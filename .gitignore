@@ -1,0 +1,8 @@
+.DS_Store
+lib
+.libs
+*.lo*
+mastodon-*
+include/base/MastodonRevision.h
+yaml_dump_mastodon-*
+syntax_dump_mastodon-*
