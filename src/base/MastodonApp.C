@@ -4,6 +4,9 @@
 #include "ModulesApp.h"
 #include "MooseSyntax.h"
 
+// Materials
+#include "LinearSoilMaterial.h"
+
 template<>
 InputParameters validParams<MastodonApp>()
 {
@@ -45,6 +48,8 @@ extern "C" void MastodonApp__registerObjects(Factory & factory) { MastodonApp::r
 void
 MastodonApp::registerObjects(Factory & factory)
 {
+  // Materials
+  registerMaterial(LinearSoilMaterial);
 }
 
 // External entry point for dynamic syntax association
