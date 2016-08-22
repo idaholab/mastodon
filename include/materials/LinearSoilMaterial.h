@@ -28,12 +28,6 @@ protected:
 
   virtual void computeQpProperties() override;
 
-  /// Maximum frequency
-  const Real & _cutoff_frequency;
-
-  /// Minimum element length reduction factor
-  const Real & _minimum_element_size_reduction_factor;
-
   /// The coupled variable field providing the layer id
   const VariableValue & _soil_layer_variable;
 
@@ -43,12 +37,6 @@ protected:
 
   /// Computed shear wave speed.
   MaterialProperty<Real> & _shear_wave_speed;
-
-  /// Computed minimum wavelength
-  MaterialProperty<Real> & _minimum_wave_length;
-
-  /// Computed minimum element size
-  MaterialProperty<Real> & _minimum_element_size;
 
   /// The id to be used for looking up the shear modulus and density, it is declared once here and re-used rather
   /// than creating a temporary variable in computeQpProperties method, simply for effeciency.

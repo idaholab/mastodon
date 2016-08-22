@@ -4,8 +4,14 @@
 #include "ModulesApp.h"
 #include "MooseSyntax.h"
 
+// Indicators
+#include "ShearWaveIndicator.h"
+
 // Materials
 #include "LinearSoilMaterial.h"
+
+// Markers
+#include "MinimumElementSizeMarker.h"
 
 template<>
 InputParameters validParams<MastodonApp>()
@@ -48,8 +54,14 @@ extern "C" void MastodonApp__registerObjects(Factory & factory) { MastodonApp::r
 void
 MastodonApp::registerObjects(Factory & factory)
 {
+  // Indicators
+  registerIndicator(ShearWaveIndicator);
+
   // Materials
   registerMaterial(LinearSoilMaterial);
+
+  // Markers
+  registerMarker(MinimumElementSizeMarker);
 }
 
 // External entry point for dynamic syntax association

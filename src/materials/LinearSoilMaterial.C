@@ -8,22 +8,15 @@ InputParameters validParams<LinearSoilMaterial>()
   params.addRequiredParam<std::vector<unsigned int>>("layer_ids", "Vector of layer ids that map one-to-one with the 'shear_modulus' and 'density' input parameters.");
   params.addRequiredParam<std::vector<Real>>("shear_modulus", "Vector of shear modules values that map one-to-one with the number 'layer_ids' parameter.");
   params.addRequiredParam<std::vector<Real>>("density", "Vector of density values that map one-to-one with the number 'layer_ids' parameter.");
-  params.addRequiredParam<Real>("cutoff_frequency", "The cutoff frequency in Hertz.");
-  params.addRangeCheckedParam<Real>("element_size_reduction_factor", 0.1, "element_size_reduction_factor<=1.0", "Additional factor to apply to the computed minimum element size, this factor much be less than or equal to one.");
   params.addRequiredCoupledVar("layer_variable", "The variable providing the soil layer identification.");
-  params.addParamNamesToGroup("element_size_reduction_factor", "Advanced");
   params.addClassDescription("Material for computing the shear wave speed ($v_s$) and minimum element size as a function of shear modules ($G$) and density ($\rho$): $v_s = \\sqrt(\frac{G}{\rho}).$");
   return params;
 }
 
 LinearSoilMaterial::LinearSoilMaterial(const InputParameters & parameters) :
     Material(parameters),
-    _cutoff_frequency(getParam<Real>("cutoff_frequency")),
-    _minimum_element_size_reduction_factor(getParam<Real>("element_size_reduction_factor")),
     _soil_layer_variable(coupledValue("layer_variable")),
-    _shear_wave_speed(declareProperty<Real>("shear_wave_speed")),
-    _minimum_wave_length(declareProperty<Real>("minimum_wave_length")),
-    _minimum_element_size(declareProperty<Real>("minimum_element_size"))
+    _shear_wave_speed(declareProperty<Real>("shear_wave_speed"))
 {
 }
 
@@ -58,10 +51,4 @@ LinearSoilMaterial::computeQpProperties()
 
   // Shear wave speed: sqrt(G/rho)
   _shear_wave_speed[_qp] = std::sqrt(it->second.first/it->second.second);
-
-  /// Computed minimum wavelength
-  _minimum_wave_length[_qp] = 1.0/_cutoff_frequency * _shear_wave_speed[_qp];
-
-  /// Computed minimum element size
-  _minimum_element_size[_qp] = _minimum_element_size_reduction_factor * _minimum_wave_length[_qp];
 }
