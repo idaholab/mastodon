@@ -26,6 +26,8 @@ MinimumElementSizeMarker::computeElementMarker()
 {
   _minimum_element_size = _scale * _error_vector[_current_elem->id()] + _factor;
   if (_minimum_element_size < _current_elem->hmin())
+  {
     return REFINE;
+  }
   return DO_NOTHING;
 }
