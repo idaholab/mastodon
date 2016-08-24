@@ -64,7 +64,7 @@
 
 [AuxKernels]
   [./hmin]
-    type = ElementSizeAux
+    type = ElementLengthAux
     variable = hmin
     method = min
     execute_on = 'initial timestep_end'
