@@ -6,6 +6,7 @@
 
 // Indicators
 #include "ShearWaveIndicator.h"
+#include "LayerInterfaceIndicator.h"
 
 // Materials
 #include "LinearSoilMaterial.h"
@@ -59,6 +60,7 @@ MastodonApp::registerObjects(Factory & factory)
 {
   // Indicators
   registerIndicator(ShearWaveIndicator);
+  registerIndicator(LayerInterfaceIndicator);
 
   // Materials
   registerMaterial(LinearSoilMaterial);
