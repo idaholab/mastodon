@@ -1,7 +1,6 @@
 #include "MastodonApp.h"
 #include "Moose.h"
 #include "AppFactory.h"
-#include "ModulesApp.h"
 #include "MooseSyntax.h"
 
 // Indicators
@@ -33,11 +32,9 @@ MastodonApp::MastodonApp(InputParameters parameters) :
     MooseApp(parameters)
 {
   Moose::registerObjects(_factory);
-  ModulesApp::registerObjects(_factory);
   MastodonApp::registerObjects(_factory);
 
   Moose::associateSyntax(_syntax, _action_factory);
-  ModulesApp::associateSyntax(_syntax, _action_factory);
   MastodonApp::associateSyntax(_syntax, _action_factory);
 }
 
