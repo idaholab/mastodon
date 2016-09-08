@@ -1,0 +1,31 @@
+.DS_Store
+lib
+.libs
+*.lo*
+mastodon-*
+include/base/MastodonRevision.h
+yaml_dump_mastodon-*
+syntax_dump_mastodon-*
+*.e
+*.e-s*
+*.csv
+*.vtk
+*.vtu
+*.pvtu
+
+# Allow certain files in gold directories
+!**/gold/*.e
+!**/gold/*.e-s*
+!**/gold/*.csv
+!**/gold/*.vtk
+!**/gold/*.vtu
+!**/gold/*.pvtu
+
+# Don't include doc/js or doc/css, these are copied from MOOSE
+doc/js/*
+doc/css/*
+
+# Ignore generated documentation
+*.moose.md
+*.moose.yml
+*.moose.svg

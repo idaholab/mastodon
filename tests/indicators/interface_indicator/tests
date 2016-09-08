@@ -1,0 +1,8 @@
+[Tests]
+  [./test]
+    # Test that indicator is working based on layer differnces
+    type = Exodiff
+    input = interface_indicator.i
+    exodiff = interface_indicator_out.e
+  [../]
+[]

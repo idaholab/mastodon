@@ -1,0 +1,7 @@
+[Tests]
+  [./test]
+    type = Exodiff
+    input = minimum_element_size.i
+    exodiff = minimum_element_size_out.e
+  [../]
+[]

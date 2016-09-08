@@ -1,0 +1,24 @@
+[Tests]
+  [./math]
+    # 1D problem with 2 elements for checking math
+    type = Exodiff
+    input = linear_soil.i
+    exodiff = linear_soil_out.e
+  [../]
+
+  [./error_size_mismatch]
+    # Test that the size mismatch error is working
+    type = RunException
+    input = linear_soil.i
+    cli_args = "Materials/linear/layer_ids='1980 1981 1982'"
+    expect_err = "The 'layer_ids', 'shear_modulus', and 'density' vectors must be the same size."
+  [../]
+
+  [./error_missing_id]
+    # Test that the size mismatch error is working
+    type = RunException
+    input = linear_soil.i
+    cli_args = "Materials/linear/layer_ids='1980 1981'"
+    expect_err = "The soil id variable value \(1949\) was not provided in the 'layer_ids' parameter."
+  [../]
+[]

@@ -1,0 +1,14 @@
+[Tests]
+  [./test]
+    type = Exodiff
+    input = auto_adapt.i
+    exodiff = auto_adapt_out.e
+  [../]
+  [./warning]
+    type = RunApp
+    input = auto_adapt.i
+    expect_out = "The initial adaptivity steps was not set"
+    cli_args = "Adaptivity/initial_steps=0 Outputs/exodus=False"
+    allow_warnings = true
+  [../]
+[]

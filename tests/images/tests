@@ -1,0 +1,8 @@
+[Tests]
+  [./basic_read]
+    # Test that the image reader is working for a simple 2D profile with three layers (32, 64, 128)
+    type = Exodiff
+    input = three_layer.i
+    exodiff = three_layer_out.e
+  [../]
+[]

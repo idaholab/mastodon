@@ -1,0 +1,25 @@
+site_name: MOOSE
+
+docs_dir: .
+
+site_dir: ../site
+
+repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
+
+theme: flatly
+
+extra_css:
+    - https://raw.githubusercontent.com/idaholab/moose/master/docs/css/moose.css
+
+extra_javascript:
+    - http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+    - https://raw.githubusercontent.com/idaholab/moose/master/docs/js/mathjaxconfig.js
+
+markdown_extensions:
+    - smarty
+    - admonition
+    - markdown_include.include           # pip install markdown-include
+    - mdx_math                           # pip install python-markdown-math
+    - MooseDocs.extensions.MooseMarkdown:
+          make: ..
+          repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
