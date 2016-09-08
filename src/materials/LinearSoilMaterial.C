@@ -9,7 +9,7 @@ InputParameters validParams<LinearSoilMaterial>()
   params.addRequiredParam<std::vector<Real>>("shear_modulus", "Vector of shear modules values that map one-to-one with the number 'layer_ids' parameter.");
   params.addRequiredParam<std::vector<Real>>("density", "Vector of density values that map one-to-one with the number 'layer_ids' parameter.");
   params.addRequiredCoupledVar("layer_variable", "The variable providing the soil layer identification.");
-  params.addClassDescription("Material for computing the shear wave speed ($v_s$) and minimum element size as a function of shear modules ($G$) and density ($\rho$): $v_s = \\sqrt(\frac{G}{\rho}).$");
+  params.addClassDescription("Material for computing the shear wave speed ($v_s$) and minimum element size as a function of shear modules ($G$) and density ($\rho$): $v_s = \\sqrt{\frac{G}{\rho}}.$");
   return params;
 }
 

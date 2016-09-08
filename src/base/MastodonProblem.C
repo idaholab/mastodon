@@ -5,6 +5,7 @@ template<>
 InputParameters validParams<MastodonProblem>()
 {
   InputParameters params = validParams<FEProblem>();
+  params.addClassDescription("A problem to perform adaptivity until the mesh no longer is changing.");
   return params;
 }
 

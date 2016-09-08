@@ -1,0 +1,34 @@
+###############################################################
+# Configuration for creating MASTODON application documentation. #
+###############################################################
+
+# Executable directory or executable
+app: ../mastodon-opt
+
+defaults:
+    # Complete YAML syntax to ignore (must include leading /). All "systems" in MOOSE matching
+    # these values will be completly ignored and all objects within the associated system will
+    # also be ignored. It is also possible to have a hide block in the local config.yml which will
+    # be joined with these value.
+    hide:
+        - /BCs/Periodic
+        - /Bounds
+        - /AuxVariables/*/InitialCondition
+        - /Variables/*/InitialCondition
+
+    # Install markdown directory
+    install: content
+
+    # The default repository for linking
+    repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
+
+# Directories/applications to include
+include:
+    src:
+        include: ../include
+        source: ../src
+        details: details
+        install: content/systems
+        links:
+            Tests:
+                - ../tests

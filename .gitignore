@@ -20,3 +20,12 @@ syntax_dump_mastodon-*
 !**/gold/*.vtk
 !**/gold/*.vtu
 !**/gold/*.pvtu
+
+# Don't include doc/js or doc/css, these are copied from MOOSE
+doc/js/*
+doc/css/*
+
+# Ignore generated documentation
+*.moose.md
+*.moose.yml
+*.moose.svg
