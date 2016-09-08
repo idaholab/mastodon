@@ -1,0 +1,7 @@
+[Tests]
+  [./test]
+    type = Exodiff
+    input = interface.i
+    exodiff = interface_out.e
+  [../]
+[]

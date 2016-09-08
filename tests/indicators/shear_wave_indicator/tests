@@ -1,0 +1,8 @@
+[Tests]
+  [./test]
+    # Test that indicator is working based on shear wave velocity
+    type = Exodiff
+    input = shear_wave_indicator.i
+    exodiff = shear_wave_indicator_out.e
+  [../]
+[]
