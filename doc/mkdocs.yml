@@ -9,11 +9,11 @@ repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
 theme: flatly
 
 extra_css:
-    - https://raw.githubusercontent.com/idaholab/moose/master/docs/css/moose.css
+    - css/moose.css
 
 extra_javascript:
     - http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-    - https://raw.githubusercontent.com/idaholab/moose/master/docs/js/mathjaxconfig.js
+    - js/mathjaxconfig.js
 
 markdown_extensions:
     - smarty
