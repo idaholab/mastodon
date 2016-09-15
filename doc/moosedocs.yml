@@ -2,28 +2,43 @@
 # Configuration for creating MASTODON application documentation. #
 ###############################################################
 
-# Executable directory or executable
-app: ../mastodon-opt
+site_name: MOOSE
 
-defaults:
-    # Complete YAML syntax to ignore (must include leading /). All "systems" in MOOSE matching
-    # these values will be completly ignored and all objects within the associated system will
-    # also be ignored. It is also possible to have a hide block in the local config.yml which will
-    # be joined with these value.
-    hide:
-        - /BCs/Periodic
-        - /Bounds
-        - /AuxVariables/*/InitialCondition
-        - /Variables/*/InitialCondition
+docs_dir: .
 
-    # Install markdown directory
-    install: content
+site_dir: ../site
 
-    # The default repository for linking
-    repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
+repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
 
-# Directories/applications to include
-include:
+theme: flatly
+
+extra_css:
+    - css/moose.css
+
+extra_javascript:
+    - http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+    - js/mathjaxconfig.js
+
+markdown_extensions:
+    - smarty
+    - admonition
+    - markdown_include.include           # pip install markdown-include
+    - mdx_math                           # pip install python-markdown-math
+    - MooseDocs.extensions.MooseMarkdown:
+          make: ..
+          repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
+
+extra:
+    defaults:
+        executable: ../mastodon-opt
+        install: content
+        repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
+        hide:
+            - /BCs/Periodic
+            - /Bounds
+            - /AuxVariables/*/InitialCondition
+            - /Variables/*/InitialCondition
+
     src:
         include: ../include
         source: ../src
