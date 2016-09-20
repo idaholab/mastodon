@@ -1,6 +1,6 @@
-###############################################################
+##################################################################
 # Configuration for creating MASTODON application documentation. #
-###############################################################
+##################################################################
 
 site_name: MOOSE
 
@@ -20,30 +20,20 @@ extra_javascript:
     - js/mathjaxconfig.js
 
 markdown_extensions:
-    - smarty
-    - admonition
-    - markdown_include.include           # pip install markdown-include
-    - mdx_math                           # pip install python-markdown-math
-    - MooseDocs.extensions.MooseMarkdown:
-          make: ..
-          repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
-
-extra:
-    defaults:
-        executable: ../mastodon-opt
-        install: content
-        repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
-        hide:
-            - /BCs/Periodic
-            - /Bounds
-            - /AuxVariables/*/InitialCondition
-            - /Variables/*/InitialCondition
-
-    src:
-        include: ../include
-        source: ../src
-        details: details
-        install: content/systems
-        links:
-            Tests:
-                - ../tests
+  - smarty
+  - admonition
+  - markdown_include.include           # pip install markdown-include
+  - mdx_math                           # pip install python-markdown-math
+  - MooseDocs.extensions.MooseMarkdown:
+      make: ..
+      repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
+      executable: ../mastodon-opt
+      links:
+          Tests:
+            - ../tests
+      locations:
+          mastodon:
+              install: content/systems
+              paths:
+                  - ../include
+                  - ../src
