@@ -1,3 +1,9 @@
+!devel /Materials/LinearSoilMaterial float=right width=auto margin=20px padding=20px background-color=#F8F8F8
+
+# LinearSoilMaterial
+
+!description /Materials/LinearSoilMaterial
+
 ## Description
 A material for computed the shear-wave speed ($v_s$) based on a linear relationship between shear modules ($G$) and
 density ($\rho$).
@@ -16,3 +22,9 @@ Using the "layer id" to determine which value to utilize, this material will com
 the mapping of layer id to $G$ and $\rho$, as shown in the input snippet below.
 
 !input tests/materials/linear_soil/linear_soil.i block=Materials
+
+!parameters /Materials/LinearSoilMaterial
+
+!inputfiles /Materials/LinearSoilMaterial
+
+!childobjects /Materials/LinearSoilMaterial
