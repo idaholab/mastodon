@@ -2,7 +2,7 @@
 # Configuration for creating MASTODON application documentation. #
 ##################################################################
 
-site_name: MOOSE
+site_name: MASTODON
 
 docs_dir: .
 
