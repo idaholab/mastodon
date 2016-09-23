@@ -30,3 +30,6 @@ doc/css/*
 *.moose.yml
 *.moose.svg
 site
+
+# Doxygen
+doc/doxygen/html

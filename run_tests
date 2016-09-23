@@ -21,4 +21,5 @@ path_tool.activate_module('TestHarness')
 
 from TestHarness import TestHarness
 # Run the tests!
+sys.argv.insert(1, "--error")
 TestHarness.buildAndRun(sys.argv, app_name, MOOSE_DIR)

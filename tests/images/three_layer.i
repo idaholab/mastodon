@@ -35,7 +35,6 @@
 
 [Executioner]
   type = Steady
-  num_steps = 1
 []
 
 [Outputs]
