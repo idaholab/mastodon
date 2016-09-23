@@ -3,6 +3,14 @@
 #include "AppFactory.h"
 #include "MooseSyntax.h"
 
+// Modules
+#include "SolidMechanicsApp.h"
+#include "TensorMechanicsApp.h"
+#include "ContactApp.h"
+
+// Dirackernels
+#include "FunctionPointForce.h"
+
 // Indicators
 #include "ShearWaveIndicator.h"
 #include "LayerInterfaceIndicator.h"
@@ -33,9 +41,15 @@ MastodonApp::MastodonApp(InputParameters parameters) :
 {
   Moose::registerObjects(_factory);
   MastodonApp::registerObjects(_factory);
+  SolidMechanicsApp::registerObjects(_factory);
+  TensorMechanicsApp::registerObjects(_factory);
+  ContactApp::registerObjects(_factory);
 
   Moose::associateSyntax(_syntax, _action_factory);
   MastodonApp::associateSyntax(_syntax, _action_factory);
+  SolidMechanicsApp::associateSyntax(_syntax, _action_factory);
+  TensorMechanicsApp::associateSyntax(_syntax, _action_factory);
+  ContactApp::associateSyntax(_syntax, _action_factory);
 }
 
 MastodonApp::~MastodonApp()
@@ -55,6 +69,9 @@ extern "C" void MastodonApp__registerObjects(Factory & factory) { MastodonApp::r
 void
 MastodonApp::registerObjects(Factory & factory)
 {
+  // DiracKernels
+  registerDiracKernel(FunctionPointForce);
+
   // Indicators
   registerIndicator(ShearWaveIndicator);
   registerIndicator(LayerInterfaceIndicator);
