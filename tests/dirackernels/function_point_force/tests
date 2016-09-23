@@ -1,0 +1,16 @@
+[tests]
+  [./function_point_force_1]
+    type = 'Exodiff'
+    input = 'force_one_point.i'
+    exodiff = 'force_one_point_out.e'
+    abs_zero = 1e-06
+    compiler = 'GCC CLANG'
+  [../]
+  [./function_point_force_multi]
+    type = 'Exodiff'
+    input = 'force_multi_point.i'
+    exodiff = 'force_multi_point_out.e'
+    abs_zero = 1e-06
+    compiler = 'GCC CLANG'
+  [../]
+[]
