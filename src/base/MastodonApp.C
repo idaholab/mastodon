@@ -17,6 +17,7 @@
 
 // Materials
 #include "LinearSoilMaterial.h"
+#include "ComputeIsotropicElasticityTensorSoil.h"
 
 // Markers
 #include "MinimumElementSizeMarker.h"
@@ -78,6 +79,7 @@ MastodonApp::registerObjects(Factory & factory)
 
   // Materials
   registerMaterial(LinearSoilMaterial);
+  registerMaterial(ComputeIsotropicElasticityTensorSoil);
 
   // Markers
   registerMarker(MinimumElementSizeMarker);
