@@ -1,0 +1,3 @@
+- Overview: content/systems/BCs/Overview.md
+- SeismicForce: content/systems/BCs/SeismicForce.md
+- SeismicInput: !include content/systems/BCs/SeismicInput/pages.yml

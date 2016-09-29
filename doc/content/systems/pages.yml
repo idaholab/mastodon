@@ -1,4 +1,5 @@
 - Adaptivity: !include content/systems/Adaptivity/pages.yml
+- BCs: !include content/systems/BCs/pages.yml
 - DiracKernels: !include content/systems/DiracKernels/pages.yml
 - Materials: !include content/systems/Materials/pages.yml
 - Problem: !include content/systems/Problem/pages.yml
