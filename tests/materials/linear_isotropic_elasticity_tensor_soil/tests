@@ -1,0 +1,7 @@
+[Tests]
+  [./linear_isotropic]
+    type = Exodiff
+    input = layered_soil_test.i
+    exodiff = layered_soil_test_out.e
+  [../]
+[]
