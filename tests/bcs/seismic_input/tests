@@ -1,0 +1,14 @@
+[tests]
+  [./seismic_input_within]
+    type = 'Exodiff'
+    input = 'seismic_within_test.i'
+    exodiff = 'seismic_within_test_out.e'
+    compiler = 'GCC CLANG'
+  [../]
+  [./seismic_force_test]
+    type = 'Exodiff'
+    input = 'seismic_force_test.i'
+    exodiff = 'seismic_force_test_out.e'
+    compiler = 'GCC CLANG'
+  [../]
+[]
