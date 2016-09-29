@@ -17,3 +17,5 @@ contrib/* linguist-vendored
 *.xml linguist-vendored
 
 *.C linguist-language=C++
+
+doc/media/*.png filter=lfs diff=lfs merge=lfs -text

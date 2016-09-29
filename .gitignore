@@ -12,6 +12,7 @@ syntax_dump_mastodon-*
 *.vtk
 *.vtu
 *.pvtu
+*.png
 
 # Allow certain files in gold directories
 !**/gold/*.e
@@ -33,3 +34,6 @@ site
 
 # Doxygen
 doc/doxygen/html
+
+# Allow images in media directory
+!docs/media/*.png
