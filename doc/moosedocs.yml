@@ -16,7 +16,7 @@ extra_css:
     - css/moose.css
 
 extra_javascript:
-    - http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+    - https://hpcsc.inl.gov/ssl/MASTODON/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
     - js/mathjaxconfig.js
 
 markdown_extensions:
@@ -28,6 +28,7 @@ markdown_extensions:
       make: ..
       repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
       executable: ../mastodon-opt
+      docs_dir: doc
       links:
           Tests:
             - ../tests
