@@ -9,9 +9,11 @@
 #include "ContactApp.h"
 
 // Actions
+#include "NonReflectingBCAction.h"
 #include "SeismicInputAction.h"
 
 // BCs
+#include "NonReflectingBC.h"
 #include "SeismicForce.h"
 
 // Dirackernels
@@ -77,6 +79,7 @@ void
 MastodonApp::registerObjects(Factory & factory)
 {
   // BCs
+  registerBoundaryCondition(NonReflectingBC);
   registerBoundaryCondition(SeismicForce);
 
   // DiracKernels
@@ -105,5 +108,9 @@ MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
   syntax.registerActionSyntax("EmptyAction", "BCs/SeismicInput");
   syntax.registerActionSyntax("SeismicInputAction", "BCs/SeismicInput/*");
 
+  syntax.registerActionSyntax("EmptyAction", "BCs/NonReflectingBC");
+  syntax.registerActionSyntax("NonReflectingBCAction", "BCs/NonReflectingBC/*");
+
   registerAction(SeismicInputAction, "add_bc");
+  registerAction(NonReflectingBCAction, "add_bc");
 }
