@@ -8,6 +8,12 @@
 #include "TensorMechanicsApp.h"
 #include "ContactApp.h"
 
+// Actions
+#include "SeismicInputAction.h"
+
+// BCs
+#include "SeismicForce.h"
+
 // Dirackernels
 #include "FunctionPointForce.h"
 
@@ -70,6 +76,9 @@ extern "C" void MastodonApp__registerObjects(Factory & factory) { MastodonApp::r
 void
 MastodonApp::registerObjects(Factory & factory)
 {
+  // BCs
+  registerBoundaryCondition(SeismicForce);
+
   // DiracKernels
   registerDiracKernel(FunctionPointForce);
 
@@ -91,6 +100,10 @@ MastodonApp::registerObjects(Factory & factory)
 // External entry point for dynamic syntax association
 extern "C" void MastodonApp__associateSyntax(Syntax & syntax, ActionFactory & action_factory) { MastodonApp::associateSyntax(syntax, action_factory); }
 void
-MastodonApp::associateSyntax(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
+MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
 {
+  syntax.registerActionSyntax("EmptyAction", "BCs/SeismicInput");
+  syntax.registerActionSyntax("SeismicInputAction", "BCs/SeismicInput/*");
+
+  registerAction(SeismicInputAction, "add_bc");
 }
