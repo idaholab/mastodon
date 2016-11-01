@@ -30,9 +30,6 @@
 // Markers
 #include "MinimumElementSizeMarker.h"
 
-// Problems
-#include "MastodonProblem.h"
-
 template<>
 InputParameters validParams<MastodonApp>()
 {
@@ -95,9 +92,6 @@ MastodonApp::registerObjects(Factory & factory)
 
   // Markers
   registerMarker(MinimumElementSizeMarker);
-
-  // Problems
-  registerProblem(MastodonProblem);
 }
 
 // External entry point for dynamic syntax association
