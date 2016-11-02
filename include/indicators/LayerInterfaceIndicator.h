@@ -12,13 +12,21 @@ InputParameters validParams<LayerInterfaceIndicator>();
 
 /**
  * Computes the "error" as defined by the difference between the layers. Since, layer ids are arbitrary the
- * magnitude of the error is not relevant, just that the error is above zero. Threfore, when a differnce is computed
+ * magnitude of the error is not relevant, just that the error is above zero. Therefore, when a difference is computed
  * the "error" is set to one. Thus, this should be used with the ErrorToleranceMarker.
+ *
+ * This inherits from InternalSideIndicator to gain access to neighbor information.
  */
 class LayerInterfaceIndicator : public InternalSideIndicator
 {
 public:
   LayerInterfaceIndicator(const InputParameters & params);
+
+  /**
+   * This elminates the aggregation performed by the InternalSideIndicator::finalize,
+   * which is not needed here.
+   */
+  virtual void finalize() override {}
 
 protected:
 

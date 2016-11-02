@@ -1,0 +1,11 @@
+[Tests]
+  [./parallel]
+    # There was a problem when running problems with the ShearWaveIndicator and LayerInterfaceIndicator
+    # together in parallel. This problem exploits the problem that is now fixed, don't make the mesh
+    # any smaller as that didn't cause the MPI problem.
+    type = Exodiff
+    input = interface_and_shear_wave_indicators.i
+    exodiff = interface_and_shear_wave_indicators_out.e
+    min_parallel = 2
+  [../]
+[]
