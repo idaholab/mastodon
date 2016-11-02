@@ -33,5 +33,7 @@ ShearWaveIndicator::computeIndicator()
   _minimum_element_size.resize(_qrule->n_points());
   for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
     _minimum_element_size[_qp] = 1.0/_cutoff_frequency * _shear_wave_speed[_qp];
-  _indicator_var.setNodalValue(*std::min_element(_minimum_element_size.begin(), _minimum_element_size.end()));
+
+  Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+  _solution.set(_indicator_var.nodalDofIndex(), *std::min_element(_minimum_element_size.begin(), _minimum_element_size.end()));
 }

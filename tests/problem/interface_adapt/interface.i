@@ -111,10 +111,6 @@
   [../]
 []
 
-[Problem]
-  type = MastodonProblem
-[]
-
 [Executioner]
   type = Transient
   num_steps = 1
