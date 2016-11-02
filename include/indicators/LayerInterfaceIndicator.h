@@ -39,6 +39,9 @@ protected:
    * see computeIndicator
    */
   virtual Real computeQpIntegral() final { return 0.0; }
+
+  /// Tolerence for considering a layer ids different
+  const Real & _tolerance;
 };
 
 #endif // LAYERINTERFACEINDICATOR_H
