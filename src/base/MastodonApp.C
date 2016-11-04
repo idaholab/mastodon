@@ -16,6 +16,9 @@
 #include "NonReflectingBC.h"
 #include "SeismicForce.h"
 
+// AuxKernels
+#include "UniformLayerAuxKernel.h"
+
 // Dirackernels
 #include "FunctionPointForce.h"
 
@@ -78,6 +81,9 @@ MastodonApp::registerObjects(Factory & factory)
   // BCs
   registerBoundaryCondition(NonReflectingBC);
   registerBoundaryCondition(SeismicForce);
+
+  // AuxKernels
+  registerAuxKernel(UniformLayerAuxKernel);
 
   // DiracKernels
   registerDiracKernel(FunctionPointForce);
