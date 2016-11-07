@@ -11,6 +11,7 @@
 // Actions
 #include "NonReflectingBCAction.h"
 #include "SeismicInputAction.h"
+#include "SeismicSourceAction.h"
 
 // BCs
 #include "NonReflectingBC.h"
@@ -21,6 +22,7 @@
 
 // Dirackernels
 #include "FunctionPointForce.h"
+#include "SeismicSource.h"
 
 // Indicators
 #include "ShearWaveIndicator.h"
@@ -87,6 +89,7 @@ MastodonApp::registerObjects(Factory & factory)
 
   // DiracKernels
   registerDiracKernel(FunctionPointForce);
+  registerDiracKernel(SeismicSource);
 
   // Indicators
   registerIndicator(ShearWaveIndicator);
@@ -111,6 +114,10 @@ MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
   syntax.registerActionSyntax("EmptyAction", "BCs/NonReflectingBC");
   syntax.registerActionSyntax("NonReflectingBCAction", "BCs/NonReflectingBC/*");
 
+  syntax.registerActionSyntax("EmptyAction", "DiracKernels/SeismicSource");
+  syntax.registerActionSyntax("SeismicSourceAction", "DiracKernels/SeismicSource/*");
+
   registerAction(SeismicInputAction, "add_bc");
   registerAction(NonReflectingBCAction, "add_bc");
+  registerAction(SeismicSourceAction, "add_dirac_kernel");
 }
