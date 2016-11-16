@@ -2,22 +2,17 @@
 # Configuration for creating MASTODON application documentation. #
 ##################################################################
 
-site_name: MASTODON
+template: materialize.html
 
-docs_dir: .
+template_arguments:
+    title: Mastodon
+    repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
+    site_url: /index.html
 
-site_dir: ../site
-
-repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
-
-theme: flatly
-
-extra_css:
-    - css/moose.css
-
-extra_javascript:
-    - https://hpcsc.inl.gov/ssl/MASTODON/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-    - js/mathjaxconfig.js
+extra_pages:
+    - home:
+        filename: index.md
+        template: materialize-home.html
 
 markdown_extensions:
   - smarty
@@ -34,6 +29,8 @@ markdown_extensions:
             - ../tests
       locations:
           mastodon:
+              doxygen: https://hpcsc.inl.gov/ssl/MASTODON/docs
+              doxygen_name_style: lower
               hide:
                 - /Bounds
               install: content/systems
