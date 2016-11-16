@@ -1,0 +1,29 @@
+##################################################################
+# Configuration for creating MASTODON application documentation. #
+##################################################################
+
+template: materialize.html
+
+template_arguments:
+    title: Mastodon
+    repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
+    site_url: /index.html
+    github_edit: False
+
+extra_pages:
+    - home:
+        filename: index.md
+        template: materialize-home.html
+
+pages: public-pages.yml
+
+markdown_extensions:
+  - smarty
+  - admonition
+  - markdown_include.include           # pip install markdown-include
+  - mdx_math                           # pip install python-markdown-math
+  - MooseDocs.extensions.MooseMarkdown:
+      make: ..
+      repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
+      executable: ../mastodon-opt
+      docs_dir: doc
