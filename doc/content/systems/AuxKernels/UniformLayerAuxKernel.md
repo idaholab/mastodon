@@ -1,5 +1,3 @@
-!devel /AuxKernels/UniformLayerAuxKernel float=right width=auto margin=20px padding=20px background-color=#F8F8F8
-
 # UniformLayerAuxKernel
 !description /AuxKernels/UniformLayerAuxKernel
 
