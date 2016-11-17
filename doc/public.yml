@@ -8,11 +8,14 @@ template_arguments:
     title: Mastodon
     repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
     site_url: /index.html
+    github_edit: False
 
 extra_pages:
     - home:
         filename: index.md
         template: materialize-home.html
+
+pages: public-pages.yml
 
 markdown_extensions:
   - smarty
@@ -24,16 +27,3 @@ markdown_extensions:
       repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
       executable: ../mastodon-opt
       docs_dir: doc
-      links:
-          Tests:
-            - ../tests
-      locations:
-          mastodon:
-              doxygen: https://hpcsc.inl.gov/ssl/MASTODON/docs
-              doxygen_name_style: lower
-              hide:
-                - /Bounds
-              install: content/systems
-              paths:
-                  - ../include
-                  - ../src

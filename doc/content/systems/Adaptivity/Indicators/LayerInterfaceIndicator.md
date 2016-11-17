@@ -1,5 +1,3 @@
-!devel /Adaptivity/Indicators/LayerInterfaceIndicator float=right width=auto margin=20px padding=20px background-color=#F8F8F8
-
 # LayerInterfaceIndicator
 
 !description /Adaptivity/Indicators/LayerInterfaceIndicator
