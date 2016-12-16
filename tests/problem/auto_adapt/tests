@@ -3,5 +3,6 @@
     type = Exodiff
     input = auto_adapt.i
     exodiff = auto_adapt_out.e
+    vtk = true
   [../]
 []

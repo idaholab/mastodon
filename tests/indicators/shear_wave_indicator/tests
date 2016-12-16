@@ -4,5 +4,6 @@
     type = Exodiff
     input = shear_wave_indicator.i
     exodiff = shear_wave_indicator_out.e
+    vtk = true
   [../]
 []

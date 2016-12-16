@@ -3,5 +3,6 @@
     type = Exodiff
     input = interface.i
     exodiff = interface_out.e
+    vtk = true
   [../]
 []
