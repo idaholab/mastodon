@@ -7,5 +7,6 @@
     input = interface_and_shear_wave_indicators.i
     exodiff = interface_and_shear_wave_indicators_out.e
     min_parallel = 2
+    vtk = true
   [../]
 []
