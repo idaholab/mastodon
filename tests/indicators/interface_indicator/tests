@@ -4,5 +4,6 @@
     type = Exodiff
     input = interface_indicator.i
     exodiff = interface_indicator_out.e
+    vtk = true
   [../]
 []
