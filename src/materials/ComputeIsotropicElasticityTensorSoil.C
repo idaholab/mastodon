@@ -27,14 +27,16 @@ InputParameters validParams<ComputeIsotropicElasticityTensorSoil>()
   params.addRequiredParam<std::vector<Real>>("shear_modulus", "Vector of  shear modulus values that map one-to-one with the number 'layer_ids' parameter.");
   params.addRequiredParam<std::vector<Real>>("density", "Vector of density values that map one-to-one with the number 'layer_ids' parameter.");
   params.addRequiredCoupledVar("layer_variable", "The variable providing the soil layer identification.");
+  params.addParam<bool>("wave_speed_calculation", true, "Set to False to turn off P and S wave speed calcualtion.");
   return params;
 }
 
 ComputeIsotropicElasticityTensorSoil::ComputeIsotropicElasticityTensorSoil(const InputParameters & parameters) :
     ComputeElasticityTensorBase(parameters),
     _soil_layer_variable(coupledValue("layer_variable")),
-    _shear_wave_speed(declareProperty<Real>("shear_wave_speed")),
-    _P_wave_speed(declareProperty<Real>("P_wave_speed")),
+    _wave_speed_calculation(getParam<bool>("wave_speed_calculation")),
+    _shear_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("shear_wave_speed") : NULL),
+    _P_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("P_wave_speed") : NULL),
     _density(declareProperty<Real>("density"))
 {
   std::vector<Real> iso_const(2);
@@ -80,11 +82,14 @@ ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
   if (it_p == _soil_id_to_youngs_modulus_and_density.end())
     mooseError("The soil id variable value (" << _current_id << ") was not provided in the 'layer_ids' parameter.");
 
-  // Shear wave speed: sqrt(G/rho)
-  _shear_wave_speed[_qp] = std::sqrt(it_s->second.first / it_s->second.second);
+  if (_wave_speed_calculation)
+  {
+    // Shear wave speed: sqrt(G/rho)
+    (*_shear_wave_speed)[_qp] = std::sqrt(it_s->second.first / it_s->second.second);
 
-  // P wave speed: sqrt(E/rho)
-  _P_wave_speed[_qp] = std::sqrt(it_p->second.first / it_p->second.second);
+    // P wave speed: sqrt(E/rho)
+    (*_P_wave_speed)[_qp] = std::sqrt(it_p->second.first / it_p->second.second);
+  }
 
   _density[_qp] = it_p->second.second;
 
@@ -97,4 +102,3 @@ ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
   //Assign elasticity tensor at a given quad point
   _elasticity_tensor[_qp] = _Cijkl;
 }
-

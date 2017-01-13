@@ -1,0 +1,36 @@
+[Tests]
+  [./data_file]
+    # 1 element problem to check stress-strain curve given using data_file
+    type = Exodiff
+    input = HYS_data_file.i
+    exodiff = HYS_data_file_out.e
+  [../]
+
+  [./darendeli]
+    # 1 element problem to check auto-generated darendeli stress-strain curves
+    type = Exodiff
+    input = HYS_darendeli.i
+    exodiff = HYS_darendeli_out.e
+  [../]
+
+  [./GQH]
+    # 1 element problem to check auto-generated GQH stress-strain curves
+    type = Exodiff
+    input = HYS_GQH.i
+    exodiff = HYS_GQH_out.e
+  [../]
+
+  [./pressure_dependent_stiffness]
+    # 1 element problem to check stiffness pressure dependency
+    type = RunException
+    input = HYS_pressure_dependent_stiffness.i
+    expect_err = "Pressure dependency is set to true but b\_exp is set to 0\.0\. Strength dependent pressure dependency is not turned on\."
+  [../]
+
+  [./stiffness_and_strength_pressure_dependence]
+    # 1 element problem to check stiffness and strength pressure dependency
+    type = Exodiff
+    input = HYS_stiffness_and_strength_pressure_dependency.i
+    exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
+  [../]
+[]

@@ -12,6 +12,7 @@
 #include "NonReflectingBCAction.h"
 #include "SeismicInputAction.h"
 #include "SeismicSourceAction.h"
+#include "ISoilAction.h"
 
 // BCs
 #include "NonReflectingBC.h"
@@ -31,6 +32,7 @@
 // Materials
 #include "LinearSoilMaterial.h"
 #include "ComputeIsotropicElasticityTensorSoil.h"
+#include "ComputeISoilStress.h"
 
 // Markers
 #include "MinimumElementSizeMarker.h"
@@ -98,6 +100,7 @@ MastodonApp::registerObjects(Factory & factory)
   // Materials
   registerMaterial(LinearSoilMaterial);
   registerMaterial(ComputeIsotropicElasticityTensorSoil);
+  registerMaterial(ComputeISoilStress);
 
   // Markers
   registerMarker(MinimumElementSizeMarker);
@@ -117,7 +120,11 @@ MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
   syntax.registerActionSyntax("EmptyAction", "DiracKernels/SeismicSource");
   syntax.registerActionSyntax("SeismicSourceAction", "DiracKernels/SeismicSource/*");
 
+  syntax.registerActionSyntax("EmptyAction", "Materials/I_Soil");
+  syntax.registerActionSyntax("ISoilAction", "Materials/I_Soil/*");
+
   registerAction(SeismicInputAction, "add_bc");
   registerAction(NonReflectingBCAction, "add_bc");
   registerAction(SeismicSourceAction, "add_dirac_kernel");
+  registerAction(ISoilAction, "add_material");
 }

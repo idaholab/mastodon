@@ -39,6 +39,9 @@ protected:
   /// The coupled variable field providing the layer id
   const VariableValue & _soil_layer_variable;
 
+  /// Flag to turn on/off P and S wave speed calculation.
+  bool _wave_speed_calculation;
+
   /// Shear Modules and Density mapping to soil id.
   // This is being done in a single map to avoid looking up the id multipe times.
   std::map<unsigned int, std::pair<Real, Real>>  _soil_id_to_shear_modulus_and_density;
@@ -48,10 +51,10 @@ protected:
   std::map<unsigned int, std::pair<Real, Real>>  _soil_id_to_youngs_modulus_and_density;
 
   /// Computed shear wave speed.
-  MaterialProperty<Real> & _shear_wave_speed;
+  MaterialProperty<Real> * _shear_wave_speed;
 
   /// Computed P wave speed.
-  MaterialProperty<Real> & _P_wave_speed;
+  MaterialProperty<Real> * _P_wave_speed;
 
   /// Density stored as a material property.
   MaterialProperty<Real> & _density;
