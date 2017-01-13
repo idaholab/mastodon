@@ -2,7 +2,7 @@
 !description /AuxKernels/UniformLayerAuxKernel
 
 ## Description
-!image media/uniform_layer_3d.png padding-left=20px width=60% float=right caption=Example of oriented "layers" in 3D.
+!image doc/media/uniform_layer_3d.png padding-left=20px width=60% float=right caption=Example of oriented "layers" in 3D.
 
 The `UniformLayerAuxKernel` is designed to create an arbitrary number of planar layers to be used
 as layer identifiers. The layers created can be oriented in any direction.

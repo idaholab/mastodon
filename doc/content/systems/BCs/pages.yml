@@ -1,5 +1,0 @@
-- Overview: content/systems/BCs/Overview.md
-- SeismicForce: content/systems/BCs/SeismicForce.md
-- SeismicInput: !include content/systems/BCs/SeismicInput/pages.yml
-- NonReflectingBC: !include content/systems/BCs/NonReflectingBC/pages.yml
-- NonReflectingBC: content/systems/BCs/NonReflectingBC.md

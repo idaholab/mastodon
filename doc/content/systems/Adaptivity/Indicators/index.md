@@ -7,4 +7,4 @@ MOOSE documentation page.
 
 !parameters /Adaptivity/Indicators
 
-!subobjects mastodon /Adaptivity/Indicators
+!subobjects /Adaptivity/Indicators
