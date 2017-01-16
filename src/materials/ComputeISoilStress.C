@@ -128,7 +128,6 @@ ComputeISoilStress::initQpStatefulProperties()
      _strength_pressure_correction = std::sqrt(_a0+_a1*(mean_stress - _p0)+ _a2*(mean_stress - _p0)*(mean_stress - _p0))/std::sqrt(_a0+_a1*(_p_ref[_pos])+ _a2*(_p_ref[_pos])*(_p_ref[_pos]));
    }
 
-   Real total_stress = 0.0;
    // Calculate the K0 consistent stress distribution
    RankTwoTensor dev_model;
    for (unsigned int i = 0; i < _base_models.size(); i++)
