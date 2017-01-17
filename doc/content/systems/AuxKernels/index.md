@@ -7,4 +7,4 @@ variables or used as postprocessing system.
 
 Please refer to the MOOSE documentation for more details regarding the system in general.
 
-!subobjects mastodon /AuxKernels
+!subobjects /AuxKernels

@@ -1,5 +1,0 @@
-- Overview: content/systems/Materials/Overview.md
-- ComputeISoilStress: content/systems/Materials/ComputeISoilStress.md
-- ComputeIsotropicElasticityTensorSoil: content/systems/Materials/ComputeIsotropicElasticityTensorSoil.md
-- I_Soil: !include content/systems/Materials/I_Soil/pages.yml
-- LinearSoilMaterial: content/systems/Materials/LinearSoilMaterial.md

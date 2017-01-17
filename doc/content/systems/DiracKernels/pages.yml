@@ -1,4 +1,0 @@
-- Overview: content/systems/DiracKernels/Overview.md
-- FunctionPointForce: content/systems/DiracKernels/FunctionPointForce.md
-- SeismicSource: !include content/systems/DiracKernels/SeismicSource/pages.yml
-- SeismicSource: content/systems/DiracKernels/SeismicSource.md
