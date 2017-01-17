@@ -8,4 +8,4 @@ Mastodon utilize the MOOSE adaptivity system, refer to MOOSE for complete docume
 
 !parameters /Adaptivity/Markers
 
-!subobjects mastodon /Adaptivity/Markers
+!subobjects /Adaptivity/Markers

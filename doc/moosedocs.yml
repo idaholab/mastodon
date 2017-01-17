@@ -1,18 +1,7 @@
-##################################################################
-# Configuration for creating MASTODON application documentation. #
-##################################################################
-
-template: materialize.html
-
+template: website.html
 template_arguments:
     title: Mastodon
     repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
-    site_url: /index.html
-
-extra_pages:
-    - home:
-        filename: index.md
-        template: materialize-home.html
 
 markdown_extensions:
   - smarty
@@ -20,20 +9,20 @@ markdown_extensions:
   - markdown_include.include           # pip install markdown-include
   - mdx_math                           # pip install python-markdown-math
   - MooseDocs.extensions.MooseMarkdown:
-      make: ..
       repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
-      executable: ../mastodon-opt
-      docs_dir: doc
+      executable: mastodon-opt
+      install: doc/content/systems
       links:
           Tests:
-            - ../tests
+            - tests
       locations:
-          mastodon:
+          - mastodon:
               doxygen: https://hpcsc.inl.gov/ssl/MASTODON/docs
               doxygen_name_style: lower
+              paths:
+                  - include
+                  - src
               hide:
                 - /Bounds
-              install: content/systems
-              paths:
-                  - ../include
-                  - ../src
+                - /BCs/NonReflectingBC # see 28
+                - /BCs/SeismicInput    # see 28
