@@ -1,13 +1,15 @@
 template: website.html
 template_arguments:
     title: Mastodon
+    mathjax_url: https://hpcsc.inl.gov/ssl/HERD/MathJax/MathJax.js
     repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
 
 markdown_extensions:
   - smarty
   - admonition
   - markdown_include.include           # pip install markdown-include
-  - mdx_math                           # pip install python-markdown-math
+  - mdx_math:                          # pip install python-markdown-math
+      enable_dollar_delimiter: True
   - MooseDocs.extensions.MooseMarkdown:
       repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
       executable: mastodon-opt
