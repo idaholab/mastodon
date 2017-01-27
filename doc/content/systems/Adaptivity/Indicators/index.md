@@ -5,6 +5,4 @@ MOOSE documentation page.
 !!! warning "MOOSE links"
     When the MOOSE site goes live, this should link to that page.
 
-!parameters /Adaptivity/Indicators
-
 !subobjects /Adaptivity/Indicators

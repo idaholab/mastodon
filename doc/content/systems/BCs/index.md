@@ -1,5 +1,4 @@
-#BCs System
-!parameters /BCs
+# BCs System
 
 !subobjects /BCs
 
