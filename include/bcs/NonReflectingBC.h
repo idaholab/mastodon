@@ -22,14 +22,17 @@ template<>
 InputParameters validParams<NonReflectingBC>();
 
 /**
- * NonReflecting BC  applies a Lysmer damper  on a given boundary in the normal and tangential directions
+ * NonReflecting BC applies a Lysmer damper on a given boundary in the normal and tangential directions
  */
-
 class NonReflectingBC : public IntegratedBC
 {
 public:
-
   NonReflectingBC(const InputParameters & parameters);
+
+  /**
+   * Method for returning parameters that are shared between NonReflectingBC and NonReflectingBCAction
+   */
+  static InputParameters commonParameters();
 
 protected:
 
