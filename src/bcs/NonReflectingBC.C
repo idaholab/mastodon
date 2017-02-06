@@ -16,10 +16,6 @@
 #include "MooseMesh.h"
 #include "Function.h"
 
-/**
- * Applies a absorbing boundary condition at the given boundary in a given direction.
- **/
-
 template<>
 InputParameters validParams<NonReflectingBC>()
 {
@@ -62,10 +58,10 @@ NonReflectingBC::NonReflectingBC(const InputParameters & parameters):
   }
 
   if (_ndisp != _mesh.dimension())
-    mooseError("Error in " + name() + ".The number of displacement variables supplied must match the mesh dimension.");
+    mooseError("The number of variables listed in the 'displacements' parameter in \"" << name() << "\" block must match the mesh dimension.");
 
   if (_component >= _mesh.dimension())
-    mooseError("Error in " + name() + ". component should be less than mesh dimension.");
+    mooseError("The 'component' parameter in \"" << name() << "\" block should be less than mesh dimension.");
 }
 
 Real
