@@ -16,23 +16,27 @@
 #include "MooseMesh.h"
 #include "Function.h"
 
-/**
- * Applies a absorbing boundary condition at the given boundary in a given direction.
- **/
-
 template<>
 InputParameters validParams<NonReflectingBC>()
 {
   InputParameters params = validParams<IntegratedBC>();
   params.addClassDescription("Applies Lysmer damper in the normal and tangential directions to soil boundary.");
+  params += NonReflectingBC::commonParameters();
   params.addRequiredParam<unsigned int>("component", "The direction in which the Lysmer damper is applied.");
+  params.set<bool>("use_displaced_mesh") = true;
+  return params;
+}
+
+InputParameters
+NonReflectingBC::commonParameters()
+{
+  InputParameters params = emptyInputParameters();
   params.addCoupledVar("displacements", "The vector of displacement variables. The size of this vector must be same as the number of dimensions.");
   params.addCoupledVar("velocities", "The vector of velocity variables that are coupled to the displacement variables. The size of this vector must be same as that of displacements.");
   params.addCoupledVar("accelerations", "The vector of acceleration variables that are coupled to the displacement variables. The size of this vector must be same as that of displacements.");
   params.addRequiredParam<Real>("beta", "The beta parameter for Newmark time integration.");
   params.addRequiredParam<Real>("gamma", "The gamma parameter for Newmark time integration.");
   params.addParam<Real>("alpha", 0.0, "The alpha parameter for HHT time integration.");
-  params.set<bool>("use_displaced_mesh") = true;
   return params;
 }
 
@@ -52,6 +56,21 @@ NonReflectingBC::NonReflectingBC(const InputParameters & parameters):
     _shear_wave_speed(getMaterialProperty<Real>("shear_wave_speed")),
     _P_wave_speed(getMaterialProperty<Real>("P_wave_speed"))
 {
+
+  // Error checking on variable vectors
+  if (_ndisp != _mesh.dimension())
+    mooseError("The number of variables listed in the 'displacements' parameter in \"" << name() << "\" block must match the mesh dimension.");
+
+  if (coupledComponents("velocities") != _mesh.dimension())
+    mooseError("The number of variables listed in the 'velocities' parameter in \"" << name() << "\" block must match the mesh dimension.");
+
+  if (coupledComponents("accelerations") != _mesh.dimension())
+    mooseError("The number of variables listed in the 'accelerations' parameter in \"" << name() << "\" block must match the mesh dimension.");
+
+  if (_component >= _mesh.dimension())
+    mooseError("The 'component' parameter in \"" << name() << "\" block should be less than mesh dimension.");
+
+  // Populate coupled variable information
   for (unsigned int i = 0; i < _ndisp; ++i)
   {
     _disp[i] = &coupledValue("displacements", i);
@@ -60,12 +79,6 @@ NonReflectingBC::NonReflectingBC(const InputParameters & parameters):
     _vel_old[i] = &coupledValueOld("velocities" , i);
     _accel_old[i] = &coupledValueOld("accelerations", i);
   }
-
-  if (_ndisp != _mesh.dimension())
-    mooseError("Error in " + name() + ".The number of displacement variables supplied must match the mesh dimension.");
-
-  if (_component >= _mesh.dimension())
-    mooseError("Error in " + name() + ". component should be less than mesh dimension.");
 }
 
 Real
