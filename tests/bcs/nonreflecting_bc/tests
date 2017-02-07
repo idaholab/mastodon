@@ -5,4 +5,28 @@
     exodiff = 'non_reflecting_bc_test_out.e'
     compiler = 'GCC CLANG'
   [../]
+  [./displacements_error]
+    type = RunException
+    input = 'non_reflecting_bc_error.i'
+    cli_args = "BCs/test/displacements=disp_x"
+    expect_err = "The number of variables listed in the \'displacements\' parameter in \"test\" block must match the mesh dimension."
+  [../]
+  [./velocities_error]
+    type = RunException
+    input = 'non_reflecting_bc_error.i'
+    cli_args = "BCs/test/velocities=disp_x"
+    expect_err = "The number of variables listed in the \'velocities\' parameter in \"test\" block must match the mesh dimension."
+  [../]
+  [./accelerations_error]
+    type = RunException
+    input = 'non_reflecting_bc_error.i'
+    cli_args = "BCs/test/accelerations=disp_x"
+    expect_err = "The number of variables listed in the \'accelerations\' parameter in \"test\" block must match the mesh dimension."
+  [../]
+  [./component_error]
+    type = RunException
+    input = 'non_reflecting_bc_error.i'
+    cli_args = "BCs/test/component=1980"
+    expect_err = "The \'component\' parameter in \"test\" block should be less than mesh dimension."
+  [../]
 []

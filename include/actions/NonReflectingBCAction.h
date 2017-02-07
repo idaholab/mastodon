@@ -16,6 +16,9 @@
 
 #include "Action.h"
 
+/**
+ * Creates NonReflectingBC object for each displacement direction.
+ **/
 class NonReflectingBCAction: public Action
 {
 public:
