@@ -30,7 +30,7 @@ public:
 protected:
 
   /**
-   * Populates the map of soild layer id to shear modules and density.
+   * Populates the map of solid layer id to shear modules and density.
    */
   virtual void initialSetup() override;
 
@@ -44,11 +44,11 @@ protected:
 
   /// Shear Modules and Density mapping to soil id.
   // This is being done in a single map to avoid looking up the id multipe times.
-  std::map<unsigned int, std::pair<Real, Real>>  _soil_id_to_shear_modulus_and_density;
+  std::map<unsigned int, std::pair<Real, Real>> _soil_id_to_shear_modulus_and_density;
 
   /// Young's Modules and Density mapping to soil id.
   // This is being done in a single map to avoid looking up the id multipe times.
-  std::map<unsigned int, std::pair<Real, Real>>  _soil_id_to_youngs_modulus_and_density;
+  std::map<unsigned int, std::pair<Real, Real>> _soil_id_to_youngs_modulus_and_density;
 
   /// Computed shear wave speed.
   MaterialProperty<Real> * _shear_wave_speed;
@@ -60,7 +60,7 @@ protected:
   MaterialProperty<Real> & _density;
 
   /// The id to be used for looking up the shear modulus and density, it is declared once here and re-used rather
-  /// than creating a temporary variable in computeQpProperties method, simply for effeciency.
+  /// than creating a temporary variable in computeQpProperties method, simply for efficiency.
   unsigned int _current_id;
 
   /// individual elasticity tensor
