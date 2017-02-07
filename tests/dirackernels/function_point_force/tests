@@ -13,4 +13,27 @@
     abs_zero = 1e-06
     compiler = 'GCC CLANG'
   [../]
+  [./function_point_no_point_error]
+    type = RunException
+    input = force_error.i
+    expect_err = "Either the 'point' or a set of points \('x_position'\) should be given as input in the \"src\" block."
+  [../]
+  [./function_point_no_number_error]
+    type = RunException
+    input = force_error.i
+    cli_args = "DiracKernels/src/x_position='x'"
+    expect_err = "The 'number' parameter is required in the \"src\" block when 'x_position' function is provided."
+  [../]
+  [./function_point_no_y_position_error]
+    type = RunException
+    input = force_error.i
+    cli_args = "DiracKernels/src/x_position='x' DiracKernels/src/number=1"
+    expect_err = "The number of position functions should be equal to mesh dimension in the \"src\" block."
+  [../]
+  [./function_point_no_z_position_error]
+    type = RunException
+    input = force_error.i
+    cli_args = "DiracKernels/src/x_position='x' DiracKernels/src/y_position='y' DiracKernels/src/number=1"
+    expect_err = "The number of position functions should be equal to mesh dimension in the \"src\" block."
+  [../]
 []
