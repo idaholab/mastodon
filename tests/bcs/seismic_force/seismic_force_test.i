@@ -143,13 +143,12 @@
 
 
 [BCs]
-  [./SeismicInput]
+  [./SeismicForce]
     [./front]
       displacements = 'disp_x disp_y disp_z'
-      input_component = '0 1 2'
+      input_components = '0 1 2'
       boundary = 'front'
-      input_function = 'x_vel y_vel z_vel' # input velocity functions
-      outcrop = true # when this is set, input velocity functions
+      velocity_functions = 'x_vel y_vel z_vel' # input velocity functions
     [../]
   [../]
   [./back_x]

@@ -1,0 +1,48 @@
+[tests]
+  [./seismic_force_test]
+    type = 'Exodiff'
+    input = 'seismic_force_test.i'
+    exodiff = 'seismic_force_test_out.e'
+  [../]
+  [./seismic_force_compenent_mesh_error]
+    type = RunException
+    input = seismic_force_error.i
+    cli_args = 'BCs/front/component=1980 BCs/front/vel_component=1'
+    expect_err = "Invalid value for 'component' \(1980\) given in \"front\" block, it must be a value from 0 to 1."
+  [../]
+  [./seismic_force_vel_compenent_mesh_error]
+    type = RunException
+    input = seismic_force_error.i
+    cli_args = 'BCs/front/component=1 BCs/front/vel_component=1980'
+    expect_err = "Invalid value for 'vel_component' \(1980\) given in \"front\" block, it must be a value from 0 to 1."
+  [../]
+  [./seismic_force_no_velocity_error]
+    type = RunException
+    input = seismic_force_error.i
+    cli_args = 'BCs/front/component=1 BCs/front/vel_component=1'
+    expect_err = "A function \('velocity_function'\) or variable \('velocity'\) describing the input velocity must be supplied in the \"front\" block."
+  [../]
+  [./action_no_velocity_error]
+    type = RunException
+    input = seismic_force_action_error.i
+    expect_err = "A list of functions \('velocity_functions'\) or variables \('velocities'\) describing the input velocity must be supplied in the \"front\" block."
+  [../]
+  [./action_var_velocity_size_error]
+    type = RunException
+    input = seismic_force_action_error.i
+    cli_args = "BCs/SeismicForce/front/velocities=vel_x"
+    expect_err = "The number of components listed in 'input_components' must equal the number of variables in 'velocities' in the \"front\" block."
+  [../]
+  [./action_func_velocity_size_error]
+    type = RunException
+    input = seismic_force_action_error.i
+    cli_args = "BCs/SeismicForce/front/velocity_functions=func_x"
+    expect_err = "The number of components listed in 'input_components' must equal the number of functions in 'velocity_functions' in the \"front\" block."
+  [../]
+  [./action_displacement_size_error]
+    type = RunException
+    input = seismic_force_action_error.i
+    cli_args = "BCs/SeismicForce/front/velocities='vel_x vel_y' BCs/SeismicForce/front/displacements='disp_x'"
+    expect_err = "The number of supplied 'displacements' must equal the mesh dimension in the \"front\" block."
+  [../]
+[]

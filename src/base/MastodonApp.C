@@ -10,7 +10,8 @@
 
 // Actions
 #include "NonReflectingBCAction.h"
-#include "SeismicInputAction.h"
+#include "SeismicForceAction.h"
+#include "SeismicDisplacementAction.h"
 #include "SeismicSourceAction.h"
 #include "ISoilAction.h"
 
@@ -111,20 +112,23 @@ extern "C" void MastodonApp__associateSyntax(Syntax & syntax, ActionFactory & ac
 void
 MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
 {
-  syntax.registerActionSyntax("EmptyAction", "BCs/SeismicInput");
-  syntax.registerActionSyntax("SeismicInputAction", "BCs/SeismicInput/*");
+  syntax.registerActionSyntax("EmptyAction", "BCs/SeismicForce");
+  syntax.registerActionSyntax("SeismicForceAction", "BCs/SeismicForce/*");
+  registerAction(SeismicForceAction, "add_bc");
+
+  syntax.registerActionSyntax("EmptyAction", "BCs/SeismicDisplacement");
+  syntax.registerActionSyntax("SeismicDisplacementAction", "BCs/SeismicDisplacement/*");
+  registerAction(SeismicDisplacementAction, "add_bc");
 
   syntax.registerActionSyntax("EmptyAction", "BCs/NonReflectingBC");
   syntax.registerActionSyntax("NonReflectingBCAction", "BCs/NonReflectingBC/*");
+  registerAction(NonReflectingBCAction, "add_bc");
 
   syntax.registerActionSyntax("EmptyAction", "DiracKernels/SeismicSource");
   syntax.registerActionSyntax("SeismicSourceAction", "DiracKernels/SeismicSource/*");
+  registerAction(SeismicSourceAction, "add_dirac_kernel");
 
   syntax.registerActionSyntax("EmptyAction", "Materials/I_Soil");
   syntax.registerActionSyntax("ISoilAction", "Materials/I_Soil/*");
-
-  registerAction(SeismicInputAction, "add_bc");
-  registerAction(NonReflectingBCAction, "add_bc");
-  registerAction(SeismicSourceAction, "add_dirac_kernel");
   registerAction(ISoilAction, "add_material");
 }

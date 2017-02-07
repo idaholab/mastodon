@@ -1,0 +1,18 @@
+[Tests]
+  [./seismic_displacment]
+    type = Exodiff
+    input = seismic_displacement.i
+    exodiff = seismic_displacement_out.e
+  [../]
+  [./action_displacement_size_error]
+    type = RunException
+    input = seismic_displacement_error.i
+    expect_err = "The number of supplied 'displacements' must equal the mesh dimension in the \"top_x\" block."
+  [../]
+  [./action_wrong_size_error]
+    type = RunException
+    input = seismic_displacement_error.i
+    cli_args = "BCs/SeismicDisplacement/top_x/displacements=disp_x"
+    expect_err = "In the \"top_x\" block the 'displacements', 'velocities', 'accelerations', 'input_functions', and 'input_components' should be of the same size."
+  [../]
+[]

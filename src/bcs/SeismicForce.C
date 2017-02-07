@@ -16,10 +16,6 @@
 #include "MooseError.h"
 #include "MooseMesh.h"
 
-/**
- * This boundary condition converts the ground velocity into a stress and applies the stress on the given boundary in a given direction.
- **/
-
 template<>
 InputParameters validParams<SeismicForce>()
 {
@@ -29,7 +25,7 @@ InputParameters validParams<SeismicForce>()
   params.addRequiredParam<unsigned int>("vel_component", "The direction in which the input velocity is applied.");
   params.addParam<Real>("factor", 1.0, "Scaling factor to be applied to the force.");
   params.addParam<FunctionName>("velocity_function", "The function that describes the input ground velocity.");
-  params.addCoupledVar("velocity", "The aux variable that describes the input velocity.");
+  params.addCoupledVar("velocity", "The variable that describes the input velocity.");
   params.addParam<Real>("alpha", 0.0, "The alpha parameter required for HHT time integration scheme.");
   params.set<bool>("use_displaced_mesh") = true;
   return params;
@@ -46,13 +42,13 @@ SeismicForce::SeismicForce(const InputParameters & parameters):
    _P_wave_speed(getMaterialProperty<Real>("P_wave_speed"))
 {
   if (_component >= _mesh.dimension())
-    mooseError( "Invalid component given for " << name() << ": " << _component << "." << std::endl );
+    mooseError( "Invalid value for 'component' (" << _component << ") given in \"" << name() << "\" block, it must be a value from 0 to " << _mesh.dimension() - 1  << ".");
 
   if (_vel_component >= _mesh.dimension())
-    mooseError( "Invalid vel_component given for " << name() << ": " << _vel_component << "." << std::endl );
+    mooseError( "Invalid value for 'vel_component' (" << _vel_component << ") given in \"" << name() << "\" block, it must be a value from 0 to " << _mesh.dimension() - 1 << ".");
 
   if (!isParamValid("velocity_function") && !isParamValid("velocity"))
-    mooseError("Error in " + name() + ".Please provide a function or aux variable for the input velocity");
+    mooseError("A function ('velocity_function') or variable ('velocity') describing the input velocity must be supplied in the \"" << name() << "\" block.");
 }
 
 Real
@@ -80,4 +76,3 @@ SeismicForce::computeQpResidual()
 
   return _factor * _test[_i][_qp] * _density[_qp] * (_P_wave_speed[_qp] * normal_vel * _normals[_qp](_component) + _shear_wave_speed[_qp] * tangential_vel[_component]);
 }
-
