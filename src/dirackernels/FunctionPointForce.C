@@ -15,11 +15,6 @@
 #include "Function.h"
 #include "MooseMesh.h"
 
-/**
- * This class applies a force at the given point/points in a given direction.
- * The force can be given as a function of space and/or time.
- **/
-
 template<>
 InputParameters validParams<FunctionPointForce>()
 {
@@ -30,7 +25,7 @@ InputParameters validParams<FunctionPointForce>()
   params.addParam<FunctionName>("x_position", "The function containing the x coordinates of the points. The first column gives point number (starting with 1) and second column gives x coordinate.");
   params.addParam<FunctionName>("y_position", "The function containing the y coordinates of the points. The first column gives point number (starting with 1) and second column gives y coordinate.");
   params.addParam<FunctionName>("z_position", "The function containing the z coordinates of the points. The first column gives point number (starting with 1) and second column gives z coordinate.");
-  params.addParam<unsigned int>("number", "The number of points");
+  params.addParam<unsigned int>("number", "The number of points.");
   params.addRequiredParam<FunctionName>("function", "The function defining the force as a function of space and/or time");
   return params;
 }
@@ -39,19 +34,19 @@ FunctionPointForce::FunctionPointForce(const InputParameters & parameters) :
     DiracKernel(parameters)
 {
   if (!isParamValid("point") && !isParamValid("x_position"))
-    mooseError("Error in " + name() + ". Either a point of a set of points should be given as input");
+    mooseError("Either the 'point' or a set of points ('x_position') should be given as input in the \"" << name() << "\" block.");
 
   if (isParamValid("x_position") && !isParamValid("number"))
-    mooseError("Error in " + name() + ". Please specify number of source points defined in the function");
+    mooseError("The 'number' parameter is required in the \"" << name() << "\" block when 'x_position' function is provided.");
 
   if (_mesh.dimension() > 1)
   {
     if (isParamValid("x_position") && !isParamValid("y_position"))
-       mooseError("Error in " + name() + ". The number of position functions should be equal to mesh dimension");
+       mooseError("The number of position functions should be equal to mesh dimension in the \"" << name() << "\" block.");
 
     if (_mesh.dimension() > 2)
       if (isParamValid("x_position") && !isParamValid("z_position"))
-        mooseError("Error in " + name() + ". The number of position functions should be equal to mesh dimension");
+        mooseError("The number of position functions should be equal to mesh dimension in the \"" << name() << "\" block.");
   }
 }
 
