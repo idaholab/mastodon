@@ -13,10 +13,6 @@
 /*************************************************/
 #include "ComputeIsotropicElasticityTensorSoil.h"
 
-/**
- * This class defines the elasticity tensor for a layered linear isotropic soil material.
- * Additionally this class calculates and stores the shear wave speed and P wave speed as material properties.
- **/
 template<>
 InputParameters validParams<ComputeIsotropicElasticityTensorSoil>()
 {
@@ -96,6 +92,7 @@ ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
   std::vector<Real> iso_const(2);
   iso_const[0] = it_s->second.first * (it_p->second.first - 2.0 * it_s->second.first) / (3.0 * it_s->second.first - it_p->second.first); // lambda = G*(E-2G)/(3G-E)
   iso_const[1] = it_s->second.first; // shear modulus
+
   //Fill elasticity tensor
   _Cijkl.fillFromInputVector(iso_const, RankFourTensor::symmetric_isotropic);
 
