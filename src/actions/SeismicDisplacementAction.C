@@ -24,7 +24,7 @@ template<>
 InputParameters validParams<SeismicDisplacementAction>()
 {
   InputParameters params = validParams<Action>();
-  params.addClassDescription("This action sets up Seismic force/displacement boundary conditions.");
+  params.addClassDescription("This action sets up seismic displacement boundary conditions.");
 
   params.addRequiredParam<std::vector<BoundaryName>>("boundary", "The list of boundary IDs from the mesh where this boundary condition will be applied.");
   params.addRequiredParam<std::vector<VariableName>>("displacements", "The nonlinear displacement variables for the problem.");
@@ -54,10 +54,6 @@ SeismicDisplacementAction::SeismicDisplacementAction(const InputParameters & par
 void
 SeismicDisplacementAction::act()
 {
-  // Cannot be done in constructor because _mesh is not defineds
-  if (_displacements.size() != _mesh->dimension())
-    mooseError("The number of supplied 'displacements' must equal the mesh dimension in the \"" << name() << "\" block.");
-
   InputParameters params = _factory.getValidParams("PresetDisplacement");
   params.set<std::vector<BoundaryName>>("boundary") = _boundary;
   params.set<Real>("beta") = getParam<Real>("beta");

@@ -4,11 +4,6 @@
     input = seismic_displacement.i
     exodiff = seismic_displacement_out.e
   [../]
-  [./action_displacement_size_error]
-    type = RunException
-    input = seismic_displacement_error.i
-    expect_err = "The number of supplied 'displacements' must equal the mesh dimension in the \"top_x\" block."
-  [../]
   [./action_wrong_size_error]
     type = RunException
     input = seismic_displacement_error.i
