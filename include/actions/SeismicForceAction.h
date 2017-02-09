@@ -11,31 +11,37 @@
 /*                                               */
 /*     See COPYRIGHT for full restrictions       */
 /*************************************************/
-#ifndef SEISMICINPUTACTION_H
-#define SEISMICINPUTACTION_H
+#ifndef SEISMICFORCEACTION_H
+#define SEISMICFORCEACTION_H
 
+// MOOSE includes
 #include "Action.h"
 
-/**
- * This action is used to apply seismic input on a set of boundaries in a model.
- * The seismic input can be applied in two ways:
- *
- * If the ground motion is an outcrop motion, then it is applied using SeismicForce boundary condition.
- * This requires the ground motion velocity as input.
- *
- * If the ground motion is a within-soil motion, then it is applied using FunctionDirichletBC.
- * This requires the ground displacement as input.
- **/
-
-class SeismicInputAction: public Action
-{
-public:
-  SeismicInputAction(const InputParameters & params);
-
-  virtual void act() override;
-};
+class SeismicForceAction;
 
 template<>
-InputParameters validParams<SeismicInputAction>();
+InputParameters validParams<SeismicForceAction>();
+
+/**
+ * This action is used to apply seismic input on a set of boundaries using SeismicForce boundary condition.
+ **/
+class SeismicForceAction: public Action
+{
+public:
+  SeismicForceAction(const InputParameters & params);
+
+  virtual void act() override;
+
+protected:
+
+  ///@{
+  /// Storage for the supplied input parameters
+  const std::vector<BoundaryName> & _boundary;
+  const std::vector<VariableName> & _displacements;
+  const std::vector<unsigned int> & _input_components;
+  const std::vector<VariableName> * _velocity_ptrs;
+  const std::vector<FunctionName> * _velocity_function_ptrs;
+  ///@}
+};
 
 #endif // SEISMICINPUTACTION_H
