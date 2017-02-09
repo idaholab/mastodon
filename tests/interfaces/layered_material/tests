@@ -1,0 +1,12 @@
+[Tests]
+  [./doc_string_error]
+    type = RunException
+    input = doc_string_error.i
+    expect_err = "The documentation for the 'layer_ids' parameter must be modified using InputParameters::etDocString in the validParams function to include information on the parameters which the layer ids correspond."
+  [../]
+  [./type_error]
+    type = RunException
+    input = type_error.i
+    expect_err = "The LayeredMaterialInterface requires that the template class be a Material object."
+  [../]
+[]

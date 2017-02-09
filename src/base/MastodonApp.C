@@ -38,6 +38,9 @@
 // Markers
 #include "MinimumElementSizeMarker.h"
 
+// Testing
+#include "TestLayeredMaterialInterface.h"
+
 template<>
 InputParameters validParams<MastodonApp>()
 {
@@ -105,6 +108,10 @@ MastodonApp::registerObjects(Factory & factory)
 
   // Markers
   registerMarker(MinimumElementSizeMarker);
+
+  // Testing
+  registerMaterial(TestLayeredMaterialInterfaceDocString);
+  registerKernel(TestLayeredMaterialInterfaceTypeError);
 }
 
 // External entry point for dynamic syntax association
