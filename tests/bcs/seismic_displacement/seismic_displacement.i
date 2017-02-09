@@ -18,7 +18,6 @@
   ymax = 1.0
 []
 
-
 [Variables]
   [./disp_x]
   [../]
@@ -107,16 +106,15 @@
 
 
 [BCs]
-  [./SeismicInput]
+  [./SeismicDisplacement]
     [./top_x]
       displacements = 'disp_x disp_y'
-      velocity = 'vel_x vel_y'
-      acceleration = 'accel_x accel_y'
-      beta = 0.4225
-      input_component = '0 1'
+      velocities = 'vel_x vel_y'
+      accelerations = 'accel_x accel_y'
+      input_components = '0 1'
+      input_functions = 'x_disp y_disp' #input displacements
       boundary = bottom
-      input_function = 'x_disp y_disp' #input displacements
-      alpha = -0.3
+      beta = 0.4225
     [../]
   [../]
 []
