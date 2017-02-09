@@ -20,6 +20,7 @@ LinearSoilMaterial::LinearSoilMaterial(const InputParameters & parameters) :
     _layer_density(getLayerParam<Real>("density"))
 {
 }
+
 void
 LinearSoilMaterial::computeQpProperties()
 {
