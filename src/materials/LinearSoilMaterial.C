@@ -16,13 +16,12 @@ InputParameters validParams<LinearSoilMaterial>()
 LinearSoilMaterial::LinearSoilMaterial(const InputParameters & parameters) :
     LayeredMaterialInterface<Material>(parameters),
     _shear_wave_speed(declareProperty<Real>("shear_wave_speed")),
-    _layer_shear_modulus(getLayerParam("shear_modulus")),
-    _layer_density(getLayerParam("density"))
+    _layer_shear_modulus(getLayerParam<Real>("shear_modulus")),
+    _layer_density(getLayerParam<Real>("density"))
 {
 }
 void
 LinearSoilMaterial::computeQpProperties()
 {
-  // Shear wave speed: sqrt(G/rho)
   _shear_wave_speed[_qp] = std::sqrt(_layer_shear_modulus[_qp]/_layer_density[_qp]);
 }

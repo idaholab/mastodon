@@ -34,6 +34,7 @@ protected:
 
   /// Layer parameter for the "density" input
   const MooseArray<Real> & _layer_density;
+
 };
 
 #endif // LINEARSOILMATERIAL_H
