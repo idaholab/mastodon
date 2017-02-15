@@ -7,8 +7,8 @@ template_arguments:
 markdown_extensions:
   - smarty
   - admonition
-  - markdown_include.include           # pip install markdown-include
-  - mdx_math:                          # pip install python-markdown-math
+  - markdown_include.include
+  - mdx_math:
       enable_dollar_delimiter: True
   - MooseDocs.extensions.MooseMarkdown:
       repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
@@ -26,5 +26,8 @@ markdown_extensions:
                   - src
               hide:
                 - /Bounds
+                - /Materials/TestLayeredMaterialInterfaceDocString
+                - /Kernels/TestLayeredMaterialInterfaceTypeError
+                - /Kernels # Only test objects exist now, this eventually should link to MOOSE docs which is a WIP.
                 - /BCs/NonReflectingBC # see 28
                 - /BCs/SeismicInput    # see 28

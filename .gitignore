@@ -15,6 +15,7 @@ syntax_dump_mastodon-*
 *.png
 peacock_run_exe_tmp.i
 *.*~*
+.failed_tests
 
 # Allow certain files in gold directories
 !**/gold/*.e
