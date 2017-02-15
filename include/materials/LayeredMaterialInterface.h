@@ -111,7 +111,7 @@ LayeredMaterialInterface<T>::LayeredMaterialInterface(const InputParameters & pa
 
   const std::string & doc = parameters.getDocString("layer_ids");
   if (doc.find("[This should be modified in the parent classes") != std::string::npos)
-    mooseError("The documentation for the 'layer_ids' parameter must be modified using InputParameters::etDocString in the validParams function to include information on the parameters which the layer ids correspond.");
+    mooseError("The documentation for the 'layer_ids' parameter must be modified using InputParameters::setDocString in the validParams function to include information on the parameters which the layer ids correspond.");
 }
 
 template<class T>

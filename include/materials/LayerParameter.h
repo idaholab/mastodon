@@ -47,7 +47,7 @@ public:
 
 /**
  * Class for storing a MooseArray to which the data from getLayerParam references. This
- * data is update with the input parameter data via LayeredMaterialInterface.
+ * data is updated with the input parameter data via LayeredMaterialInterface.
  */
 template<class P>
 class LayerParameter : public LayerParameterBase

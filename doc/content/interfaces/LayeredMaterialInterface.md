@@ -6,12 +6,12 @@ interface.
 
 ## Layer IDs
 Foremost, this interface relies on the concept of layer ids, which in Mastodon are defined by a field variable, which
-is typically an AuxVariable that defines regions with in the domain that represent areas where material properties
+is typically an AuxVariable that defines regions within the domain that represent areas where material properties
 vary (e.g., due to changing soil type). The LayeredMaterialInterface must be supplied the layer id field variable, via
 the "layer_variable" parameter.
 
 ## Layer Parameters
-When defining a Material object is is often desired to vary the value of a property according to the layer id. This
+When defining a Material object it is often desired to vary the value of a property according to the layer id. This
 connection between layer id and property value occurs in the input file using the "up-and-down" syntax that is
 ubiquitous throughout MOOSE.
 
