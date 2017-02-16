@@ -134,7 +134,7 @@ LayeredMaterialInterface<T>::computeProperties()
       // The location of the data in parameter data (i.e., data.second)
       const unsigned int & idx = _layer_id_to_param_index[current_layer_id];
       if (idx == Mastodon::INVALID_LAYER_ID)
-        mooseError("The current layer id variable value (" << current_layer_id << ") was not provided in the 'layer_ids' parameter of the \"" << T::name() << "\" block.");
+        mooseError2("The current layer id variable value (", current_layer_id, ") was not provided in the 'layer_ids' parameter of the \"", T::name(), "\" block.");
 
       // Update the reference data for the current quadrature point and layer id
       //    qp = The current quadrature point
@@ -155,7 +155,7 @@ LayeredMaterialInterface<T>::getLayerParam(const std::string & param_name)
   // Get the parameter data and check that it is the same size as "layer_ids"
   const std::vector<P> & data = T::template getParam<std::vector<P>>(param_name);
   if (data.size() != _input_layer_ids.size())
-    mooseError("The parameter \"" << param_name << "\" in the \"" << T::name() << "\" block must be the same length as the \"layer_ids\" parameter.");
+    mooseError2("The parameter \"", param_name, "\" in the \"", T::name(), "\" block must be the same length as the \"layer_ids\" parameter.");
 
   return addLayerVector<P>(data);
 }
@@ -177,7 +177,7 @@ LayeredMaterialInterface<T>::addLayerVector(const std::vector<P> & data)
 
   // Check that the input data being retrieved is the same size as "layer_ids"
   if (data.size() != _input_layer_ids.size())
-    mooseError("The data in the \"" << T::name() << "\" block supplied with the addLayerVector method must be the same length as the \"layer_ids\" parameter.");
+    mooseError2("The data in the \"", T::name(), "\" block supplied with the addLayerVector method must be the same length as the \"layer_ids\" parameter.");
 
   // Add the data to the list and return a reference to the MooseArray that will be populated in computeProperties
   _layer_data.emplace_back(std::make_shared<LayerParameter<P>>(data));

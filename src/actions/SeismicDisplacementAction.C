@@ -48,7 +48,7 @@ SeismicDisplacementAction::SeismicDisplacementAction(const InputParameters & par
 {
   if ((_displacements.size() != _input_components.size()) || (_displacements.size() != _accelerations.size()) ||
       (_displacements.size() != _velocities.size()) || _displacements.size() != _input_functions.size())
-    mooseError("In the \"" << name() << "\" block the 'displacements', 'velocities', 'accelerations', 'input_functions', and 'input_components' should be of the same size.");
+    mooseError2("In the \"", name(), "\" block the 'displacements', 'velocities', 'accelerations', 'input_functions', and 'input_components' should be of the same size.");
 }
 
 void
