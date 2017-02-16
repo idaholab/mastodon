@@ -59,16 +59,16 @@ NonReflectingBC::NonReflectingBC(const InputParameters & parameters):
 
   // Error checking on variable vectors
   if (_ndisp != _mesh.dimension())
-    mooseError("The number of variables listed in the 'displacements' parameter in \"" << name() << "\" block must match the mesh dimension.");
+    mooseError2("The number of variables listed in the 'displacements' parameter in \"", name(), "\" block must match the mesh dimension.");
 
   if (coupledComponents("velocities") != _mesh.dimension())
-    mooseError("The number of variables listed in the 'velocities' parameter in \"" << name() << "\" block must match the mesh dimension.");
+    mooseError2("The number of variables listed in the 'velocities' parameter in \"", name(), "\" block must match the mesh dimension.");
 
   if (coupledComponents("accelerations") != _mesh.dimension())
-    mooseError("The number of variables listed in the 'accelerations' parameter in \"" << name() << "\" block must match the mesh dimension.");
+    mooseError2("The number of variables listed in the 'accelerations' parameter in \"", name(), "\" block must match the mesh dimension.");
 
   if (_component >= _mesh.dimension())
-    mooseError("The 'component' parameter in \"" << name() << "\" block should be less than mesh dimension.");
+    mooseError2("The 'component' parameter in \"", name(), "\" block should be less than mesh dimension.");
 
   // Populate coupled variable information
   for (unsigned int i = 0; i < _ndisp; ++i)

@@ -410,7 +410,7 @@ ISoilAction::parseColumns( std::vector<Real> & x, std::vector<Real> & y, FileNam
 {
   std::ifstream file(data_file.c_str());
   if (!file.good())
-    mooseError("In " << name() << ": Error opening file '" + data_file + "'.");
+    mooseError2("In ", name(), ": Error opening file '" + data_file + "'.");
 
   std::vector<Real> scratch;
   unsigned int x_index = 0;
@@ -424,15 +424,15 @@ ISoilAction::parseColumns( std::vector<Real> & x, std::vector<Real> & y, FileNam
       if (x_index < scratch.size())
         x.push_back(scratch[x_index]);
       else
-        mooseError("In " << name() << ": column " << x_index << " for x does not exist on line " << line_index);
+        mooseError2("In ", name(), ": column ", x_index, " for x does not exist on line ", line_index);
 
       if (y_index < scratch.size())
         y.push_back(scratch[y_index]);
       else
-        mooseError("In " << name() << ": column " << y_index << " for y does not exist on line " << line_index);
+        mooseError2("In ", name(), ": column ", y_index, " for y does not exist on line ", line_index);
 
       if (scratch.size() != 2)
-        mooseError("In " << name() << ": Read more than 2 columns of data from file '" + data_file + "'.");
+        mooseError2("In ", name(), ": Read more than 2 columns of data from file '" + data_file + "'.");
     }
 
     line_index++;

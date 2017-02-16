@@ -34,19 +34,19 @@ FunctionPointForce::FunctionPointForce(const InputParameters & parameters) :
     DiracKernel(parameters)
 {
   if (!isParamValid("point") && !isParamValid("x_position"))
-    mooseError("Either the 'point' or a set of points ('x_position') should be given as input in the \"" << name() << "\" block.");
+    mooseError2("Either the 'point' or a set of points ('x_position') should be given as input in the \"", name(), "\" block.");
 
   if (isParamValid("x_position") && !isParamValid("number"))
-    mooseError("The 'number' parameter is required in the \"" << name() << "\" block when 'x_position' function is provided.");
+    mooseError2("The 'number' parameter is required in the \"", name(), "\" block when 'x_position' function is provided.");
 
   if (_mesh.dimension() > 1)
   {
     if (isParamValid("x_position") && !isParamValid("y_position"))
-       mooseError("The number of position functions should be equal to mesh dimension in the \"" << name() << "\" block.");
+       mooseError2("The number of position functions should be equal to mesh dimension in the \"", name(), "\" block.");
 
     if (_mesh.dimension() > 2)
       if (isParamValid("x_position") && !isParamValid("z_position"))
-        mooseError("The number of position functions should be equal to mesh dimension in the \"" << name() << "\" block.");
+        mooseError2("The number of position functions should be equal to mesh dimension in the \"", name(), "\" block.");
   }
 }
 
