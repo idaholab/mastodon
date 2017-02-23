@@ -42,13 +42,13 @@ SeismicForce::SeismicForce(const InputParameters & parameters):
    _P_wave_speed(getMaterialProperty<Real>("P_wave_speed"))
 {
   if (_component >= _mesh.dimension())
-    mooseError2( "Invalid value for 'component' (", _component, ") given in \"", name(), "\" block, it must be a value from 0 to ", _mesh.dimension() - 1 , ".");
+    mooseError( "Invalid value for 'component' (", _component, ") given in \"", name(), "\" block, it must be a value from 0 to ", _mesh.dimension() - 1 , ".");
 
   if (_vel_component >= _mesh.dimension())
-    mooseError2( "Invalid value for 'vel_component' (", _vel_component, ") given in \"", name(), "\" block, it must be a value from 0 to ", _mesh.dimension() - 1, ".");
+    mooseError( "Invalid value for 'vel_component' (", _vel_component, ") given in \"", name(), "\" block, it must be a value from 0 to ", _mesh.dimension() - 1, ".");
 
   if (!isParamValid("velocity_function") && !isParamValid("velocity"))
-    mooseError2("A function ('velocity_function') or variable ('velocity') describing the input velocity must be supplied in the \"", name(), "\" block.");
+    mooseError("A function ('velocity_function') or variable ('velocity') describing the input velocity must be supplied in the \"", name(), "\" block.");
 }
 
 Real
