@@ -44,13 +44,13 @@ SeismicForceAction::SeismicForceAction(const InputParameters & params) :
     _velocity_function_ptrs(isParamValid("velocity_functions") ? &getParam<std::vector<FunctionName>>("velocity_functions") : NULL)
 {
   if (!_velocity_ptrs && !_velocity_function_ptrs)
-    mooseError2("A list of functions ('velocity_functions') or variables ('velocities') describing the input velocity must be supplied in the \"", name(), "\" block.");
+    mooseError("A list of functions ('velocity_functions') or variables ('velocities') describing the input velocity must be supplied in the \"", name(), "\" block.");
 
   if (_velocity_ptrs && (_input_components.size() != _velocity_ptrs->size()))
-    mooseError2("The number of components listed in 'input_components' must equal the number of variables in 'velocities' in the \"", name(), "\" block.");
+    mooseError("The number of components listed in 'input_components' must equal the number of variables in 'velocities' in the \"", name(), "\" block.");
 
   if (_velocity_function_ptrs && (_input_components.size() != _velocity_function_ptrs->size()))
-    mooseError2("The number of components listed in 'input_components' must equal the number of functions in 'velocity_functions' in the \"", name(), "\" block.");
+    mooseError("The number of components listed in 'input_components' must equal the number of functions in 'velocity_functions' in the \"", name(), "\" block.");
 }
 
 void
@@ -58,7 +58,7 @@ SeismicForceAction::act()
 {
   // Cannot be done in constructor because _mesh is not defineds
   if (_displacements.size() != _mesh->dimension())
-    mooseError2("The number of supplied 'displacements' must equal the mesh dimension in the \"", name(), "\" block.");
+    mooseError("The number of supplied 'displacements' must equal the mesh dimension in the \"", name(), "\" block.");
 
   // Define parameters object for object to be created
   InputParameters params = _factory.getValidParams("SeismicForce");
