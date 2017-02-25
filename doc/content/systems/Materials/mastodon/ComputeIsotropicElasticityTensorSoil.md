@@ -18,7 +18,7 @@ $$
 
 The P wave speed is calculated as:
 $$
-V_p = \sqrt{\frac{2G(1+\nu)}{\rho}}
+V_p = \sqrt{\frac{2G(1-\nu)}{(1-2\nu)\rho}}
 $$
 
 !parameters /Materials/ComputeIsotropicElasticityTensorSoil

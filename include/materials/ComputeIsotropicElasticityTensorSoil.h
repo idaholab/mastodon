@@ -34,8 +34,8 @@ protected:
 
   virtual void computeQpElasticityTensor() override;
 
-  /// Computed Youngs modules
-  Real _youngs_modulus = 0;
+  /// Computed P wave modules
+  Real _P_wave_modulus = 0;
 
   /// Layer parameter for the "shear_modulus" input
   const MooseArray<Real> & _layer_shear_modulus;
