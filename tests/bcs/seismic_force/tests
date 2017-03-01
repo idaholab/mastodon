@@ -1,8 +1,14 @@
 [tests]
-  [./seismic_force_test]
+  [./seismic_force_test_x_y]
     type = 'Exodiff'
-    input = 'seismic_force_test.i'
-    exodiff = 'seismic_force_test_out.e'
+    input = 'seismic_force_test_x_y.i'
+    exodiff = 'seismic_force_test_x_y_out.e'
+  [../]
+  [./seismic_force_test_z]
+    # A minimum time step size of 0.01 is required for this problem.
+    type = 'Exodiff'
+    input = 'seismic_force_test_z.i'
+    exodiff = 'seismic_force_test_z_out.e'
   [../]
   [./seismic_force_compenent_mesh_error]
     type = RunException

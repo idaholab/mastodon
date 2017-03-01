@@ -1,16 +1,16 @@
-# Test for application of seismic force which converts ground velocity into shear and normal stress.
+# Test for application of seismic force which converts ground velocity in x and y directions into shear stress.
 
 # This test consists of 20 brick elements stacked in the z direction.
 
 # Back surface (z=0) is fixed in all three coordinate directions.
 
-# Seismic stress proportional to a 3D input velocity is applied to the front surface (z=1).
+# Seismic stress proportional to a 2D input velocity is applied to the front surface (z=1).
 
 # The nodes on the sides are constrained to move together to using periodic boundary.
 
-# The shear wave speed in the soil is 1 m/s. So it will take 1 second for a shear wave from the front surface to reach the back surface and 2 seconds for the wave reflected off the back surface to reach the front surface. Similarly, P-wave speed is 1.6 m/s, so it will take 1.24 seconds for the reflected P-wave to reach the front surface.
+# The shear wave speed in the soil is 1 m/s. So it will take 1 second for a shear wave from the front surface to reach the back surface and 2 seconds for the wave reflected off the back surface to reach the front surface.
 
-# Result: The velocity at the front surface should almost be same as input velocity in the x and y directions before 2 seconds (i.e., before the reflected shear wave reaches the front surface). In the z direction, the velocity should be same as input z velocity before 1.24 seconds.
+# Result: The velocity at the front surface should almost be same as input velocity in the x and y directions before 2 seconds (i.e., before the reflected shear wave reaches the front surface).
 
 [Mesh]
   type = GeneratedMesh
@@ -146,9 +146,9 @@
   [./SeismicForce]
     [./front]
       displacements = 'disp_x disp_y disp_z'
-      input_components = '0 1 2'
+      input_components = '0 1'
       boundary = 'front'
-      velocity_functions = 'x_vel y_vel z_vel' # input velocity functions
+      velocity_functions = 'x_vel y_vel' # input velocity functions
     [../]
   [../]
   [./back_x]
@@ -228,11 +228,6 @@
     x = '0.0 0.25 0.5 0.75 1.0 1.25 1.5 2.0 3.0'
     y = '0.0 0.0  0.5 0.0 -0.5 0.0  0.0 0.0 0.0'
   [../]
-  [./z_vel]
-    type = PiecewiseLinear
-    x = '0.0 0.25 0.5 0.75 1.0 1.25 1.5 2.0 3.0'
-    y = '0.0 0.0  0.5 0.0  0.0 0.0  0.0 0.0 0.0'
-  [../]
   [./x_vel]
     type = ParsedFunction
     value = 'if (t<=1.0, sin(pi*t), 0.0)'
@@ -256,11 +251,6 @@
     type = NodalVariableValue
     nodeid = 103
     variable = vel_y
-  [../]
-  [./disp_3]
-    type = NodalVariableValue
-    nodeid = 103
-    variable = vel_z
   [../]
 []
 
