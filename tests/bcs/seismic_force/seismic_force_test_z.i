@@ -1,6 +1,6 @@
 # Test for application of seismic force which converts ground velocity in z directions into normal stress.
 
-# This test consists of 40 elements for algorithm testing purposes (use 200 elements and dt of 0.005s to get a much cleaner wave).
+# This test consists of 20 elements for algorithm testing purposes (use 200 elements and dt of 0.005s to get a much cleaner wave).
 
 # Non-reflecting boundary condition is applied on the back surface (z=0) to simulate an infinitely long soil column.
 
@@ -17,7 +17,7 @@
   dim = 3
   nx = 1
   ny = 1
-  nz = 40
+  nz = 20
   xmin = 0.0
   xmax = 25.0
   ymin = 0.0
@@ -227,7 +227,7 @@
     type = PiecewiseLinear
     data_file = 'vel_wav_00125.csv'
     format = columns
-    scale_factor = -1
+    scale_factor = -10.0
   [../]
 []
 
