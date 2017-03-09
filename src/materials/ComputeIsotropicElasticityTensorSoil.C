@@ -46,7 +46,7 @@ void
 ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
 {
 
-  _youngs_modulus = _layer_shear_modulus[_qp] * 2.0* (1.0 + _layer_poissons_ratio[_qp]);
+  _P_wave_modulus = _layer_shear_modulus[_qp] * 2.0* (1.0 - _layer_poissons_ratio[_qp]) / (1.0 - 2.0 * _layer_poissons_ratio[_qp]);
 
   _density[_qp] = _layer_density[_qp];
 
@@ -55,12 +55,12 @@ ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
     // Shear wave speed: sqrt(G/rho)
     (*_shear_wave_speed)[_qp] = std::sqrt(_layer_shear_modulus[_qp]/ _density[_qp]);
 
-    // P wave speed: sqrt(E/rho)
-    (*_P_wave_speed)[_qp] = std::sqrt(_youngs_modulus / _density[_qp]);
+    // P wave speed: sqrt(M/rho)
+    (*_P_wave_speed)[_qp] = std::sqrt(_P_wave_modulus / _density[_qp]);
   }
 
   std::vector<Real> iso_const(2);
-  iso_const[0] = _layer_shear_modulus[_qp] * (_youngs_modulus - 2.0 * _layer_shear_modulus[_qp]) / (3.0 * _layer_shear_modulus[_qp] - _youngs_modulus); // lambda = G*(E-2G)/(3G-E)
+  iso_const[0] = _P_wave_modulus - 2.0 * _layer_shear_modulus[_qp]; // lambda = M - 2G
   iso_const[1] = _layer_shear_modulus[_qp]; // shear modulus
 
   //Fill elasticity tensor

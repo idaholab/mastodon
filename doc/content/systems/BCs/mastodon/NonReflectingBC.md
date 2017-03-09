@@ -6,7 +6,7 @@ This boundary condition applies a Lsymer damper \citep{lysmer1969finite} on a gi
 
 $$
 \sigma = E \epsilon = E \frac{du}{dx} = \frac{E}{V_p} \frac{du}{dt}= \rho V_p \frac{du}{dt}, $$
-where $E$ is the Young's modulus, $\sigma$ is the normal stress, $\epsilon$ is the normal strain, $\rho$ is the density, $V_p = \sqrt{\frac{E}{\rho}}$ is the P-wave speed and $\frac{du}{dt}$ is the particle velocity.
+where $E$ is the Young's modulus, $\sigma$ is the normal stress, $\epsilon$ is the normal strain, $\rho$ is the density, $V_p = \sqrt{\frac{E}{\rho}}$ is the P-wave speed and $\frac{du}{dt}$ is the particle velocity. Note that for a 3D problem, the P-wave speed is $V_p = \sqrt{\frac{E(1-\    nu)}{(1+\nu)(1-2\nu)}$.
 
 The stress in the above equation is directly proportional to the particle velocity which makes this boundary condition analogous to a viscous damper with damping coefficient of $\rho V_p$. So truncating the soil domain and placing this damper at the end of the domain is equivalent to simulating wave propagation in an infinite soil column provided the soil is made of linear elastic material and the wave is vertically incident on the boundary.
 
