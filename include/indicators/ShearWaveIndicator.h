@@ -3,7 +3,6 @@
 
 // MOOSE includes
 #include "Indicator.h"
-#include "MaterialPropertyInterface.h"
 
 // libMesh includes
 #include "libmesh/quadrature.h"
@@ -18,8 +17,7 @@ InputParameters validParams<ShearWaveIndicator>();
  * Computes the minimum element size.
  */
 class ShearWaveIndicator :
-    public Indicator,
-    public MaterialPropertyInterface
+    public Indicator
 {
 public:
   ShearWaveIndicator(const InputParameters & params);

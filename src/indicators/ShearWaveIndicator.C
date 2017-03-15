@@ -8,7 +8,6 @@ template<>
 InputParameters validParams<ShearWaveIndicator>()
 {
   InputParameters params = validParams<Indicator>();
-  params += validParams<MaterialPropertyInterface>();
   params.addParam<MaterialPropertyName>("shear_wave_speed", "shear_wave_speed", "The name of the material properties (type Real) that computes the shear wave velocity.");
   params.addRequiredParam<Real>("cutoff_frequency", "The cutoff frequency in Hertz.");
   params.addClassDescription("Computes the minimum element size based on the shear wave speed.");
@@ -18,7 +17,6 @@ InputParameters validParams<ShearWaveIndicator>()
 
 ShearWaveIndicator::ShearWaveIndicator(const InputParameters & parameters) :
     Indicator(parameters),
-    MaterialPropertyInterface(this),
     _shear_wave_speed(getMaterialProperty<Real>("shear_wave_speed")),
     _cutoff_frequency(getParam<Real>("cutoff_frequency")),
     _qrule(_assembly.qRule()),
