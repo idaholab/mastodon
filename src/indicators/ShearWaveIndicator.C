@@ -1,8 +1,12 @@
-// Mastodon includes
-#include "ShearWaveIndicator.h"
+// libMesh includes
+#include "libmesh/numeric_vector.h"
 
 // MOOSE includes
 #include "Assembly.h"
+#include "SystemBase.h"
+
+// Mastodon includes
+#include "ShearWaveIndicator.h"
 
 template<>
 InputParameters validParams<ShearWaveIndicator>()
