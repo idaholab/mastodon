@@ -1,3 +1,6 @@
+// libMesh includes
+#include "libmesh/numeric_vector.h"
+
 // Mastodon includes
 #include "LayerInterfaceIndicator.h"
 
