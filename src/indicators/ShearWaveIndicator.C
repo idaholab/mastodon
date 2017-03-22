@@ -4,6 +4,7 @@
 // MOOSE includes
 #include "Assembly.h"
 #include "SystemBase.h"
+#include "MooseVariable.h"
 
 // Mastodon includes
 #include "ShearWaveIndicator.h"
