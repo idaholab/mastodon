@@ -20,6 +20,7 @@
 #include "FEProblem.h"
 #include "Parser.h"
 #include "Conversion.h"
+#include "ColumnMajorMatrix.h"
 
 template<>
 InputParameters validParams<ISoilAction>()
