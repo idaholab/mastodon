@@ -7,6 +7,8 @@
 // libMesh includes
 #include "libmesh/quadrature.h"
 
+#include "MooseVariable.h"
+
 template<>
 InputParameters validParams<LayerInterfaceIndicator>()
 {
