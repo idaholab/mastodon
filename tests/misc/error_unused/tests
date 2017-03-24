@@ -1,0 +1,7 @@
+[Tests]
+  [./unused]
+    type = RunException
+    input = error_unused.i
+    expect_err = "The following parameters were unused in your input file:\nKernels/diff/not_used"
+  [../]
+[]
