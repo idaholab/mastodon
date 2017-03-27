@@ -47,7 +47,7 @@ protected:
   std::vector<MaterialProperty<RankTwoTensor> *>  _stress_model;
 
   /// Material property which stores the old stress for each elastic perfectly plastic curve.
-  std::vector<MaterialProperty<RankTwoTensor> *>  _stress_model_old;
+  std::vector<const MaterialProperty<RankTwoTensor> *>  _stress_model_old;
 
   /// Yield stress for each elastic perfectly plastic curve for each soil layer.
   std::vector<std::vector<Real>> _yield_stress;
