@@ -79,7 +79,7 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters) :
    for (unsigned int i = 0; i < _base_models.size(); i++)
    {
      _stress_model[i] = &declareProperty<RankTwoTensor>(_base_models[i] + "_stress_model");
-     _stress_model_old[i] = &declarePropertyOld<RankTwoTensor>(_base_models[i] + "_stress_model");
+     _stress_model_old[i] = &getMaterialPropertyOld<RankTwoTensor>(_base_models[i] + "_stress_model");
    }
 
    _stress_new.zero();
@@ -92,10 +92,7 @@ ComputeISoilStress::initQpStatefulProperties()
 {
   ComputeStressBase::initQpStatefulProperties();
   for (unsigned int i = 0; i < _base_models.size(); i++)
-  {
     (*_stress_model[i])[_qp].zero();
-    (*_stress_model_old[i])[_qp].zero();
-  }
 
   // Determine the current id for the soil. The variable which is a Real must be converted to a unsigned int for lookup, so first
   // it is rounded to avoid Real values that are just below the desired value.
@@ -156,7 +153,6 @@ ComputeISoilStress::initQpStatefulProperties()
      residual_xx = residual_xx - (*_stress_model[i])[_qp](0,0) - mean_pressure;
      residual_yy = residual_yy - (*_stress_model[i])[_qp](1,1) - mean_pressure;
   }
-  _stress_old[_qp] = _stress[_qp];
 }
 
 void
