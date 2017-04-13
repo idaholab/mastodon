@@ -21,26 +21,23 @@
 class Function;
 class FunctionPointForce;
 
-template<>
-InputParameters validParams<FunctionPointForce>();
+template <> InputParameters validParams<FunctionPointForce>();
 
 /**
  * This class applies a force at the given point/points in a given direction.
  * The force can be given as a function of space and/or time.
  **/
-class FunctionPointForce : public DiracKernel
-{
+class FunctionPointForce : public DiracKernel {
 public:
-  FunctionPointForce(const InputParameters & parameters);
+  FunctionPointForce(const InputParameters &parameters);
 
   virtual void addPoints() override;
 
   virtual Real computeQpResidual() override;
 
 protected:
-
   /// location of the point force
   Point _p;
 };
 
-#endif //FUNCTIONPOINTFORCE_H
+#endif // FUNCTIONPOINTFORCE_H

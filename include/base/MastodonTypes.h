@@ -12,9 +12,12 @@
 /*     See COPYRIGHT for full restrictions       */
 /*************************************************/
 
-// Defines a Mastodon namespace in which special types and enums should be defined.
-namespace Mastodon
-{
-  /// Invalid layer id (see LayeredMaterialInterface)
-  const static unsigned int INVALID_LAYER_ID = std::numeric_limits<unsigned int>::max();
+// STL includes
+#include <limits>
+
+// Defines a Mastodon namespace in which special types and enums should be
+// defined.
+namespace Mastodon {
+/// Invalid layer id (see LayeredMaterialInterface)
+extern const unsigned int INVALID_LAYER_ID;
 }
