@@ -1,19 +1,19 @@
+#include "AppFactory.h"
 #include "MastodonApp.h"
 #include "Moose.h"
-#include "AppFactory.h"
 #include "MooseSyntax.h"
 
 // Modules
+#include "ContactApp.h"
 #include "SolidMechanicsApp.h"
 #include "TensorMechanicsApp.h"
-#include "ContactApp.h"
 
 // Actions
-#include "NonReflectingBCAction.h"
-#include "SeismicForceAction.h"
-#include "SeismicDisplacementAction.h"
-#include "SeismicSourceAction.h"
 #include "ISoilAction.h"
+#include "NonReflectingBCAction.h"
+#include "SeismicDisplacementAction.h"
+#include "SeismicForceAction.h"
+#include "SeismicSourceAction.h"
 
 // BCs
 #include "NonReflectingBC.h"
@@ -27,13 +27,13 @@
 #include "SeismicSource.h"
 
 // Indicators
-#include "ShearWaveIndicator.h"
 #include "LayerInterfaceIndicator.h"
+#include "ShearWaveIndicator.h"
 
 // Materials
-#include "LinearSoilMaterial.h"
-#include "ComputeIsotropicElasticityTensorSoil.h"
 #include "ComputeISoilStress.h"
+#include "ComputeIsotropicElasticityTensorSoil.h"
+#include "LinearSoilMaterial.h"
 
 // Markers
 #include "MinimumElementSizeMarker.h"
@@ -41,9 +41,7 @@
 // Testing
 #include "TestLayeredMaterialInterface.h"
 
-template<>
-InputParameters validParams<MastodonApp>()
-{
+template <> InputParameters validParams<MastodonApp>() {
   InputParameters params = validParams<MooseApp>();
   params.set<bool>("error_unused") = true;
   params.set<bool>("use_legacy_uo_initialization") = false;
@@ -53,9 +51,7 @@ InputParameters validParams<MastodonApp>()
   return params;
 }
 
-MastodonApp::MastodonApp(InputParameters parameters) :
-    MooseApp(parameters)
-{
+MastodonApp::MastodonApp(InputParameters parameters) : MooseApp(parameters) {
   Moose::registerObjects(_factory);
   MastodonApp::registerObjects(_factory);
   SolidMechanicsApp::registerObjects(_factory);
@@ -69,23 +65,17 @@ MastodonApp::MastodonApp(InputParameters parameters) :
   ContactApp::associateSyntax(_syntax, _action_factory);
 }
 
-MastodonApp::~MastodonApp()
-{
-}
+MastodonApp::~MastodonApp() {}
 
 // External entry point for dynamic application loading
 extern "C" void MastodonApp__registerApps() { MastodonApp::registerApps(); }
-void
-MastodonApp::registerApps()
-{
-  registerApp(MastodonApp);
-}
+void MastodonApp::registerApps() { registerApp(MastodonApp); }
 
 // External entry point for dynamic object registration
-extern "C" void MastodonApp__registerObjects(Factory & factory) { MastodonApp::registerObjects(factory); }
-void
-MastodonApp::registerObjects(Factory & factory)
-{
+extern "C" void MastodonApp__registerObjects(Factory &factory) {
+  MastodonApp::registerObjects(factory);
+}
+void MastodonApp::registerObjects(Factory &factory) {
   // BCs
   registerBoundaryCondition(NonReflectingBC);
   registerBoundaryCondition(SeismicForce);
@@ -115,16 +105,19 @@ MastodonApp::registerObjects(Factory & factory)
 }
 
 // External entry point for dynamic syntax association
-extern "C" void MastodonApp__associateSyntax(Syntax & syntax, ActionFactory & action_factory) { MastodonApp::associateSyntax(syntax, action_factory); }
-void
-MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
-{
+extern "C" void MastodonApp__associateSyntax(Syntax &syntax,
+                                             ActionFactory &action_factory) {
+  MastodonApp::associateSyntax(syntax, action_factory);
+}
+void MastodonApp::associateSyntax(Syntax &syntax,
+                                  ActionFactory &action_factory) {
   syntax.registerActionSyntax("EmptyAction", "BCs/SeismicForce");
   syntax.registerActionSyntax("SeismicForceAction", "BCs/SeismicForce/*");
   registerAction(SeismicForceAction, "add_bc");
 
   syntax.registerActionSyntax("EmptyAction", "BCs/SeismicDisplacement");
-  syntax.registerActionSyntax("SeismicDisplacementAction", "BCs/SeismicDisplacement/*");
+  syntax.registerActionSyntax("SeismicDisplacementAction",
+                              "BCs/SeismicDisplacement/*");
   registerAction(SeismicDisplacementAction, "add_bc");
 
   syntax.registerActionSyntax("EmptyAction", "BCs/NonReflectingBC");
@@ -132,7 +125,8 @@ MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
   registerAction(NonReflectingBCAction, "add_bc");
 
   syntax.registerActionSyntax("EmptyAction", "DiracKernels/SeismicSource");
-  syntax.registerActionSyntax("SeismicSourceAction", "DiracKernels/SeismicSource/*");
+  syntax.registerActionSyntax("SeismicSourceAction",
+                              "DiracKernels/SeismicSource/*");
   registerAction(SeismicSourceAction, "add_dirac_kernel");
 
   syntax.registerActionSyntax("EmptyAction", "Materials/I_Soil");

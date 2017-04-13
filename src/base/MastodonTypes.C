@@ -11,21 +11,12 @@
 /*                                               */
 /*     See COPYRIGHT for full restrictions       */
 /*************************************************/
-#ifndef NONREFLECTINGBCACTION_H
-#define NONREFLECTINGBCACTION_H
 
-#include "Action.h"
+// MOOSE includes
+#include "MastodonTypes.h"
 
-/**
- * Creates NonReflectingBC object for each displacement direction.
- **/
-class NonReflectingBCAction : public Action {
-public:
-  NonReflectingBCAction(const InputParameters &params);
-
-  virtual void act() override;
-};
-
-template <> InputParameters validParams<NonReflectingBCAction>();
-
-#endif // NONREFLECTINGBCACTION_H
+// Defines a Mastodon namespace in which special types and enums should be defined.
+namespace Mastodon {
+/// Invalid layer id (see LayeredMaterialInterface)
+const unsigned int INVALID_LAYER_ID = std::numeric_limits<unsigned int>::max();
+}

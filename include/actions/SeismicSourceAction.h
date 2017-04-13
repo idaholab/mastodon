@@ -19,15 +19,13 @@
 /**
  * This Action sets up the seismic source dirac kernel in multiple directions
  **/
-class SeismicSourceAction: public Action
-{
+class SeismicSourceAction : public Action {
 public:
-  SeismicSourceAction(const InputParameters & params);
+  SeismicSourceAction(const InputParameters &params);
 
   virtual void act() override;
 };
 
-template<>
-InputParameters validParams<SeismicSourceAction>();
+template <> InputParameters validParams<SeismicSourceAction>();
 
 #endif // SEISMICSOURCEACTION_H

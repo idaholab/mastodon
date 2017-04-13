@@ -18,24 +18,23 @@
 
 class NonReflectingBC;
 
-template<>
-InputParameters validParams<NonReflectingBC>();
+template <> InputParameters validParams<NonReflectingBC>();
 
 /**
- * NonReflecting BC applies a Lysmer damper on a given boundary in the normal and tangential directions
+ * NonReflecting BC applies a Lysmer damper on a given boundary in the normal
+ * and tangential directions
  */
-class NonReflectingBC : public IntegratedBC
-{
+class NonReflectingBC : public IntegratedBC {
 public:
-  NonReflectingBC(const InputParameters & parameters);
+  NonReflectingBC(const InputParameters &parameters);
 
   /**
-   * Method for returning parameters that are shared between NonReflectingBC and NonReflectingBCAction
+   * Method for returning parameters that are shared between NonReflectingBC and
+   * NonReflectingBCAction
    */
   static InputParameters commonParameters();
 
 protected:
-
   virtual Real computeQpResidual() override;
   virtual Real computeQpJacobian() override;
   virtual Real computeQpOffDiagJacobian(unsigned int jvar) override;
@@ -71,13 +70,13 @@ protected:
   const Real _alpha;
 
   /// Density of the soil
-  const MaterialProperty<Real> & _density;
+  const MaterialProperty<Real> &_density;
 
   /// Shear wave speed of the soil
-  const MaterialProperty<Real> & _shear_wave_speed;
+  const MaterialProperty<Real> &_shear_wave_speed;
 
   /// P wave speed of the soil
-  const MaterialProperty<Real> & _P_wave_speed;
+  const MaterialProperty<Real> &_P_wave_speed;
 };
 
-#endif //NONREFLECTINGBC_H
+#endif // NONREFLECTINGBC_H
