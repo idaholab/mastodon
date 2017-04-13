@@ -4,6 +4,7 @@
     input = 'non_reflecting_bc_test.i'
     exodiff = 'non_reflecting_bc_test_out.e'
     compiler = 'GCC CLANG'
+    max_parallel = 1
   [../]
   [./displacements_error]
     type = RunException
