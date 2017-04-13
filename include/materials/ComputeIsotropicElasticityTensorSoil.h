@@ -25,41 +25,40 @@
  * layer soil material and also calculates the material properties shear and P
  * wave velocities.
  */
-class ComputeIsotropicElasticityTensorSoil : public LayeredMaterialInterface<ComputeElasticityTensorBase>
-{
+class ComputeIsotropicElasticityTensorSoil
+    : public LayeredMaterialInterface<ComputeElasticityTensorBase> {
 public:
-  ComputeIsotropicElasticityTensorSoil(const InputParameters & parameters);
+  ComputeIsotropicElasticityTensorSoil(const InputParameters &parameters);
 
   /// This class will always produce an isotropic tensor.
-  virtual bool isGuaranteedIsotropic() const override {return true;}
+  virtual bool isGuaranteedIsotropic() const override { return true; }
 
 protected:
-
   virtual void computeQpElasticityTensor() override;
 
   /// Computed P wave modules
   Real _P_wave_modulus = 0;
 
   /// Layer parameter for the "shear_modulus" input
-  const MooseArray<Real> & _layer_shear_modulus;
+  const MooseArray<Real> &_layer_shear_modulus;
 
   /// Layer parameter for the "density" input
-  const MooseArray<Real> & _layer_density;
+  const MooseArray<Real> &_layer_density;
 
   /// Layer parameter for the "poissons_ratio" input
-  const MooseArray<Real> & _layer_poissons_ratio;
+  const MooseArray<Real> &_layer_poissons_ratio;
 
   /// Flag to turn on/off P and S wave speed calculation.
   bool _wave_speed_calculation;
 
   /// Computed shear wave speed.
-  MaterialProperty<Real> * _shear_wave_speed;
+  MaterialProperty<Real> *_shear_wave_speed;
 
   /// Computed P wave speed.
-  MaterialProperty<Real> * _P_wave_speed;
+  MaterialProperty<Real> *_P_wave_speed;
 
   /// Density stored as a material property.
-  MaterialProperty<Real> & _density;
+  MaterialProperty<Real> &_density;
 
   /// individual elasticity tensor
   RankFourTensor _Cijkl;
