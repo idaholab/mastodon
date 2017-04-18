@@ -7,14 +7,16 @@
 // Forward Declarations
 class UniformLayerAuxKernel;
 
-template <> InputParameters validParams<UniformLayerAuxKernel>();
+template <>
+InputParameters validParams<UniformLayerAuxKernel>();
 
 /**
  * Computes uniform layer ids given thicknesses and a direction.
  */
-class UniformLayerAuxKernel : public AuxKernel {
+class UniformLayerAuxKernel : public AuxKernel
+{
 public:
-  UniformLayerAuxKernel(const InputParameters &parameters);
+  UniformLayerAuxKernel(const InputParameters & parameters);
 
 protected:
   /**
@@ -23,7 +25,7 @@ protected:
   virtual Real computeValue() override;
 
   /// The layer interfaces along the direction vector
-  const std::vector<Real> &_interfaces;
+  const std::vector<Real> & _interfaces;
 
   /// The layer id values
   std::vector<unsigned int> _layer_ids;

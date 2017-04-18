@@ -16,7 +16,8 @@
 #include "MastodonTypes.h"
 
 // Defines a Mastodon namespace in which special types and enums should be defined.
-namespace Mastodon {
+namespace Mastodon
+{
 /// Invalid layer id (see LayeredMaterialInterface)
 const unsigned int INVALID_LAYER_ID = std::numeric_limits<unsigned int>::max();
 }

@@ -19,13 +19,15 @@
 /**
  * Creates NonReflectingBC object for each displacement direction.
  **/
-class NonReflectingBCAction : public Action {
+class NonReflectingBCAction : public Action
+{
 public:
-  NonReflectingBCAction(const InputParameters &params);
+  NonReflectingBCAction(const InputParameters & params);
 
   virtual void act() override;
 };
 
-template <> InputParameters validParams<NonReflectingBCAction>();
+template <>
+InputParameters validParams<NonReflectingBCAction>();
 
 #endif // NONREFLECTINGBCACTION_H

@@ -17,7 +17,8 @@
 
 // Defines a Mastodon namespace in which special types and enums should be
 // defined.
-namespace Mastodon {
+namespace Mastodon
+{
 /// Invalid layer id (see LayeredMaterialInterface)
 extern const unsigned int INVALID_LAYER_ID;
 }

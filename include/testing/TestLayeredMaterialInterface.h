@@ -25,18 +25,22 @@
 /**
  * Test object for checking setDocString error of LayeredMaterialInterface
  */
-class TestLayeredMaterialInterfaceDocString
-    : public LayeredMaterialInterface<Material> {
+class TestLayeredMaterialInterfaceDocString : public LayeredMaterialInterface<Material>
+{
 public:
-  TestLayeredMaterialInterfaceDocString(const InputParameters &parameters)
-      : LayeredMaterialInterface(parameters) {}
+  TestLayeredMaterialInterfaceDocString(const InputParameters & parameters)
+    : LayeredMaterialInterface(parameters)
+  {
+  }
 
 protected:
   virtual void computeQpProperties() override {}
 };
 
 template <>
-InputParameters validParams<TestLayeredMaterialInterfaceDocString>() {
+InputParameters
+validParams<TestLayeredMaterialInterfaceDocString>()
+{
   InputParameters params = validParams<Material>();
   params += validParams<LayeredMaterialInterface<>>();
   return params;
@@ -45,16 +49,19 @@ InputParameters validParams<TestLayeredMaterialInterfaceDocString>() {
 /**
  * Test object needed to test Material type of LayeredMaterialInterface
  */
-class TestLayeredMaterialInterfaceKernel : public Kernel {
+class TestLayeredMaterialInterfaceKernel : public Kernel
+{
 public:
-  TestLayeredMaterialInterfaceKernel(const InputParameters &parameters)
-      : Kernel(parameters) {}
+  TestLayeredMaterialInterfaceKernel(const InputParameters & parameters) : Kernel(parameters) {}
 
 protected:
   virtual void computeProperties() {}
 };
 
-template <> InputParameters validParams<TestLayeredMaterialInterfaceKernel>() {
+template <>
+InputParameters
+validParams<TestLayeredMaterialInterfaceKernel>()
+{
   return validParams<Kernel>();
 }
 
@@ -63,15 +70,20 @@ template <> InputParameters validParams<TestLayeredMaterialInterfaceKernel>() {
  * LayeredMaterialInterface
  */
 class TestLayeredMaterialInterfaceTypeError
-    : public LayeredMaterialInterface<TestLayeredMaterialInterfaceKernel> {
+    : public LayeredMaterialInterface<TestLayeredMaterialInterfaceKernel>
+{
 public:
-  TestLayeredMaterialInterfaceTypeError(const InputParameters &parameters)
-      : LayeredMaterialInterface(parameters) {}
+  TestLayeredMaterialInterfaceTypeError(const InputParameters & parameters)
+    : LayeredMaterialInterface(parameters)
+  {
+  }
   virtual Real computeQpResidual() override { return 0.0; }
 };
 
 template <>
-InputParameters validParams<TestLayeredMaterialInterfaceTypeError>() {
+InputParameters
+validParams<TestLayeredMaterialInterfaceTypeError>()
+{
   InputParameters params = validParams<TestLayeredMaterialInterfaceKernel>();
   params += validParams<LayeredMaterialInterface<>>();
   return params;

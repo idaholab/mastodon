@@ -32,9 +32,10 @@
 
 #include "Action.h"
 
-class ISoilAction : public Action {
+class ISoilAction : public Action
+{
 public:
-  ISoilAction(const InputParameters &params);
+  ISoilAction(const InputParameters & params);
 
   virtual void act();
 
@@ -42,41 +43,40 @@ private:
   /// Calculates the Youngs modulus and yiled stress for each elastic-perfectly
   /// plastic curve for each soil layer from the data stored in stress and
   /// strain vectors.
-  void computeSoilLayerProperties(
-      std::vector<std::vector<Real>> &stress,
-      std::vector<std::vector<Real>> &strain,
-      std::vector<unsigned int> &layer_ids,
-      std::vector<std::vector<Real>> &E0_component,
-      std::vector<std::vector<Real>> &scaled_yield0_component,
-      std::vector<Real> &poissons_ratio);
+  void computeSoilLayerProperties(std::vector<std::vector<Real>> & stress,
+                                  std::vector<std::vector<Real>> & strain,
+                                  std::vector<unsigned int> & layer_ids,
+                                  std::vector<std::vector<Real>> & E0_component,
+                                  std::vector<std::vector<Real>> & scaled_yield0_component,
+                                  std::vector<Real> & poissons_ratio);
 
   /// Reads the user provided data file and stores the stress and strain values
   /// for each soil layer in the vectors stress and strain, respectively.
-  void computeUserDefinedBackbone(std::vector<std::vector<Real>> &stress,
-                                  std::vector<std::vector<Real>> &strain,
-                                  std::vector<unsigned int> &layer_ids);
+  void computeUserDefinedBackbone(std::vector<std::vector<Real>> & stress,
+                                  std::vector<std::vector<Real>> & strain,
+                                  std::vector<unsigned int> & layer_ids);
 
   /// Populates the stress and strain vectors automatically using the Darendeli
   /// backbone curve formulation.
-  void computeDarendeliBackBone(std::vector<std::vector<Real>> &stress,
-                                std::vector<std::vector<Real>> &strain,
-                                std::vector<unsigned int> &layer_ids);
+  void computeDarendeliBackBone(std::vector<std::vector<Real>> & stress,
+                                std::vector<std::vector<Real>> & strain,
+                                std::vector<unsigned int> & layer_ids);
 
   /// Populates the stress and strain vectors automatically using the GQ/H
   /// backbone curve formulation.
-  void computeGQHBackbone(std::vector<std::vector<Real>> &stress,
-                          std::vector<std::vector<Real>> &strain,
-                          std::vector<unsigned int> &layer_ids);
+  void computeGQHBackbone(std::vector<std::vector<Real>> & stress,
+                          std::vector<std::vector<Real>> & strain,
+                          std::vector<unsigned int> & layer_ids);
 
   /// parseNextLineReals reads one line of a file and stores it a vector.
-  bool parseNextLineReals(std::ifstream &ifs, std::vector<Real> &myvec);
+  bool parseNextLineReals(std::ifstream & ifs, std::vector<Real> & myvec);
 
   /// parseColumns reads a given csv file with 2 columns and stores the first
   /// column in the vector x and the second column in vector y.
-  void parseColumns(std::vector<Real> &x, std::vector<Real> &y,
-                    FileName &data_file);
+  void parseColumns(std::vector<Real> & x, std::vector<Real> & y, FileName & data_file);
 };
 
-template <> InputParameters validParams<ISoilAction>();
+template <>
+InputParameters validParams<ISoilAction>();
 
 #endif // ISOILACTION_H

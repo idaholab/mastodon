@@ -19,15 +19,17 @@
 class Function;
 class SeismicForce;
 
-template <> InputParameters validParams<SeismicForce>();
+template <>
+InputParameters validParams<SeismicForce>();
 
 /**
  * SeismicForce applies a pressure on a given boundary in the direction defined
  * by component
  */
-class SeismicForce : public IntegratedBC {
+class SeismicForce : public IntegratedBC
+{
 public:
-  SeismicForce(const InputParameters &parameters);
+  SeismicForce(const InputParameters & parameters);
 
 protected:
   virtual Real computeQpResidual() override;
@@ -45,13 +47,13 @@ protected:
   const Real _alpha;
 
   /// density of the soil
-  const MaterialProperty<Real> &_density;
+  const MaterialProperty<Real> & _density;
 
   /// shear wave speed of the soil
-  const MaterialProperty<Real> &_shear_wave_speed;
+  const MaterialProperty<Real> & _shear_wave_speed;
 
   /// P wave speed of the soil
-  const MaterialProperty<Real> &_P_wave_speed;
+  const MaterialProperty<Real> & _P_wave_speed;
 };
 
 #endif // SEISMICFORCE_H
