@@ -7,7 +7,8 @@
 // Forward Declarations
 class LayerInterfaceIndicator;
 
-template <> InputParameters validParams<LayerInterfaceIndicator>();
+template <>
+InputParameters validParams<LayerInterfaceIndicator>();
 
 /**
  * Computes the "error" as defined by the difference between the layers. Since,
@@ -20,9 +21,10 @@ template <> InputParameters validParams<LayerInterfaceIndicator>();
  * This inherits from InternalSideIndicator to gain access to neighbor
  * information.
  */
-class LayerInterfaceIndicator : public InternalSideIndicator {
+class LayerInterfaceIndicator : public InternalSideIndicator
+{
 public:
-  LayerInterfaceIndicator(const InputParameters &params);
+  LayerInterfaceIndicator(const InputParameters & params);
 
   /**
    * This elminates the aggregation performed by the
@@ -43,7 +45,7 @@ protected:
   virtual Real computeQpIntegral() final { return 0.0; }
 
   /// Tolerence for considering a layer ids different
-  const Real &_tolerance;
+  const Real & _tolerance;
 };
 
 #endif // LAYERINTERFACEINDICATOR_H

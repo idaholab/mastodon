@@ -19,26 +19,28 @@
 
 class SeismicForceAction;
 
-template <> InputParameters validParams<SeismicForceAction>();
+template <>
+InputParameters validParams<SeismicForceAction>();
 
 /**
  * This action is used to apply seismic input on a set of boundaries using
  *SeismicForce boundary condition.
  **/
-class SeismicForceAction : public Action {
+class SeismicForceAction : public Action
+{
 public:
-  SeismicForceAction(const InputParameters &params);
+  SeismicForceAction(const InputParameters & params);
 
   virtual void act() override;
 
 protected:
   ///@{
   /// Storage for the supplied input parameters
-  const std::vector<BoundaryName> &_boundary;
-  const std::vector<VariableName> &_displacements;
-  const std::vector<unsigned int> &_input_components;
-  const std::vector<VariableName> *_velocity_ptrs;
-  const std::vector<FunctionName> *_velocity_function_ptrs;
+  const std::vector<BoundaryName> & _boundary;
+  const std::vector<VariableName> & _displacements;
+  const std::vector<unsigned int> & _input_components;
+  const std::vector<VariableName> * _velocity_ptrs;
+  const std::vector<FunctionName> * _velocity_function_ptrs;
   ///@}
 };
 

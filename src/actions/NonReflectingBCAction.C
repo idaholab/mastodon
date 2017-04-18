@@ -16,21 +16,25 @@
 #include "NonReflectingBC.h"
 #include "NonReflectingBCAction.h"
 
-template <> InputParameters validParams<NonReflectingBCAction>() {
+template <>
+InputParameters
+validParams<NonReflectingBCAction>()
+{
   InputParameters params = validParams<Action>();
-  params.addClassDescription(
-      "Set up Non-reflecting boundary conditions in different directions.");
+  params.addClassDescription("Set up Non-reflecting boundary conditions in different directions.");
   params += NonReflectingBC::commonParameters();
   params.addRequiredParam<std::vector<BoundaryName>>(
-      "boundary", "The list of boundary IDs from the mesh where this boundary "
-                  "condition will be applied");
+      "boundary",
+      "The list of boundary IDs from the mesh where this boundary "
+      "condition will be applied");
   return params;
 }
 
-NonReflectingBCAction::NonReflectingBCAction(const InputParameters &params)
-    : Action(params) {}
+NonReflectingBCAction::NonReflectingBCAction(const InputParameters & params) : Action(params) {}
 
-void NonReflectingBCAction::act() {
+void
+NonReflectingBCAction::act()
+{
   // Apply parameters from the action level to the parameters of a
   // NonReflectingBC object
   InputParameters params = _factory.getValidParams("NonReflectingBC");
@@ -40,11 +44,11 @@ void NonReflectingBCAction::act() {
   std::string prefix = "mastodon_non_reflecting_BC";
 
   // Loop over displacements and add NonReflectingBC object for each variable
-  const std::vector<BoundaryName> &boundary =
-      getParam<std::vector<BoundaryName>>("boundary");
-  const std::vector<VariableName> &displacements =
+  const std::vector<BoundaryName> & boundary = getParam<std::vector<BoundaryName>>("boundary");
+  const std::vector<VariableName> & displacements =
       getParam<std::vector<VariableName>>("displacements");
-  for (unsigned int i = 0; i < displacements.size(); ++i) {
+  for (unsigned int i = 0; i < displacements.size(); ++i)
+  {
     std::stringstream name;
     name << prefix << i << boundary[0];
 
