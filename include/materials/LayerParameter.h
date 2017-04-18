@@ -30,20 +30,20 @@
  * MooseArray objects
  * that are stored in the parent version (LayerParameter).
  */
-class LayerParameterBase {
+class LayerParameterBase
+{
 public:
   LayerParameterBase() = default;
   virtual ~LayerParameterBase() = default;
 
   LayerParameterBase(const LayerParameterBase &) = delete;
-  LayerParameterBase &operator=(const LayerParameterBase &) = delete;
+  LayerParameterBase & operator=(const LayerParameterBase &) = delete;
 
   LayerParameterBase(LayerParameterBase &&) = default;
-  LayerParameterBase &operator=(LayerParameterBase &&) = default;
+  LayerParameterBase & operator=(LayerParameterBase &&) = default;
 
-  virtual void resize(const unsigned int & /*n*/){}; // = 0;
-  virtual void reinit(const unsigned int & /*qp*/,
-                      const unsigned int & /*idx*/){}; // = 0;
+  virtual void resize(const unsigned int & /*n*/){};                                // = 0;
+  virtual void reinit(const unsigned int & /*qp*/, const unsigned int & /*idx*/){}; // = 0;
 };
 
 /**
@@ -51,33 +51,35 @@ public:
  * references. This
  * data is updated with the input parameter data via LayeredMaterialInterface.
  */
-template <class P> class LayerParameter : public LayerParameterBase {
+template <class P>
+class LayerParameter : public LayerParameterBase
+{
 public:
-  LayerParameter(const std::vector<P> &data) : _param_data(data) {}
+  LayerParameter(const std::vector<P> & data) : _param_data(data) {}
 
   /**
    * Resizes the MooseArray that will be referenced by calls to getLayerParam.
    */
-  virtual void resize(const unsigned int &n) override { _array_data.resize(n); }
+  virtual void resize(const unsigned int & n) override { _array_data.resize(n); }
 
   /**
    * Updates the MooseArray data at a quadrature point given the input parameter
    * vector index.
    * see LayeredMaterialInterface::computeProperties
    */
-  virtual void reinit(const unsigned int &qp,
-                      const unsigned int &idx) override {
+  virtual void reinit(const unsigned int & qp, const unsigned int & idx) override
+  {
     _array_data[qp] = _param_data[idx];
   }
 
   /**
    * Return a reference to the MooseArray object (see getLayerParam).
    */
-  const MooseArray<P> &array() { return _array_data; }
+  const MooseArray<P> & array() { return _array_data; }
 
 private:
   /// Reference to the input parameter data for the problem.
-  const std::vector<P> &_param_data;
+  const std::vector<P> & _param_data;
 
   /// Data that will be referenced in calls to getLayerParam
   MooseArray<P> _array_data;

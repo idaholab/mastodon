@@ -25,9 +25,10 @@
 
 #include "ComputeFiniteStrainElasticStress.h"
 
-class ComputeISoilStress : public ComputeFiniteStrainElasticStress {
+class ComputeISoilStress : public ComputeFiniteStrainElasticStress
+{
 public:
-  ComputeISoilStress(const InputParameters &parameters);
+  ComputeISoilStress(const InputParameters & parameters);
 
 protected:
   virtual void computeQpStress() override;
@@ -39,7 +40,7 @@ protected:
   virtual void initQpStatefulProperties() override;
 
   /// Strain_increment for the current time step.
-  const MaterialProperty<RankTwoTensor> &_strain_increment;
+  const MaterialProperty<RankTwoTensor> & _strain_increment;
 
   /// Base names given to each elastic perfectly plastic curve.
   std::vector<std::string> _base_models;
@@ -110,19 +111,19 @@ protected:
   Real _stiffness_pressure_correction;
 
   /// The coupled variable field providing the soil layer id.
-  const VariableValue &_soil_layer_variable;
+  const VariableValue & _soil_layer_variable;
 
   /// Flag to turn on/off P and S wave speed calculation
   bool _wave_speed_calculation;
 
   /// Computed shear wave speed.
-  MaterialProperty<Real> *_shear_wave_speed;
+  MaterialProperty<Real> * _shear_wave_speed;
 
   /// Computed P wave speed.
-  MaterialProperty<Real> *_P_wave_speed;
+  MaterialProperty<Real> * _P_wave_speed;
 
   /// Density stored as a material property.
-  const MaterialProperty<Real> *_density;
+  const MaterialProperty<Real> * _density;
 
   /// The id to be used for looking up the shear modulus and density, it is
   /// declared once here and re-used rather

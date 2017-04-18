@@ -34,11 +34,13 @@
 class Function;
 class SeismicSource;
 
-template <> InputParameters validParams<SeismicSource>();
+template <>
+InputParameters validParams<SeismicSource>();
 
-class SeismicSource : public DiracKernel {
+class SeismicSource : public DiracKernel
+{
 public:
-  SeismicSource(const InputParameters &parameters);
+  SeismicSource(const InputParameters & parameters);
 
   virtual void addPoints() override;
   virtual Real computeQpResidual() override;
@@ -63,7 +65,7 @@ protected:
   const Real _area;
 
   /// Function describing slip time history
-  Function *const _slip_function;
+  Function * const _slip_function;
 
   /// Magnitude of moment = _shear_modulus * _area * slip. Used in residual
   /// calculation
