@@ -1,18 +1,12 @@
 [Mesh]
   type = GeneratedMesh
   dim = 2
-  nx = 10
-  ny = 10
+  nx = 3
+  ny = 3
 []
 
 [Variables]
   [./u]
-  [../]
-[]
-
-[AuxVariables]
-  [./accel_x]
-    initial_condition = 1
   [../]
 []
 
@@ -27,43 +21,47 @@
   [../]
 []
 
-[BCs]
-  [./left]
-    type = DirichletBC
-    variable = u
-    boundary = left
-    value = 0
+[AuxVariables]
+  [./accel_x]
   [../]
-  [./right]
-    type = DirichletBC
-    variable = u
-    boundary = right
-    value = 1
+  [./proc_id]
+    family = MONOMIAL
+    order = CONSTANT
+  [../]
+[]
+
+[AuxKernels]
+  [./accel_x]
+    type = FunctionAux
+    function = t*t
+    variable = accel_x
+    execute_on = 'initial timestep_end'
+  [../]
+  [./proc]
+    type = ProcessorIDAux
+    variable = proc_id
   [../]
 []
 
 [Executioner]
-  # Preconditioned JFNK (default)
   type = Transient
   num_steps = 5
   dt = 1
-  solve_type = PJFNK
-  petsc_options_iname = '-pc_type -pc_hypre_type'
-  petsc_options_value = 'hypre boomeramg'
 []
 
 [Outputs]
-  [./accel]
+  exodus = true
+  [./out]
     type = CSV
     execute_on = final
   [../]
 []
 
 [VectorPostprocessors]
-  [./accel_history_builder]
+  [./accel]
     type = ResponseHistoryBuilder
-    variables = 'u accel_x'
-    node = 25
+    variables = 'accel_x'
+    node = 2
     execute_on = 'initial timestep_end'
   [../]
 []

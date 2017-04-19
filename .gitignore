@@ -27,7 +27,7 @@ peacock_run_exe_tmp.i
 !**/gold/*.pvtu
 
 # Don't include doc/js or doc/css, these are copied from MOOSE
-doc/js/*
+doc/js
 doc/css/*
 
 # Ignore generated documentation

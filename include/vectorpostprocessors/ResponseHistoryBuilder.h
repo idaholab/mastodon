@@ -32,27 +32,15 @@ InputParameters validParams<ResponseHistoryBuilder>();
 class ResponseHistoryBuilder : public NodalVectorPostprocessor
 {
 public:
-  /**
-    * Class constructor
-    * @param parameters The input parameters
-    */
   ResponseHistoryBuilder(const InputParameters & parameters);
-
   virtual void initialize() override;
-
+  virtual void finalize() override;
   virtual void threadJoin(const UserObject & uo) override;
-
-  /**
-   * Builds response histories
-   */
   virtual void execute() override;
 
 protected:
-  /// Reference to the time vector from the analysis. Will be output in the first column of the csv file.
+  /// Reference to the time vector from the analysis.
   VectorPostprocessorValue & _history_time;
-
-  /// Dummy variable for current time.
-  Real _cur_time;
 
   /// Vector of pointers to the response histories of different variables at the node.
   std::vector<VectorPostprocessorValue *> _history;
@@ -61,7 +49,13 @@ protected:
   std::vector<const VariableValue *> _variables;
 
   /// Reference to the node number where the response histories are requested.
-  const unsigned int & _node;
+  const dof_id_type & _node;
+
+  /// Stores the processor id that owns the data collected from the node, this is set to an invalid
+  /// value during initialize() and then set to the node processor id that contains the data that
+  /// is being stored. Thus, this is used to dictate which processor as well as thread has the
+  /// latest data.
+  processor_id_type _node_rank;
 };
 
 #endif
