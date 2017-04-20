@@ -38,6 +38,9 @@
 // Markers
 #include "MinimumElementSizeMarker.h"
 
+// VectorPostprocessors
+#include "ResponseHistoryBuilder.h"
+
 // Testing
 #include "TestLayeredMaterialInterface.h"
 
@@ -114,6 +117,9 @@ MastodonApp::registerObjects(Factory & factory)
 
   // Markers
   registerMarker(MinimumElementSizeMarker);
+
+  // VectorPostprocessors
+  registerVectorPostprocessor(ResponseHistoryBuilder);
 
   // Testing
   registerMaterial(TestLayeredMaterialInterfaceDocString);
