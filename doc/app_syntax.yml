@@ -1,5 +1,5 @@
 executable: mastodon-opt
-install: doc/content/systems
+install: doc/content/documentation/systems
 links:
     Tests:
       - tests

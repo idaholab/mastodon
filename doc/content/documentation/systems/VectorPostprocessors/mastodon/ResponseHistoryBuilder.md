@@ -1,4 +1,3 @@
-# ResponseHistoryBuilder
 The `ResponseHistoryBuilder` creates a time history given a list of variables and a node. Thus, at the specified node the values of the variables are stored at each timestep.
 
 For example, the input file below contains two variables: "u" and "accel_x". It is desired that
@@ -12,7 +11,6 @@ is limited, resulting in the CSV file shown below.
 !listing tests/vectorpostprocessors/response_history_builder/response_history_builder.i block=Outputs
 
 !listing tests/vectorpostprocessors/response_history_builder/gold/response_history_builder_out_accel_0006.csv
-
 
 !parameters /VectorPostprocessors/ResponseHistoryBuilder
 
