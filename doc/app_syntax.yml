@@ -1,0 +1,19 @@
+executable: mastodon-opt
+install: doc/content/systems
+links:
+    Tests:
+      - tests
+locations:
+    - mastodon:
+        doxygen: https://hpcsc.inl.gov/ssl/MASTODON/docs
+        doxygen_name_style: lower
+        paths:
+            - include
+            - src
+        hide:
+          - /Bounds
+          - /Materials/TestLayeredMaterialInterfaceDocString
+          - /Kernels/TestLayeredMaterialInterfaceTypeError
+          - /Kernels # Only test objects exist now, this eventually should link to MOOSE docs which is a WIP.
+          - /BCs/NonReflectingBC # see 28
+          - /BCs/SeismicInput    # see 28
