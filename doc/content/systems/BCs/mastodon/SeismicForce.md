@@ -9,7 +9,7 @@ To convert the velocity into a stress, let us a consider a uniform infinite line
 $$
 \sigma = E  \epsilon = E  \frac{du}{dx} = \frac{E}{V_p}  \frac{du}{dt} = \rho  V_p  \frac{du}{dt},
 $$
-where $E$ is the Young's modulus, $\sigma$ is the normal stress, $\epsilon$ is the normal strain, $\rho$ is the density, $V_p = \sqrt{\frac{E}{\rho}}$ is the P-wave speed, $\frac{du}{dt}$ is the particle velocity (or the ground velocity in this case). Note that for a 3D problem, the P-wave speed is $V_p = \sqrt{\frac{E(1-\nu)}{(1+\nu)(1-2\nu)}$. 
+where $E$ is the Young's modulus, $\sigma$ is the normal stress, $\epsilon$ is the normal strain, $\rho$ is the density, $V_p = \sqrt{\frac{E}{\rho}}$ is the P-wave speed, $\frac{du}{dt}$ is the particle velocity (or the ground velocity in this case). Note that for a 3D problem, the P-wave speed is $V_p = \sqrt{\frac{E(1-\nu)}{(1+\nu)(1-2\nu)}$.
 
 Similarly, if a vertically propagating shear wave is traveling through the infinite linear elastic soil column, then, the shear stress at any location within the soil column is:
 
