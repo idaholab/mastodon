@@ -1,0 +1,28 @@
+- toc
+- smarty
+- admonition
+- extra
+- meta
+- mdx_math:
+    enable_dollar_delimiter: True
+#- MooseDocs.extensions.global:
+#    globals: !include doc/globals.yml
+- MooseDocs.extensions.include
+- MooseDocs.extensions.bibtex
+- MooseDocs.extensions.css
+- MooseDocs.extensions.diagram
+- MooseDocs.extensions.devel
+- MooseDocs.extensions.misc
+- MooseDocs.extensions.media
+- MooseDocs.extensions.tables
+- MooseDocs.extensions.listings:
+    repo: https://hpcgitlab.inl.gov/idaholab/mastodon/tree/master
+- MooseDocs.extensions.refs
+- MooseDocs.extensions.app_syntax: !include doc/app_syntax.yml
+- MooseDocs.extensions.template:
+    template: website.html
+    template_args:
+        title: Mastodon
+        mathjax_url: https://hpcsc.inl.gov/ssl/HERD/MathJax/MathJax.js
+        repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
+        navigation: doc/navigation.yml

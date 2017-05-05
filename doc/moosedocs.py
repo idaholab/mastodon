@@ -15,6 +15,7 @@ MOOSE_PYTHON_DIR = os.path.join(MOOSE_DIR, 'python')
 if MOOSE_PYTHON_DIR not in sys.path:
     sys.path.append(MOOSE_PYTHON_DIR)
 import MooseDocs
+from MooseDocs import main
 
 if __name__ == '__main__':
-    sys.exit(MooseDocs.moosedocs())
+    sys.exit(main.run())
