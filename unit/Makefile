@@ -2,34 +2,49 @@
 ################### MOOSE Application Standard Makefile #######################
 ###############################################################################
 #
+# Required Environment variables (one of the following)
+# PACKAGES_DIR  - Location of the MOOSE redistributable package
+#
 # Optional Environment variables
-# MOOSE_DIR        - Root directory of the MOOSE project 
-# HERD_TRUNK_DIR   - Location of the HERD repository
-# FRAMEWORK_DIR    - Location of the MOOSE framework
+# MOOSE_DIR     - Root directory of the MOOSE project
+# FRAMEWORK_DIR - Location of the MOOSE framework
 #
 ###############################################################################
 MOOSE_DIR          ?= $(shell dirname `pwd`)/../moose
 FRAMEWORK_DIR      ?= $(MOOSE_DIR)/framework
 ###############################################################################
-CURRENT_DIR        := $(shell pwd)
 
 # framework
 include $(FRAMEWORK_DIR)/build.mk
 include $(FRAMEWORK_DIR)/moose.mk
 
 ################################## MODULES ####################################
-HEAT_CONDUCTION   := yes
-NAVIER_STOKES     := yes
-MISC              := yes
+# set desired physics modules equal to 'yes' to enable them
+CHEMICAL_REACTIONS        := no
+CONTACT                   := yes
+FLUID_PROPERTIES          := no
+HEAT_CONDUCTION           := no
+MISC                      := no
+NAVIER_STOKES             := no
+PHASE_FIELD               := no
+RDG                       := no
+RICHARDS                  := no
+SOLID_MECHANICS           := yes
+STOCHASTIC_TOOLS          := no
+TENSOR_MECHANICS          := yes
+WATER_STEAM_EOS           := no
+XFEM                      := no
+POROUS_FLOW               := no
+LEVEL_SET                 := no
 include           $(MOOSE_DIR)/modules/modules.mk
 ###############################################################################
 
-# Extra stuff for CPPUNIT
-CPPUNIT_DIR 		?= $(PACKAGES_DIR)/cppunit
-ADDITIONAL_INCLUDES 	:= -I$(CPPUNIT_DIR)/include
-ADDITIONAL_LIBS 	:= -L$(CPPUNIT_DIR)/lib -lcppunit
+# Extra stuff for GTEST
+ADDITIONAL_INCLUDES	:= -I$(FRAMEWORK_DIR)/contrib/gtest
+ADDITIONAL_LIBS 	:= $(FRAMEWORK_DIR)/contrib/gtest/libgtest.la
 
 # dep apps
+CURRENT_DIR        := $(shell pwd)
 APPLICATION_DIR    := $(CURRENT_DIR)/..
 APPLICATION_NAME   := mastodon
 include            $(FRAMEWORK_DIR)/app.mk
@@ -37,13 +52,14 @@ include            $(FRAMEWORK_DIR)/app.mk
 APPLICATION_DIR    := $(CURRENT_DIR)
 APPLICATION_NAME   := mastodon-unit
 BUILD_EXEC         := yes
+
 DEP_APPS    ?= $(shell $(FRAMEWORK_DIR)/scripts/find_dep_apps.py $(APPLICATION_NAME))
 include $(FRAMEWORK_DIR)/app.mk
 
-# Find all the MASTODON unit test source files and include their dependencies.
-mastodon-unit_srcfiles := $(shell find $(CURRENT_DIR) -name "*.C")
-mastodon-unit_deps := $(patsubst %.C, %.$(obj-suffix).d, $(mastodon-unit_srcfiles))
--include $(mastodon-unit_deps)
+# Find all the Mastodon unit test source files and include their dependencies.
+mastodon_unit_srcfiles := $(shell find $(MOOSE_DIR)/unit/src -name "*.C")
+mastodon_unit_deps := $(patsubst %.C, %.$(obj-suffix).d, $(mastodon_unit_srcfiles))
+-include $(mastodon_unit_deps)
 
 ###############################################################################
 # Additional special case targets should be added here
