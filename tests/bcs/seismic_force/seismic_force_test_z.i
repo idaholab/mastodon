@@ -29,7 +29,7 @@
 [Controls]
    [./period0]
       type = TimePeriod
-      disable_objects = 'inertia_x inertia_y inertia_z accel_x accel_y accel_z vel_x vel_y vel_z'
+      disable_objects = 'Kernels/inertia_x Kernels/inertia_y Kernels/inertia_z AuxKernels/accel_x AuxKernels/accel_y AuxKernels/accel_z AuxKernels/vel_x AuxKernels/vel_y AuxKernels/vel_z'
       start_time = 0.0
       end_time = 0.00125 # same as dt used in the analysis
    [../]
