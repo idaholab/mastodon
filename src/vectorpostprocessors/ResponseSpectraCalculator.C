@@ -63,12 +63,12 @@ ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & par
 
   // Declaring three spectrum vectors: displacement, velocity and acceleration
   // for each variable name input by the user.
-  for (unsigned int i = 0; i < _varnames.size(); ++i)
+  for (const std::string & name : _varnames)
   {
-    _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", _varnames[i]));
-    _spectrum.push_back(&declareVector(_varnames[i] + "_sd"));
-    _spectrum.push_back(&declareVector(_varnames[i] + "_sv"));
-    _spectrum.push_back(&declareVector(_varnames[i] + "_sa"));
+    _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", name));
+    _spectrum.push_back(&declareVector(name + "_sd"));
+    _spectrum.push_back(&declareVector(name + "_sv"));
+    _spectrum.push_back(&declareVector(name + "_sa"));
   }
 }
 
@@ -76,8 +76,8 @@ void
 ResponseSpectraCalculator::initialize()
 {
   _frequency.clear();
-  for (int i = 0; i < _spectrum.size(); ++i)
-    _spectrum[i]->clear();
+  for (VectorPostprocessorValue * ptr : _spectrum)
+    ptr->clear();
 }
 
 void
@@ -88,7 +88,7 @@ ResponseSpectraCalculator::execute()
   // calculation is performed when the distance between _t and _calc_time is
   // smaller than the _dt at that time step. The makes sure that the
   // calculation is performed only once.
-  for (int i = 0; i < _varnames.size() && abs(_t - _calc_time) < _dt; ++i)
+  for (std::size_t i = 0; i < _varnames.size() && abs(_t - _calc_time) < _dt; ++i)
   {
     // The acceleration responses may or may not have a constant time step.
     // Therefore, they are regularized by default to a constant time step by the

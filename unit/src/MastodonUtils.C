@@ -18,7 +18,7 @@ TEST(MastodonUtils, Regularize)
   EXPECT_EQ(reg_out.size(), 2)
       << "Number of vectors returned by the function is different. Two vectors are expected.\n";
   // Value check
-  for (int i = 0; i < reg_acc.size(); ++i)
+  for (std::size_t i = 0; i < reg_acc.size(); ++i)
   {
     EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(reg_out[0][i], reg_tme[i]))
         << "Time vector is different at index: " << i << ". Calculated: " << reg_out[0][i]
