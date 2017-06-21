@@ -11,7 +11,7 @@ MastodonUtils::responseSpectrum(const Real & freq_start,
 {
   std::vector<Real> freq_vec, aspec_vec, vspec_vec, dspec_vec;
   Real logdf, om_n, om_d, dt2, dis1, vel1, acc1, dis2, vel2, acc2, pdmax, kd;
-  for (int n = 0; n < freq_num; ++n)
+  for (std::size_t n = 0; n < freq_num; ++n)
   {
     // Building the frequency vector. Frequencies are distributed
     // uniformly in the log scale.
@@ -25,7 +25,7 @@ MastodonUtils::responseSpectrum(const Real & freq_start,
     pdmax = 0.0;
     acc1 = -1.0 * history_acc[0] - 2.0 * om_d * vel1 - om_n * om_n * dis1;
     kd = 1.0 + om_d * reg_dt + dt2 * om_n * om_n / 4.0;
-    for (int j = 0; j < history_acc.size(); ++j)
+    for (std::size_t j = 0; j < history_acc.size(); ++j)
     {
       dis2 = ((1.0 + om_d * reg_dt) * dis1 + (reg_dt + 1.0 / 2.0 * om_d * dt2) * vel1 +
               dt2 / 4.0 * acc1 - dt2 / 4.0 * history_acc[j]) /
