@@ -1,23 +1,11 @@
-/*************************************************/
-/*           DO NOT MODIFY THIS HEADER           */
-/*                                               */
-/*                     MASTODON                  */
-/*                                               */
-/*    (c) 2015 Battelle Energy Alliance, LLC     */
-/*            ALL RIGHTS RESERVED                */
-/*                                               */
-/*   Prepared by Battelle Energy Alliance, LLC   */
-/*     With the U. S. Department of Energy       */
-/*                                               */
-/*     See COPYRIGHT for full restrictions       */
-/*************************************************/
-
+// MOOSE includes
 #include "PostprocessorInterface.h"
 #include "ResponseHistoryBuilder.h"
 
 // libMesh includes
 #include "libmesh/parallel_algebra.h"
 
+// C++ includes
 #include <unistd.h>
 
 template <>
