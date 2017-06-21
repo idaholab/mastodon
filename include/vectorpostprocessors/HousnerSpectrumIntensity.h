@@ -39,7 +39,6 @@ class HousnerSpectrumIntensity : public GeneralVectorPostprocessor
 public:
   HousnerSpectrumIntensity(const InputParameters & parameters);
   virtual void initialize() override;
-  virtual void threadJoin(const UserObject &) override{};
   virtual void execute() override;
 
 protected:
