@@ -40,6 +40,8 @@
 
 // VectorPostprocessors
 #include "ResponseHistoryBuilder.h"
+#include "ResponseSpectraCalculator.h"
+#include "HousnerSpectrumIntensity.h"
 
 // Testing
 #include "TestLayeredMaterialInterface.h"
@@ -120,6 +122,8 @@ MastodonApp::registerObjects(Factory & factory)
 
   // VectorPostprocessors
   registerVectorPostprocessor(ResponseHistoryBuilder);
+  registerVectorPostprocessor(ResponseSpectraCalculator);
+  registerVectorPostprocessor(HousnerSpectrumIntensity);
 
   // Testing
   registerMaterial(TestLayeredMaterialInterfaceDocString);
