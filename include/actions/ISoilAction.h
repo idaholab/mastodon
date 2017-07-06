@@ -16,15 +16,11 @@
 // (numanog2@illinois.edu) and Omar Baltaji (baltaji2@illinois.edu) from UIUC.
 
 /**
- * This action sets up the I-Soil material model. The stress-strain backbone
- *curve can
- * either be provided by the user or can be automatically generated using the
- *Darendeli
- * GQ/H method. This stress-strain curve is then divided into multiple
- *elastic-perfectly
- * plastic stress-strain curves and the information corresponding to each
- *elastic-perfectly
- * plastic curve is passed as input to the ComputeISoilStress.C material model
+ * This action sets up the I-Soil material model. The stress-strain backbone *curve can either be
+ * provided by the user or can be automatically generated using the Darendeli GQ/H method. This
+ * stress-strain curve is then divided into multiple elastic-perfectly plastic stress-strain curves
+ * and the information corresponding to each elastic-perfectly plastic curve is passed as input to
+ * the ComputeISoilStress.C material model
  **/
 
 #ifndef ISOILACTION_H
@@ -37,10 +33,10 @@ class ISoilAction : public Action
 public:
   ISoilAction(const InputParameters & params);
 
-  virtual void act();
+  virtual void act() override;
 
 private:
-  /// Calculates the Youngs modulus and yiled stress for each elastic-perfectly
+  /// Calculates the Youngs modulus and yield stress for each elastic-perfectly
   /// plastic curve for each soil layer from the data stored in stress and
   /// strain vectors.
   void computeSoilLayerProperties(std::vector<std::vector<Real>> & stress,

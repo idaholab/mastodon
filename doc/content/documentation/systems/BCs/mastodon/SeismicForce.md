@@ -1,5 +1,5 @@
 #SeismicForce
-!description /BCs/SeismicForce
+!syntax description /BCs/SeismicForce
 
 ## Description
 This boundary condition takes the ground velocity in a particular coordinate direction as input and converts it to a normal/tangential stress and applies this stress at the given boundary. The ground velocity is given as input using the "velocity_function" and the direction in which this velocity has to be applied is given by "vel_component".
@@ -20,8 +20,8 @@ where $V_s$ is the shear wave speed and $\tau$ is the shear stress.
 
 If the normal to boundary is not along "vel_component", then the given velocity is split into two components, one normal and one tangential to the boundary and the normal and shear stresses are then obtained using the above equations. The direction of these stresses are dependent on the orientation of the boundary. So, these stress have to be brought back to the global coordinate system using coordinate transformation and the component of the stress in the global direction given by "component" is assembled to the corresponding location in the residual vector.
 
-!parameters /BCs/SeismicForce
+!syntax parameters /BCs/SeismicForce actions=0 syntax=0
 
-!inputfiles /BCs/SeismicForce
+!syntax inputs /BCs/SeismicForce actions=0 syntax=0
 
-!childobjects /BCs/SeismicForce
+!syntax children /BCs/SeismicForce actions=0 syntax=0

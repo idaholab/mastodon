@@ -1,5 +1,5 @@
 # NonReflectingBC
-!description /BCs/NonReflectingBC
+!syntax description /BCs/NonReflectingBC
 
 ## Description
 This boundary condition applies a Lsymer damper \citep{lysmer1969finite} on a given boundary to absorb the waves hitting the boundary. To understand Lsymer dampers, let us consider an uniform linear elastic soil column and say a 1D vertically propagating P wave is traveling through this soil column. Then the normal stress at any location in the soil column is given by:
@@ -12,11 +12,11 @@ The stress in the above equation is directly proportional to the particle veloci
 
 If the soil is not linear elastic or if the wave is incident at an angle on the boundary, the waves are not completely absorbed by the Lsymer damper. However, if the non-reflecting boundary is placed sufficiently far from the region of interest, any reflected waves will get damped out by rayliegh damping or hysteretic material behavior before it reaches the region of interest.
 
-!parameters /BCs/NonReflectingBC
+!syntax parameters /BCs/NonReflectingBC
 
-!inputfiles /BCs/NonReflectingBC
+!syntax inputs /BCs/NonReflectingBC
 
-!childobjects /BCs/NonReflectingBC
+!syntax children /BCs/NonReflectingBC
 
 ## References
 \bibliographystyle{unsrt}

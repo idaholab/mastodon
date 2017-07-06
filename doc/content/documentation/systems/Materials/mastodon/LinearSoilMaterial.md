@@ -1,6 +1,6 @@
 # LinearSoilMaterial
 
-!description /Materials/LinearSoilMaterial
+!syntax description /Materials/LinearSoilMaterial
 
 ## Description
 A material for computed the shear-wave speed ($v_s$) based on a linear relationship between shear modules ($G$) and
@@ -19,10 +19,10 @@ is a required parameter in the input.
 Using the "layer id" to determine which value to utilize, this material will compute the shear-wave speed based on
 the mapping of layer id to $G$ and $\rho$, as shown in the input snippet below.
 
-!input tests/materials/linear_soil/linear_soil.i block=Materials
+!listing tests/materials/linear_soil/linear_soil.i block=Materials
 
-!parameters /Materials/LinearSoilMaterial
+!syntax parameters /Materials/LinearSoilMaterial
 
-!inputfiles /Materials/LinearSoilMaterial
+!syntax inputs /Materials/LinearSoilMaterial
 
-!childobjects /Materials/LinearSoilMaterial
+!syntax children /Materials/LinearSoilMaterial

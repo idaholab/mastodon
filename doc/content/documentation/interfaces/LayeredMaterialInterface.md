@@ -19,7 +19,7 @@ Firstly, using this interface adds a "layer_ids" parameter, which contains a lis
 other input parameters. For example, in the input file snippet below two parameters ("shear_modulus" and "density")
 are to be connected to the corresponding value in the "layer_ids" parameter.
 
-!input tests/materials/linear_soil/linear_soil.i block=Materials label=False
+!listing tests/materials/linear_soil/linear_soil.i block=Materials label=False
 
 Within the code layer parameters should be accessed using the "getLayerParam" method that is defined in the LayeredMaterialInterface class. This method returns a reference to a container that is sized according to the number of quadrature points, in similar fashion to MooseVariable for MaterialProperty types, allowing the usage of these
 layer parameters to be trivial. When the parameters are utilized within the computeQpProperties method they are updated
