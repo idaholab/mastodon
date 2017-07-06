@@ -8,7 +8,7 @@ The I-soil material model is a nonlinear hysteretic soil model that is based on 
 The three dimensional generalization of this model is achieved using von-Mises failure criteria for each elastic-perfectly plastic curve resulting in an invariant yield surfaces in three-dimensional stress space like in Figure 1.
 
 <!--
-!image doc/media/yield_surface.png width=40% float=right margin=20px padding=20px caption=Fig 1. Invariant yield surfaces of the individual elastic-perfectly curves (after \citet{chiang1994anew}).
+!media media/yield_surface.png width=40% float=right margin=20px padding=20px caption=Fig 1. Invariant yield surfaces of the individual elastic-perfectly curves (after \citet{chiang1994anew}).
 -->
 
 The backbone stress-strain curves for each soil layer can be provided in three different ways:
@@ -33,9 +33,7 @@ where $a_0$, $a_1$ and $a_2$ are parameters obtained from experiments.
 
 To include pressure dependent stiffness and yield strength calculation, pressure_dependency should be set to true and b_exp, a_0, a_1, a_2, tension_pressure_cut_off and p_ref need to be provided as input. Other than p_ref, all the other parameters are the same for all the soil layers. p_ref can be provided as vector with information about each soil layer.
 
-!parameters /Materials/I_Soil
-
-!inputfiles /Materials/I_Soil
+!syntax parameters /Materials/I_Soil/ISoilAction
 
 ## References
 \bibliographystyle{unsrt}

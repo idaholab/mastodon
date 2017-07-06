@@ -1,6 +1,6 @@
 #ComputeIsotropicElasticityTensorSoil
 
-!description /Materials/ComputeIsotropicElasticityTensorSoil
+!syntax description /Materials/ComputeIsotropicElasticityTensorSoil
 
 ## Description
 There are three essential components which describe the mechanical behavior of a material. These are strain formulation, stress formulation and an elasticity tensor which connects the strains to stresses. In MASTODON, these three can be specified separately. This class defines the elasticity tensor for an isotropic material.
@@ -21,8 +21,8 @@ $$
 V_p = \sqrt{\frac{2G(1-\nu)}{(1-2\nu)\rho}}
 $$
 
-!parameters /Materials/ComputeIsotropicElasticityTensorSoil
+!syntax parameters /Materials/ComputeIsotropicElasticityTensorSoil
 
-!inputfiles /Materials/ComputeIsotropicElasticityTensorSoil
+!syntax inputs /Materials/ComputeIsotropicElasticityTensorSoil
 
-!childobjects /Materials/ComputeIsotropicElasticityTensorSoil
+!syntax children /Materials/ComputeIsotropicElasticityTensorSoil

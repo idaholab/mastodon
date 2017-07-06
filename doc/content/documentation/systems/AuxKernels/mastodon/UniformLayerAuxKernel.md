@@ -1,5 +1,5 @@
 # UniformLayerAuxKernel
-!description /AuxKernels/UniformLayerAuxKernel
+!syntax description /AuxKernels/UniformLayerAuxKernel
 
 ## Description
 
@@ -14,10 +14,10 @@ The "interfaces" parameters is a list of layer interface locations in the direct
 parameter. Optionally, the "ids" of each of the layers that will be created may be provided in the "layer_ids"
 parameter, if this list is omitted then the "ids" are assigned in ascending order beginning at 0.
 
-!media doc/media/uniform_layer_3d.png style=width:50%;margin-left:auto;margin-right:auto; caption=Example of oriented "layers" in 3D. id=uniform_layer_3d
+!media media/uniform_layer_3d.png style=width:50%;margin-left:auto;margin-right:auto; caption=Example of oriented "layers" in 3D. id=uniform_layer_3d
 
-!parameters /AuxKernels/UniformLayerAuxKernel
+!syntax parameters /AuxKernels/UniformLayerAuxKernel
 
-!inputfiles /AuxKernels/UniformLayerAuxKernel
+!syntax inputs /AuxKernels/UniformLayerAuxKernel
 
-!childobjects /AuxKernels/UniformLayerAuxKernel
+!syntax children /AuxKernels/UniformLayerAuxKernel

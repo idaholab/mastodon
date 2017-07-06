@@ -1,3 +1,0 @@
-# DiracKernels System
-
-!subobjects /DiracKernels

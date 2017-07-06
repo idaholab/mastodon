@@ -9,8 +9,8 @@ The HSI calculation is performed only at the end of the simulation and the spect
 
 !listing tests/vectorpostprocessors/housner_spectrum_intensity/gold/housner_spectrum_intensity_accel_csv_accel_hsi_0201.csv
 
-!parameters /VectorPostprocessors/HousnerSpectrumIntensity
+!syntax parameters /VectorPostprocessors/HousnerSpectrumIntensity
 
-!inputfiles /VectorPostprocessors/HousnerSpectrumIntensity
+!syntax inputs /VectorPostprocessors/HousnerSpectrumIntensity
 
-!childobjects /VectorPostprocessors/HousnerSpectrumIntensity
+!syntax children /VectorPostprocessors/HousnerSpectrumIntensity

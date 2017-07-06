@@ -28,7 +28,7 @@ InputParameters
 validParams<ISoilAction>()
 {
   InputParameters params = validParams<Action>();
-  params.addClassDescription("Set up I-Soil material model");
+  params.addClassDescription("Set up I-Soil material model.");
 
   params.addRequiredParam<std::vector<NonlinearVariableName>>(
       "displacements", "The vector of displacement variables in the problem.");

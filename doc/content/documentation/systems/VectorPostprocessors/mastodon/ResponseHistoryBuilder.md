@@ -12,8 +12,8 @@ is limited, resulting in the CSV file shown below.
 
 !listing tests/vectorpostprocessors/response_history_builder/gold/response_history_builder_out_accel_0006.csv
 
-!parameters /VectorPostprocessors/ResponseHistoryBuilder
+!syntax parameters /VectorPostprocessors/ResponseHistoryBuilder
 
-!inputfiles /VectorPostprocessors/ResponseHistoryBuilder
+!syntax inputs /VectorPostprocessors/ResponseHistoryBuilder
 
-!childobjects /VectorPostprocessors/ResponseHistoryBuilder
+!syntax children /VectorPostprocessors/ResponseHistoryBuilder

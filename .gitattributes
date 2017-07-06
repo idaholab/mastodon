@@ -19,4 +19,4 @@ contrib/* linguist-vendored
 *.C linguist-language=C++
 
 # LFS
-doc/media/**/*.png filter=lfs diff=lfs merge=lfs -text
+doc/content/media/**/*.png filter=lfs diff=lfs merge=lfs -text

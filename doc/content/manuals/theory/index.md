@@ -68,7 +68,7 @@ The degree of damping in the system depends on the coefficients $\zeta$ and $\et
 
 where, $\xi(f)$ is the damping ratio of the system as a function of frequency $f$. The damping ratio as a function of frequency for $\zeta = 0.0035$ and $\eta = 0.09$ is presented in \ref{fig:rayleigh}.
 
-!media doc/media/theory/rayleigh.png width=60% margin-left=150px float=center id=fig:rayleigh caption=Damping ratio as a function of frequency.
+!media media/theory/rayleigh.png width=60% margin-left=150px float=center id=fig:rayleigh caption=Damping ratio as a function of frequency.
 
 Because Rayleigh damping only uses two terms, a constant damping ratio can only be approximated between a certain frequency range. The user must consider the frequency range of interest to their application to achieve the desired viscous damping. For building structures it is desirable to have constant damping for the first few modes of response, this is typically between 2 to 10 percent (i.e., between 0.02-0.10). For soils, the small strain (elastic) viscous damping ratio is constant till a cut-off frequency and then it decreases with increase in frequency. MASTODON has the capability to calculate $\zeta$ and $\eta$ for both the above mentioned scenarios.
 
@@ -134,7 +134,7 @@ Once the soil layers have been distinguished, it is necessary to ensure that the
 
 If linear elements such as QUAD4 or HEX8 are used, then the optimum mesh size is $\lambda_{min}/10$. If quadratic elements such as QUAD9 or HEX27 are used, then the optimum mesh size is $\lambda_{min}/5$. Using the minimum element size information, MASTODON refines the mesh such that the element size criterion is met and at the same time the layers separations are visible. An example of this meshing scheme is presented in \ref{fig:adaptive_meshing} where a 2D soil domain is divided into 3 soil layers and these soil layers are meshed such that the element size criterion is satisfied. A denser mesh is created at the interface between different soil layers.
 
-!media doc/media/theory/adaptive_mesh.png width=60% margin-left=150px float=center id=fig:adaptive_meshing caption=Auto-generated mesh for a soil domain with three non-horizontal non-planar soil layers.
+!media media/theory/adaptive_mesh.png width=60% margin-left=150px float=center id=fig:adaptive_meshing caption=Auto-generated mesh for a soil domain with three non-horizontal non-planar soil layers.
 
 ## Material models
 To model the mechanical behavior of a material, three components are need to be defined at every point in space and time - strain, elasticity tensor, stress.
@@ -154,11 +154,11 @@ In scenarios where the material exhibits a linear relation between stress and st
 <!-- Add stuff from I - Soil index.md -->
 The I-soil material model is a nonlinear hysteretic soil model that is based on the distributed element models developed by \citet{iwan1967on} and \citet{chiang1994anew}. In 1-D, this model takes the backbone shear stress - shear strain curve and divides it into a set of elastic-perfectly plastic curves. The total stress then is the sum of the stresses from the individual elastic-perfectly plastic curves (\ref{fig:1D_representation}).
 
-!media doc/media/theory/1D_isoil_representation.png width=80% margin-left=40px float=center id=fig:1D_representation caption=I-soil model details: (a) 1D representation by springs; (b) example monotonic and cyclic behavior of four nested component model (reprinted from \citet{baltaji2017nonlinear}).
+!media media/theory/1D_isoil_representation.png width=80% margin-left=40px float=center id=fig:1D_representation caption=I-soil model details: (a) 1D representation by springs; (b) example monotonic and cyclic behavior of four nested component model (reprinted from \citet{baltaji2017nonlinear}).
 
 The three-dimensional generalization of this model is achieved using von-Mises failure criteria for each elastic-perfectly plastic curve, resulting in an invariant yield surfaces in three-dimensional stress space like in \ref{fig:yield_surface}.
 
-!media doc/media/yield_surface.png width=40% margin-left=200px float=center id=fig:yield_surface caption=Invariant yield surfaces of the individual elastic-perfectly curves \citep{chiang1994anew}.
+!media media/yield_surface.png width=40% margin-left=200px float=center id=fig:yield_surface caption=Invariant yield surfaces of the individual elastic-perfectly curves \citep{chiang1994anew}.
 
 The backbone stress-strain curves for each soil layer can be provided in three different ways:
 
@@ -199,7 +199,7 @@ The foundation-soil interface is an important aspect of NLSSI modeling. The foun
 ### Thin-layer method
 An efficient approach to modeling the foundation-soil interface is to create a thin layer of the I-Soil material at the interface, as illustrated in \ref{fig:thin_layer} below.
 
-!media doc/media/theory/thin_layer.png width=60% margin-left=100px float=center id=fig:thin_layer caption=Modeling the foundation-soil interface as a thin layer for a sample surface foundation.
+!media media/theory/thin_layer.png width=60% margin-left=100px float=center id=fig:thin_layer caption=Modeling the foundation-soil interface as a thin layer for a sample surface foundation.
 
 The red layer between the foundation (green) and soil (yellow) is the thin layer of I-Soil. The properties of this thin layer are then adjusted to simulate Coulomb friction between the surfaces. The Coulomb-friction-type behavior can be achieved by modeling the material of the thin soil layer as follows:
 
@@ -213,7 +213,7 @@ The red layer between the foundation (green) and soil (yellow) is the thin layer
 
 3. Define the stress-strain curve to be almost elastic-perfectly-plastic, and such that the shear modulus of the thin layer is equal to the shear modulus of the surrounding soil, in case of an embedded foundation. If the foundation is resting on the surface such as in \ref{fig:thin_layer} above, the shear modulus of the thin layer soil should be as high as possible, such that the linear horizontal foundation stiffness is not reduced due to the presence of the thin layer. A sample stress-strain curve is shown in \ref{fig:thin_layer_stress_strain} below. The sample curve in the figure shows an almost bilinear shear behavior with gradual yielding and strain hardening, both of which, are provided to reduce possible high-frequency response. High-frequency response is likely to occur if a pure Coulomb friction model (elastic-perfectly-plastic shear behavior at the interface) is employed, due to the sudden change in the interface shear stiffness to zero.
 
-!media doc/media/theory/thin_layer_stress_strain.png width=60% margin-left=150px float=center id=fig:thin_layer_stress_strain caption=Sample shear-stress shear-strain curve for modeling the thin-layer interface using I-Soil.
+!media media/theory/thin_layer_stress_strain.png width=60% margin-left=150px float=center id=fig:thin_layer_stress_strain caption=Sample shear-stress shear-strain curve for modeling the thin-layer interface using I-Soil.
 
 4. 	Turn on pressure dependency of the soil stress-strain curve and set $a_0$, $a_1$ and $a_2$ to 0, 0 and 1, respectively. This ensures that the stress-strain curve scales linearly with the normal pressure on the interface, thereby also increasing the shear strength in the above equation linearly with the normal pressure, similar to Coulomb friction.
 
@@ -256,7 +256,7 @@ If the ground excitation was measured at a depth within the soil by placing an a
 ### Domain reduction method (DRM)
 Earthquake 'source-to-site' simulations require simulating a huge soil domain (order of many kilometers) with a earthquake fault. The nuclear power plant structure, which is usually less than 100 m wide, is located very far from the earthquake fault, and the presence of the structure only affects the response of the soil in the vicinity of the structure. In most of these situations, where a localized feature such as  a structure is present in a huge soil domain, the problem can be divided into two parts: (i) a free-field 'source-to-site' simulation is run on the huge soil domain ( \ref{fig:DRM}(a)) that does not contain the localized feature, and (ii) the forces from the free-field simulation at one element layer, which is the element layer separating the bigger and smaller soil domain, can be transferred to a much smaller domain containing the localized feature ( \ref{fig:DRM}(b)). This method of reducing the domain is called the domain reduction method (DRM) \citep{bielak2003domain}.
 
-!media doc/media/theory/DRM.png width=100% float=center id=fig:DRM caption=Domain reduction method summary: (a) Big soil domain containing the earthquake fault but not the localized feature. The displacements are obtained at the boundaries $\Gamma$ and $\Gamma_e$ and are converted to equivalent forces. (b) Smaller soil domain containing the localized feature but not the earthquake fault. The equivalent forced calculated in (a) are applied at the boundaries $\Gamma$ and $\Gamma_e$. This image is reprinted from \citet{bielak2003domain}.
+!media media/theory/DRM.png width=100% float=center id=fig:DRM caption=Domain reduction method summary: (a) Big soil domain containing the earthquake fault but not the localized feature. The displacements are obtained at the boundaries $\Gamma$ and $\Gamma_e$ and are converted to equivalent forces. (b) Smaller soil domain containing the localized feature but not the earthquake fault. The equivalent forced calculated in (a) are applied at the boundaries $\Gamma$ and $\Gamma_e$. This image is reprinted from \citet{bielak2003domain}.
 
 To convert the displacements at $\Gamma$ and $\Gamma_e$ from part (i) to equivalent forces, a finite element model of the one element layer between $\Gamma$ and $\Gamma_e$ is simulated in two steps. First, the bounday $\Gamma_e$ is fixed and the boundary $\Gamma$ is moved with the displacements recorded at $\Gamma$. This step gives the equivalent forces at $\Gamma_e$. Second, the boundary $\Gamma$ is fixed and the boundary $\Gamma_e$ is moved with the displacements recorded at $\Gamma_e$. This steps gives the equivalent forces at $\Gamma$.
 
@@ -265,7 +265,7 @@ Note: The meshes for the bigger soil domain and smaller soil domain need not ali
 ## Earthquake fault rupture
 The orientation of an earthquake fault is described using three directions - strike ($\phi_s$), dip ($\delta$) and slip direction ($\lambda$) as shown in \ref{fig:fault_orientation}.
 
-!media doc/media/fault_orientation.png width=80% margin-left=100px id=fig:fault_orientation caption= Definition of the fault-orientation parameters - strike $\phi_s$, dip $\delta$ and slip direction $\lambda$. The slip direction is measured clockwise around from north, with the fault dipping down to the right of the strike direction. Strike direction is also measured from the north. $\delta$ is measured down from the horizontal (image courtesy \citet{aki2012quantitative}).
+!media media/fault_orientation.png width=80% margin-left=100px id=fig:fault_orientation caption= Definition of the fault-orientation parameters - strike $\phi_s$, dip $\delta$ and slip direction $\lambda$. The slip direction is measured clockwise around from north, with the fault dipping down to the right of the strike direction. Strike direction is also measured from the north. $\delta$ is measured down from the horizontal (image courtesy \citet{aki2012quantitative}).
 
 In MASTODON, earthquake fault is modeled using a set of point sources. The seismic moment ($M_o$) of the earthquake point source in the fault specific coordinate system is:
 
@@ -288,7 +288,7 @@ M_{zz}(t) = M_o(t) \sin 2\delta \sin \lambda
 
 Each component of the above matrix is a force couple with the first index representing the force direction and the second index representing the direction in which the forces are separated (see \ref{fig:source_direction}).
 
-!media doc/media/source_direction.png width=60% margin-left=150px id=fig:source_direction caption=The nine different force couples required to model an earthquake source (image courtesy \citet{aki2012quantitative}).
+!media media/source_direction.png width=60% margin-left=150px id=fig:source_direction caption=The nine different force couples required to model an earthquake source (image courtesy \citet{aki2012quantitative}).
 
 The total force in global coordinate direction $i$ resulting from an earthquake source applied at point $\vec{\zeta}$ in space is then:
 
