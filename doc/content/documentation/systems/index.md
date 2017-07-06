@@ -1,1 +1,1 @@
-!systems 
+!syntax complete groups=mastodon

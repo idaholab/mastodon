@@ -1,3 +1,0 @@
-# Materials System
-
-!subobjects /Materials

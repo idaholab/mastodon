@@ -9,8 +9,8 @@ The response spectra calculation is performed only at the end of the simulation 
 
 !listing tests/vectorpostprocessors/response_spectra_calculator/gold/response_spectra_calculator_accel_csv_accel_spec_0201.csv
 
-!parameters /VectorPostprocessors/ResponseSpectraCalculator
+!syntax parameters /VectorPostprocessors/ResponseSpectraCalculator
 
-!inputfiles /VectorPostprocessors/ResponseSpectraCalculator
+!syntax inputs /VectorPostprocessors/ResponseSpectraCalculator
 
-!childobjects /VectorPostprocessors/ResponseSpectraCalculator
+!syntax children /VectorPostprocessors/ResponseSpectraCalculator

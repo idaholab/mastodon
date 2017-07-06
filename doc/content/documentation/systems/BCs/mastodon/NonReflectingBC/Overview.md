@@ -3,5 +3,5 @@
 ## Description
 This action is used to set up the non-reflecting boundary condition in multiple directions.
 
-!parameters /BCs/NonReflectingBC
+!syntax parameters /BCs/NonReflectingBC
 
