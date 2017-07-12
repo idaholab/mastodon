@@ -31,9 +31,6 @@ class ComputeIsotropicElasticityTensorSoil
 public:
   ComputeIsotropicElasticityTensorSoil(const InputParameters & parameters);
 
-  /// This class will always produce an isotropic tensor.
-  virtual bool isGuaranteedIsotropic() const override { return true; }
-
 protected:
   virtual void computeQpElasticityTensor() override;
 
