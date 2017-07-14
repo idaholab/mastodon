@@ -53,7 +53,12 @@ ComputeIsotropicElasticityTensorSoil::ComputeIsotropicElasticityTensorSoil(
     _P_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("P_wave_speed") : NULL),
     _density(declareProperty<Real>("density"))
 {
+  // all tensors created by this class are always isotropic
   issueGuarantee(_elasticity_tensor_name, Guarantee::ISOTROPIC);
+
+  // all tensors created by this class are always constant in time
+  issueGuarantee(_elasticity_tensor_name, Guarantee::CONSTANT_IN_TIME);
+
   std::vector<Real> iso_const(2);
   // Fill elasticity tensor
   _Cijkl.fillFromInputVector(iso_const, RankFourTensor::symmetric_isotropic);
