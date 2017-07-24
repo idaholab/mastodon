@@ -1,0 +1,12 @@
+[Tests]
+  [./newmark]
+    type = 'Exodiff'
+    input = 'newmark.i'
+    exodiff = 'newmark_out.e'
+  [../]
+  [./hht]
+    type = 'Exodiff'
+    input = 'hht.i'
+    exodiff = 'hht_out.e'
+  [../]
+[]
