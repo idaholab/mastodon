@@ -45,4 +45,4 @@ site
 doc/doxygen/html
 
 # Allow images in media directory
-!doc/media/**/*.png
+!doc/content/media/**/*.png
