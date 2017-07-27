@@ -1,0 +1,10 @@
+[Tests]
+  [./Event]
+    type = PythonUnitTest
+    input = test_event.py
+  [../]
+  [./FaultTree]
+    type = PythonUnitTest
+    input = test_fault_tree.py
+  [../]
+[]
