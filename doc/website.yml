@@ -30,6 +30,8 @@
         navigation:
           - Manuals:
               - Theory: doc/content/manuals/theory/index.md
+              - Software Quality: doc/content/sqa/index.md
           - Documentation:
               - Systems: doc/content/documentation/systems/index.md
               - Interfaces: doc/content/documentation/interfaces/index.md
+- MooseDocs.extensions.sqa
