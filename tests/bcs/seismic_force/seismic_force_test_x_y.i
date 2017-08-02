@@ -1,3 +1,5 @@
+#@requirement F6.4
+
 # Test for application of seismic force which converts ground velocity in x and y directions into shear stress.
 
 # This test consists of 20 brick elements stacked in the z direction.

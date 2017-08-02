@@ -1,3 +1,4 @@
+#@requirement F6.2
 # Test for non-reflecting boundary condition and application of seismic input
 
 # This test consists of 20 brick elements stacked in the z direction.
