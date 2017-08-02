@@ -1,3 +1,4 @@
+#@requirement F4.2
 # One element test to test the user-defined  backbone curve.
 # The back surface of the element (z=0) is fixed and the front surface (z=1)
 # is moved by applying a cyclic preset displacement.

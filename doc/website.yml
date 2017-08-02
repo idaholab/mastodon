@@ -34,4 +34,5 @@
           - Documentation:
               - Systems: doc/content/documentation/systems/index.md
               - Interfaces: doc/content/documentation/interfaces/index.md
-- MooseDocs.extensions.sqa
+- MooseDocs.extensions.sqa:
+    PROJECT: MASTODON

@@ -1,3 +1,4 @@
+# @requirement F1.2
 # HHT time integration test
 
 # In this one element test, the base and top of the 2D element is fixed in y
