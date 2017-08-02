@@ -1,3 +1,5 @@
+#@requirement F3.3
+#@requirement DI1.3
 [Mesh]
   type = GeneratedMesh
   dim = 3

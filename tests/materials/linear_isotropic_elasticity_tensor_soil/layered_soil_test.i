@@ -1,3 +1,4 @@
+#@requirement F4.1
 # Test for layered soil material using traditional approach.
 
 # In this test, a 1x1 soil domain is split into 9 elements (3x3 mesh).

@@ -1,3 +1,4 @@
+#@requirement F6.4
 # Test for application of seismic force which converts ground velocity in z directions into normal stress.
 
 # This test consists of 20 elements for algorithm testing purposes (use 200 elements and dt of 0.005s to get a much cleaner wave).

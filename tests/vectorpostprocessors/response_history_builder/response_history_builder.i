@@ -1,3 +1,4 @@
+#@requirement F8.1
 [Mesh]
   type = GeneratedMesh
   dim = 2

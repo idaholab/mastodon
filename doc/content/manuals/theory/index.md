@@ -1,4 +1,6 @@
-#Theory manual
+# Theory manual
+
+[PDF](https://hpcgitlab.inl.gov/idaholab/mastodon/uploads/18a52f9713275fa073a4b1dfe928135f/Theory_Manual.pdf)
 
 ## Introduction
 Multi-hazard Analysis for STOchastic time-DOmaiN phenomena (MASTODON) is a finite element application that aims at analyzing the response of 3-D soil-structure systems to natural and man-made hazards such as earthquakes, floods and fire. MASTODON currently focuses on the simulation of seismic events and has the capability to perform extensive 'source-to-site' simulations including earthquake fault rupture, nonlinear wave propagation and nonlinear soil-structure interaction (NLSSI) analysis. MASTODON is being developed to be a dynamic probabilistic risk assessment framework that enables analysts to not only perform deterministic analyses, but also easily perform probabilistic or stochastic simulations for the purpose of risk assessment.

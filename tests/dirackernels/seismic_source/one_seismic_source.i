@@ -1,3 +1,4 @@
+#@requirement F7.1
 # Test for seismic source applied at one point.
 
 # This test consists of one brick element of size 1x1x1.
