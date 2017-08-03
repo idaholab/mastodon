@@ -36,3 +36,4 @@
               - Interfaces: doc/content/documentation/interfaces/index.md
 - MooseDocs.extensions.sqa:
     PROJECT: MASTODON
+    repo: https://hpcgitlab.inl.gov/idaholab/mastodon
