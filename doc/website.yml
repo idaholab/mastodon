@@ -12,12 +12,22 @@
         mastodon:
             - /DiracKernels
             - /Materials
-        solid_mechanics:
-            - /
+            - /BCs
+        framework:
+            - /DiracKernels/FunctionDiracSource
+            - /BCs/Periodic
         tensor_mechanics:
-            - /
-        contact:
-            - /
+            - /Materials/CappedMohrCoulombStressUpdate
+            - /Materials/TensileStressUpdate
+            - /BCs/CavityPressure
+            - /BCs/Pressure
+            - /Kernels/DynamicTensorMechanics
+            - /Kernels/PoroMechanics
+            - /Kernels/TensorMechanics
+            - /Modules
+            - /Modules/TensorMechanics
+            - /Modules/TensorMechanics/GeneralizedPlaneStrain
+            - /Modules/TensorMechanics/Master
     links:
         Tests:
             - tests
