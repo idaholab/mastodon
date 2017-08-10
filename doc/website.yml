@@ -17,6 +17,7 @@
             - /DiracKernels/FunctionDiracSource
             - /BCs/Periodic
         tensor_mechanics:
+            - /Materials/CappedMohrCoulombCosseratStressUpdate
             - /Materials/CappedMohrCoulombStressUpdate
             - /Materials/TensileStressUpdate
             - /BCs/CavityPressure
