@@ -468,7 +468,7 @@ ComputeISoilStress::computeQpStress()
   _stress[_qp] = _rotation_increment[_qp] * _stress_new * _rotation_increment[_qp].transpose();
 
   // Compute dstress_dstrain
-  if (_tangent_modulus == 0.0)
+  if (std::abs(_tangent_modulus) < 1e-6)
     _tangent_modulus = _youngs[_pos][_youngs.size() - 1];
 
   _Jacobian_mult[_qp] =
@@ -495,7 +495,7 @@ ComputeISoilStress::computeStress()
   // current pressure calculation
   Real mean_stress = _stress_old[_qp].trace() / (-3.0);
   if (mean_stress < _p0)
-    mean_stress = _p0;
+    mean_stress = 0.0;
 
   if (_pressure_dependency)
   {
