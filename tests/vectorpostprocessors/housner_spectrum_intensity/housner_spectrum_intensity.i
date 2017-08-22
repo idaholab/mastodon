@@ -295,6 +295,7 @@
     node = 9
     execute_on = 'initial timestep_end'
   [../]
+[]
 
 [VectorPostprocessors]
   [./accel_hsi]
@@ -306,3 +307,4 @@
     calculation_time = 33
     execute_on = timestep_end
   [../]
+[]
