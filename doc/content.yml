@@ -43,3 +43,4 @@ framework:
     - docs/content/documentation/systems/Kernels/index.md
     - docs/content/documentation/systems/DiracKernels/index.md
     - docs/content/documentation/systems/Materials/index.md
+    - docs/content/documentation/systems/Functions/index.md
