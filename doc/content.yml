@@ -2,11 +2,6 @@ mastodon:
   base: doc/content
   include:
     - doc/content/*
-moose_bib:
-  root_dir: $MOOSE_DIR
-  base: docs
-  include:
-    - docs/bib/*
 framework:
   root_dir: $MOOSE_DIR
   base: docs/content
@@ -14,6 +9,7 @@ framework:
     - docs/content/css/*
     - docs/content/js/*
     - docs/content/media/*
+    - docs/content/bib/*
     - docs/content/documentation/examples/*
     - docs/content/documentation/systems/Variables/index.md
     - docs/content/documentation/systems/AuxVariables/index.md
