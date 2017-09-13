@@ -40,4 +40,4 @@ framework:
     - docs/content/documentation/systems/DiracKernels/index.md
     - docs/content/documentation/systems/Materials/index.md
     - docs/content/documentation/systems/Functions/index.md
-    - docs/content/documentation/interfaces/*
+    - docs/content/documentation/interfaces/DerivativeMaterialInterface.md
