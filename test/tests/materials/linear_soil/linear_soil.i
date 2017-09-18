@@ -1,4 +1,4 @@
-[Mesh]
+cd [Mesh]
   type = GeneratedMesh
   dim = 1
   nx = 2

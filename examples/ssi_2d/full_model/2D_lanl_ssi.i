@@ -327,6 +327,10 @@
 []
 
 [Preconditioning]
+#  [./fdp]
+#    type = FDP
+#    full = true
+#  [../]
   [./smp]
     type = SMP
     full = true
@@ -343,12 +347,15 @@
    nl_rel_tol = 1e-6
    nl_abs_tol = 1e-6
    dt = 0.002
-   petsc_options = '-snes_ksp_ew'
+#   petsc_options = '-snes_ksp_ew'
 #   petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_type_boomeramg_max_iter'
 #   petsc_options_value = '201                 hypre    boomeramg       4'
-   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
-   petsc_options_value = 'lu superlu_dist'
-   line_search = 'none'
+#   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
+#   petsc_options_value = 'lu superlu_dist'
+    petsc_options = '-sub_pc_factor_nonzeros_along_diagonal'
+    petsc_options_iname = '-pc_type -sub_pc_type'
+    petsc_options_value = 'asm sor'
+#   line_search = 'none'
    timestep_tolerance = 1e-12
 []
 
@@ -377,7 +384,7 @@
    [./exodus]
      type = Exodus
      interval = 50
-   [../] 
+   [../]
   # [./out]
   #    type = Console
   #    max_rows = 1
