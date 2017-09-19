@@ -2,10 +2,10 @@
     #import:
     #    - moose/docs/globals.yml
 - MooseDocs.extensions.listings:
-    repo: https://hpcgitlab.inl.gov/idaholab/mastodon
+    repo: https://github.com/idaholab/mastodon
 - MooseDocs.extensions.app_syntax:
     install: doc/content/documentation/systems
-    repo: https://hpcgitlab.inl.gov/idaholab/mastodon
+    repo: https://github.com/idaholab/mastodon
     hide:
         all:
             - /Bounds
@@ -36,8 +36,7 @@
     template: website.html
     template_args:
         title: MASTODON
-        mathjax_url: https://hpcsc.inl.gov/ssl/HERD/MathJax/MathJax.js
-        repo_url: https://hpcgitlab.inl.gov/idaholab/mastodon
+        repo_url: https://github.com/idaholab/mastodon
         navigation:
           - Manuals:
               - Theory: doc/content/manuals/theory/index.md
@@ -47,4 +46,4 @@
               - Interfaces: doc/content/documentation/interfaces/index.md
 - MooseDocs.extensions.sqa:
     PROJECT: MASTODON
-    repo: https://hpcgitlab.inl.gov/idaholab/mastodon
+    repo: https://github.com/idaholab/mastodon
