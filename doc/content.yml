@@ -26,6 +26,7 @@ framework:
     - docs/content/documentation/systems/Variables/InitialCondition/index.md
     - docs/content/documentation/systems/Mesh/MortarInterfaces/index.md
     - docs/content/documentation/systems/Postprocessors/index.md
+    - docs/content/documentation/systems/Controls/index.md
     - docs/content/documentation/systems/Mesh/Partitioner/index.md
     - docs/content/documentation/systems/*/solid_mechanics/*
     - docs/content/documentation/systems/*/tensor_mechanics/*
