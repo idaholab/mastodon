@@ -8,12 +8,12 @@
     type = RunException
     input = layered_soil_test.i
     cli_args = "Materials/Elasticity_tensor_1/layer_ids='10 20 30 1980' Outputs/exodus=false"
-    expect_err = "The parameter "shear_modulus" in the "Elasticity_tensor_1" block must be the same length as the "layer_ids" parameter."
+    expect_err = 'The parameter "shear_modulus" in the "Elasticity_tensor_1" block must be the same length as the "layer_ids" parameter.'
   [../]
   [./linear_isotropic_layer_id_error]
     type = RunException
     input = layered_soil_test.i
     cli_args = "Materials/Elasticity_tensor_1/layer_ids='10 20 1980' Outputs/exodus=false"
-    expect_err = "The current layer id variable value \(30\) was not provided in the 'layer_ids' parameter of the "Elasticity_tensor_1" block."
+    expect_err = "The current layer id variable value \(30\) was not provided in the 'layer_ids' parameter of the \"Elasticity_tensor_1\" block."
   [../]
 []
