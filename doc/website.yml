@@ -14,6 +14,7 @@
             - /Materials
             - /BCs
         framework:
+            - /Kernels/UserForcingFunction
             - /DiracKernels/FunctionDiracSource
             - /BCs/Periodic
         tensor_mechanics:
