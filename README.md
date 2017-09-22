@@ -1,6 +1,8 @@
-[MASTODON Documentation](https://hpcsc.inl.gov/ssl/MASTODON/site/)
+[MASTODON Documentation](http://mooseframework.org/docs/mastodon/site/)
 
-[MASTODON Code Coverage](https://hpcsc.inl.gov/ssl/MASTODON/coverage/)
+[MASTODON Code Coverage](http://mooseframework.org/docs/coverage/MASTODON/coverage/)
+
+[MASTODON Doxygen](http://mooseframework.org/docs/mastodon/docs/html/)
 
 ### Description
 Mastodon is a MOOSE-based application for nonlinear, three-dimensional seismic soil-structure interaction analysis.
