@@ -1,0 +1,12 @@
+[Tests]
+  [./run]
+    type = RunApp
+    input = ground_motion_reader.i
+  [../]
+  [./bad_pattern]
+    type = RunException
+    input = ground_motion_reader.i
+    cli_args = UserObjects/motions/pattern=this/is/wrong*.csv
+    expect_err = "Unable to locate files with the given pattern \(this/is/wrong\*\.csv\) in the GroundMotionReader object 'motions'."
+  [../]
+[]

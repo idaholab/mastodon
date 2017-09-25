@@ -1,3 +1,13 @@
+// System includes
+#include <glob.h>
+
+// STL includes
+#include <cmath>
+
+// MOOSE contrib
+#include "pcrecpp.h"
+#include "tinydir.h"
+
 // MASTODON includes
 #include "MastodonUtils.h"
 
@@ -15,8 +25,8 @@ MastodonUtils::responseSpectrum(const Real & freq_start,
   {
     // Building the frequency vector. Frequencies are distributed
     // uniformly in the log scale.
-    logdf = (log10(freq_end) - log10(freq_start)) / (freq_num - 1);
-    freq_vec.push_back(pow(10.0, log10(freq_start) + n * logdf));
+    logdf = (std::log10(freq_end) - std::log10(freq_start)) / (freq_num - 1);
+    freq_vec.push_back(pow(10.0, std::log10(freq_start) + n * logdf));
     om_n = 2.0 * 3.141593 * freq_vec[n]; // om_n = 2*pi*f
     om_d = om_n * xi;
     dis1 = 0.0;
@@ -58,13 +68,47 @@ MastodonUtils::regularize(const std::vector<Real> & history_acc,
   {
     while (cur_tme >= history_time[i] && cur_tme <= history_time[i + 1])
     {
-      cur_acc = history_acc[i] +
-                (cur_tme - history_time[i]) / (history_time[i + 1] - history_time[i]) *
-                    (history_acc[i + 1] - history_acc[i]);
+      cur_acc = history_acc[i] + (cur_tme - history_time[i]) /
+                                     (history_time[i + 1] - history_time[i]) *
+                                     (history_acc[i + 1] - history_acc[i]);
       reg_acc.push_back(cur_acc);
       reg_tme.push_back(cur_tme);
       cur_tme += reg_dt;
     }
   }
   return {reg_tme, reg_acc};
+}
+
+std::vector<std::string>
+MastodonUtils::glob(const std::string & pattern)
+{
+  glob_t glob_result;
+  glob(pattern.c_str(), GLOB_TILDE, NULL, &glob_result);
+  std::vector<string> output;
+  for (unsigned int i = 0; i < glob_result.gl_pathc; ++i)
+    output.push_back(string(glob_result.gl_pathv[i]));
+  globfree(&glob_result);
+  return output;
+}
+
+std::vector<Real>
+MastodonUtils::adjust(const std::vector<Real> & input, const Real & scale, const Real & offset)
+{
+  std::vector<Real> output(input.size());
+  for (std::size_t i = 0; i < input.size(); ++i)
+    output[i] = scale * input[i] + offset;
+  return output;
+}
+
+std::vector<Real>
+MastodonUtils::log10(const std::vector<Real> & input)
+{
+  std::vector<Real> output(input.size());
+  for (std::size_t i = 0; i < input.size(); ++i)
+  {
+    if (input[i] <= 0)
+      ::mooseError("Cannot take the log of ", input[i], ".");
+    output[i] = std::log10(input[i]);
+  }
+  return output;
 }
