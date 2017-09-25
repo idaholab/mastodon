@@ -19,7 +19,7 @@ is a required parameter in the input.
 Using the "layer id" to determine which value to utilize, this material will compute the shear-wave speed based on
 the mapping of layer id to $G$ and $\rho$, as shown in the input snippet below.
 
-!listing tests/materials/linear_soil/linear_soil.i block=Materials
+!listing test/tests/materials/linear_soil/linear_soil.i block=Materials
 
 !syntax parameters /Materials/LinearSoilMaterial
 

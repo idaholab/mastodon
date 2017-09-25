@@ -12,6 +12,6 @@ This ground excitation is applied as a prescribed displacement boundary conditio
 `input_function` in this case should be the displacement time histories.
 
 ## Example Usage
-!listing tests/bcs/seismic_displacement/seismic_displacement.i block=BCs
+!listing test/tests/bcs/seismic_displacement/seismic_displacement.i block=BCs
 
 !syntax parameters /BCs/SeismicDisplacement/SeismicDisplacementAction

@@ -63,15 +63,11 @@ MastodonApp::MastodonApp(InputParameters parameters) : MooseApp(parameters)
 {
   Moose::registerObjects(_factory);
   MastodonApp::registerObjects(_factory);
-  SolidMechanicsApp::registerObjects(_factory);
-  TensorMechanicsApp::registerObjects(_factory);
-  ContactApp::registerObjects(_factory);
+  MastodonApp::registerObjectDepends(_factory);
 
   Moose::associateSyntax(_syntax, _action_factory);
   MastodonApp::associateSyntax(_syntax, _action_factory);
-  SolidMechanicsApp::associateSyntax(_syntax, _action_factory);
-  TensorMechanicsApp::associateSyntax(_syntax, _action_factory);
-  ContactApp::associateSyntax(_syntax, _action_factory);
+  MastodonApp::associateSyntaxDepends(_syntax, _action_factory);
 }
 
 MastodonApp::~MastodonApp() {}
@@ -158,4 +154,20 @@ MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
   syntax.registerActionSyntax("EmptyAction", "Materials/I_Soil");
   syntax.registerActionSyntax("ISoilAction", "Materials/I_Soil/*");
   registerAction(ISoilAction, "add_material");
+}
+
+void
+MastodonApp::registerObjectDepends(Factory & factory)
+{
+  SolidMechanicsApp::registerObjects(factory);
+  TensorMechanicsApp::registerObjects(factory);
+  ContactApp::registerObjects(factory);
+}
+
+void
+MastodonApp::associateSyntaxDepends(Syntax & syntax, ActionFactory & action_factory)
+{
+  SolidMechanicsApp::associateSyntax(syntax, action_factory);
+  TensorMechanicsApp::associateSyntax(syntax, action_factory);
+  ContactApp::associateSyntax(syntax, action_factory);
 }

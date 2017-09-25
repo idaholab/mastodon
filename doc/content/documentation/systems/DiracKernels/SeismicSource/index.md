@@ -4,6 +4,6 @@ syntax for creating the correct [SeismicSource](DiracKernels/mastodon/SeismicSou
 kernels for each direction components specified.
 
 ## Example Usage
-!listing tests/dirackernels/seismic_source/one_seismic_source.i block=DiracKernels
+!listing test/tests/dirackernels/seismic_source/one_seismic_source.i block=DiracKernels
 
 !syntax parameters /DiracKernels/SeismicSource/SeismicSourceAction
