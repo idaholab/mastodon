@@ -1,5 +1,5 @@
 #include "AppFactory.h"
-#include "MastodonApp.h"
+#include "MastodonTestApp.h"
 #include "Moose.h"
 #include "MooseApp.h"
 #include "MooseInit.h"
@@ -15,10 +15,10 @@ main(int argc, char * argv[])
   MooseInit init(argc, argv);
 
   // Register this application's MooseApp and any it depends on
-  MastodonApp::registerApps();
+  MastodonTestApp::registerApps();
 
   // This creates dynamic memory that we're responsible for deleting
-  MooseApp * app = AppFactory::createApp("MastodonApp", argc, argv);
+  MooseApp * app = AppFactory::createApp("MastodonTestApp", argc, argv);
 
   // Execute the application
   app->run();
