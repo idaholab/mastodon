@@ -13,6 +13,6 @@ should be given as ground velocity. More details about the conversion of ground 
 can be found in [SeismicForce](mastodon/SeismicForce.md).
 
 ## Example Usage
-!listing tests/bcs/seismic_force/seismic_force_test_x_y.i block=BCs
+!listing test/tests/bcs/seismic_force/seismic_force_test_x_y.i block=BCs
 
 !syntax parameters /BCs/SeismicForce/SeismicForceAction
