@@ -170,7 +170,7 @@ TEST(MastodonUtils, standardDeviation)
 }
 
 // Test for sigma function in MastodonUtils
-TEST(MastodonUtils, beta)
+TEST(MastodonUtils, lognormalStandardDeviation)
 {
   // Inputs for testing
   std::vector<Real> vec = {1.2, 0.1, 1.1, 1.3, 2.3, 8.9, 10.5, 1.52, 0.1, 0.39};
@@ -209,4 +209,65 @@ TEST(MastodonUtils, zeropad)
   // Value check
   EXPECT_EQ(zpad_n1.compare("0004"), 0);
   EXPECT_EQ(zpad_n2.compare("0015"), 0);
+}
+
+// Test for glob function in MastodonUtils
+TEST(MastodonUtils, glob)
+{
+  std::vector<std::string> results = MastodonUtils::glob("../test/tests/data/ground_motion_*.csv");
+  EXPECT_EQ(results.size(), 10);
+  EXPECT_EQ(results[0], "../test/tests/data/ground_motion_00.csv");
+  EXPECT_EQ(results[1], "../test/tests/data/ground_motion_01.csv");
+  EXPECT_EQ(results[2], "../test/tests/data/ground_motion_02.csv");
+  EXPECT_EQ(results[3], "../test/tests/data/ground_motion_03.csv");
+  EXPECT_EQ(results[4], "../test/tests/data/ground_motion_04.csv");
+  EXPECT_EQ(results[5], "../test/tests/data/ground_motion_05.csv");
+  EXPECT_EQ(results[6], "../test/tests/data/ground_motion_06.csv");
+  EXPECT_EQ(results[7], "../test/tests/data/ground_motion_07.csv");
+  EXPECT_EQ(results[8], "../test/tests/data/ground_motion_08.csv");
+  EXPECT_EQ(results[9], "../test/tests/data/ground_motion_09.csv");
+}
+
+// Test for adjust function in MastodonUtils
+TEST(MastodonUtils, adjust)
+{
+  std::vector<Real> x = {1, 2, 3, 4};
+  std::vector<Real> y = MastodonUtils::adjust(x, 2, 9);
+  ASSERT_EQ(x.size(), y.size());
+  for (std::size_t i = 0; i < x.size(); ++i)
+    EXPECT_EQ(2 * x[i] + 9, y[i]);
+}
+
+// Test for log10 function in MastodonUtils
+TEST(MastodonUtils, log10)
+{
+  std::vector<Real> x = {1, 2, 3, 4};
+  std::vector<Real> y = MastodonUtils::log10(x);
+  ASSERT_EQ(x.size(), y.size());
+  for (std::size_t i = 0; i < x.size(); ++i)
+    EXPECT_EQ(std::log10(x[i]), y[i]);
+
+  try
+  {
+    std::vector<Real> y = MastodonUtils::log10({0});
+    FAIL();
+  }
+  catch (const std::exception & err)
+  {
+    std::string gold = "Cannot take the log of 0.";
+    std::size_t pos = std::string(err.what()).find(gold);
+    EXPECT_TRUE(pos != std::string::npos);
+  }
+
+  try
+  {
+    std::vector<Real> y = MastodonUtils::log10({1, 2, 3, -42});
+    FAIL();
+  }
+  catch (const std::exception & err)
+  {
+    std::string gold = "Cannot take the log of -42.";
+    std::size_t pos = std::string(err.what()).find(gold);
+    EXPECT_TRUE(pos != std::string::npos);
+  }
 }
