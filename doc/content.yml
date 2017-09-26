@@ -11,6 +11,7 @@ framework:
     - docs/content/media/*
     - docs/content/bib/*
     - docs/content/documentation/examples/*
+    - docs/content/documentation/systems/DomainIntegral/index.md
     - docs/content/documentation/systems/Variables/index.md
     - docs/content/documentation/systems/AuxVariables/index.md
     - docs/content/documentation/systems/Adaptivity/index.md
