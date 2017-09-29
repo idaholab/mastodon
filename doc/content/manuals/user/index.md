@@ -122,5 +122,5 @@ A linear elastic soil can be defined in MASTODON by defining a elasticity tensor
 !listing test/tests/dirackernels/seismic_source/one_seismic_source.i start=Materials end=Executioner
 
 #### I-soil material model
-The nonlinear soil material model usage is demonstrated in the [Example 1] (manuals/examples/index.md)
+The nonlinear soil material model usage is demonstrated in the [Example 1] (/examples/index.md)
 >>>>>>> Changes to theory manual, additions to user and examples manuals #3

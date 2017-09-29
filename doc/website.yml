@@ -47,11 +47,16 @@
         title: MASTODON
         repo_url: https://github.com/idaholab/mastodon
         navigation:
+          - Examples:
+               - Overview: doc/content/examples/index.md
+               - Example 1: doc/content/examples/example1.md
+               - Example 2: doc/content/examples/example2.md
+               - Example 3: doc/content/examples/example3.md
+               - Example 4: doc/content/examples/example4.md
           - Manuals:
               - Theory: doc/content/manuals/theory/index.md
               - Software Quality: doc/content/sqa/index.md
               - User: doc/content/manuals/user/index.md
-              - Examples: doc/content/manuals/examples/index.md
           - Documentation:
               - Systems: doc/content/documentation/systems/index.md
               - Interfaces: doc/content/documentation/interfaces/index.md
