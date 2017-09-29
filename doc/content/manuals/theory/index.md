@@ -1,21 +1,42 @@
 # Theory manual
 
 ## Introduction
-Multi-hazard Analysis for STOchastic time-DOmaiN phenomena (MASTODON) is a finite element application that aims at analyzing the response of 3-D soil-structure systems to natural and man-made hazards such as earthquakes, floods and fire. MASTODON currently focuses on the simulation of seismic events and has the capability to perform extensive 'source-to-site' simulations including earthquake fault rupture, nonlinear wave propagation and nonlinear soil-structure interaction (NLSSI) analysis. MASTODON is being developed to be a dynamic probabilistic risk assessment framework that enables analysts to not only perform deterministic analyses, but also easily perform probabilistic or stochastic simulations, fragility calculations and fault tree quantification for the purpose of risk assessment..
+Multi-hazard Analysis for STOchastic time-DOmaiN phenomena (MASTODON) is
+a finite element application that aims at analyzing the response of 3-D
+soil-structure systems to natural and man-made hazards such as
+earthquakes, floods and fire. MASTODON currently focuses on the
+simulation of seismic events and has the capability to perform extensive
+`source-to-site' simulations including earthquake fault rupture,
+nonlinear wave propagation and nonlinear soil-structure interaction
+(NLSSI) analysis. MASTODON is being developed to be a dynamic
+probabilistic risk assessment framework that enables analysts to not
+only perform deterministic analyses, but also easily perform
+probabilistic or stochastic simulations for the purpose of risk
+assessment.
 
-MASTODON is a MOOSE-based application and performs finite-element analysis of the dynamics of solids, mechanics of interfaces and porous media flow. It is equipped with numerical material models of dry and saturated soils including a nonlinear hysteretic soil model, and a u-P-U model for saturated soil, as well as structural materials such as reinforced concrete. It is also equipped with interface models that simulate gapping, sliding and uplift at the interfaces of solid media such as the foundation-soil interface of structures. MASTODON also includes absorbing boundary models for the simulation of infinite or semi-infinite domains, fault rupture model for seismic source simulation, and the domain reduction method for the input of complex, three-dimensional wave fields. Since MASTODON is a MOOSE-based application, it can efficiently solve problems using standard workstations or very large high-performance computers.
+MASTODON is a <a href="http://mooseframework.org/"> MOOSE </a>-based application and performs finite-element
+analysis of the dynamics of solids, mechanics of interfaces and porous
+media flow. It is equipped with effective stress space nonlinear hysteretic soil constitutive  model (I-soil), and a <a href= "https://lwrs.inl.gov/RisckInformed%20Safety%20Margin%20Characterization/INL-EXT-15-36735%20Advanced%20Seismic%20Fragility%20Modeling.pdf"> u-p-U </a> formulation to couple solid and fluid, as well as structural materials such as reinforced concrete. It includes interface models that
+simulate gapping, sliding and uplift at the interfaces of solid media
+such as the foundation-soil interface of structures. Absorbing boundary models for the simulation of infinite or
+semi-infinite domains, fault rupture model for seismic source
+simulation, and the domain reduction method for the input of complex,
+three-dimensional wave fields are incorporated. Since MASTODON is a <a href="http://mooseframework.org/"> MOOSE </a>-based
+application, it can efficiently solve problems using standard
+workstations or very large high-performance computers.
 
-This document describes the theoretical and numerical foundations of MASTODON.
+This document describes the theoretical and numerical foundations of
+MASTODON.
 
 ## Governing equations
 The basic equation that MASTODON solves is the nonlinear wave equation:
 
 \begin{eqnarray}
 \label{eqn:governing_equation}
- \rho \mathbf{\ddot{u}} + \nabla \cdot \boldsymbol{\sigma} = \mathbf{F_{ext}}
+\rho \mathbf{\ddot{u}} + \nabla \cdot \boldsymbol{\sigma} = \mathbf{F_{ext}}
 \end{eqnarray}
 
-where, $\rho$ is the density of the soil or structure that can vary with space, $\boldsymbol{\sigma}$ is the stress at any point in space and time, $\mathbf{F_{ext}}$ is the external force acting on the system that can be in the form of localized seismic sources or global body forces such as gravity, and $\mathbf{\ddot{u}}$ is the acceleration at any point within the soil-structure domain. The left side of the equation contains the internal forces acting on the system with first term being the contribution from the inertia, and the second term being the contribution from the stiffness of the system. Additional terms would be added to this equation when damping is present in the system. The material stress response ($\boldsymbol{\sigma}$) is described by the constitutive model, where the stress is determined as a function of the strain ($\boldsymbol{\epsilon}$), i.e. $\boldsymbol{\sigma}(\boldsymbol{\epsilon})$. Details about the material constitutive models available in MASTODON are presented in the section about [material models](#Material models).
+where $\rho$ is the density of the soil or structure that can vary with space, $\boldsymbol{\sigma}$ is the stress at any point in space and time, $\mathbf{F_{ext}}$ is the external force acting on the system that can be in the form of localized seismic sources or global body forces such as gravity, and $\mathbf{\ddot{u}}$ is the acceleration at any point within the soil-structure domain. The left side of the equation contains the internal forces acting on the system with first term being the contribution from the inertia, and the second term being the contribution from the stiffness of the system. Additional terms would be added to this equation when damping is present in the system. The material stress response ($\boldsymbol{\sigma}$) is described by the constitutive model, where the stress is determined as a function of the strain ($\boldsymbol{\epsilon}$), i.e. $\boldsymbol{\sigma}(\boldsymbol{\epsilon})$. Details about the material constitutive models available in MASTODON are presented in the section about [Material models](##Material models).
 
 The above equation is incomplete and ill-conditioned without the corresponding boundary conditions. There are two main types of boundary conditions - (i) Dirichlet boundary condition which is a kinematic boundary condition where the displacement, velocity, or acceleration at that boundary is specified; (ii) Neumann boundary condition where a force or traction is applied at the boundary. All the special boundary conditions such as absorbing boundary condition are specialized versions of these broad boundary condition types.
 
@@ -46,10 +67,19 @@ The HHT time integration scheme \citep{hughes2000thefinite} is built upon Newmar
 Here, $\alpha$ is the HHT parameter. The optimum parameter combination to use for this time integration scheme is $\beta = \frac{1}{4}(1-\alpha)^2$, $\gamma = \frac{1}{2} - \alpha$, and $-0.3 \le \alpha \le 0$.
 
 ## Small strain damping  
-When the soil-structure system (including both soil and concrete) responds to earthquake excitation energy is dissipated in two primary ways: (1) elastic and/or in-elastic material response, and (2) gapping, sliding and uplift at the soil-foundation interface. Dissipation of energy due to item (1) is modeled (approximately) using two different methods: (i) small strain damping experienced at very small strain levels where the material behavior is largely linear elastic; (ii) hysteretic damping due to nonlinear behavior of the material. Dissipation of energy due to (2) is discussed in the section about [foundation-soil interface models](#Foundation-soil interface models). This section discusses the damping that is present at small strain levels.
+
+When the soil-structure system (including both soil and concrete)
+responds to an earthquake excitation, energy is dissipated in two primary
+ways: (1)small-strain and hysteretic material damping, and (2) damping due to gapping,
+sliding and uplift at the soil-foundation interface. Dissipation of
+energy due to item (1) is modeled (approximately) using following methods: (i) viscous damping for small strain damping experienced at very small strain
+levels ($\gamma$ $\leq 0.001 \%$) where the material behavior is largely linear viscoelastic; (ii)
+hysteretic damping due to nonlinear hysteretic behavior of the material.
+Dissipation of energy due to (2) is discussed in [foundation-soil interface models](#Foundation-soil interface models). This section discusses the damping that is present at small strain levels.
+
 
 ### Rayleigh damping
-Rayleigh damping is the most common form of classical damping used in modeling structural dynamic problems. The more generalized form of classical damping, Caughey Damping \citep{caughey1960classical}, is currently not in MASTODON. Rayleigh damping is a specific form of Caughey damping that uses only the first two terms of the series. In this method, the viscous damping is proportional to the inertial contribution and contribution from the stiffness. This implies that in the matrix form of the governing equation, the damping matrix ($\mathbf{C}$) is assumed to be a linear combination of the mass ($\mathbf{M}$) and stiffness ($\mathbf{K}$) matrices, i.e., $\mathbf{C} = \eta \mathbf{M} +\zeta\mathbf{K}$. Here, $\eta$ and $\zeta$ are the mass and stiffness dependent Rayleigh damping parameters, respectively.
+Rayleigh damping is the most common form of classical damping used in modeling structural dynamic problems. The more generalized form of classical damping, Caughey Damping \citep{caughey1960classical}, is currently not implemented in MASTODON. Rayleigh damping is a specific form of Caughey damping that uses only the first two terms of the series. In this method, the viscous damping is proportional to the inertial contribution and contribution from the stiffness. This implies that in the matrix form of the governing equation, the damping matrix ($\mathbf{C}$) is assumed to be a linear combination of the mass ($\mathbf{M}$) and stiffness ($\mathbf{K}$) matrices, i.e., $\mathbf{C} = \eta \mathbf{M} +\zeta\mathbf{K}$. Here, $\eta$ and $\zeta$ are the mass and stiffness dependent Rayleigh damping parameters, respectively.
 
 The equation of motion (in the matrix form) in the presence of Rayleigh damping becomes:
 \begin{eqnarray}
@@ -70,9 +100,9 @@ where, $\xi(f)$ is the damping ratio of the system as a function of frequency $f
 
 !media media/theory/rayleigh.png width=60% margin-left=150px float=center id=fig:rayleigh caption=Damping ratio as a function of frequency.
 
-Because Rayleigh damping only uses two terms, a constant damping ratio can only be approximated between a certain frequency range. The user must consider the frequency range of interest to their application to achieve the desired viscous damping. For building structures it is desirable to have constant damping for the first few modes of response, this is typically between 2 to 10 percent (i.e., between 0.02-0.10). For soils, the small strain (elastic) viscous damping ratio is constant till a cut-off frequency and then it decreases with increase in frequency. MASTODON has the capability to calculate $\zeta$ and $\eta$ for both the above mentioned scenarios.
 
 #### Constant damping ratio
+
 For the constant damping ratio scenario, the aim is to find $\zeta$ and $\eta$ such that the $\xi(f)$ is close to the target damping ratio $\xi_t$, which is a constant value, between the frequency range $[f_1, f_2]$. This can be achieved by minimizing the difference between $\xi_t$ and $\xi(f)$ for all the frequencies between $f_1$ and $f_2$, i.e., if
 
 \begin{eqnarray}
@@ -87,7 +117,29 @@ Then, $\frac{dI}{d \eta} = 0$ and $\frac{dI}{d \zeta}=0$ results in two equation
 \end{eqnarray}
 
 #### Damping ratio for soils
-The damping seen in soils is usually of the form \citep{withers2015memory}:
+
+Small strain material damping of soils is independent of loading frequency in frequency band of 0.01 Hz - 10 Hz (\cite{menq2003}, \cite{shibuya2000damp},\cite{lopresti1997damp}, and \cite{marmureanu2000damp}). The two mode Rayleigh damping is frequency dependent and can only achieve the specified damping at two frequencies while underestimating within and overestimating outside of these frequencies. The parameters $\eta$ and $\zeta$ for a given damping ratio can be calculated as follows:
+
+\begin{equation}
+  \begin{bmatrix}
+    \xi_i \\
+    \xi_j
+  \end{bmatrix}
+  =
+  \frac{1}{4\pi}
+  \begin{bmatrix}
+    \frac {1}{f_i} &  f_i \\
+    \frac {1}{f_j} &  f_j
+  \end{bmatrix}
+  \begin{bmatrix}
+    \eta \\
+    \zeta
+  \end{bmatrix}
+\end{equation}
+
+In case of two mode Rayleigh damping, \cite{kwok2007damp} suggests to use natural frequency and five times of it for the soil column of interest. In addition, selecting first mode frequency of soil column and higher frequency that corresponds to predominant period of the input ground motion is a common practice.
+
+Heterogeneities of the wave travel path may introduce scattering effect which leads to frequency dependent damping (\cite{campbell2009damp}). This type of damping is of the form (\cite{withers2015memory}):
 
 \begin{equation}\label{eqn:non_constant_damping}
 \xi (f) = \begin{cases}
@@ -96,7 +148,12 @@ The damping seen in soils is usually of the form \citep{withers2015memory}:
            \end{cases}
 \end{equation}
 
-where, $f_T$ is the frequency above which the damping ratio starts to deviate from the constant target value of $\xi_t$, and $\gamma$ is the exponent which lies between 0 and 1. Minimizing the difference between Equations \eqref{eqn:non_constant_damping} and \eqref{eqn:general_rayleigh} with respect to $\eta$ and $\zeta$ for all frequencies between $f_1$ and $f_2$ gives:
+where, $f_T$ is the frequency above which the damping ratio starts to
+deviate from the constant target value of $\xi_t$, and $\gamma$ is
+the exponent which lies between 0 and 1. Minimizing the difference
+between \eqref{eqn:non_constant_damping} and
+\eqref{eqn:general_rayleigh} with respect to $\eta$ and $\zeta$ for
+all frequencies between $f_1$ and $f_2$ gives:
 
 \begin{eqnarray}
 \zeta = \frac{\xi_t}{2 \pi} \; \frac{6}{(\Delta f)^3} \; [b(f_1,f_2) - a(f_1, f_2) \; f_1 f_2] \\
@@ -110,7 +167,9 @@ a(f_1, f_2) = ln \frac{f_T}{f_1} + \frac{1}{\gamma} \; \left[1- \left(\frac{f_T}
 b(f_1, f_2) = \frac{{f_T}^2 - {f_1}^2}{2} + \frac{{f_T}^\gamma}{2-\gamma} \; ({f_2}^{2-\gamma} - {f_T}^{2-\gamma})
 \end{eqnarray}
 
-Also, $\xi_t$ for soils is inversely proportional to the shear wave velocity ($V_s$) and a commonly used expression for $\xi_t$ of soil is:
+Also, $\xi_t$ for soils is inversely proportional to the shear wave
+velocity ($V_s$) and a commonly used expression for $\xi_t$ of soil
+is:
 
 \begin{eqnarray}
 \xi_t = \frac{5}{V_s}
@@ -122,7 +181,15 @@ where, $V_s$ is in m/s.
 As seen in the previous sub-section, the damping ratio using Rayleigh damping varies with frequency. Although the parameters $\eta$ and $\zeta$ can be tuned to arrive at a constant damping ratio for a short frequency range, as the frequency range increases, the damping ratio no longer remains constant. For scenarios like these, where a constant damping ratio is required over a large frequency range, frequency independent damping formulations work better. This formulations is under consideration for adding to MASTODON.
 
 ## Soil layers and meshing
-Soil models in general are made up of different soil layers each with a different material behavior. These soil layers can either be horizontal or non-horizontal. For the horizontal soil layer scenario, the location of the interfaces can be provided as input and MASTODON will use that information to generate a set of soil layers, each with a unique identification number. These layer ids are later used to assign material properties to each soil layer. The same procedure can also be used for non-horizontal but planar soil layers by specifying the normal to the plane and the interface locations measured along the normal direction.
+
+Small strain properties (shear wave velocity, small strain modulus etc.) as well as mobilized shear strength of soils change with depth. Thus, in numerical models, soil profile (layers) is constructed to incorporate the depth dependent properties. The ground surface as well as layers that define the soil domain can be horizontal
+or non-horizontal. For the horizontal ground surface and layering scenario, the location
+of the interfaces can be provided as input and MASTODON will use that
+information to generate a set of soil layers, each with a unique
+identification number. These layer ids are later used to assign material
+properties to each soil layer. The same procedure can also be used for
+non-horizontal but planar soil layers by specifying the normal to the
+plane and the interface locations measured along the normal direction.
 
 For scenarios where the soil layers are non-horizontal and non-planar, images (.jpg, .png, etc.) of the soil profile can be provided as input. The different soil layers are distinguished from the image by reading either the red, green or blue color value (as per user's directions) at each pixel. Gray scale images in which the red, green and blue values are all the same also work well for this purpose. For creating 3D soil layers, multiple 2D images with soil profiles at different 2-D cross-sections of the soil domain can be provided as input.
 
@@ -137,9 +204,9 @@ If linear elements such as QUAD4 or HEX8 are used, then the optimum mesh size is
 !media media/theory/adaptive_mesh.png width=60% margin-left=150px float=center id=fig:adaptive_meshing caption=Auto-generated mesh for a soil domain with three non-horizontal non-planar soil layers.
 
 ## Material models
-To model the mechanical behavior of a material, three components are need to be defined at every point in space and time - strain, elasticity tensor, stress.
+To model the mechanical behavior of a material, three components need to be defined at every point in space and time - strain, elasticity tensor, stress.
 
-1. **Strain**: Strain is a normalized measure of the deformation experienced by a material. In a 1-D scenario, say a truss is stretched along its axis, the axial strain is the elongation of the truss normalized by the length of the truss. In a 3D scenario, the strain is 3x3 tensor and there are three different ways to calculate strains from displacements - small linearized total strain, small linearized incremental strain, and finite incremental strain. Details about these methods can be found in http://mooseframework.org/docs/PRs/9050/site/documentation/modules/tensor_mechanics/index.html.
+1. **Strain**: Strain is a normalized measure of the deformation experienced by a material. In a 1-D scenario, say a truss is stretched along its axis, the axial strain is the elongation of the truss normalized by the length of the truss. In a 3D scenario, the strain is 3x3 tensor and there are three different ways to calculate strains from displacements - small linearized total strain, small linearized incremental strain, and finite incremental strain. Details about these methods can be found in <a href= "http://mooseframework.org/docs/moose_docs/site/documentation/modules/tensor_mechanics/index.html"> Tensor Mechanics module </a> .
 
 2. **Elasticity Tensor**: The elasticity tensor is a 4th order tensor with a maximum of 81 independent constants. For MASTODON applications, the soil and structure are usually assumed to behave isotropically, i.e., the material behaves the same in all directions. Under this assumption, the number of independent elastic constants reduces from 81 to 2. The two independent constants that are usually provided for the soil are the shear modulus and Poissons's ratio, and for the structure it is the Young's modulus and Poisson's ratio.
 
@@ -150,48 +217,76 @@ Details about stress calculation for two different constitutive models are prese
 ### Linear elastic constitutive model
 In scenarios where the material exhibits a linear relation between stress and strain, and does not retain any residual strain after unloading, is called a linear elastic material. In linear elasticity, the stress tensor ($\boldsymbol{\sigma}$) is calculated as $\boldsymbol{\sigma} = \mathcal{C}\boldsymbol{\epsilon}$, where $\mathcal{C}$ is the elasticity tensor, and $\boldsymbol{\epsilon}$ is the strain tensor. This material model is currently used for numerically modeling the behavior of concrete and other materials used for designing a structure in MASTODON.
 
-### Nonlinear hysteretic constitutive model for soils (I-Soil)
-<!-- Add stuff from I - Soil index.md -->
-The I-soil material model is a nonlinear hysteretic soil model that is based on the distributed element models developed by \citet{iwan1967on} and \citet{chiang1994anew}. In 1-D, this model takes the backbone shear stress - shear strain curve and divides it into a set of elastic-perfectly plastic curves. The total stress then is the sum of the stresses from the individual elastic-perfectly plastic curves (\ref{fig:1D_representation}).
+### Nonlinear hysteretic constitutive model for soils (I-soil)
 
-!media media/theory/1D_isoil_representation.png width=80% margin-left=40px float=center id=fig:1D_representation caption=I-soil model details: (a) 1D representation by springs; (b) example monotonic and cyclic behavior of four nested component model (reprinted from \citet{baltaji2017nonlinear}).
+I-soil (\citet{numanoglu2017phd}) is a three dimensional, physically motivated, piecewise linearized nonlinear hysteretic material model for soils. The model can be represented by shear type parallel-series distributed nested components (springs and sliders) in one dimensional shear stress space and its framework is analogous to the distributed element modeling concept developed by \citet{iwan1967on}. The model behavior is obtained by superimposing the stress-strain response of nested components. Three dimensional generalization follows \citet{chiang1994anew} and uses von Mises (independent of effective mean stress) and/or Drucker-Prager (effective mean stress dependent) type shear yield surfaces depending on user's choice. The yield surfaces are invariant in the stress space \ref{fig:yield_surface} . Thus, the model does not require kinematic hardening rule to model un/reloading stress-strain response and preserves mathematical simplicity.
 
-The three-dimensional generalization of this model is achieved using von-Mises failure criteria for each elastic-perfectly plastic curve, resulting in an invariant yield surfaces in three-dimensional stress space like in \ref{fig:yield_surface}.
+!media media/theory/yield_surface.png width=40% margin-left=200px float=center id=fig:yield_surface caption=Invariant yield surfaces of the individual elastic-perfectly curves (after Chiang and Beck, 1994).
 
-!media media/yield_surface.png width=40% margin-left=200px float=center id=fig:yield_surface caption=Invariant yield surfaces of the individual elastic-perfectly curves \citep{chiang1994anew}.
+The current version of I-soil implemented in MASTODON utilizes Masing type un/reloading behavior and is analogous to MAT79 (LS-DYNA) material model but does not exhibit numerical instability observed in MAT79 (\citet{numanoglu2017conf}). Masing type un/reloading is inherently achieved by the model because upon un/reloading the yielded nested components regain stiffness and strength. The cyclic response obtained from current version of the model is presented in \ref{fig:1D_isoil_representation}. Reduction factor type modification on un/reloading behavior (\citet{phillips2009damping}; \citet{numanoglu2017nonmasing}) is an ongoing study within MASTODON framework.
 
-The backbone stress-strain curves for each soil layer can be provided in three different ways:
+!media media/theory/1D_isoil_representation.png width=60% margin-left=200px float=center id=fig:1D_isoil_representation caption=I-soil model details: (a) 1D representation by springs; (b) example monotonic and cyclic behavior of four nested component model (reprinted from Baltaji et al., 2017).
 
-1. User-defined backbone curve (soil_type = 0): The backbone curve can be provided in a .csv file where the first column is shear strain and the second column is shear stress. The number of elastic-perfectly plastic curves that will be generated from this backbone curve depends on the number of entries in the data file. When many soil layers are present, a vector of data files can be provided as input. The size of this vector should equal the number of soil layers. Also the number of entries in each data file should be the same.
+Main input for the current version of I-soil in MASTODON is a backbone curve at a given reference pressure. MASTODON provides variety of options to built backbone curve for a given soil type and reference pressure using following methods :
 
-2. Darendeli backbone curve (soil_type = 1): The backbone curve can be auto-generated based on empirical data for common soil types. \citet{darendeli2001development} presents a functional form that can be used to create the backbone shear stress - strain curves based on the experimental results obtained from resonant column and torsional shear tests. This functional form requires the initial shear modulus, initial bulk modulus, plasticity index, over consolidation ratio, reference mean confining pressure ($p_{ref}$) and number of points as input. Other than the number of points, all the other parameters can be provided as a vector for each soil layer. The number of points, which determines the number of elastic-perfectly plastic curves to be generated, is constant for all soil layers.
+ 1. User-defined backbone curve (soil\_type = 0): The backbone curve can
+  be provided in a .csv file where the first column is shear strain points and
+  the second column is shear stress points. The number of nested components that will be generated from this backbone curve depends
+  on the number of discrete shear strain - shear stress pairs defined in the .csv file. When layered soil profile is
+  present, .csv file for each reference pressure can be provided to the corresponding elements in the mesh.
 
-3. General Quadratic/Hyperbolic (GQ/H) backbone curve (soil_type = 2): \citet{darendeli2001development} study constructs the shear stress-strain curves based on experimentally obtained data. At small strains, the data is obtained using resonant column test, and towards the medium shear strain levels, the torsional shear test results are used. These values are extrapolated to the large strain levels. This extrapolation may underestimate or overestimate the shear strength at large strains. Therefore, shear strength correction is necessary to account for the correct shear strength at large strains. GQ/H model proposed by \citet{groholski2016simplified} has a curve fitting scheme that automatically corrects the reference curves provided by \citet{darendeli2001development} based on the specific shear strength at the large strains. This model requires taumax, theta_1 through 5, initial shear modulus, initial bulk modulus and number of points as input. The parameter taumax is the maximum shear stress that can be generated in the soil. The parameters theta_1 through 5 are the curve fitting parameters and can be obtained using DEEPSOIL \citep{hashash2016deepsoil}. Other than the number of points, all the other parameters can be given as a vector for the different soil layers. The number of points, which determines the number of elastic-perfectly plastic curves to be generated, is constant for all soil layers.
+2.  Darendeli backbone curve (soil\_type = 1): The backbone curve can be
+  auto-generated based on empirical relations obtained from laboratory tests.
+  \citet{darendeli2001development} presents a functional form for normalized modulus reduction curves obtained from resonant column - torsional shear test for variety of soils. MASTODON utilizes this study and auto-generates the backbone shear stress - strain curves. The inputs for this option are (1) small strain shear modulus, (2) bulk modulus, (3) plasticity index, (4) overconsolidation ratio, (5) reference effective mean stress (\(p_{ref}\)) at which the backbone is constructed, and (6) number of shear stress - shear strain points preferred by user to construct piecewise linear backbone curve. All the other parameters except the number of shear stress - shear strain points can be provided as a vector for each soil layer.
 
-Once the backbone curve is generated, the data from this curve is used to calculate the shear modulus and yield stress for each the elastic-plastic curve in \ref{fig:1D_representation}. The stress calculation for each elastic-plastic curve follows two steps:
+  Darendeli (2001) study extrapolates the normalized modulus reduction curves after 0.1 \% shear strains. This extrapolation causes significant over/under estimation of the shear strength implied at large strains for different type of soils at different reference effective mean stresses \citep{hashash2010recent}. Thus user should be cautious about implied shear strength when utilizing this option.
 
-1. If $\Delta \boldsymbol{\epsilon}$ is the strain increment in the current time step, then it is first assumed that the material is still in the elastic region and the current stress is calculated as $\boldsymbol{\sigma} = \mathcal{C} \boldsymbol{\epsilon}$.
+3.  General Quadratic/Hyperbolic (GQ/H) backbone curve (soil\_type = 2):
+  \citet{darendeli2001development} study presented in previous item constructs the shear
+  stress - shear strain curves based on experimentally obtained data. At small
+  strains, the data is obtained using resonant column test, and towards
+  the moderate shear strain levels, torsional shear test results are
+  used. Large strain data are extrapolation of the small to medium shear strain data. This extrapolation underestimates or overestimates the shear strength mobilized at
+  large shear strains. Therefore, implied shear strength correction is necessary to
+  account for the correct shear strength at large strains. GQ/H constitutive model
+  proposed by \citet{groholski2016simplified} has a unique curve fitting scheme embedded into the constitutive model that accounts for
+  mobilized strength at large shear strains by controlling the shear strength. This model uses taumax, theta\_1 through 5,
+  small strain shear modulus,  bulk modulus and number of shear stress - shear strain points preferred by user to construct piecewise linear backbone curve. The parameter taumax is the maximum shear strength that can be
+  mobilized by the soil at large strains. The parameters theta\_1 through 5 are the curve
+  fitting parameters and can be obtained using DEEPSOIL
+  \citep{hashash2016deepsoil}. Other than the number of points, all the
+  other parameters can be given as a vector for the different soil
+  layers. The number of points, which determines the number of
+  elastic-perfectly plastic curves to be generated, is constant for all soil layers.
 
-2. Next, the elasticity assumption is tested by checking whether the current stress state is above or below the yield surface. To check this yield criterion, the von-Mises stress ($\sigma_{eq}$) is calculated from the stress tensor $\boldsymbol{\sigma}$. If $\sigma_{eq}$ is less than or equal to the yield stress ($\sigma_y$) for that curve, the stress state calculated in step 1 is correct. If not, the stress tensor calculated in step 1 is brought back to the yield surface by linearly scaling it by $\frac{\sigma_y}{\sigma_{eq}}$.
+Once the backbone curve is provided to I-soil, the model determines
+the properties for nested components presented in \ref{fig:1D_isoil_representation}. The stress integration for each nested component follows  classic elastic predictor - plastic corrector type radial return algorithm (\citet{simo2006computein}) and model stress is obtained by summing the stresses  from each nested component:
 
-Once the stress for all the elastic-plastic curves are evaluated using the above 2 step process, the total stress of the material is the summation of the stress tensors from all the elastic-plastic curves.
+\begin{equation}
+\tau = \sum_{k=1}^{i} G_{k}*\gamma +  \sum_{k=i+1}^{n} {\tau_{y}}^k
+\end{equation}
 
-All the above backbone curves provide the behavior of the soil at a reference confining pressure ($p_{ref}$). When the confining pressure of the soil changes, the soil behavior also changes. The shear modulus ($G(p)$) of each elastic-plastic curve at a pressure $p$ is given by:
+where $\tau$ is the total shear stress, $G_{k}$ is the shear modulus of the $k^{th}$ nested component, $\gamma$ is the shear strain, ${\tau_{y}}^k$ is the yield stress of the $k^{th}$ nested component,  and $i$ represents the number of components that have not yet yielded out of the $n$ total nested components.
+
+Small strain shear modulus can be varied with effective mean stress via:
 
 \begin{equation}
  G(p) = G_0 \left(\frac{p-p_0}{p_{ref}}\right)^{b_{exp}}
 \end{equation}
 
-where, $G_0$ is the initial shear modulus, $p_0$ is the tension pressure cut off and $b_{exp}$ is a parameter obtained from experiments. The shear modulus reduces to zero for any pressure lower than $p_0$ to model the failure of soil in tension. Note that compressive pressure is taken to be positive.  
 
-Similarly, the yield stress ($\sigma_y(p)$) of the elastic-perfectly plastic curve also changes when the confining pressure changes. The yield stress ($\sigma_y(p)$) at a pressure $p$ is given as:
+where, $G_0$ is the initial shear modulus, $p_0$ is the tension
+pressure cut off and $b_{exp}$ is mean effective stress dependency parameter obtained from
+experiments. The shear modulus reduces to zero for any mean effective stress lower
+than $p_0$ to model the failure of soil in tension. Note that the mean effective stress is positive for compressive loading. Thus, $p_0$ should be inputted as negative.
+
+Yield criteria of the material can also be varied with effective mean stress dependent behavior as:
+
 \begin{equation}
-\sigma_y(p) = \sqrt{\frac{a_0 + a_1 (p-p_0) + a_2 (p-p_0)^2}{a_0 + a_1 p_{ref} + a_2 {p_{ref}}^2}} \sigma_y(p_{ref})
+\tau_y(p) = \sqrt{\frac{a_0 + a_1 (p-p_0) + a_2 (p-p_0)^2}{a_0 + a_1 p_{ref} + a_2 {p_{ref}}^2}} \tau_y(p_{ref})
 \end{equation}
 
-where, $a_0$, $a_1$ and $a_2$ are parameters obtained from experiments.
-
-This material model was developed in collaboration with Prof. Youssef Hashash and his students Ozgun Numanoglu and Omar Baltaji from University of Illinois at Urbana-Champaign.
+where, $a_0$, $a_1$ and $a_2$ are parameters that define how the yield stress varies with pressure.
 
 ## Foundation-soil interface models
 The foundation-soil interface is an important aspect of NLSSI modeling. The foundation-soil interface simulates geometric nonlinearities in the soil-structure system: gapping (opening and closing of gaps between the soil and the foundation), sliding, and uplift.
@@ -256,16 +351,16 @@ If the ground excitation was measured at a depth within the soil by placing an a
 ### Domain reduction method (DRM)
 Earthquake 'source-to-site' simulations require simulating a huge soil domain (order of many kilometers) with a earthquake fault. The nuclear power plant structure, which is usually less than 100 m wide, is located very far from the earthquake fault, and the presence of the structure only affects the response of the soil in the vicinity of the structure. In most of these situations, where a localized feature such as  a structure is present in a huge soil domain, the problem can be divided into two parts: (i) a free-field 'source-to-site' simulation is run on the huge soil domain ( \ref{fig:DRM}(a)) that does not contain the localized feature, and (ii) the forces from the free-field simulation at one element layer, which is the element layer separating the bigger and smaller soil domain, can be transferred to a much smaller domain containing the localized feature ( \ref{fig:DRM}(b)). This method of reducing the domain is called the domain reduction method (DRM) \citep{bielak2003domain}.
 
-!media media/theory/DRM.png width=100% float=center id=fig:DRM caption=Domain reduction method summary: (a) Big soil domain containing the earthquake fault but not the localized feature. The displacements are obtained at the boundaries $\Gamma$ and $\Gamma_e$ and are converted to equivalent forces. (b) Smaller soil domain containing the localized feature but not the earthquake fault. The equivalent forced calculated in (a) are applied at the boundaries $\Gamma$ and $\Gamma_e$. This image is reprinted from \citet{bielak2003domain}.
+!media media/theory/DRM.png width=100% float=center id=fig:DRM caption=Domain reduction method summary: (a) Big soil domain containing the earthquake fault but not the localized feature. The displacements are obtained at the boundaries $\Gamma$ and $\Gamma_e$ and are converted to equivalent forces. (b) Smaller soil domain containing the localized feature but not the earthquake fault. The equivalent forced calculated in (a) are applied at the boundaries $\Gamma$ and $\Gamma_e$. This image is reprinted from Bielak et al., 2003.
 
-To convert the displacements at $\Gamma$ and $\Gamma_e$ from part (i) to equivalent forces, a finite element model of the one element layer between $\Gamma$ and $\Gamma_e$ is simulated in two steps. First, the bounday $\Gamma_e$ is fixed and the boundary $\Gamma$ is moved with the displacements recorded at $\Gamma$. This step gives the equivalent forces at $\Gamma_e$. Second, the boundary $\Gamma$ is fixed and the boundary $\Gamma_e$ is moved with the displacements recorded at $\Gamma_e$. This steps gives the equivalent forces at $\Gamma$.
+To convert the displacements at $\Gamma$ and $\Gamma_e$ from part (i) to equivalent forces, a finite element model of the one element layer between $\Gamma$ and $\Gamma_e$ is simulated in two steps. First, the boundary $\Gamma_e$ is fixed and the boundary $\Gamma$ is moved with the displacements recorded at $\Gamma$. This step gives the equivalent forces at $\Gamma_e$. Second, the boundary $\Gamma$ is fixed and the boundary $\Gamma_e$ is moved with the displacements recorded at $\Gamma_e$. This steps gives the equivalent forces at $\Gamma$.
 
-Note: The meshes for the bigger soil domain and smaller soil domain need not align between $\Gamma$ and $\Gamma_e$. The equivalent forces can be applied as point forces at the same coordinate location at which nodes are present in the bigger model, irrespective of whether these locations correspond to nodal locations in the smaller model.   
+Note: The meshes for the bigger soil domain and smaller soil domain need not align between $\Gamma$ and $\Gamma_e$. The equivalent forces can be applied as point forces at the same coordinate location at which nodes are present in the bigger model, irrespective of whether these locations correspond to nodal locations in the smaller model.
 
 ## Earthquake fault rupture
 The orientation of an earthquake fault is described using three directions - strike ($\phi_s$), dip ($\delta$) and slip direction ($\lambda$) as shown in \ref{fig:fault_orientation}.
 
-!media media/fault_orientation.png width=80% margin-left=100px id=fig:fault_orientation caption= Definition of the fault-orientation parameters - strike $\phi_s$, dip $\delta$ and slip direction $\lambda$. The slip direction is measured clockwise around from north, with the fault dipping down to the right of the strike direction. Strike direction is also measured from the north. $\delta$ is measured down from the horizontal (image courtesy \citet{aki2012quantitative}).
+!media media/fault_orientation.png width=80% margin-left=100px id=fig:fault_orientation caption= Definition of the fault-orientation parameters - strike $\phi_s$, dip $\delta$ and slip direction $\lambda$. The slip direction is measured clockwise around from north, with the fault dipping down to the right of the strike direction. Strike direction is also measured from the north. $\delta$ is measured down from the horizontal (image courtesy Aki and Richards (2012)).
 
 In MASTODON, earthquake fault is modeled using a set of point sources. The seismic moment ($M_o$) of the earthquake point source in the fault specific coordinate system is:
 
@@ -288,7 +383,7 @@ M_{zz}(t) = M_o(t) \sin 2\delta \sin \lambda
 
 Each component of the above matrix is a force couple with the first index representing the force direction and the second index representing the direction in which the forces are separated (see \ref{fig:source_direction}).
 
-!media media/source_direction.png width=60% margin-left=150px id=fig:source_direction caption=The nine different force couples required to model an earthquake source (image courtesy \citet{aki2012quantitative}).
+!media media/source_direction.png width=60% margin-left=150px id=fig:source_direction caption=The nine different force couples required to model an earthquake source (image courtesy Aki and Richards (2012)).
 
 The total force in global coordinate direction $i$ resulting from an earthquake source applied at point $\vec{\zeta}$ in space is then:
 

@@ -431,11 +431,6 @@ ISoilAction::computeGQHBackbone(std::vector<std::vector<Real>> & stress,
 
   for (unsigned int i = 0; i < layer_ids.size(); i++)
   {
-    if (theta_1[i] + theta_2[i] + theta_3[i] + theta_4[i] + theta_5[i] > 1.0)
-      mooseError("Error in" + name() + "Sum of theta 1 through 5 should be "
-                                       "smaller or equal to 1 for each soil "
-                                       "layer.");
-
     if (number_of_points <= 0 || taumax[i] <= 0.0 || initial_shear_modulus[i] <= 0.0 ||
         initial_bulk_modulus[i] <= 0.0)
       mooseError("Error in" + name() + ". Please provide positive values for number of points, "
