@@ -15,8 +15,16 @@
             - /BCs
         framework:
             - /Kernels/UserForcingFunction
+            - /Kernels/framework/MaterialDerivativeRankFourTestKernel
+            - /Kernels/framework/MaterialDerivativeTestKernel
+            - /Kernels/MaterialDerivativeRankTwoTestKernel
+            - /Kernels/MaterialDerivativeRankFourTestKernel
+            - /Kernels/MaterialDerivativeTestKernel
+            - /Debug/MaterialDerivativeTest
+            - /Debug/MaterialDerivativeTest/MaterialDerivativeTestAction
             - /DiracKernels/FunctionDiracSource
             - /BCs/Periodic
+            - /Transfers/MultiAppScalarToAuxScalarTransfer
         tensor_mechanics:
             - /Materials/CappedMohrCoulombCosseratStressUpdate
             - /Materials/CappedMohrCoulombStressUpdate

@@ -1,45 +1,54 @@
 mastodon:
-  base: doc/content
-  include:
-    - doc/content/*
-framework:
-  root_dir: $MOOSE_DIR
-  base: docs/content
-  include:
-    - docs/content/css/*
-    - docs/content/js/*
-    - docs/content/media/*
-    - docs/content/bib/*
-    - docs/content/documentation/examples/*
-    - docs/content/documentation/systems/DomainIntegral/index.md
-    - docs/content/documentation/systems/Variables/index.md
-    - docs/content/documentation/systems/AuxVariables/index.md
-    - docs/content/documentation/systems/Adaptivity/index.md
-    - docs/content/documentation/systems/Adaptivity/Markers/index.md
-    - docs/content/documentation/systems/Adaptivity/Indicators/index.md
-    - docs/content/documentation/systems/AuxKernels/index.md
-    - docs/content/documentation/systems/BCs/index.md
-    - docs/content/documentation/systems/Dampers/index.md
-    - docs/content/documentation/systems/DiracKernels/index.md
-    - docs/content/documentation/systems/UserObjects/index.md
-    - docs/content/documentation/systems/ScalarKernels/index.md
-    - docs/content/documentation/systems/AuxVariables/InitialCondition/index.md
-    - docs/content/documentation/systems/Variables/InitialCondition/index.md
-    - docs/content/documentation/systems/Mesh/MortarInterfaces/index.md
-    - docs/content/documentation/systems/Postprocessors/index.md
-    - docs/content/documentation/systems/Controls/index.md
-    - docs/content/documentation/systems/Mesh/Partitioner/index.md
-    - docs/content/documentation/systems/*/solid_mechanics/*
-    - docs/content/documentation/systems/*/tensor_mechanics/*
-    - docs/content/documentation/systems/*/contact/*
-    - docs/content/documentation/systems/*/framework/*
-    - docs/content/documentation/modules/tensor_mechanics/*
-    - docs/content/documentation/systems/VectorPostprocessors/index.md
-    - docs/content/documentation/systems/Variables/index.md
-    - docs/content/documentation/systems/MultiApps/index.md
-    - docs/content/documentation/systems/Mesh/index.md
-    - docs/content/documentation/systems/Kernels/index.md
-    - docs/content/documentation/systems/DiracKernels/index.md
-    - docs/content/documentation/systems/Materials/index.md
-    - docs/content/documentation/systems/Functions/index.md
-    - docs/content/documentation/interfaces/DerivativeMaterialInterface.md
+    base: doc/content
+    include:
+        - doc/content/**
+moose:
+    root_dir: $MOOSE_DIR
+    base: docs/content
+    include:
+        - docs/content/documentation/systems/**/index.md
+        - docs/content/documentation/systems/**/framework/**
+        - docs/content/documentation/systems/**/contact/**
+        - docs/content/documentation/systems/**/solid_mechanics/**
+        - docs/content/documentation/systems/**/tensor_mechanics/**
+
+        - docs/content/documentation/modules/tensor_mechanics/**
+
+        - docs/content/documentation/examples/**
+
+        - docs/content/media/**
+        - docs/content/bib/**
+
+    exclude:
+        - docs/content/documentation/systems/Modules/**
+
+        - docs/content/documentation/systems/Kernels/misc/GaussContForcing.md
+        - docs/content/documentation/systems/Kernels/framework/MaterialDerivativeRankFourTestKernel.md
+        - docs/content/documentation/systems/Kernels/framework/MaterialDerivativeRankTwoTestKernel.md
+        - docs/content/documentation/systems/Kernels/framework/MaterialDerivativeTestKernel.md
+        - docs/content/documentation/systems/Debug/MaterialDerivativeTest/framework/MaterialDerivativeTestAction.md
+
+        - docs/content/documentation/systems/AuxVariables/MultiAuxVariables/**
+        - docs/content/documentation/systems/Variables/PolycrystalVariables/**
+        - docs/content/documentation/systems/Variables/CHPFCRFFSplitVariables/**
+        - docs/content/documentation/systems/Variables/HHPFCRFFSplitVariables/**
+        - docs/content/documentation/systems/Variables/PFCRFFVariables/**
+        - docs/content/documentation/systems/AuxKernels/MatVecRealGradAuxKernel/**
+        - docs/content/documentation/systems/AuxKernels/MaterialVectorAuxKernel/**
+        - docs/content/documentation/systems/AuxKernels/MaterialVectorGradAuxKernel/**
+        - docs/content/documentation/systems/Kernels/PFCRFFKernel/**
+        - docs/content/documentation/systems/Kernels/PolycrystalKernel/**
+        - docs/content/documentation/systems/Kernels/CHPFCRFFSplitKernel/**
+        - docs/content/documentation/systems/Kernels/HHPFCRFFSplitKernel/**
+        - docs/content/documentation/systems/Kernels/PolycrystalStoredEnergy/**
+        - docs/content/documentation/systems/Kernels/PolycrystalElasticDrivingForce/**
+        - docs/content/documentation/systems/Kernels/RigidBodyMultiKernel/**
+        - docs/content/documentation/systems/PFCRFFVariables/**
+        - docs/content/documentation/systems/ICs/PolycrystalICs/**
+
+        - docs/content/documentation/systems/ThermalContact/**
+
+        - docs/content/documentation/systems/XFEM/**
+
+        - docs/content/documentation/systems/ReactionNetwork/**
+        - docs/content/documentation/systems/Q2P/**
