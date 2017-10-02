@@ -58,10 +58,22 @@ HazardCurve::execute()
 }
 
 const std::vector<Real> &
-HazardCurve::getData(const unsigned int & bin,
-                     const unsigned int & index,
+HazardCurve::getData(const std::size_t & bin,
+                     const std::size_t & index,
                      const GroundMotionReader::Component & comp) const
 {
+  if (bin >= _ground_motion_data.size())
+    mooseError("The supplied bin number (",
+               bin,
+               ") is out of range of the available number of bins (",
+               _ground_motion_data.size(),
+               ").");
+  if (index >= _ground_motion_data[bin].size())
+    mooseError("The supplied index number (",
+               index,
+               ") is out of range of the available number of ground motions (",
+               _ground_motion_data[bin].size(),
+               ").");
   return _ground_motion_data[bin][index].at(comp);
 }
 
@@ -126,11 +138,35 @@ HazardCurve::execute(
 unsigned int
 HazardCurve::count() const
 {
+  check();
+  unsigned int num = 0;
+  for (std::size_t i = 0; i < bins(); ++i)
+    num += count(i);
+  return num;
+}
+
+std::size_t
+HazardCurve::count(const std::size_t & /*bin*/) const
+{
+  // TODO: In the future it may be possible to have a different number of ground motions per
+  // bin, this method will allow that to work without changing the API.
+  check();
+  return _ground_motion_reader.count();
+}
+
+std::size_t
+HazardCurve::bins() const
+{
+  check();
+  return _reference.size();
+}
+
+void
+HazardCurve::check() const
+{
   if (_ground_motion_data.empty())
     mooseError("The HazardCurve '",
                name(),
-               "' does not contain data, please chech the 'execute_on' settings to make sure the "
-               "object as executed.");
-
-  return _reference.size() * _ground_motion_reader.count();
+               "' does not contain data, please check the 'execute_on' settings to make sure the "
+               "object was executed.");
 }

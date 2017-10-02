@@ -7,8 +7,8 @@ validParams<HazardCurveMultiApp>()
   InputParameters params = validParams<TransientMultiApp>();
   params.addClassDescription(
       "Creates a sub-application for each row of each HazardCurve bin and ground motion.");
-  params.addParam<UserObjectName>("hazard",
-                                  "The HazardCurve object to utilize for creating MultiApps.");
+  params.addRequiredParam<UserObjectName>(
+      "hazard", "The HazardCurve object to utilize for creating MultiApps.");
   params.suppressParameter<std::vector<Point>>("positions");
   params.suppressParameter<bool>("output_in_position");
   params.suppressParameter<std::vector<FileName>>("positions_file");

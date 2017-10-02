@@ -30,8 +30,8 @@ public:
    * @param index The ground motion index.
    * @param comp The ground motion component.
    */
-  const std::vector<Real> & getData(const unsigned int & bin,
-                                    const unsigned int & index,
+  const std::vector<Real> & getData(const std::size_t & bin,
+                                    const std::size_t & index,
                                     const GroundMotionReader::Component & comp) const;
 
   /**
@@ -43,6 +43,16 @@ public:
    * Return the number of curves.
    */
   unsigned int count() const;
+
+  /**
+   * Return the number of curves within the provided bin.
+   */
+  std::size_t count(const std::size_t & bin) const;
+
+  /**
+   * Return the number of bins.
+   */
+  std::size_t bins() const;
 
 protected:
   /// Reader for the hazard data
@@ -59,6 +69,11 @@ protected:
 
   /// Reference Acceleration
   std::vector<Real> _reference;
+
+  /**
+   * Method for checking initialization status.
+   */
+  void check() const;
 
 public:
   /* The following methods are private static methods that implement the primary functions of this

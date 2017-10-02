@@ -50,6 +50,9 @@
 // MultiApp
 #include "HazardCurveMultiApp.h"
 
+// Transfers
+#include "HazardCurveTransfer.h"
+
 // Testing
 #include "TestLayeredMaterialInterface.h"
 
@@ -134,6 +137,9 @@ MastodonApp::registerObjects(Factory & factory)
 
   // MultiApps
   registerMultiApp(HazardCurveMultiApp);
+
+  // Transfers
+  registerTransfer(HazardCurveTransfer);
 
   // Testing
   registerMaterial(TestLayeredMaterialInterfaceDocString);
