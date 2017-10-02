@@ -47,6 +47,9 @@
 #include "GroundMotionReader.h"
 #include "HazardCurve.h"
 
+// MultiApp
+#include "HazardCurveMultiApp.h"
+
 // Testing
 #include "TestLayeredMaterialInterface.h"
 
@@ -128,6 +131,9 @@ MastodonApp::registerObjects(Factory & factory)
   // UserObjects
   registerUserObject(GroundMotionReader);
   registerUserObject(HazardCurve);
+
+  // MultiApps
+  registerMultiApp(HazardCurveMultiApp);
 
   // Testing
   registerMaterial(TestLayeredMaterialInterfaceDocString);

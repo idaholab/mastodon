@@ -46,6 +46,11 @@ public:
   }
   ///@}
 
+  /**
+   * Return the number of ground motions.
+   */
+  unsigned int count() const;
+
 protected:
   /// Filename pattern (glob)
   const std::string & _pattern;

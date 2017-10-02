@@ -10,7 +10,8 @@ InputParameters
 validParams<GroundMotionReader>()
 {
   InputParameters params = validParams<GeneralUserObject>();
-  params.set<MultiMooseEnum>("execute_on") = "initial";
+  params.set<MultiMooseEnum>("execute_on") = MultiMooseEnum("");
+  params.suppressParameter<MultiMooseEnum>("execute_on");
   params.addRequiredParam<std::string>(
       "pattern", "The filename pattern (glob) for the ground motions to read.");
   return params;
@@ -19,6 +20,7 @@ validParams<GroundMotionReader>()
 GroundMotionReader::GroundMotionReader(const InputParameters & parameters)
   : GeneralUserObject(parameters), _pattern(getParam<std::string>("pattern"))
 {
+  execute();
 }
 
 void
@@ -60,6 +62,12 @@ GroundMotionReader::execute(const std::string & name, const std::string & patter
     readers.emplace_back(std::move(reader));
   }
   return readers;
+}
+
+unsigned int
+GroundMotionReader::count() const
+{
+  return _readers.size();
 }
 
 const std::vector<double> &

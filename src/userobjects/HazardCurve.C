@@ -11,7 +11,8 @@ InputParameters
 validParams<HazardCurve>()
 {
   InputParameters params = validParams<GeneralUserObject>();
-  params.set<MultiMooseEnum>("execute_on") = "initial";
+  params.set<MultiMooseEnum>("execute_on") = MultiMooseEnum("");
+  params.suppressParameter<MultiMooseEnum>("execute_on");
   params.addRequiredParam<UserObjectName>("ground_motions",
                                           "The GroundMotionReader object to extract ground motion "
                                           "data from to build the hazard curve.");
@@ -44,13 +45,14 @@ HazardCurve::HazardCurve(const InputParameters & parameters)
                "prescribed number of bins (",
                n_bins,
                ").");
+
+  execute();
 }
 
 void
 HazardCurve::execute()
 {
   _hazard_reader.read();
-
   _ground_motion_data = HazardCurve::execute(
       name(), _reference, _hazard_reader, _ground_motion_reader.readers(), _hazard_sample);
 }
@@ -106,7 +108,7 @@ HazardCurve::execute(
   sample_data.reserve(n_bins);
 
   // Populate ground motion data
-  std::vector<GroundMotionReader::Data> ground_motion_data(reference.size());
+  std::vector<GroundMotionReader::Data> ground_motion_data(n_bins);
   double x = (*x_min) + dx / 2.;
   for (unsigned int i = 0; i < n_bins; ++i)
   {
@@ -119,4 +121,16 @@ HazardCurve::execute(
     x += dx;
   }
   return ground_motion_data;
+}
+
+unsigned int
+HazardCurve::count() const
+{
+  if (_ground_motion_data.empty())
+    mooseError("The HazardCurve '",
+               name(),
+               "' does not contain data, please chech the 'execute_on' settings to make sure the "
+               "object as executed.");
+
+  return _reference.size() * _ground_motion_reader.count();
 }

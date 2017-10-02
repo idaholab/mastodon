@@ -30,15 +30,21 @@ public:
    * @param index The ground motion index.
    * @param comp The ground motion component.
    */
-  const std::vector<Real> & getData(const unsigned int & bin, const unsigned int & index, const GroundMotionReader::Component & comp) const;
+  const std::vector<Real> & getData(const unsigned int & bin,
+                                    const unsigned int & index,
+                                    const GroundMotionReader::Component & comp) const;
 
   /**
    * Return the sampled hazard curve.
    */
   const std::vector<std::pair<Real, Real>> & getSamples() const;
 
-protected:
+  /**
+   * Return the number of curves.
+   */
+  unsigned int count() const;
 
+protected:
   /// Reader for the hazard data
   MooseUtils::DelimitedFileReader _hazard_reader;
 
@@ -56,9 +62,9 @@ protected:
 
 public:
   /* The following methods are private static methods that implement the primary functions of this
-  * object. They are static so that they may be unit tested. They are private because they are
-  * not intended to be used outside of this class (excluding testing).
-  */
+   * object. They are static so that they may be unit tested. They are private because they are
+   * not intended to be used outside of this class (excluding testing).
+   */
   static std::vector<GroundMotionReader::Data> execute(
       const std::string & name,
       const std::vector<Real> & reference,
