@@ -10,12 +10,12 @@ This document describes the theoretical and numerical foundations of MASTODON.
 ## Governing equations
 The basic equation that MASTODON solves is the nonlinear wave equation:
 
-\begin{eqnarray}
+\begin{equation}
 \label{eqn:governing_equation}
- \rho \mathbf{\ddot{u}} + \nabla \cdot \boldsymbol{\sigma} = \mathbf{F_{ext}}
-\end{eqnarray}
+ \rho \mathbf{\ddot{u}} + \nabla \cdot \sigma = \mathbf{F_{ext}}
+\end{equation}
 
-where, $\rho$ is the density of the soil or structure that can vary with space, $\boldsymbol{\sigma}$ is the stress at any point in space and time, $\mathbf{F_{ext}}$ is the external force acting on the system that can be in the form of localized seismic sources or global body forces such as gravity, and $\mathbf{\ddot{u}}$ is the acceleration at any point within the soil-structure domain. The left side of the equation contains the internal forces acting on the system with first term being the contribution from the inertia, and the second term being the contribution from the stiffness of the system. Additional terms would be added to this equation when damping is present in the system. The material stress response ($\boldsymbol{\sigma}$) is described by the constitutive model, where the stress is determined as a function of the strain ($\boldsymbol{\epsilon}$), i.e. $\boldsymbol{\sigma}(\boldsymbol{\epsilon})$. Details about the material constitutive models available in MASTODON are presented in the section about [material models](#Material models).
+where, $\rho$ is the density of the soil or structure that can vary with space, $\sigma$ is the stress at any point in space and time, $\mathbf{F_{ext}}$ is the external force acting on the system that can be in the form of localized seismic sources or global body forces such as gravity, and $\mathbf{\ddot{u}}$ is the acceleration at any point within the soil-structure domain. The left side of the equation contains the internal forces acting on the system with first term being the contribution from the inertia, and the second term being the contribution from the stiffness of the system. Additional terms would be added to this equation when damping is present in the system. The material stress response ($\sigma$) is described by the constitutive model, where the stress is determined as a function of the strain ($\epsilon$), i.e. $\sigma(\epsilon)$. Details about the material constitutive models available in MASTODON are presented in the section about [material models](#Material models).
 
 The above equation is incomplete and ill-conditioned without the corresponding boundary conditions. There are two main types of boundary conditions - (i) Dirichlet boundary condition which is a kinematic boundary condition where the displacement, velocity, or acceleration at that boundary is specified; (ii) Neumann boundary condition where a force or traction is applied at the boundary. All the special boundary conditions such as absorbing boundary condition are specialized versions of these broad boundary condition types.
 
@@ -25,10 +25,12 @@ To solve Equation \eqref{eqn:governing_equation} for $\mathbf{u}$, an appropriat
 ### Newmark time integration
 In Newmark time integration \citep{newmark1959amethod}, the acceleration and velocity at $t+\Delta t$ are written in terms of the displacement ($\mathbf{u}$), velocity ($\mathbf{\dot{u}}$) and acceleration ($\mathbf{\ddot{u}}$) at time $t$ and the displacement at $t+\Delta t$.
 
-\begin{eqnarray} \label{eqn:Newmark}
-\mathbf{\ddot{u}}(t+\Delta t) &=& \frac{\mathbf{u}(t+\Delta t)-\mathbf{u}(t)}{\beta \Delta t^2}- \frac{\mathbf{\dot{u}}(t)}{\beta \Delta t}+\frac{\beta -0.5}{\beta}\mathbf{\ddot{u}}(t) \\
-\mathbf{\dot{u}}(t+ \Delta t) &=& \mathbf{\dot{u}}(t)+ (1-\gamma)\Delta t \mathbf{\ddot{u}}(t) + \gamma \Delta t \mathbf{\ddot{u}}(t+\Delta t)
-\end{eqnarray}
+\begin{equation} \label{eqn:Newmark}
+\begin{aligned}
+\mathbf{\ddot{u}}(t+\Delta t) &= \frac{\mathbf{u}(t+\Delta t)-\mathbf{u}(t)}{\beta \Delta t^2} - \frac{\mathbf{\dot{u}}(t)}{\beta \Delta t}+\frac{\beta -0.5}{\beta}\mathbf{\ddot{u}}(t) \\
+\mathbf{\dot{u}}(t+ \Delta t) &= \mathbf{\dot{u}}(t)+ (1-\gamma)\Delta t \mathbf{\ddot{u}}(t) + \gamma \Delta t \mathbf{\ddot{u}}(t+\Delta t)
+\end{aligned}
+\end{equation}
 
 In the above equations, $\beta$ and $\gamma$ are Newmark time integration parameters. Substituting the above two equations into the equation of motion will result in a linear system of equations ($\mathbf{Au}(t+\Delta t) = \mathbf{b}$) from which $\mathbf{u}(t+\Delta t)$ can be estimated.
 
@@ -39,9 +41,9 @@ The Newmark time integration scheme is unconditionally stable for $\gamma \ge \f
 ### Hilber-Hughes-Taylor (HHT) time integration
 The HHT time integration scheme \citep{hughes2000thefinite} is built upon Newmark time integration method to provide an unconditionally stable and second order accurate numerical scheme with the ability to damp out high frequency numerical noise. Here, in addition to the Newmark equations, the equation of motion is also altered resulting in:
 
-\begin{eqnarray}
-\rho\mathbf{\ddot{u}}(t+\Delta t) + \nabla \cdot [(1+\alpha) \boldsymbol{\sigma}(t+\Delta t) - \alpha \boldsymbol{\sigma}(t)] = \mathbf{F_{ext}}(t+\alpha\Delta t)
-\end{eqnarray}
+\begin{equation}
+\rho\mathbf{\ddot{u}}(t+\Delta t) + \nabla \cdot [(1+\alpha) \sigma(t+\Delta t) - \alpha \sigma(t)] = \mathbf{F_{ext}}(t+\alpha\Delta t)
+\end{equation}
 
 Here, $\alpha$ is the HHT parameter. The optimum parameter combination to use for this time integration scheme is $\beta = \frac{1}{4}(1-\alpha)^2$, $\gamma = \frac{1}{2} - \alpha$, and $-0.3 \le \alpha \le 0$.
 
@@ -52,14 +54,14 @@ When the soil-structure system (including both soil and concrete) responds to ea
 Rayleigh damping is the most common form of classical damping used in modeling structural dynamic problems. The more generalized form of classical damping, Caughey Damping \citep{caughey1960classical}, is currently not in MASTODON. Rayleigh damping is a specific form of Caughey damping that uses only the first two terms of the series. In this method, the viscous damping is proportional to the inertial contribution and contribution from the stiffness. This implies that in the matrix form of the governing equation, the damping matrix ($\mathbf{C}$) is assumed to be a linear combination of the mass ($\mathbf{M}$) and stiffness ($\mathbf{K}$) matrices, i.e., $\mathbf{C} = \eta \mathbf{M} +\zeta\mathbf{K}$. Here, $\eta$ and $\zeta$ are the mass and stiffness dependent Rayleigh damping parameters, respectively.
 
 The equation of motion (in the matrix form) in the presence of Rayleigh damping becomes:
-\begin{eqnarray}
+\begin{equation}
 \mathbf{M}\mathbf{\ddot{u}}+ (\eta \mathbf{M} + \zeta \mathbf{K})\mathbf{\dot{u}} +\mathbf{K}\mathbf{u} = \mathbf{F_{ext}}
-\end{eqnarray}
+\end{equation}
 
 The same equation of motion at any point in space and time (in the non-matrix form) is given by:
-\begin{eqnarray}
-\rho\mathbf{\ddot{u}} + \eta \rho \mathbf{\dot{u}} + \zeta  \nabla \cdot \frac{d}{dt}\boldsymbol{\sigma} + \nabla \cdot \boldsymbol{\sigma} = \mathbf{F_{ext}}
-\end{eqnarray}
+\begin{equation}
+\rho\mathbf{\ddot{u}} + \eta \rho \mathbf{\dot{u}} + \zeta  \nabla \cdot \frac{d}{dt}\sigma + \nabla \cdot \sigma = \mathbf{F_{ext}}
+\end{equation}
 
 The degree of damping in the system depends on the coefficients $\zeta$ and $\eta$ as follows:
 \begin{equation}\label{eqn:general_rayleigh}
@@ -75,16 +77,18 @@ Because Rayleigh damping only uses two terms, a constant damping ratio can only 
 #### Constant damping ratio
 For the constant damping ratio scenario, the aim is to find $\zeta$ and $\eta$ such that the $\xi(f)$ is close to the target damping ratio $\xi_t$, which is a constant value, between the frequency range $[f_1, f_2]$. This can be achieved by minimizing the difference between $\xi_t$ and $\xi(f)$ for all the frequencies between $f_1$ and $f_2$, i.e., if
 
-\begin{eqnarray}
+\begin{equation}
 I = \int_{f_1}^{f_2} \xi_t - \left(\frac{\eta}{2}\frac{1}{f} + \frac{\zeta}{2}f\right) df
-\end{eqnarray}
+\end{equation}
 
 Then, $\frac{dI}{d \eta} = 0$ and $\frac{dI}{d \zeta}=0$ results in two equations that are linear in $\eta$ and $\zeta$. Solving these two linear equations simultaneously gives:
 
-\begin{eqnarray}
-\zeta = \frac{\xi_t}{2 \pi} \; \frac{3}{(\Delta f)^2} \; \left(f_1 + f_2 - 2 \frac{f_1 f_1}{\Delta f} \; ln \frac{f_2}{f_1}\right) \\
-\eta = 2 \pi \xi_t \; \frac{f_1 f_2}{\Delta_f} \; \left[ln \frac{f_2}{f_1}\; \left(2 + 6 \frac{f_1 f_2}{(\Delta_f)^2}\right) - \frac{3(f_1 + f_2)}{\Delta_f}\right]
-\end{eqnarray}
+\begin{equation}
+\begin{aligned}
+\zeta &= \frac{\xi_t}{2 \pi} \; \frac{3}{(\Delta f)^2} \; \left(f_1 + f_2 - 2 \frac{f_1 f_1}{\Delta f} \; ln \frac{f_2}{f_1}\right) \\
+\eta &= 2 \pi \xi_t \; \frac{f_1 f_2}{\Delta_f} \; \left[ln \frac{f_2}{f_1}\; \left(2 + 6 \frac{f_1 f_2}{(\Delta_f)^2}\right) - \frac{3(f_1 + f_2)}{\Delta_f}\right]
+\end{aligned}
+\end{equation}
 
 #### Damping ratio for soils
 The damping seen in soils is usually of the form \citep{withers2015memory}:
@@ -98,23 +102,27 @@ The damping seen in soils is usually of the form \citep{withers2015memory}:
 
 where, $f_T$ is the frequency above which the damping ratio starts to deviate from the constant target value of $\xi_t$, and $\gamma$ is the exponent which lies between 0 and 1. Minimizing the difference between Equations \eqref{eqn:non_constant_damping} and \eqref{eqn:general_rayleigh} with respect to $\eta$ and $\zeta$ for all frequencies between $f_1$ and $f_2$ gives:
 
-\begin{eqnarray}
-\zeta = \frac{\xi_t}{2 \pi} \; \frac{6}{(\Delta f)^3} \; [b(f_1,f_2) - a(f_1, f_2) \; f_1 f_2] \\
-\eta = 2 \pi \xi_t \; \frac{2 f_1 f_2}{(\Delta f)^3} \; [a(f_1, f_2)\; ({f_1}^2 + {f_2}^2 + f_1 f_2) - 3 b(f_1, f_2)]
-\end{eqnarray}
+\begin{equation}
+\begin{aligned}
+\zeta &= \frac{\xi_t}{2 \pi} \; \frac{6}{(\Delta f)^3} \; [b(f_1,f_2) - a(f_1, f_2) \; f_1 f_2] \\
+\eta &= 2 \pi \xi_t \; \frac{2 f_1 f_2}{(\Delta f)^3} \; [a(f_1, f_2)\; ({f_1}^2 + {f_2}^2 + f_1 f_2) - 3 b(f_1, f_2)]
+\end{aligned}
+\end{equation}
 
 where, the functions $a(f_1, f_2)$ and $b(f_1, f_2)$ are given by:
 
-\begin{eqnarray}
-a(f_1, f_2) = ln \frac{f_T}{f_1} + \frac{1}{\gamma} \; \left[1- \left(\frac{f_T}{f_2}\right)^\gamma\right] \\
-b(f_1, f_2) = \frac{{f_T}^2 - {f_1}^2}{2} + \frac{{f_T}^\gamma}{2-\gamma} \; ({f_2}^{2-\gamma} - {f_T}^{2-\gamma})
-\end{eqnarray}
+\begin{equation}
+\begin{aligned}
+a(f_1, f_2) &= ln \frac{f_T}{f_1} + \frac{1}{\gamma} \; \left[1- \left(\frac{f_T}{f_2}\right)^\gamma\right] \\
+b(f_1, f_2) &= \frac{{f_T}^2 - {f_1}^2}{2} + \frac{{f_T}^\gamma}{2-\gamma} \; ({f_2}^{2-\gamma} - {f_T}^{2-\gamma})
+\end{aligned}
+\end{equation}
 
 Also, $\xi_t$ for soils is inversely proportional to the shear wave velocity ($V_s$) and a commonly used expression for $\xi_t$ of soil is:
 
-\begin{eqnarray}
+\begin{equation}
 \xi_t = \frac{5}{V_s}
-\end{eqnarray}
+\end{equation}
 
 where, $V_s$ is in m/s.
 
@@ -148,17 +156,17 @@ To model the mechanical behavior of a material, three components are need to be 
 Details about stress calculation for two different constitutive models are presented below.
 
 ### Linear elastic constitutive model
-In scenarios where the material exhibits a linear relation between stress and strain, and does not retain any residual strain after unloading, is called a linear elastic material. In linear elasticity, the stress tensor ($\boldsymbol{\sigma}$) is calculated as $\boldsymbol{\sigma} = \mathcal{C}\boldsymbol{\epsilon}$, where $\mathcal{C}$ is the elasticity tensor, and $\boldsymbol{\epsilon}$ is the strain tensor. This material model is currently used for numerically modeling the behavior of concrete and other materials used for designing a structure in MASTODON.
+In scenarios where the material exhibits a linear relation between stress and strain, and does not retain any residual strain after unloading, is called a linear elastic material. In linear elasticity, the stress tensor ($\sigma$) is calculated as $\sigma = \mathcal{C}\epsilon$, where $\mathcal{C}$ is the elasticity tensor, and $\epsilon$ is the strain tensor. This material model is currently used for numerically modeling the behavior of concrete and other materials used for designing a structure in MASTODON.
 
 ### Nonlinear hysteretic constitutive model for soils (I-Soil)
 <!-- Add stuff from I - Soil index.md -->
-The I-soil material model is a nonlinear hysteretic soil model that is based on the distributed element models developed by \citet{iwan1967on} and \citet{chiang1994anew}. In 1-D, this model takes the backbone shear stress - shear strain curve and divides it into a set of elastic-perfectly plastic curves. The total stress then is the sum of the stresses from the individual elastic-perfectly plastic curves (\ref{fig:1D_representation}).
+The I-soil material model is a nonlinear hysteretic soil model that is based on the distributed element models developed by \citet{iwan1967on} and \citet{chiang1994anew}. In 1-D, this model takes the backbone shear stress - shear strain curve and divides it into a set of elastic-perfectly plastic curves. The total stress then is the sum of the stresses from the individual elastic-perfectly plastic curves (\ref{fig:1D_representation}; reprinted from \citet{baltaji2017nonlinear}).
 
-!media media/theory/1D_isoil_representation.png width=80% margin-left=40px float=center id=fig:1D_representation caption=I-soil model details: (a) 1D representation by springs; (b) example monotonic and cyclic behavior of four nested component model (reprinted from \citet{baltaji2017nonlinear}).
+!media media/theory/1D_isoil_representation.png width=80% margin-left=40px float=center id=fig:1D_representation caption=I-soil model details: (a) 1D representation by springs; (b) example monotonic and cyclic behavior of four nested component model.
 
-The three-dimensional generalization of this model is achieved using von-Mises failure criteria for each elastic-perfectly plastic curve, resulting in an invariant yield surfaces in three-dimensional stress space like in \ref{fig:yield_surface}.
+The three-dimensional generalization of this model is achieved using von-Mises failure criteria for each elastic-perfectly plastic curve, resulting in an invariant yield surfaces in three-dimensional stress space like in \ref{fig:yield_surface} \citep{chiang1994anew}.
 
-!media media/yield_surface.png width=40% margin-left=200px float=center id=fig:yield_surface caption=Invariant yield surfaces of the individual elastic-perfectly curves \citep{chiang1994anew}.
+!media media/yield_surface.png width=40% margin-left=200px float=center id=fig:yield_surface caption=Invariant yield surfaces of the individual elastic-perfectly curves.
 
 The backbone stress-strain curves for each soil layer can be provided in three different ways:
 
@@ -170,9 +178,9 @@ The backbone stress-strain curves for each soil layer can be provided in three d
 
 Once the backbone curve is generated, the data from this curve is used to calculate the shear modulus and yield stress for each the elastic-plastic curve in \ref{fig:1D_representation}. The stress calculation for each elastic-plastic curve follows two steps:
 
-1. If $\Delta \boldsymbol{\epsilon}$ is the strain increment in the current time step, then it is first assumed that the material is still in the elastic region and the current stress is calculated as $\boldsymbol{\sigma} = \mathcal{C} \boldsymbol{\epsilon}$.
+1. If $\Delta \epsilon$ is the strain increment in the current time step, then it is first assumed that the material is still in the elastic region and the current stress is calculated as $\sigma = \mathcal{C} \epsilon$.
 
-2. Next, the elasticity assumption is tested by checking whether the current stress state is above or below the yield surface. To check this yield criterion, the von-Mises stress ($\sigma_{eq}$) is calculated from the stress tensor $\boldsymbol{\sigma}$. If $\sigma_{eq}$ is less than or equal to the yield stress ($\sigma_y$) for that curve, the stress state calculated in step 1 is correct. If not, the stress tensor calculated in step 1 is brought back to the yield surface by linearly scaling it by $\frac{\sigma_y}{\sigma_{eq}}$.
+2. Next, the elasticity assumption is tested by checking whether the current stress state is above or below the yield surface. To check this yield criterion, the von-Mises stress ($\sigma_{eq}$) is calculated from the stress tensor $\sigma$. If $\sigma_{eq}$ is less than or equal to the yield stress ($\sigma_y$) for that curve, the stress state calculated in step 1 is correct. If not, the stress tensor calculated in step 1 is brought back to the yield surface by linearly scaling it by $\frac{\sigma_y}{\sigma_{eq}}$.
 
 Once the stress for all the elastic-plastic curves are evaluated using the above 2 step process, the total stress of the material is the summation of the stress tensors from all the elastic-plastic curves.
 
@@ -254,41 +262,43 @@ In some situations, the ground motion measured at a depth within the soil is ava
 If the ground excitation was measured at a depth within the soil by placing an accelerometer at that location, then it is termed as a within-soil input. This time history contains the wave that was generated by the earthquake (incoming wave) and the wave that is reflected off the free surface. This ground excitation time history is usually available in the form of a acceleration time history. Since MASTODON is a displacement controlled algorithm, i.e., displacements are the primary unknown variables, the acceleration time history is first converted to the corresponding displacement time history using Newmark time integration equation (Equation \eqref{eqn:Newmark}). This displacement time history is then prescribed to the boundary.
 
 ### Domain reduction method (DRM)
-Earthquake 'source-to-site' simulations require simulating a huge soil domain (order of many kilometers) with a earthquake fault. The nuclear power plant structure, which is usually less than 100 m wide, is located very far from the earthquake fault, and the presence of the structure only affects the response of the soil in the vicinity of the structure. In most of these situations, where a localized feature such as  a structure is present in a huge soil domain, the problem can be divided into two parts: (i) a free-field 'source-to-site' simulation is run on the huge soil domain ( \ref{fig:DRM}(a)) that does not contain the localized feature, and (ii) the forces from the free-field simulation at one element layer, which is the element layer separating the bigger and smaller soil domain, can be transferred to a much smaller domain containing the localized feature ( \ref{fig:DRM}(b)). This method of reducing the domain is called the domain reduction method (DRM) \citep{bielak2003domain}.
+Earthquake 'source-to-site' simulations require simulating a huge soil domain (order of many kilometers) with a earthquake fault. The nuclear power plant structure, which is usually less than 100 m wide, is located very far from the earthquake fault, and the presence of the structure only affects the response of the soil in the vicinity of the structure. In most of these situations, where a localized feature such as  a structure is present in a huge soil domain, the problem can be divided into two parts: (i) a free-field 'source-to-site' simulation is run on the huge soil domain ( \ref{fig:DRM}(a)) that does not contain the localized feature, and (ii) the forces from the free-field simulation at one element layer, which is the element layer separating the bigger and smaller soil domain, can be transferred to a much smaller domain containing the localized feature ( \ref{fig:DRM}(b)). This method of reducing the domain is called the domain reduction method (DRM) \citep{bielak2003domain}. \ref{fig:DRM} is reproduced from \citet{bielak2003domain}.
 
-!media media/theory/DRM.png width=100% float=center id=fig:DRM caption=Domain reduction method summary: (a) Big soil domain containing the earthquake fault but not the localized feature. The displacements are obtained at the boundaries $\Gamma$ and $\Gamma_e$ and are converted to equivalent forces. (b) Smaller soil domain containing the localized feature but not the earthquake fault. The equivalent forced calculated in (a) are applied at the boundaries $\Gamma$ and $\Gamma_e$. This image is reprinted from \citet{bielak2003domain}.
+!media media/theory/DRM.png width=100% float=center id=fig:DRM caption=Domain reduction method summary: (a) Big soil domain containing the earthquake fault but not the localized feature. The displacements are obtained at the boundaries $\Gamma$ and $\Gamma_e$ and are converted to equivalent forces. (b) Smaller soil domain containing the localized feature but not the earthquake fault. The equivalent forced calculated in (a) are applied at the boundaries $\Gamma$ and $\Gamma_e$.
 
 To convert the displacements at $\Gamma$ and $\Gamma_e$ from part (i) to equivalent forces, a finite element model of the one element layer between $\Gamma$ and $\Gamma_e$ is simulated in two steps. First, the bounday $\Gamma_e$ is fixed and the boundary $\Gamma$ is moved with the displacements recorded at $\Gamma$. This step gives the equivalent forces at $\Gamma_e$. Second, the boundary $\Gamma$ is fixed and the boundary $\Gamma_e$ is moved with the displacements recorded at $\Gamma_e$. This steps gives the equivalent forces at $\Gamma$.
 
 Note: The meshes for the bigger soil domain and smaller soil domain need not align between $\Gamma$ and $\Gamma_e$. The equivalent forces can be applied as point forces at the same coordinate location at which nodes are present in the bigger model, irrespective of whether these locations correspond to nodal locations in the smaller model.   
 
 ## Earthquake fault rupture
-The orientation of an earthquake fault is described using three directions - strike ($\phi_s$), dip ($\delta$) and slip direction ($\lambda$) as shown in \ref{fig:fault_orientation}.
+The orientation of an earthquake fault is described using three directions - strike ($\phi_s$), dip ($\delta$) and slip direction ($\lambda$) as shown in \ref{fig:fault_orientation}, which is courtesy of \citet{aki2012quantitative}.
 
-!media media/fault_orientation.png width=80% margin-left=100px id=fig:fault_orientation caption= Definition of the fault-orientation parameters - strike $\phi_s$, dip $\delta$ and slip direction $\lambda$. The slip direction is measured clockwise around from north, with the fault dipping down to the right of the strike direction. Strike direction is also measured from the north. $\delta$ is measured down from the horizontal (image courtesy \citet{aki2012quantitative}).
+!media media/fault_orientation.png width=80% margin-left=100px id=fig:fault_orientation caption= Definition of the fault-orientation parameters - strike $\phi_s$, dip $\delta$ and slip direction $\lambda$. The slip direction is measured clockwise around from north, with the fault dipping down to the right of the strike direction. Strike direction is also measured from the north. $\delta$ is measured down from the horizontal.
 
 In MASTODON, earthquake fault is modeled using a set of point sources. The seismic moment ($M_o$) of the earthquake point source in the fault specific coordinate system is:
 
 \begin{equation}
- M_o(t) = \mu A \bar{u}(t)
- \end{equation}
+M_o(t) = \mu A \bar{u}(t)
+\end{equation}
 
 where, $\mu$ is the shear modulus of the soil, $A$ is the area of fault rupture and $\bar{u}(t)$ is the spatially averaged slip rate of the fault.
 
 When this seismic moment is converted into the global coordinate system (x, y and z) with the x direction oriented along the geographic north and z direction along the soil depth, the resulting moment can be written in a symmetric $3 \times 3$ matrix form whose components are as follows:
 
-\begin{eqnarray}
- M_{xx}(t) = -M_o(t)(\sin \delta \cos \lambda \sin2 \phi_s + \sin 2\delta \sin\lambda \sin^2 \phi_s\\
-M_{xy}(t) = M_o(t)(\sin\delta \cos \lambda \cos 2 \phi_s + \frac{1}{2} \sin 2\delta \sin \lambda \sin 2 \phi_s) = M_{yx}(t) \\
-M_{xz}(t) = -M_o(t)(\cos \delta \cos \lambda \cos \phi_s + \cos 2\delta \sin \lambda \sin 2\phi_s = M_{zx}(t)\\
-M_{yy}(t) = M_o(t)(\sin \delta \cos \lambda \sin 2 \phi_s - \sin 2 \delta \sin \lambda \cos^2 \phi_s \\
-M_{yz}(t) = -M_o(t)(\cos \delta \cos \lambda \sin \phi_s - \cos 2\delta \sin\lambda \cos\phi_s) = M_{zy}(t) \\
-M_{zz}(t) = M_o(t) \sin 2\delta \sin \lambda
-\end{eqnarray}
+\begin{equation}
+\begin{aligned}
+M_{xx}(t) &= -M_o(t)(\sin \delta \cos \lambda \sin2 \phi_s + \sin 2\delta \sin\lambda \sin^2 \phi_s) \\
+M_{xy}(t) &= M_{yx}(t) = M_o(t)(\sin\delta \cos \lambda \cos 2 \phi_s + \frac{1}{2} \sin 2\delta \sin \lambda \sin 2 \phi_s) \\
+M_{xz}(t) &= M_{zx}(t) = -M_o(t)(\cos \delta \cos \lambda \cos \phi_s + \cos 2\delta \sin \lambda \sin 2\phi_s) \\
+M_{yy}(t) &= M_o(t)(\sin \delta \cos \lambda \sin 2 \phi_s - \sin 2 \delta \sin \lambda \cos^2 \phi_s) \\
+M_{yz}(t) &= M_{zy}(t) = -M_o(t)(\cos \delta \cos \lambda \sin \phi_s - \cos 2\delta \sin\lambda \cos\phi_s) \\
+M_{zz}(t) &= M_o(t) \sin 2\delta \sin \lambda
+\end{aligned}
+\end{equation}
 
-Each component of the above matrix is a force couple with the first index representing the force direction and the second index representing the direction in which the forces are separated (see \ref{fig:source_direction}).
+Each component of the above matrix is a force couple with the first index representing the force direction and the second index representing the direction in which the forces are separated (see \ref{fig:source_direction}; \citet{aki2012quantitative}).
 
-!media media/source_direction.png width=60% margin-left=150px id=fig:source_direction caption=The nine different force couples required to model an earthquake source (image courtesy \citet{aki2012quantitative}).
+!media media/source_direction.png width=60% margin-left=150px id=fig:source_direction caption=The nine different force couples required to model an earthquake source.
 
 The total force in global coordinate direction $i$ resulting from an earthquake source applied at point $\vec{\zeta}$ in space is then:
 
