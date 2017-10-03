@@ -17,8 +17,7 @@
 
 /**
  * This material class calculates the total stress for the  nonlinear hysteretic
- *soil model
- * I-Soil.
+ * soil model I-Soil.
  **/
 #ifndef COMPUTEISOILSTRESS_H
 #define COMPUTEISOILSTRESS_H
@@ -60,11 +59,27 @@ protected:
   /// layer.
   std::vector<std::vector<Real>> _youngs;
 
+  /// The coupled variable field providing the soil layer id.
+  const VariableValue & _soil_layer_variable;
+
+  /// The vector of soil layer ids.
+  std::vector<unsigned int> _layer_ids;
+
+  /// Flag to turn on/off P and S wave speed calculation
+  bool _wave_speed_calculation;
+
   /// Poisson's ratio for each soil layer.
   std::vector<Real> _poissons_ratio;
 
+  /// Density stored as a material property.
+  const MaterialProperty<Real> * _density;
+
   /// Exponential parameter used in pressure dependent stiffness calcualtion.
   Real _b_exp;
+
+  /// Reference pressure at which the soil properties are defined for each soil
+  /// layer.
+  std::vector<Real> _p_ref;
 
   /// The first coefficient used in pressure dependent yield strength
   /// calculation.
@@ -82,16 +97,31 @@ protected:
   /// in tension.
   Real _p0;
 
-  /// Reference pressure at which the soil properties are defined for each soil
-  /// layer.
-  std::vector<Real> _p_ref;
-
   /// Flag to turn on pressure dependent stiffness and yield strength
   /// calculation.
   bool _pressure_dependency;
 
-  /// The vector of soil layer ids.
-  std::vector<unsigned int> _layer_ids;
+  /// The multiplicative factor for pressure dependent yield strength
+  /// correction.
+  Real _strength_pressure_correction;
+
+  /// The multiplicative factor for pressure dependent stiffness correction.
+  Real _stiffness_pressure_correction;
+
+  /// Computed shear wave speed.
+  MaterialProperty<Real> * _shear_wave_speed;
+
+  /// Computed P wave speed.
+  MaterialProperty<Real> * _P_wave_speed;
+
+  /// Tangent modulus for each soil layer.
+  Real _tangent_modulus;
+
+  /// The position of the current layer id in the vector layer_ids.
+  int _pos;
+
+  /// Whether initial stress was provided
+  const bool _initial_soil_stress_provided;
 
   /// stress_new used in stress calcualtion.
   RankTwoTensor _stress_new;
@@ -103,45 +133,14 @@ protected:
   /// curve.
   RankTwoTensor _deviatoric_trial_stress;
 
-  /// The multiplicative factor for pressure dependent yield strength
-  /// correction.
-  Real _strength_pressure_correction;
-
-  /// The multiplicative factor for pressure dependent stiffness correction.
-  Real _stiffness_pressure_correction;
-
-  /// The coupled variable field providing the soil layer id.
-  const VariableValue & _soil_layer_variable;
-
-  /// Flag to turn on/off P and S wave speed calculation
-  bool _wave_speed_calculation;
-
-  /// Computed shear wave speed.
-  MaterialProperty<Real> * _shear_wave_speed;
-
-  /// Computed P wave speed.
-  MaterialProperty<Real> * _P_wave_speed;
-
-  /// Density stored as a material property.
-  const MaterialProperty<Real> * _density;
-
   /// The id to be used for looking up the shear modulus and density, it is
   /// declared once here and re-used rather
   /// than creating a temporary variable in computeQpProperties method, simply
   /// for effeciency.
   unsigned int _current_id;
 
-  /// Tangent modulus for each soil layer.
-  Real _tangent_modulus;
-
-  /// The position of the current layer id in the vector layer_ids.
-  int _pos;
-
   /// initial stress components
   std::vector<Function *> _initial_soil_stress;
-
-  /// Whether initial stress was provided
-  const bool _initial_soil_stress_provided;
 };
 
 #endif // COMPUTEISOILSTRESS_H

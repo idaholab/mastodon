@@ -1,8 +1,8 @@
-# One element test to test the auto-generated GQ/H backbone curve.
-# The back surface of the element (z=0) is fixed and the front surface (z=1)
-# is moved by applying a cyclic preset displacement.
+# One element test to test the auto-generated thin_layer backbone curve for
+# Coulomb friction. The top surface of the element (z=0) is fixed and the
+# bottom surface (z=1) is moved by applying a cyclic preset displacement.
 
-# The resulting shear stress-strain curve was verified against obtained from DEEPSOIL.
+# This file DOES NOT use ISoilAction
 
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
@@ -18,9 +18,9 @@
   zmax = 1
 []
 
+
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
-  use_displaced_mesh = false
 []
 
 [Variables]
@@ -103,6 +103,7 @@
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
     zeta = 0.00006366
+    use_displaced_mesh = false
   [../]
   [./inertia_x]
     type = InertialForce
@@ -112,6 +113,7 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
+    use_displaced_mesh = false
   [../]
   [./inertia_y]
     type = InertialForce
@@ -121,6 +123,7 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
+    use_displaced_mesh = false
   [../]
   [./inertia_z]
     type = InertialForce
@@ -130,11 +133,13 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
+    use_displaced_mesh = false
   [../]
   [./gravity]
     type = Gravity
     variable = disp_z
     value = -9.81
+    use_displaced_mesh = false
   [../]
 []
 
@@ -281,13 +286,13 @@
   [./x_bot]
     type = PresetBC
     variable = disp_x
-    boundary = 0
+    boundary = '0 1 2 3 4'
     value = 0.0
   [../]
   [./y_bot]
     type = PresetBC
     variable = disp_y
-    boundary = 0
+    boundary = '0 1 2 3 4'
     value = 0.0
   [../]
   [./z_bot]
@@ -324,30 +329,39 @@
 [Functions]
   [./top_disp]
     type = PiecewiseLinear
-    data_file = '../ex01/Displacement2.csv'
+    data_file = Displacement2.csv
     format = columns
   [../]
 []
 
 [Materials]
-  [./I_Soil]
-    [./soil_1]
-      soil_type = 'gqh'
-      layer_variable = layer_id
-      layer_ids = '0'
-      theta_1 = '-2.28'
-      theta_2 = '-5.54'
-      theta_3 = '1.0'
-      theta_4 = '1.0'
-      theta_5 = '0.99'
-      taumax = '7500'
-      initial_shear_modulus = '20000000'
-      number_of_points = 10
-      poissons_ratio = '0.3'
-      block = 0
-      initial_soil_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
-      density = '2000'
-    [../]
+  [./sample_isoil]
+    type = ComputeISoilStress
+    soil_type = 'thin_layer'
+    layer_variable = layer_id
+    layer_ids = '0'
+    initial_shear_modulus = '20000'
+    poissons_ratio = '0.45'
+    friction_coefficient = '0.7'
+    hardening_ratio = '0.001'
+    p_ref = '8.6209091'
+    initial_soil_stress = '-8.0263636 0 0  0 -8.0263636 0  0 0 -9.810'
+  [../]
+  [./sample_isoil_strain]
+    ## Use ComputeFiniteStrain for soil_type = thin_layer since large strains are expected
+    type = ComputeFiniteStrain
+    block = '0'
+    displacements = 'disp_x disp_y disp_z'
+  [../]
+  [./sample_isoil_elasticitytensor]
+    type = ComputeIsotropicElasticityTensorSoil
+    block = '0'
+    elastic_modulus = '1.0'
+    poissons_ratio = '0.45'
+    density = '2.0'
+    wave_speed_calculation = false
+    layer_ids = '0'
+    layer_variable = layer_id
   [../]
 []
 
@@ -361,8 +375,8 @@
 [Executioner]
   type = Transient
   solve_type = PJFNK
-  nl_abs_tol = 1e-11
-  nl_rel_tol = 1e-11
+  nl_abs_tol = 1e-8
+  nl_rel_tol = 1e-8
   start_time = 0
   end_time = 8
   dt = 0.01

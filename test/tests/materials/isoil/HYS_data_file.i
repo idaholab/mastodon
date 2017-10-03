@@ -1,8 +1,9 @@
-# One element test to test the auto-generated GQ/H backbone curve.
+#@requirement F4.2
+# One element test to test the user-defined  backbone curve.
 # The back surface of the element (z=0) is fixed and the front surface (z=1)
 # is moved by applying a cyclic preset displacement.
 
-# The resulting shear stress-strain curve was verified against obtained from DEEPSOIL.
+# The resulting shear stress-strain curve is same as the one provided as input.
 
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
@@ -103,6 +104,7 @@
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
     zeta = 0.00006366
+    #use_displaced_mesh = false
   [../]
   [./inertia_x]
     type = InertialForce
@@ -112,6 +114,7 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
+    #use_displaced_mesh = false
   [../]
   [./inertia_y]
     type = InertialForce
@@ -121,6 +124,7 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
+    #use_displaced_mesh = false
   [../]
   [./inertia_z]
     type = InertialForce
@@ -129,12 +133,14 @@
     acceleration = accel_z
     beta = 0.25
     gamma = 0.5
-    eta = 7.854
+    eta = 7.85
+    #use_displaced_mesh = false
   [../]
   [./gravity]
     type = Gravity
     variable = disp_z
     value = -9.81
+    #use_displaced_mesh = false
   [../]
 []
 
@@ -268,7 +274,7 @@
     index_i = 2
     index_j = 2
   [../]
-  [./layer]
+  [./layers]
     type = UniformLayerAuxKernel
     variable = layer_id
     interfaces = '2.0'
@@ -324,7 +330,7 @@
 [Functions]
   [./top_disp]
     type = PiecewiseLinear
-    data_file = '../ex01/Displacement2.csv'
+    data_file = Displacement2.csv
     format = columns
   [../]
 []
@@ -332,17 +338,10 @@
 [Materials]
   [./I_Soil]
     [./soil_1]
-      soil_type = 'gqh'
       layer_variable = layer_id
       layer_ids = '0'
-      theta_1 = '-2.28'
-      theta_2 = '-5.54'
-      theta_3 = '1.0'
-      theta_4 = '1.0'
-      theta_5 = '0.99'
-      taumax = '7500'
-      initial_shear_modulus = '20000000'
-      number_of_points = 10
+      soil_type = 'user_defined'
+      backbone_curve_files = 'stress_strain_darendeli.csv'
       poissons_ratio = '0.3'
       block = 0
       initial_soil_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
