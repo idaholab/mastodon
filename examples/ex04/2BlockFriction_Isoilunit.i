@@ -311,8 +311,8 @@
     [./soil1]
       layer_variable = layer_id
       layer_ids = '0'
-      soil_type = 0
-      data_file = 'backbone_curveunit.csv'
+      soil_type = 'user_defined'
+      backbone_curve_files = 'backbone_curveunit.csv'
       poissons_ratio = '0.45'
       block = 1002
       initial_soil_stress = 'initial_ymid 0 0  0 initial_ymid 0  0 0 initial_zzmid'
