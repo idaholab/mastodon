@@ -7,6 +7,7 @@
 #include "ContactApp.h"
 #include "SolidMechanicsApp.h"
 #include "TensorMechanicsApp.h"
+#include "StochasticToolsApp.h"
 
 // Actions
 #include "ISoilAction.h"
@@ -162,6 +163,7 @@ MastodonApp::registerObjectDepends(Factory & factory)
   SolidMechanicsApp::registerObjects(factory);
   TensorMechanicsApp::registerObjects(factory);
   ContactApp::registerObjects(factory);
+  StochasticToolsApp::registerObjects(factory);
 }
 
 void
@@ -170,4 +172,5 @@ MastodonApp::associateSyntaxDepends(Syntax & syntax, ActionFactory & action_fact
   SolidMechanicsApp::associateSyntax(syntax, action_factory);
   TensorMechanicsApp::associateSyntax(syntax, action_factory);
   ContactApp::associateSyntax(syntax, action_factory);
+  StochasticToolsApp::associateSyntax(syntax, action_factory);
 }

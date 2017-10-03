@@ -23,6 +23,7 @@ include $(FRAMEWORK_DIR)/moose.mk
 SOLID_MECHANICS  := yes
 TENSOR_MECHANICS := yes
 CONTACT          := yes
+STOCHASTIC_TOOLS := yes
 include $(MOOSE_DIR)/modules/modules.mk
 ###############################################################################
 
