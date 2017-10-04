@@ -11,8 +11,10 @@ moose:
         - docs/content/documentation/systems/**/contact/**
         - docs/content/documentation/systems/**/solid_mechanics/**
         - docs/content/documentation/systems/**/tensor_mechanics/**
+        - docs/content/documentation/systems/**/stochastic_tools/**
 
         - docs/content/documentation/modules/tensor_mechanics/**
+        - docs/content/documentation/modules/stochastic_tools/**
 
         - docs/content/documentation/examples/**
 
@@ -52,3 +54,5 @@ moose:
 
         - docs/content/documentation/systems/ReactionNetwork/**
         - docs/content/documentation/systems/Q2P/**
+
+        - docs/content/documentation/systems/Postprocessors/stochastic_tools/TestDistributionPostprocessor.md
