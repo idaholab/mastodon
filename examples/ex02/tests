@@ -1,0 +1,8 @@
+[Tests]
+  [./ex02]
+    type = RunApp
+    input = HYS_GQH.i
+    method = opt
+    check_input = True
+  [../]
+[../]

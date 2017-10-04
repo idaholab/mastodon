@@ -1,0 +1,9 @@
+[Tests]
+  [./ex04]
+    type = RunApp
+    input = '2BlockFriction_Isoilunit.i'
+    cli_args = Executioner/num_steps=2
+    allow_warnings = true
+    method = opt
+  [../]
+[../]
