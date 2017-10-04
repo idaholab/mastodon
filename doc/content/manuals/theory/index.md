@@ -33,19 +33,12 @@ The basic equation that MASTODON solves is the nonlinear wave equation:
 
 \begin{equation}
 \label{eqn:governing_equation}
-<<<<<<< de2079b461234601978c3cd2e70cb5c6fbcfd7f3
  \rho \mathbf{\ddot{u}} + \nabla \cdot \sigma = \mathbf{F_{ext}}
 \end{equation}
 
-where, $\rho$ is the density of the soil or structure that can vary with space, $\sigma$ is the stress at any point in space and time, $\mathbf{F_{ext}}$ is the external force acting on the system that can be in the form of localized seismic sources or global body forces such as gravity, and $\mathbf{\ddot{u}}$ is the acceleration at any point within the soil-structure domain. The left side of the equation contains the internal forces acting on the system with first term being the contribution from the inertia, and the second term being the contribution from the stiffness of the system. Additional terms would be added to this equation when damping is present in the system. The material stress response ($\sigma$) is described by the constitutive model, where the stress is determined as a function of the strain ($\epsilon$), i.e. $\sigma(\epsilon)$. Details about the material constitutive models available in MASTODON are presented in the section about [material models](#Material models).
-=======
-\rho \mathbf{\ddot{u}} + \nabla \cdot \boldsymbol{\sigma} = \mathbf{F_{ext}}
-\end{eqnarray}
+where, $\rho$ is the density of the soil or structure that can vary with space, $\sigma$ is the stress at any point in space and time, $\mathbf{F_{ext}}$ is the external force acting on the system that can be in the form of localized seismic sources or global body forces such as gravity, and $\mathbf{\ddot{u}}$ is the acceleration at any point within the soil-structure domain. The left side of the equation contains the internal forces acting on the system with first term being the contribution from the inertia, and the second term being the contribution from the stiffness of the system. Additional terms would be added to this equation when damping is present in the system. The material stress response ($\sigma$) is described by the constitutive model, where the stress is determined as a function of the strain ($\epsilon$), i.e. $\sigma(\epsilon)$. Details about the material constitutive models available in MASTODON are presented in the section about [material models](#material-models).
 
-where $\rho$ is the density of the soil or structure that can vary with space, $\boldsymbol{\sigma}$ is the stress at any point in space and time, $\mathbf{F_{ext}}$ is the external force acting on the system that can be in the form of localized seismic sources or global body forces such as gravity, and $\mathbf{\ddot{u}}$ is the acceleration at any point within the soil-structure domain. The left side of the equation contains the internal forces acting on the system with first term being the contribution from the inertia, and the second term being the contribution from the stiffness of the system. Additional terms would be added to this equation when damping is present in the system. The material stress response ($\boldsymbol{\sigma}$) is described by the constitutive model, where the stress is determined as a function of the strain ($\boldsymbol{\epsilon}$), i.e. $\boldsymbol{\sigma}(\boldsymbol{\epsilon})$. Details about the material constitutive models available in MASTODON are presented in the section about [Material models](##Material models).
->>>>>>> Changes to theory manual, additions to user and examples manuals #3
-
-The above equation is incomplete and ill-conditioned without the corresponding boundary conditions. There are two main types of boundary conditions - (i) Dirichlet boundary condition which is a kinematic boundary condition where the displacement, velocity, or acceleration at that boundary is specified; (ii) Neumann boundary condition where a force or traction is applied at the boundary. All the special boundary conditions such as absorbing boundary condition are specialized versions of these broad boundary condition types.
+The above equation is incomplete and ill-conditioned without the corresponding boundary conditions. There are two main types of boundary conditions: (i) Dirichlet boundary condition which is a kinematic boundary condition where the displacement, velocity, or acceleration at that boundary is specified; (ii) Neumann boundary condition where a force or traction is applied at the boundary. All the special boundary conditions such as absorbing boundary condition are specialized versions of these broad boundary condition types.
 
 ## Time integration
 To solve Equation \eqref{eqn:governing_equation} for $\mathbf{u}$, an appropriate time integration scheme needs to be chosen. Newmark and Hilber-Hughes-Taylor (HHT) time integration schemes are two of the commonly used methods in solving wave propagation problems.
@@ -232,17 +225,6 @@ Details about stress calculation for two different constitutive models are prese
 ### Linear elastic constitutive model
 In scenarios where the material exhibits a linear relation between stress and strain, and does not retain any residual strain after unloading, is called a linear elastic material. In linear elasticity, the stress tensor ($\sigma$) is calculated as $\sigma = \mathcal{C}\epsilon$, where $\mathcal{C}$ is the elasticity tensor, and $\epsilon$ is the strain tensor. This material model is currently used for numerically modeling the behavior of concrete and other materials used for designing a structure in MASTODON.
 
-<<<<<<< de2079b461234601978c3cd2e70cb5c6fbcfd7f3
-### Nonlinear hysteretic constitutive model for soils (I-Soil)
-<!-- Add stuff from I - Soil index.md -->
-The I-soil material model is a nonlinear hysteretic soil model that is based on the distributed element models developed by \citet{iwan1967on} and \citet{chiang1994anew}. In 1-D, this model takes the backbone shear stress - shear strain curve and divides it into a set of elastic-perfectly plastic curves. The total stress then is the sum of the stresses from the individual elastic-perfectly plastic curves (\ref{fig:1D_representation}; reprinted from \citet{baltaji2017nonlinear}).
-
-!media media/theory/1D_isoil_representation.png width=80% margin-left=40px float=center id=fig:1D_representation caption=I-soil model details: (a) 1D representation by springs; (b) example monotonic and cyclic behavior of four nested component model.
-
-The three-dimensional generalization of this model is achieved using von-Mises failure criteria for each elastic-perfectly plastic curve, resulting in an invariant yield surfaces in three-dimensional stress space like in \ref{fig:yield_surface} \citep{chiang1994anew}.
-
-!media media/yield_surface.png width=40% margin-left=200px float=center id=fig:yield_surface caption=Invariant yield surfaces of the individual elastic-perfectly curves.
-=======
 ### Nonlinear hysteretic constitutive model for soils (I-soil)
 
 I-soil (\citet{numanoglu2017phd}) is a three dimensional, physically motivated, piecewise linearized nonlinear hysteretic material model for soils. The model can be represented by shear type parallel-series distributed nested components (springs and sliders) in one dimensional shear stress space and its framework is analogous to the distributed element modeling concept developed by \citet{iwan1967on}. The model behavior is obtained by superimposing the stress-strain response of nested components. Three dimensional generalization follows \citet{chiang1994anew} and uses von Mises (independent of effective mean stress) and/or Drucker-Prager (effective mean stress dependent) type shear yield surfaces depending on user's choice. The yield surfaces are invariant in the stress space \ref{fig:yield_surface} . Thus, the model does not require kinematic hardening rule to model un/reloading stress-strain response and preserves mathematical simplicity.
@@ -250,7 +232,6 @@ I-soil (\citet{numanoglu2017phd}) is a three dimensional, physically motivated, 
 !media media/theory/yield_surface.png width=40% margin-left=200px float=center id=fig:yield_surface caption=Invariant yield surfaces of the individual elastic-perfectly curves (after Chiang and Beck, 1994).
 
 The current version of I-soil implemented in MASTODON utilizes Masing type un/reloading behavior and is analogous to MAT79 (LS-DYNA) material model but does not exhibit numerical instability observed in MAT79 (\citet{numanoglu2017conf}). Masing type un/reloading is inherently achieved by the model because upon un/reloading the yielded nested components regain stiffness and strength. The cyclic response obtained from current version of the model is presented in \ref{fig:1D_isoil_representation}. Reduction factor type modification on un/reloading behavior (\citet{phillips2009damping}; \citet{numanoglu2017nonmasing}) is an ongoing study within MASTODON framework.
->>>>>>> Changes to theory manual, additions to user and examples manuals #3
 
 !media media/theory/1D_isoil_representation.png width=60% margin-left=200px float=center id=fig:1D_isoil_representation caption=I-soil model details: (a) 1D representation by springs; (b) example monotonic and cyclic behavior of four nested component model (reprinted from Baltaji et al., 2017).
 
@@ -268,11 +249,6 @@ Main input for the current version of I-soil in MASTODON is a backbone curve at 
 
   Darendeli (2001) study extrapolates the normalized modulus reduction curves after 0.1 \% shear strains. This extrapolation causes significant over/under estimation of the shear strength implied at large strains for different type of soils at different reference effective mean stresses \citep{hashash2010recent}. Thus user should be cautious about implied shear strength when utilizing this option.
 
-<<<<<<< de2079b461234601978c3cd2e70cb5c6fbcfd7f3
-1. If $\Delta \epsilon$ is the strain increment in the current time step, then it is first assumed that the material is still in the elastic region and the current stress is calculated as $\sigma = \mathcal{C} \epsilon$.
-
-2. Next, the elasticity assumption is tested by checking whether the current stress state is above or below the yield surface. To check this yield criterion, the von-Mises stress ($\sigma_{eq}$) is calculated from the stress tensor $\sigma$. If $\sigma_{eq}$ is less than or equal to the yield stress ($\sigma_y$) for that curve, the stress state calculated in step 1 is correct. If not, the stress tensor calculated in step 1 is brought back to the yield surface by linearly scaling it by $\frac{\sigma_y}{\sigma_{eq}}$.
-=======
 3.  General Quadratic/Hyperbolic (GQ/H) backbone curve (soil\_type = 2):
   \citet{darendeli2001development} study presented in previous item constructs the shear
   stress - shear strain curves based on experimentally obtained data. At small
@@ -293,7 +269,6 @@ Main input for the current version of I-soil in MASTODON is a backbone curve at 
 
 Once the backbone curve is provided to I-soil, the model determines
 the properties for nested components presented in \ref{fig:1D_isoil_representation}. The stress integration for each nested component follows  classic elastic predictor - plastic corrector type radial return algorithm (\citet{simo2006computein}) and model stress is obtained by summing the stresses  from each nested component:
->>>>>>> Changes to theory manual, additions to user and examples manuals #3
 
 \begin{equation}
 \tau = \sum_{k=1}^{i} G_{k}*\gamma +  \sum_{k=i+1}^{n} {\tau_{y}}^k
