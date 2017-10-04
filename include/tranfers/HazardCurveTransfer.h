@@ -9,7 +9,7 @@
 
 class HazardCurveTransfer;
 
-template<>
+template <>
 InputParameters validParams<HazardCurveTransfer>();
 
 /**
@@ -22,10 +22,9 @@ public:
   virtual void execute() override;
 
 protected:
+  // std::shared_ptr<HazardCurveMultiApp> _hazard_curve_multiapp;
 
-  //std::shared_ptr<HazardCurveMultiApp> _hazard_curve_multiapp;
-
-//  const HazardCurve & _hazard_curve;
+  //  const HazardCurve & _hazard_curve;
 };
 
 #endif

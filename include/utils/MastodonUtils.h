@@ -55,6 +55,5 @@ std::vector<Real> adjust(const std::vector<Real> & input, const Real & scale, co
  * Compute log (base 10) of the supplied vector entries.
  */
 std::vector<Real> log10(const std::vector<Real> & input);
-
 }
 #endif

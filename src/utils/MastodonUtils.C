@@ -68,9 +68,9 @@ MastodonUtils::regularize(const std::vector<Real> & history_acc,
   {
     while (cur_tme >= history_time[i] && cur_tme <= history_time[i + 1])
     {
-      cur_acc = history_acc[i] + (cur_tme - history_time[i]) /
-                                     (history_time[i + 1] - history_time[i]) *
-                                     (history_acc[i + 1] - history_acc[i]);
+      cur_acc = history_acc[i] +
+                (cur_tme - history_time[i]) / (history_time[i + 1] - history_time[i]) *
+                    (history_acc[i + 1] - history_acc[i]);
       reg_acc.push_back(cur_acc);
       reg_tme.push_back(cur_tme);
       cur_tme += reg_dt;
