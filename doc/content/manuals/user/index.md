@@ -1,5 +1,25 @@
 # User Manual
 
+## Installation
+
+MASTODON is a MOOSE based application that requires either a Linux or Mac OS. To install MASTODON open a terminal and navigate to the home directory. Enter the following commands in the order they appear:
+
+mkdir projects
+
+cd projects
+
+git clone https://github.com/idaholab/mastodon.git
+
+git submodule update --init moose
+
+cd moose/scripts/
+
+./update_and_rebuild_libmesh
+
+cd ~/projects/mastodon/
+
+make -j 8 
+
 ## Getting Started
 
 This section provides step-by-step instructions to define the basic components of a simple numerical model for a finite element analysis using MASTODON framework focusing on the geotechnical earthquake engineering applications.
