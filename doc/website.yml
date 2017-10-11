@@ -1,6 +1,4 @@
 - MooseDocs.extensions.global
-    #import:
-    #    - moose/docs/globals.yml
 - MooseDocs.extensions.listings:
     repo: https://github.com/idaholab/mastodon
 - MooseDocs.extensions.app_syntax:
@@ -47,12 +45,15 @@
         title: MASTODON
         repo_url: https://github.com/idaholab/mastodon
         navigation:
+          - Getting Started:
+              - Mac OS: doc/content/getting_started/macos.md
+              - Ubuntu: doc/content/getting_started/ubuntu.md
           - Examples:
-               - Overview: doc/content/examples/index.md
-               - Example 1: doc/content/examples/example1.md
-               - Example 2: doc/content/examples/example2.md
-               - Example 3: doc/content/examples/example3.md
-               - Example 4: doc/content/examples/example4.md
+              - Overview: doc/content/examples/index.md
+              - Example 1: doc/content/examples/example1.md
+              - Example 2: doc/content/examples/example2.md
+              - Example 3: doc/content/examples/example3.md
+              - Example 4: doc/content/examples/example4.md
           - Manuals:
               - Theory: doc/content/manuals/theory/index.md
               - Software Quality: doc/content/sqa/index.md
