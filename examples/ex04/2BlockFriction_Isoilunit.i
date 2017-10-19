@@ -262,13 +262,18 @@
     type = ComputeIncrementalSmallStrain
     block = 1003
     displacements = 'disp_x disp_y disp_z'
+    eigenstrain_names = ini_stress
+  [../]
+  [./strain_from_initial_stress]
+    type = ComputeEigenstrainFromInitialStress
+    initial_stress = '0 0 0 0 0 0 0 0 initial_zztop'
+    eigenstrain_name = ini_stress
   [../]
   [./stress_top]
     #Computes the stress, using linear elasticity
     type = ComputeFiniteStrainElasticStress
     store_stress_old = true
     block = 1003
-    initial_stress = '0 0 0 0 0 0 0 0 initial_zztop'
   [../]
   [./den_top]
     type = GenericConstantMaterial
@@ -310,7 +315,7 @@
       data_file = 'backbone_curveunit.csv'
       poissons_ratio = '0.45'
       block = 1002
-      initial_stress = 'initial_ymid 0 0  0 initial_ymid 0  0 0 initial_zzmid'
+      initial_soil_stress = 'initial_ymid 0 0  0 initial_ymid 0  0 0 initial_zzmid'
       density = '2500'
       #initial_bulk_modulus = '7.83e10'
       #initial_shear_modulus = '2.7e10'
