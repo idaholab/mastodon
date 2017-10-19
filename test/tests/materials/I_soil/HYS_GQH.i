@@ -346,7 +346,7 @@
       number_of_points = 10
       poissons_ratio = '0.3'
       block = 0
-      initial_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
+      initial_soil_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
       density = '2000'
     [../]
   [../]

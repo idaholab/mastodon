@@ -341,7 +341,7 @@
       data_file = 'stress_strain20.csv'
       poissons_ratio = '0.3'
       block = 0
-      initial_stress = '-12613 0 0  0 -12613 0  0 0 -29430'
+      initial_soil_stress = '-12613 0 0  0 -12613 0  0 0 -29430'
       pressure_dependency = true
       b_exp = 0.5
       p_ref = 6072.86

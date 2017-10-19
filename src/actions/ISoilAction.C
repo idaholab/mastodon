@@ -41,7 +41,7 @@ validParams<ISoilAction>()
       "Vector of layer ids that map one-to-one to the rest of the "
       "soil layer parameters provided as input.");
   params.addParam<std::vector<FunctionName>>(
-      "initial_stress",
+      "initial_soil_stress",
       "The function values for the initial stress distribution. 9 function "
       "names have to be provided corresponding to stress_xx, stress_xy, "
       "stress_xz, stress_yx, stress_yy, stress_yz, stress_zx, stress_zy, "
@@ -282,8 +282,8 @@ ISoilAction::act()
   params.set<std::vector<Real>>("p_ref") = p_ref;
   params.set<bool>("pressure_dependency") = getParam<bool>("pressure_dependency");
   params.set<bool>("store_stress_old") = true;
-  params.set<std::vector<FunctionName>>("initial_stress") =
-      getParam<std::vector<FunctionName>>("initial_stress");
+  params.set<std::vector<FunctionName>>("initial_soil_stress") =
+      getParam<std::vector<FunctionName>>("initial_soil_stress");
   params.set<bool>("wave_speed_calculation") = true;
   params.set<std::vector<unsigned int>>("layer_ids") = layer_ids;
   params.set<std::vector<VariableName>>("layer_variable") = layer_variable;
