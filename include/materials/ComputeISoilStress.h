@@ -136,6 +136,12 @@ protected:
 
   /// The position of the current layer id in the vector layer_ids.
   int _pos;
+
+  /// initial stress components
+  std::vector<Function *> _initial_soil_stress;
+
+  /// Whether initial stress was provided
+  const bool _initial_soil_stress_provided;
 };
 
 #endif // COMPUTEISOILSTRESS_H

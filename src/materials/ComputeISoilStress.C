@@ -18,6 +18,7 @@
 #include "ComputeISoilStress.h"
 
 #include "MooseMesh.h"
+#include "Function.h"
 
 template <>
 InputParameters
@@ -71,6 +72,12 @@ validParams<ComputeISoilStress>()
                                "The variable providing the soil layer identification.");
   params.addParam<bool>(
       "wave_speed_calculation", true, "Set to False to turn off P and S wave speed calcualtion.");
+  params.addParam<std::vector<FunctionName>>(
+      "initial_soil_stress",
+      "A list of functions describing the initial stress.  If provided, there "
+      "must be 9 of these, corresponding to the xx, yx, zx, xy, yy, zy, xz, yz, "
+      "zz components respectively.  If not provided, all components of the "
+      "initial stress will be zero");
   return params;
 }
 
@@ -99,7 +106,10 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
     _P_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("P_wave_speed") : NULL),
     _density(_wave_speed_calculation ? &getMaterialProperty<Real>("density") : NULL),
     _tangent_modulus(0.0),
-    _pos(0)
+    _pos(0),
+    _initial_soil_stress_provided(
+        getParam<std::vector<FunctionName>>("initial_soil_stress").size() ==
+        LIBMESH_DIM * LIBMESH_DIM)
 {
   if ((_youngs.size() != _layer_ids.size()) || (_yield_stress.size() != _layer_ids.size()) ||
       (_poissons_ratio.size() != _layer_ids.size()))
@@ -123,6 +133,21 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
         &getMaterialPropertyOld<RankTwoTensor>(_base_models[i] + "_stress_model");
   }
 
+  const std::vector<FunctionName> & fcn_names(
+      getParam<std::vector<FunctionName>>("initial_soil_stress"));
+  const unsigned num = fcn_names.size();
+
+  if (!(num == 0 || num == LIBMESH_DIM * LIBMESH_DIM))
+    mooseError("Either zero or ",
+               LIBMESH_DIM * LIBMESH_DIM,
+               " initial soil stress functions must be provided.  You supplied ",
+               num,
+               "\n");
+
+  _initial_soil_stress.resize(num);
+  for (unsigned i = 0; i < num; ++i)
+    _initial_soil_stress[i] = &getFunctionByName(fcn_names[i]);
+
   _stress_new.zero();
   _individual_stress_increment.zero();
   _deviatoric_trial_stress.zero();
@@ -132,6 +157,12 @@ void
 ComputeISoilStress::initQpStatefulProperties()
 {
   ComputeStressBase::initQpStatefulProperties();
+  if (_initial_soil_stress_provided)
+  {
+    for (unsigned i = 0; i < LIBMESH_DIM; ++i)
+      for (unsigned j = 0; j < LIBMESH_DIM; ++j)
+        _stress[_qp](i, j) = _initial_soil_stress[i * LIBMESH_DIM + j]->value(_t, _q_point[_qp]);
+  }
   for (unsigned int i = 0; i < _base_models.size(); i++)
     (*_stress_model[i])[_qp].zero();
 
