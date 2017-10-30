@@ -35,6 +35,10 @@ skipped depending on your system environment).
 
 At this point you now have a working copy of MASTODON.
 
+!!!note
+    The number 4 should be replaced with the number of processors you have available on your system.
+
+
 ## Update MASTODON
 MASTODON does not use traditional versioning, is under heavy development, and is being updated continuously. Therefore, it is critical that you continue to update MASTODON regularly to
 get the latest features.

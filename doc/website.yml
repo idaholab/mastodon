@@ -61,6 +61,8 @@
           - Documentation:
               - Systems: doc/content/documentation/systems/index.md
               - Interfaces: doc/content/documentation/interfaces/index.md
+          - Help:
+              - FAQ: doc/content/help/faq.md
 - MooseDocs.extensions.sqa:
     PROJECT: MASTODON
     repo: https://github.com/idaholab/mastodon
