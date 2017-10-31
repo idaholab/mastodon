@@ -6,6 +6,7 @@ moose:
     root_dir: $MOOSE_DIR
     base: docs/content
     include:
+        - docs/content/getting_started/**
         - docs/content/documentation/systems/**/index.md
         - docs/content/documentation/systems/**/framework/**
         - docs/content/documentation/systems/**/contact/**
