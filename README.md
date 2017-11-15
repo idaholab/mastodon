@@ -1,4 +1,4 @@
-[MASTODON Documentation](http://mooseframework.org/docs/mastodon/site/)
+[MASTODON Documentation](http://mooseframework.org/mastodon)
 
 [MASTODON Code Coverage](http://mooseframework.org/docs/coverage/MASTODON/coverage/)
 
