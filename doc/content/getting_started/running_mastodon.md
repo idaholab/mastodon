@@ -28,40 +28,47 @@ The input file used by MASTODON (or any MOOSE application) is broken into
 sections or blocks identified with square brackets. The type of input block is
 placed in the opening brackets, and empty brackets mark the end of the block.
 
-    [BlockName]
-      block_lines_and_subblocks
-    []
+```text
+[BlockName]
+  block_lines_and_subblocks
+[]
+```
 
 Each block may contain an arbitrary number of line commands to define
 parameters related to that block. They can also optionally contain one
 or more subblocks, which may in turn contain their own nested subblocks.
 Subblocks are opened and closed with the following syntax:
 
-      [./subblock_name]
-        line_command1
-        line_command2
-      [../]
+```text
+[./subblock_name]
+  line_command1
+  line_command2
+[../]
+```
 
-Note that all subblocks contained within a given block must have unique
-names (within the opening [] brackets).
+!!!note
+    All subblocks contained within a given block must have unique
+    names (within the opening [] brackets).
 
 Parameters are defined with line commands, and are given as key/value
 pairs separated by an equals sign (=). They specify parameters to be
 used by the object being described.  The key is a string (no
 whitespace), and the value may be a string, an integer, a real number,
 or a list of strings, integers, or real numbers.  Lists are given
-in single quotes and are separated by whitespace.  
+in single quotes and are separated by whitespace.
 
 The following are examples of line commands for a single parameter and
 for a list of parameters:
 
-    single_parameter = 2.3
-    list_of_parameters = '1.0 2.3 3.7'
+```text
+single_parameter = 2.3
+list_of_parameters = '1.0 2.3 3.7'
+```
 
 Blocks and subblocks at any level can contain line commands, which must
 be appropriate for the scope of the block containing them. Most of the
 time, blocks are used to create instances of MOOSE objects, and contain
-a ```type = ``` parameter to specify the type of MOOSE object to be
+a `type = ` parameter to specify the type of MOOSE object to be
 created. The name of the MOOSE object specified in the parameter
 corresponds to the name of the class in the C++ source code.
 
@@ -74,7 +81,7 @@ a block also results in an error. A full list of object types and the
 corresponding parameters valid for that object can be found in
 [systems](documentation/systems/index.md).
 
-The name of a subblock (```[./name]```) is arbitrary. However, these
+The name of a subblock (`[./name]`) is arbitrary. However, these
 names should be chosen to be meaningful because they can be used to
 refer to those entities elsewhere in the input file. Not every created
 entity is referenced elsewhere, but a name must be created for every
@@ -105,9 +112,11 @@ the functionality needed to model physics of interest for MASTODON.
 
 A complete listing of all input syntax options in MOOSE is available on
 [the MOOSE Documentation page](http://mooseframework.org/documentation/).
-See the section on Input File Documentation. Note also that you can run
+See the section on Input File Documentation, you can run
 
-    ./mastodon-opt --dump
+```bash
+./mastodon-opt --dump
+```
 
 to get a list of valid input options for MASTODON.
 
@@ -128,15 +137,18 @@ convergence behavior change.
 To demonstrate running MASTODON, consider the simple shear example problem
 included in the MASTODON example set:
 
-    cd ~/projects/mastodon/examples/ex01
-    # To run with one processor
-    ~/projects/mastodon/mastodon-opt -i HYS_darendeli.i
-    # To run in parallel (2 processors)
-    mpiexec -n 2 ../../mastodon-opt -i HYS_darendeli.i
+```bash
+cd ~/projects/mastodon/examples/ex01
+# To run with one processor
+~/projects/mastodon/mastodon-opt -i HYS_darendeli.i
+# To run in parallel (2 processors)
+mpiexec -n 2 ../../mastodon-opt -i HYS_darendeli.i
+```
 
-Note that the procedure for running this model in parallel is shown only
-for illustrative purposes. This particular model is quite small, and would
-not benefit from being run in parallel, although it can be run that way.
+!!!note
+    The procedure for running this model in parallel is shown only
+    for illustrative purposes. This particular model is quite small, and would
+    not benefit from being run in parallel, although it can be run that way.
 
 ## Post Processing
 

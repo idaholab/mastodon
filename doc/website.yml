@@ -48,7 +48,7 @@
           - Getting Started:
               - Installation - Mac OS: doc/content/getting_started/macos.md
               - Installation - Ubuntu: doc/content/getting_started/ubuntu.md
-              - Running MASTODON: doc/content/getting_started/RunningMastodon.md
+              - Running MASTODON: doc/content/getting_started/running_mastodon.md
           - Examples:
               - Overview: doc/content/examples/index.md
               - Example 1: doc/content/examples/example1.md
