@@ -18,13 +18,10 @@ main(int argc, char * argv[])
   MastodonTestApp::registerApps();
 
   // This creates dynamic memory that we're responsible for deleting
-  MooseApp * app = AppFactory::createApp("MastodonTestApp", argc, argv);
+  std::shared_ptr<MooseApp> app = AppFactory::createAppShared("MastodonTestApp", argc, argv);
 
   // Execute the application
   app->run();
-
-  // Free up the memory we created earlier
-  delete app;
 
   return 0;
 }
