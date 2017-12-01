@@ -42,12 +42,13 @@
 - MooseDocs.extensions.template:
     template: website.html
     template_args:
-        title: MASTODON
+        title: Home
         repo_url: https://github.com/idaholab/mastodon
         navigation:
           - Getting Started:
-              - Mac OS: doc/content/getting_started/macos.md
-              - Ubuntu: doc/content/getting_started/ubuntu.md
+              - Installation - Mac OS: doc/content/getting_started/macos.md
+              - Installation - Ubuntu: doc/content/getting_started/ubuntu.md
+              - Running MASTODON: doc/content/getting_started/running_mastodon.md
           - Examples:
               - Overview: doc/content/examples/index.md
               - Example 1: doc/content/examples/example1.md
