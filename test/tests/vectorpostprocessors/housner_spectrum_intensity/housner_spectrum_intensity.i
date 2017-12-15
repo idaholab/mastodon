@@ -197,10 +197,10 @@
 []
 
 [BCs]
-  [./bottom_accel]
+  [./bottom_accel_x]
     type = PresetAcceleration
     boundary = back
-    function = accel_bottom
+    function = accel_bottom_x
     variable = disp_x
     beta = 0.25
     acceleration = accel_x
@@ -212,11 +212,14 @@
     boundary = back
     value = 0.0
   [../]
-  [./bottom_y]
-    type = PresetBC
-    variable = disp_y
+  [./bottom_accel_y]
+    type = PresetAcceleration
     boundary = back
-    value = 0.0
+    function = accel_bottom_y
+    variable = disp_y
+    beta = 0.25
+    acceleration = accel_y
+    velocity = vel_y
   [../]
   [./Periodic]
     [./x_dir]
@@ -233,10 +236,17 @@
 []
 
 [Functions]
-  [./accel_bottom]
+  [./accel_bottom_x]
     type = PiecewiseLinear
     data_file = 'accel.csv'
     format = columns
+    scale_factor = 1.0
+  [../]
+  [./accel_bottom_y]
+    type = PiecewiseLinear
+    data_file = 'accel.csv'
+    format = columns
+    scale_factor = 2.0
   [../]
 []
 
@@ -256,36 +266,9 @@
   line_search = 'none'
 []
 
-[Postprocessors]
-  [./_dt]
-    type = TimestepSize
-  [../]
-  [./accel_top_x]
-    type = NodalVariableValue
-    nodeid = 9
-    variable = accel_x
-  [../]
-  [./accel_top_y]
-    type = NodalVariableValue
-    nodeid = 9
-    variable = accel_y
-  [../]
-  [./accel_top_z]
-    type = NodalVariableValue
-    nodeid = 9
-    variable = accel_z
-  [../]
-[]
-
 [Outputs]
-  [./accel_exodus]
-    type = Exodus
-    execute_on = 'initial timestep_end'
-  [../]
-  [./accel_csv]
-    type = CSV
-    execute_on = 'final'
-  [../]
+  csv = true
+  execute_on = final
 []
 
 [VectorPostprocessors]
@@ -301,7 +284,7 @@
   [./accel_hsi]
     type = HousnerSpectrumIntensity
     vectorpostprocessor = accel_hist
-    variables = 'accel_x accel_x'
+    variables = 'accel_x accel_y'
     damping_ratio = 0.05
     regularize_dt = 0.005
     calculation_time = 33
