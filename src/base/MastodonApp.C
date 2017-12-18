@@ -44,6 +44,16 @@
 #include "ResponseSpectraCalculator.h"
 #include "HousnerSpectrumIntensity.h"
 
+// UserObjects
+#include "GroundMotionReader.h"
+#include "HazardCurve.h"
+
+// MultiApp
+#include "HazardCurveMultiApp.h"
+
+// Transfers
+#include "HazardCurveTransfer.h"
+
 // Testing
 #include "TestLayeredMaterialInterface.h"
 
@@ -121,6 +131,16 @@ MastodonApp::registerObjects(Factory & factory)
   registerVectorPostprocessor(ResponseHistoryBuilder);
   registerVectorPostprocessor(ResponseSpectraCalculator);
   registerVectorPostprocessor(HousnerSpectrumIntensity);
+
+  // UserObjects
+  registerUserObject(GroundMotionReader);
+  registerUserObject(HazardCurve);
+
+  // MultiApps
+  registerMultiApp(HazardCurveMultiApp);
+
+  // Transfers
+  registerTransfer(HazardCurveTransfer);
 
   // Testing
   registerMaterial(TestLayeredMaterialInterfaceDocString);

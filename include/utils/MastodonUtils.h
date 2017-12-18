@@ -40,6 +40,20 @@ std::vector<std::vector<Real>> responseSpectrum(const Real & freq_start,
 std::vector<std::vector<Real>> regularize(const std::vector<Real> & history_acc,
                                           const std::vector<Real> & history_time,
                                           const Real & reg_dt);
-}
 
+/**
+ * Return a list of numbered files from a base string.
+ */
+std::vector<std::string> glob(const std::string & pattern);
+
+/**
+ * Shift and scale std::vector components.
+ */
+std::vector<Real> adjust(const std::vector<Real> & input, const Real & scale, const Real & offset);
+
+/**
+ * Compute log (base 10) of the supplied vector entries.
+ */
+std::vector<Real> log10(const std::vector<Real> & input);
+}
 #endif
