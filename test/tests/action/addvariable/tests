@@ -1,0 +1,26 @@
+[Tests]
+  [./noaction]
+    # 1 element problem with no MASTODON actions
+    type = Exodiff
+    input = noaction.i
+    exodiff = noaction_out.e
+  [../]
+
+  [./variable_action]
+    # 1 element problem with action that automatically creates displacement Variables
+    type = Exodiff
+    input = variable_action.i
+    exodiff = noaction_out.e
+    cli_args = "Outputs/file_base=noaction_out"
+    prereq = noaction
+  [../]
+
+  [./auxvariable_action]
+    # 1 element problem with action that automatically creates velocity and acceleration AuxVariables
+    type = Exodiff
+    input = auxvariable_action.i
+    exodiff = noaction_out.e
+    cli_args = "Outputs/file_base=noaction_out"
+    prereq = variable_action
+  [../]
+[]
