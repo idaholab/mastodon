@@ -201,7 +201,6 @@
     store_stress_old = true
     block = 0
   [../]
-
 []
 
 [Executioner]
