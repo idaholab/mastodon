@@ -29,8 +29,6 @@ public:
   MastodonAddVariableAction(const InputParameters & params);
 
   virtual void act() override;
-
-private:
 };
 
 template <>
