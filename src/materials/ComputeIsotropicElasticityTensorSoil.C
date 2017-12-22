@@ -48,7 +48,7 @@ validParams<ComputeIsotropicElasticityTensorSoil>()
 const MooseArray<Real> &
 getShearModulus(ComputeIsotropicElasticityTensorSoil * object,
                 std::vector<Real> & shear_modulus,
-                std::string name)
+                const std::string & name)
 {
   if (object->isParamValid("shear_modulus") && object->isParamValid("elastic_modulus"))
     mooseError("In block " + name + ". Please provide ONE of the parameters, 'shear_modulus' and "
