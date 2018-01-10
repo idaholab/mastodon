@@ -1,6 +1,6 @@
-# Example 2
+# Example 2: Direct shear test using the GQ/H backbone curve formulation
 
-This example  is designated to conduct single element direct simple shear test that utilizes I-soil with GQ/H backbone generation method \citep{groholski2016simplified}. For this particular example, the units defining the parameters are N, kg, and meter (m), and the material definition is created using following command:
+This example demonstrates a single element direct simple shear test that utilizes I-soil with GQ/H backbone generation method \citep{groholski2016simplified}. For this particular example, the units defining the parameters are N, kg, and meter (m), and the material definition is created using following input:
 
 !listing examples/ex02/HYS_GQH.i start=Materials end=Preconditioning
 

@@ -1,6 +1,9 @@
-# Example 4
+# Example 4: Frictional contact
 
-This example describes a methodology on how to model frictional contact using the existing tools in MASTODON. Two brick elements are stacked vertically and a thin layer is modeled to describe the frictional contact (see \ref{fig:undeformedcontact}). Top and bottom layers use linear elastic material model whereas thin layer uses I-soil to approximate a contact behavior with elastic - nearly perfectly plastic shear behavior.
+This example demonstrates a frictional contact using the user-defined backbone I-soil material model in MASTODON. Two brick elements are stacked vertically and a thin layer is modeled to describe the frictional contact (see \ref{fig:undeformedcontact}). Top and bottom layers use linear elastic material model whereas thin layer uses I-soil to approximate a contact behavior with elastic - nearly perfectly plastic shear behavior.
+
+!!!note
+    This type of backbone curve can now be automated using the 'thin_layer' option in I-soil and ComputeISoilStress.
 
 !listing examples/ex04/2BlockFriction_Isoilunit.i
 

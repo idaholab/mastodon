@@ -336,10 +336,10 @@
 [Materials]
   [./I_Soil]
     [./soil_1]
-      soil_type = 0
+      soil_type = 'user_defined'
       layer_variable = layer_id
       layer_ids = '0'
-      data_file = 'stress_strain20.csv'
+      backbone_curve_files = 'stress_strain20.csv'
       poissons_ratio = '0.3'
       block = 0
       initial_soil_stress = '-12613 0 0  0 -12613 0  0 0 -29430'

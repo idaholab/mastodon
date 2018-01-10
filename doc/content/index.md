@@ -59,7 +59,7 @@ A MOOSE-based application for seismic analysis
         Software Quality Assurance
       </h5>
       <p class="light">
-        MASTODON is being developed in accordance with the ASME NQA-1 safety software requirements. Related documentation can be found <a href= "http://mooseframework.org/docs/PRs/95/site/sqa/index.html"> here. </a>
+        MASTODON is being developed in accordance with the ASME NQA-1 safety software requirements. Related documentation can be found <a href= "http://mooseframework.org/mastodon/sqa/index.html"> here. </a>
       </p>
     </div>
   </div>

@@ -324,7 +324,7 @@
 [Functions]
   [./top_disp]
     type = PiecewiseLinear
-    data_file = '../ex01/Displacement2.csv'
+    data_file = Displacement2.csv
     format = columns
   [../]
 []
