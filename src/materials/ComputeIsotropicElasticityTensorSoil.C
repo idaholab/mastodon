@@ -20,62 +20,32 @@ validParams<ComputeIsotropicElasticityTensorSoil>()
   InputParameters params = validParams<ComputeElasticityTensorBase>();
   params += validParams<LayeredMaterialInterface<>>();
   params.addClassDescription("Compute an isotropic elasticity tensor for a "
-                             "layered soil material when shear modulus or elastic modulus, "
+                             "layered soil material when shear modulus, "
                              "poisson's ratio and density are provided as "
                              "input for each layer.");
   params.setDocString("layer_ids",
                       "Vector of layer ids that map one-to-one "
-                      "with the 'shear_modulus' or 'elastic_modulus', 'poissons_ratio' "
+                      "with the 'shear_modulus', 'poissons_ratio' "
                       "and 'density' input parameters.");
   params.addRequiredParam<std::vector<Real>>("poissons_ratio",
                                              "Vector of Poisson's ratio values that map one-to-one "
                                              "with the number 'layer_ids' parameter.");
-  params.addParam<std::vector<Real>>("shear_modulus",
-                                     "Vector of shear modulus values that map one-to-one "
-                                     "with the number 'layer_ids' parameter.");
-  params.addParam<std::vector<Real>>("elastic_modulus",
-                                     "Vector of elastic modulus values that map one-to-one "
-                                     "with the number 'layer_ids' parameter.");
+  params.addRequiredParam<std::vector<Real>>("shear_modulus",
+                                             "Vector of  shear modulus values that map one-to-one "
+                                             "with the number 'layer_ids' parameter.");
   params.addRequiredParam<std::vector<Real>>(
       "density",
       "Vector of density values that map one-to-one with the number "
       "'layer_ids' parameter.");
   params.addParam<bool>(
-      "wave_speed_calculation", true, "Set to False to turn off P and S wave speed calculation.");
+      "wave_speed_calculation", true, "Set to False to turn off P and S wave speed calcualtion.");
   return params;
-}
-
-const MooseArray<Real> &
-getShearModulus(ComputeIsotropicElasticityTensorSoil * object,
-                std::vector<Real> & shear_modulus,
-                const std::string & name)
-{
-  if (object->isParamValid("shear_modulus") && object->isParamValid("elastic_modulus"))
-    mooseError("In block " + name + ". Please provide ONE of the parameters, 'shear_modulus' and "
-                                    "'elastic_modulus', but not both.");
-  if (!object->isParamValid("shear_modulus") && !object->isParamValid("elastic_modulus"))
-    mooseError("In block " + name +
-               ". Please provide ONE of the parameters, 'shear_modulus' or 'elastic_modulus'.");
-  if (object->isParamValid("shear_modulus"))
-    return object->getLayerParam<Real>("shear_modulus");
-  else
-  {
-    const std::vector<Real> & elastic_modulus =
-        object->getParam<std::vector<Real>>("elastic_modulus");
-    const std::vector<Real> & poissons_ratio =
-        object->getParam<std::vector<Real>>("poissons_ratio");
-    shear_modulus.resize(elastic_modulus.size());
-    for (std::size_t i = 0; i < shear_modulus.size(); ++i)
-      shear_modulus[i] = elastic_modulus[i] / (2 * (1 + poissons_ratio[i]));
-    return object->addLayerVector(shear_modulus);
-  }
 }
 
 ComputeIsotropicElasticityTensorSoil::ComputeIsotropicElasticityTensorSoil(
     const InputParameters & parameters)
   : LayeredMaterialInterface(parameters),
-    _input_shear_modulus(),
-    _layer_shear_modulus(getShearModulus(this, _input_shear_modulus, name())),
+    _layer_shear_modulus(getLayerParam<Real>("shear_modulus")),
     _layer_density(getLayerParam<Real>("density")),
     _layer_poissons_ratio(getLayerParam<Real>("poissons_ratio")),
     _wave_speed_calculation(getParam<bool>("wave_speed_calculation")),
@@ -97,6 +67,7 @@ ComputeIsotropicElasticityTensorSoil::ComputeIsotropicElasticityTensorSoil(
 void
 ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
 {
+
   _P_wave_modulus = _layer_shear_modulus[_qp] * 2.0 * (1.0 - _layer_poissons_ratio[_qp]) /
                     (1.0 - 2.0 * _layer_poissons_ratio[_qp]);
 

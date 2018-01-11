@@ -37,8 +37,6 @@ protected:
   /// Computed P wave modules
   Real _P_wave_modulus = 0;
 
-  std::vector<Real> _input_shear_modulus;
-
   /// Layer parameter for the "shear_modulus" input
   const MooseArray<Real> & _layer_shear_modulus;
 

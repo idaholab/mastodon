@@ -19,10 +19,6 @@
 
 #include "MooseMesh.h"
 #include "Function.h"
-#include "MastodonUtils.h"
-#include "ISoilUtils.h"
-#include "Conversion.h"
-#include "FEProblem.h"
 
 template <>
 InputParameters
@@ -30,323 +26,108 @@ validParams<ComputeISoilStress>()
 {
   InputParameters params = validParams<ComputeFiniteStrainElasticStress>();
   params.addClassDescription("Compute total stress for the nonlinear material "
-                             "model I-Soil using a backbone curve.");
-  params.addRequiredCoupledVar("layer_variable",
-                               "The auxvariable providing the soil layer identification.");
-  params.addRequiredParam<std::vector<unsigned int>>(
-      "layer_ids",
-      "Vector of layer ids that map one-to-one to the rest of the "
-      "soil layer parameters provided as input.");
-  params.addRequiredParam<std::vector<Real>>("poissons_ratio",
-                                             "Poissons's ratio for the soil layers. The "
-                                             "size of the vector should be same as the size of "
-                                             "layer_ids.");
-  params.addParam<Real>("b_exp",
-                        0.0,
-                        "The exponential factors for pressure "
-                        "dependent stiffness for all the soil "
-                        "layers.");
-  params.addParam<std::vector<Real>>("p_ref",
-                                     "The reference pressure at which "
-                                     "the parameters are defined for "
-                                     "each soil layer.");
+                             "model I-Soil using a set of elastic perfectly "
+                             "plastic stress-strain curves");
+  params.addRequiredParam<std::vector<std::vector<Real>>>(
+      "yield_stress",
+      "Yield stress for the individual stress-strain curves "
+      "for each soil layer.");
+  params.addParam<Real>("b_exp", "The exponent for pressure dependent stiffness calculation.");
   params.addParam<Real>("a0",
-                        1.0,
-                        "The first coefficient for pressure dependent yield strength "
-                        "calculation for all the soil layers. If a0 = 1, a1 = 0 and "
-                        "a2=0 for one soil layer, then the yield strength of that "
-                        "layer is independent of pressure.");
+                        "The first coefficient for pressure dependent "
+                        "yield strength calculation.");
   params.addParam<Real>("a1",
-                        0.0,
-                        "The second coefficient for pressure dependent yield "
-                        "strength calculation for all the soil layers. If a0 = "
-                        "1, a1 = 0, a2 = 0 for one soil layer, then the yield "
-                        "strength of that layer is independent of pressure.");
+                        "The second coefficient for pressure dependent "
+                        "yield strength calculation.");
   params.addParam<Real>("a2",
-                        0.0,
-                        "The third coefficient for pressure dependent yield "
-                        "strength calculation for all the soil layers. If a0 = "
-                        "1, a1=0 and a2=0 for one soil layer, then the yield "
-                        "strength of that layer is independent of pressure.");
+                        "The third coefficient for pressure dependent "
+                        "yield strength calculation.");
   params.addParam<Real>("tension_pressure_cut_off",
-                        -1.0,
-                        "The tension cut-off for all the soil layers. If the "
-                        "pressure becomes lower than this value, then the "
-                        "stiffness of the soil reduces to zero. A negative "
-                        "pressure indicates tension. The default "
-                        "value is -1.0 for all the soil layers.");
+                        "The stiffness of the soil is reduced to zero if the "
+                        "hydrostatic pressure goes below the "
+                        "tension_pressure_cut_off. A negative value for the "
+                        "pressure indicates tensile pressure.");
+  params.addParam<std::vector<Real>>("p_ref", "Reference Pressure");
   params.addParam<bool>("pressure_dependency",
                         false,
                         "Set to true to turn on pressure dependent stiffness "
                         "and yield strength calculation.");
+  params.addRequiredParam<std::vector<std::vector<Real>>>(
+      "youngs_modulus",
+      "The youngs modulus for the individual stress-strain "
+      "curves for each soil layer.");
+  params.addRequiredParam<std::vector<Real>>("poissons_ratio",
+                                             "The Poissons's ratio for each soil layer.");
+  params.addRequiredParam<std::vector<std::string>>(
+      "base_models",
+      "Base name for each elastic perfectly plastic model. All "
+      "soil layers have the same number of elastic perfectly "
+      "plastic models so this is not defined for each soil "
+      "layer.");
+  params.addRequiredParam<std::vector<unsigned int>>(
+      "layer_ids",
+      "Vector of layer ids that map one-to-one to the rest of the "
+      "soil layer parameters provided as input.");
+  params.addRequiredCoupledVar("layer_variable",
+                               "The variable providing the soil layer identification.");
   params.addParam<bool>(
-      "wave_speed_calculation", true, "Set to false to turn off P and S wave speed calculation.");
+      "wave_speed_calculation", true, "Set to False to turn off P and S wave speed calcualtion.");
   params.addParam<std::vector<FunctionName>>(
       "initial_soil_stress",
-      "A list of functions describing the initial stress. There "
-      "must be 9 functions, corresponding to the xx, yx, zx, xy, yy, zy, xz, yz, "
-      "zz components respectively. If not provided, all components of the "
-      "initial stress will be zero.");
-  // params for specific backbone types
-  MooseEnum soil_type("user_defined darendeli gqh thin_layer");
-  params.addRequiredParam<MooseEnum>(
-      "soil_type",
-      soil_type,
-      "This parameter determines the type of backbone curve used. Use 'user_defined' "
-      "for a user defined backbone curve provided in a data file, 'darendeli' "
-      "if the backbone curve is to be determined using Darandeli equations, 'gqh' "
-      "if the backbone curve is determined using the GQ/H approach and 'thin_layer' if the soil is "
-      "being used to simulate a thin-layer friction interface.");
-  // params required for user_defined backbone curve: soil_type = 'user_defined'
-  params.addParam<std::vector<FileName>>(
-      "backbone_curve_files",
-      "The vector of file names of the files containing "
-      "stress-strain backbone curves for the different soil layers. The "
-      "size of the vector should be same as the size of layer_ids. All files "
-      "should contain the same number of stress-strain points. Headers are not "
-      "expected and it is assumed that the first column corresponds to strain values "
-      "and the second column corresponds to the stress values. Additionally, two "
-      "segments of a backbone curve cannot have the same slope.");
-  // params required for soil_type = 'darendeli', 'GQ/H' and 'thin_layer'
-  params.addParam<std::vector<Real>>(
-      "initial_shear_modulus",
-      "The initial shear modulus of the soil layers. "
-      "This is required if Darandeli or GQ/H type backbone curves are used.");
-  // params required for soil_type = 'darendeli' and 'GQ/H'
-  params.addParam<unsigned int>("number_of_points",
-                                "The total number of data points in which the "
-                                "backbone curve needs to be split for all soil "
-                                "layers (required for Darandeli or GQ/H type backbone curves).");
-  // params required for Darandeli backbone curve: soil_type = 'darendeli'
-  params.addParam<std::vector<Real>>("over_consolidation_ratio",
-                                     "The over consolidation ratio of the soil "
-                                     "layers. Required for Darandeli backbone curve.");
-  params.addParam<std::vector<Real>>(
-      "plasticity_index",
-      "The plasticity index of the soil layers. Required for Darandeli backbone curve.");
-  // params required for GQ/H backbone curve: soil_type = "gqh"
-  params.addParam<std::vector<Real>>("theta_1",
-                                     "The curve fit coefficient for "
-                                     "GQ/H model"
-                                     "for each soil layer.");
-  params.addParam<std::vector<Real>>("theta_2",
-                                     "The curve fit coefficient for "
-                                     "GQ/H model"
-                                     "for each soil layer.");
-  params.addParam<std::vector<Real>>("theta_3",
-                                     "The curve fit coefficient for "
-                                     "GQ/H model"
-                                     "for each soil layer.");
-  params.addParam<std::vector<Real>>("theta_4",
-                                     "The curve fit coefficient for "
-                                     "GQ/H model"
-                                     "for each soil layer.");
-  params.addParam<std::vector<Real>>("theta_5",
-                                     "The curve fit coefficient for "
-                                     "GQ/H model"
-                                     "for each soil layer.");
-  params.addParam<std::vector<Real>>("taumax",
-                                     "The ultimate shear strength of "
-                                     "the soil layers. Required for "
-                                     "GQ/H model");
-  // params required for thin_layer contact model soil_type = "thin_layer"
-  params.addParam<std::vector<Real>>("friction_coefficient",
-                                     "Friction coefficients of the thin layers.");
-  params.addParam<std::vector<Real>>("hardening_ratio",
-                                     "Post-yield hardening ratios of the layers.");
+      "A list of functions describing the initial stress.  If provided, there "
+      "must be 9 of these, corresponding to the xx, yx, zx, xy, yy, zy, xz, yz, "
+      "zz components respectively.  If not provided, all components of the "
+      "initial stress will be zero");
   return params;
 }
 
 ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
   : ComputeFiniteStrainElasticStress(parameters),
     _strain_increment(getMaterialProperty<RankTwoTensor>(_base_name + "strain_increment")),
-    _base_models(),
-    _stress_model(),
-    _stress_model_old(),
-    _yield_stress(), // *** YIELD STRAIN NOT YIELD STRESS ***
-    _youngs(),
-    _soil_layer_variable(coupledValue("layer_variable")),
-    _layer_ids(getParam<std::vector<unsigned int>>("layer_ids")),
-    _wave_speed_calculation(getParam<bool>("wave_speed_calculation")),
+    _base_models(getParam<std::vector<std::string>>("base_models")),
+    _stress_model(_base_models.size()),
+    _stress_model_old(_base_models.size()),
+    _yield_stress(getParam<std::vector<std::vector<Real>>>("yield_stress")),
+    _youngs(getParam<std::vector<std::vector<Real>>>("youngs_modulus")),
     _poissons_ratio(getParam<std::vector<Real>>("poissons_ratio")),
-    _density(_wave_speed_calculation ? &getMaterialProperty<Real>("density") : NULL),
     _b_exp(getParam<Real>("b_exp")),
-    _p_ref(getParam<std::vector<Real>>("p_ref")),
     _a0(getParam<Real>("a0")),
     _a1(getParam<Real>("a1")),
     _a2(getParam<Real>("a2")),
     _p0(getParam<Real>("tension_pressure_cut_off")),
+    _p_ref(getParam<std::vector<Real>>("p_ref")),
     _pressure_dependency(getParam<bool>("pressure_dependency")),
+    _layer_ids(getParam<std::vector<unsigned int>>("layer_ids")),
     _strength_pressure_correction(1.0),
     _stiffness_pressure_correction(1.0),
+    _soil_layer_variable(coupledValue("layer_variable")),
+    _wave_speed_calculation(getParam<bool>("wave_speed_calculation")),
     _shear_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("shear_wave_speed") : NULL),
     _P_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("P_wave_speed") : NULL),
+    _density(_wave_speed_calculation ? &getMaterialProperty<Real>("density") : NULL),
     _tangent_modulus(0.0),
     _pos(0),
     _initial_soil_stress_provided(
         getParam<std::vector<FunctionName>>("initial_soil_stress").size() ==
         LIBMESH_DIM * LIBMESH_DIM)
 {
-  // checking that density, and Poisson's ratio are the same size as layer_ids
-  if (_poissons_ratio.size() != _layer_ids.size())
-    mooseError("Error in " + name() + ". Poisson's ratio should be of the same "
-                                      "size as layer_ids.");
-  // checks for pressure dependency
-  if (_pressure_dependency && _b_exp == 0.0)
-    mooseWarning("Warning in " + name() + ". Pressure dependency is set to true "
-                                          "but b_exp is set to 0.0. Stiffness "
-                                          "pressure dependency is NOT "
-                                          "turned on.");
-  if (_pressure_dependency && (_a0 == 1.0 && _a1 == 0.0 && _a2 == 0.0))
-    mooseWarning("Warning in " + name() +
-                 ". Pressure dependency is set to true but a0, a1 and a2 are "
-                 "set to 1.0, 0.0 and 0.0, respectively. Strength "
-                 "pressure dependency is NOT turned on.");
-  if (_pressure_dependency && _p_ref.size() != _layer_ids.size())
-    mooseError("Error in " + name() + ". When pressure dependency is turned on, "
-                                      "a positive reference pressure "
-                                      "(compressive) has to be defined for all "
-                                      "the soil layers and the same number of reference "
-                                      "pressures as soil layers should be provided.");
-  if (_pressure_dependency && MastodonUtils::isNegativeOrZero(_p_ref))
-    mooseError("Error in " + name() +
-               ". Please provide positive (compressive) values for reference pressure.");
+  if ((_youngs.size() != _layer_ids.size()) || (_yield_stress.size() != _layer_ids.size()) ||
+      (_poissons_ratio.size() != _layer_ids.size()))
+    mooseError("Error in" + name() + ". Young's modulus, yield stress and "
+                                     "Poisson's ratio should be of the same "
+                                     "size as layer_ids.");
 
-  // Initializing backbone curve
-  const MooseEnum & soil_type = getParam<MooseEnum>("soil_type");
-  std::vector<std::vector<Real>> backbone_stress(_layer_ids.size());
-  std::vector<std::vector<Real>> backbone_strain(_layer_ids.size());
-  // Calculating backbone curve for soil_type = user_defined
-  if (soil_type == "user_defined")
+  for (unsigned int i = 0; i < _layer_ids.size(); i++)
   {
-    std::vector<FileName> backbone_curve_files =
-        getParam<std::vector<FileName>>("backbone_curve_files");
-    if (backbone_curve_files.size() != _layer_ids.size())
-      mooseError("Error in " + name() +
-                 ". A vector of file names needs to "
-                 "be provided for `backbone_curve_files` and the size of this vector "
-                 "should be same as that of `layers_ids`.");
-    ISoilUtils::computeUserDefinedBackbone(
-        backbone_stress, backbone_strain, _layer_ids, backbone_curve_files, name());
+    if ((_youngs[i].size() != _yield_stress[i].size()) ||
+        (_youngs[i].size() != _base_models.size()))
+      mooseError("Error in" + name() + ". Youngs modulus, yield stress and "
+                                       "base_models for each soil layer should "
+                                       "be of the same size");
   }
-  // Calculating backbone curve for soil_type = darendeli
-  else if (soil_type == "darendeli")
+
+  for (unsigned int i = 0; i < _base_models.size(); i++)
   {
-    std::vector<Real> initial_shear_modulus = getParam<std::vector<Real>>("initial_shear_modulus");
-    std::vector<Real> over_consolidation_ratio =
-        getParam<std::vector<Real>>("over_consolidation_ratio");
-    std::vector<Real> plasticity_index = getParam<std::vector<Real>>("plasticity_index");
-    unsigned int number_of_points = getParam<unsigned int>("number_of_points");
-    if (initial_shear_modulus.size() != _layer_ids.size() ||
-        over_consolidation_ratio.size() != _layer_ids.size() ||
-        plasticity_index.size() != _layer_ids.size())
-      mooseError("Error in " + name() + ". initial_shear_modulus, "
-                                        "over_consolidation_ratio and plasticity_index must be "
-                                        "of the same size as layer_ids.");
-    if (MastodonUtils::isNegativeOrZero(over_consolidation_ratio) || number_of_points <= 0 ||
-        MastodonUtils::isNegativeOrZero(initial_shear_modulus))
-      mooseError("Error in " + name() + ". Positive values have to be provided "
-                                        "for over_consolidation_ratio, "
-                                        "number_of_points, "
-                                        "and initial_shear_modulus.");
-    ISoilUtils::computeDarendeliBackbone(backbone_stress,
-                                         backbone_strain,
-                                         _layer_ids,
-                                         initial_shear_modulus,
-                                         over_consolidation_ratio,
-                                         plasticity_index,
-                                         _p_ref,
-                                         number_of_points,
-                                         name());
-  }
-  // Calculating backbone curve for soil_type = gqh
-  else if (soil_type == "gqh")
-  {
-    std::vector<Real> initial_shear_modulus = getParam<std::vector<Real>>("initial_shear_modulus");
-    unsigned int number_of_points = getParam<unsigned int>("number_of_points");
-    std::vector<Real> theta_1 = getParam<std::vector<Real>>("theta_1");
-    std::vector<Real> theta_2 = getParam<std::vector<Real>>("theta_2");
-    std::vector<Real> theta_3 = getParam<std::vector<Real>>("theta_3");
-    std::vector<Real> theta_4 = getParam<std::vector<Real>>("theta_4");
-    std::vector<Real> theta_5 = getParam<std::vector<Real>>("theta_5");
-    std::vector<Real> taumax = getParam<std::vector<Real>>("taumax");
-    std::vector<std::vector<Real>> modulus(_layer_ids.size());
-    if (initial_shear_modulus.size() != _layer_ids.size() || theta_1.size() != _layer_ids.size() ||
-        theta_2.size() != _layer_ids.size() || theta_3.size() != _layer_ids.size() ||
-        theta_4.size() != _layer_ids.size() || theta_5.size() != _layer_ids.size() ||
-        taumax.size() != _layer_ids.size())
-      mooseError("Error in " + name() +
-                 ". initial_shear_modulus, theta_1, "
-                 "theta_2, theta_3, theta_4, theta_5 and taumax should be of the "
-                 "same size as layer_ids.");
-    if (number_of_points <= 0 || MastodonUtils::isNegativeOrZero(taumax) ||
-        MastodonUtils::isNegativeOrZero(initial_shear_modulus))
-      mooseError("Error in " + name() + ". Please provide positive values for number of points, "
-                                        "taumax and initial_shear_modulus.");
-    ISoilUtils::computeGQHBackbone(backbone_stress,
-                                   backbone_strain,
-                                   _layer_ids,
-                                   initial_shear_modulus,
-                                   number_of_points,
-                                   theta_1,
-                                   theta_2,
-                                   theta_3,
-                                   theta_4,
-                                   theta_5,
-                                   taumax);
-  }
-  // Calculating backbone curve for soil_type = thin_layer
-  else if (soil_type == "thin_layer")
-  {
-    _pressure_dependency = true;
-    _a0 = 0.0;
-    _a1 = 0.0;
-    _a2 = 1.0;
-    std::vector<Real> initial_shear_modulus = getParam<std::vector<Real>>("initial_shear_modulus");
-    std::vector<Real> friction_coefficient = getParam<std::vector<Real>>("friction_coefficient");
-    std::vector<Real> hardening_ratio = getParam<std::vector<Real>>("hardening_ratio");
-    if (initial_shear_modulus.size() != _layer_ids.size() ||
-        friction_coefficient.size() != _layer_ids.size() ||
-        hardening_ratio.size() != _layer_ids.size())
-      mooseError("Error in " + name() + ". initial_shear_modulus, friction_coefficient, "
-                                        "hardening_ratio and p_ref must be "
-                                        "of the same size as layer_ids.");
-    if (MastodonUtils::isNegativeOrZero(initial_shear_modulus) ||
-        MastodonUtils::isNegativeOrZero(friction_coefficient) ||
-        MastodonUtils::isNegativeOrZero(hardening_ratio))
-      mooseError("Error in " + name() + ". Positive values have to be provided "
-                                        "for `initial_shear_modulus`, "
-                                        "`friction_coefficient` and `hardening_ratio`");
-    ISoilUtils::computeCoulombBackbone(backbone_stress,
-                                       backbone_strain,
-                                       _layer_ids,
-                                       initial_shear_modulus,
-                                       friction_coefficient,
-                                       hardening_ratio,
-                                       _p_ref,
-                                       name());
-  }
-  else
-    mooseError("Error in " + name() + ". The parameter soil_type is invalid.");
-  // Deconstructing the backbone curves for all the soil layers into
-  // elastic-perfectly-plastic components. Each backbone curve is split up into
-  // a set of youngs modulus and yield stress pairs.
-  _youngs.resize(_layer_ids.size());
-  _yield_stress.resize(_layer_ids.size());
-  ISoilUtils::computeSoilLayerProperties(
-      _youngs,
-      _yield_stress, // *** CALCULATES YIELD STRAIN NOT YIELD STRESS ***
-      backbone_stress,
-      backbone_strain,
-      _layer_ids,
-      _poissons_ratio,
-      name());
-  _stress_model.resize(_youngs[0].size());
-  _stress_model_old.resize(_youngs[0].size());
-  _base_models.resize(_youngs[0].size());
-  for (std::size_t i = 0; i < _youngs[0].size(); i++)
-  {
-    _base_models[i] = Moose::stringify(i);
     _stress_model[i] = &declareProperty<RankTwoTensor>(_base_models[i] + "_stress_model");
     _stress_model_old[i] =
         &getMaterialPropertyOld<RankTwoTensor>(_base_models[i] + "_stress_model");
@@ -382,7 +163,7 @@ ComputeISoilStress::initQpStatefulProperties()
       for (unsigned j = 0; j < LIBMESH_DIM; ++j)
         _stress[_qp](i, j) = _initial_soil_stress[i * LIBMESH_DIM + j]->value(_t, _q_point[_qp]);
   }
-  for (std::size_t i = 0; i < _base_models.size(); i++)
+  for (unsigned int i = 0; i < _base_models.size(); i++)
     (*_stress_model[i])[_qp].zero();
 
   // Determine the current id for the soil. The variable which is a Real must be
@@ -395,7 +176,7 @@ ComputeISoilStress::initQpStatefulProperties()
   if (_wave_speed_calculation)
   {
     Real initial_youngs = 0.0;
-    for (std::size_t i = 0; i < _base_models.size(); i++)
+    for (unsigned int i = 0; i < _base_models.size(); i++)
       initial_youngs += _youngs[_pos][i];
 
     // shear wave speed is sqrt(shear_modulus/density)
@@ -425,14 +206,14 @@ ComputeISoilStress::initQpStatefulProperties()
 
   // Calculate the K0 consistent stress distribution
   RankTwoTensor dev_model;
-  for (std::size_t i = 0; i < _base_models.size(); i++)
+  for (unsigned int i = 0; i < _base_models.size(); i++)
   {
     Real mean_pressure = 0.0;
     if (residual_vertical != 0.0)
     {
       Real sum_youngs = 0.0;
 
-      for (std::size_t j = i; j < _base_models.size(); j++)
+      for (unsigned int j = i; j < _base_models.size(); j++)
         sum_youngs += _youngs[_pos][j];
 
       (*_stress_model[i])[_qp](2, 2) = residual_vertical * _youngs[_pos][i] / sum_youngs;
@@ -505,7 +286,7 @@ ComputeISoilStress::computeStress()
   }
 
   Real mean_pressure = 0.0;
-  for (std::size_t i = 0; i < _base_models.size(); i++)
+  for (unsigned int i = 0; i < _base_models.size(); i++)
   {
     // compute trial stress increment - note that _elasticity_tensor here
     // assumes youngs modulus = 1

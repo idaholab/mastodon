@@ -332,7 +332,7 @@
 [Materials]
   [./I_Soil]
     [./soil_1]
-      soil_type = 'gqh'
+      soil_type = 2
       layer_variable = layer_id
       layer_ids = '0'
       theta_1 = '-2.28'
@@ -342,6 +342,7 @@
       theta_5 = '0.99'
       taumax = '7500'
       initial_shear_modulus = '20000000'
+      initial_bulk_modulus = '43333333.33'
       number_of_points = 10
       poissons_ratio = '0.3'
       block = 0

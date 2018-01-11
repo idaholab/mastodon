@@ -1,6 +1,9 @@
-# One element test to test the auto-generated thin_layer backbone curve for
-# Coulomb friction. The top surface of the element (z=0) is fixed and the
-# bottom surface (z=1) is moved by applying a cyclic preset displacement.
+#@requirement F4.2
+# One element test to test the user-defined  backbone curve.
+# The back surface of the element (z=0) is fixed and the front surface (z=1)
+# is moved by applying a cyclic preset displacement.
+
+# The resulting shear stress-strain curve is same as the one provided as input.
 
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
@@ -15,7 +18,6 @@
   zmin = 0.0
   zmax = 1
 []
-
 
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
@@ -267,7 +269,7 @@
     index_i = 2
     index_j = 2
   [../]
-  [./layer]
+  [./layers]
     type = UniformLayerAuxKernel
     variable = layer_id
     interfaces = '2.0'
@@ -280,13 +282,13 @@
   [./x_bot]
     type = PresetBC
     variable = disp_x
-    boundary = '0 1 2 3 4'
+    boundary = 0
     value = 0.0
   [../]
   [./y_bot]
     type = PresetBC
     variable = disp_y
-    boundary = '0 1 2 3 4'
+    boundary = 0
     value = 0.0
   [../]
   [./z_bot]
@@ -330,18 +332,15 @@
 
 [Materials]
   [./I_Soil]
-    [./soil_thin_layer]
-      soil_type = 'thin_layer'
+    [./soil_1]
       layer_variable = layer_id
       layer_ids = '0'
-      initial_shear_modulus = '20000'
-      poissons_ratio = '0.45'
+      soil_type = 0
+      data_file = 'stress_strain_darendelli.csv'
+      poissons_ratio = '0.3'
       block = 0
-      density = '2.0'
-      friction_coefficient = '0.7'
-      hardening_ratio = '0.001'
-      p_ref = '8.6209091'
-      initial_soil_stress = '-8.0263636 0 0  0 -8.0263636 0  0 0 -9.810'
+      initial_soil_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
+      density = '2000'
     [../]
   [../]
 []
@@ -356,8 +355,8 @@
 [Executioner]
   type = Transient
   solve_type = PJFNK
-  nl_abs_tol = 1e-8
-  nl_rel_tol = 1e-8
+  nl_abs_tol = 1e-11
+  nl_rel_tol = 1e-11
   start_time = 0
   end_time = 8
   dt = 0.01
