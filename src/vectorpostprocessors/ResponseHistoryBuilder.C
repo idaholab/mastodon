@@ -15,7 +15,7 @@ validParams<ResponseHistoryBuilder>()
   InputParameters params = validParams<NodalVectorPostprocessor>();
   params.addRequiredParam<unsigned int>("node",
                                         "Node number at which the response history is requested.");
-  params.set<MultiMooseEnum>("execute_on") = "initial timestep_end";
+  params.set<ExecFlagEnum>("execute_on") = {EXEC_INITIAL, EXEC_TIMESTEP_END};
   params.addRequiredCoupledVar("variables",
                                "Variable name for which the response history is requested.");
   params.addClassDescription("Calculates response histories for a given node and variable(s).");
