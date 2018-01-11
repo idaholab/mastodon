@@ -1,8 +1,11 @@
-# One element test to test the auto-generated GQ/H backbone curve.
+# One element test to test the auto-generated Darendeli backbone curve.
 # The back surface of the element (z=0) is fixed and the front surface (z=1)
 # is moved by applying a cyclic preset displacement.
 
-# The resulting shear stress-strain curve was verified against obtained from DEEPSOIL.
+# The resulting shear stress vs shear strain curve was verified against that obtained
+# from DEEPSOIL.
+
+# This file DOES NOT use ISoilAction
 
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
@@ -18,9 +21,10 @@
   zmax = 1
 []
 
+
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
-  use_displaced_mesh = false
+  #use_displaced_mesh = false
 []
 
 [Variables]
@@ -103,6 +107,7 @@
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
     zeta = 0.00006366
+    use_displaced_mesh = false
   [../]
   [./inertia_x]
     type = InertialForce
@@ -112,6 +117,7 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
+    use_displaced_mesh = false
   [../]
   [./inertia_y]
     type = InertialForce
@@ -121,6 +127,7 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
+    use_displaced_mesh = false
   [../]
   [./inertia_z]
     type = InertialForce
@@ -130,11 +137,13 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
+    use_displaced_mesh = false
   [../]
   [./gravity]
     type = Gravity
     variable = disp_z
     value = -9.81
+    use_displaced_mesh = false
   [../]
 []
 
@@ -324,30 +333,40 @@
 [Functions]
   [./top_disp]
     type = PiecewiseLinear
-    data_file = '../ex01/Displacement2.csv'
+    data_file = Displacement2.csv
     format = columns
   [../]
 []
 
 [Materials]
-  [./I_Soil]
-    [./soil_1]
-      soil_type = 'gqh'
-      layer_variable = layer_id
-      layer_ids = '0'
-      theta_1 = '-2.28'
-      theta_2 = '-5.54'
-      theta_3 = '1.0'
-      theta_4 = '1.0'
-      theta_5 = '0.99'
-      taumax = '7500'
-      initial_shear_modulus = '20000000'
-      number_of_points = 10
-      poissons_ratio = '0.3'
-      block = 0
-      initial_soil_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
-      density = '2000'
-    [../]
+  [./sample_isoil]
+    type = ComputeISoilStress
+    soil_type = 'darendeli'
+    layer_variable = layer_id
+    layer_ids = '0'
+    over_consolidation_ratio = '1'
+    plasticity_index = '0'
+    initial_shear_modulus = '20000'
+    number_of_points = 10
+    poissons_ratio = '0.3'
+    initial_soil_stress = '-4.204286 0 0  0 -4.204286 0  0 0 -9.810'
+    p_ref = '6.07286'
+    wave_speed_calculation = true
+  [../]
+  [./sample_isoil_strain]
+    type = ComputeIncrementalSmallStrain
+    block = '0'
+    displacements = 'disp_x disp_y disp_z'
+  [../]
+  [./sample_isoil_elasticitytensor]
+    type = ComputeIsotropicElasticityTensorSoil
+    block = '0'
+    elastic_modulus = '1.0'
+    poissons_ratio = '0.3'
+    density = '2'
+    wave_speed_calculation = false
+    layer_ids = '0'
+    layer_variable = layer_id
   [../]
 []
 

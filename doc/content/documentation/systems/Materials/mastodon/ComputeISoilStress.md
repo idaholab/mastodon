@@ -2,7 +2,7 @@
 !syntax description /Materials/ComputeISoilStress
 
 ## Description
-This material computes the total stress for a I-soil element by summing the stresses from the elastic-perfectly plastic curves.
+This material object computes the stress of an I-Soil element.
 
 !syntax parameters /Materials/ComputeISoilStress
 
