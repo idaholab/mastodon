@@ -66,3 +66,147 @@ TEST(MastodonUtils, ResponseSpectrum)
         << ". Calculated: " << respspec[3][i] << ". Expected: " << aspec[i] << ".\n";
   }
 }
+
+// Test for checkEqualSize function in MastodonUtils
+TEST(MastodonUtils, checkEqualSize)
+{
+  // Inputs for testing
+  std::vector<Real> vec1 = {-1, 0, 1};
+  std::vector<Real> vec2 = {-1, 0, 1};
+  std::vector<Real> vec3 = {-1, 0, 1};
+  std::vector<Real> vec4 = {-1, 0, 1, 2};
+  std::vector<std::vector<Real>> vvec1 = {vec1, vec2, vec3};
+  std::vector<std::vector<Real>> vvec2 = {vec1, vec2, vec4};
+  // Outputs for testing
+  //   None
+  // Value check
+  EXPECT_FALSE(MastodonUtils::checkEqualSize(vvec2));
+  EXPECT_TRUE(MastodonUtils::checkEqualSize(vvec1));
+}
+
+// Test for checkEqual function in MastodonUtils
+TEST(MastodonUtils, checkEqual)
+{
+  // Inputs for testing
+  std::vector<Real> vec1 = {-1, 0, 1};
+  std::vector<Real> vec2 = {-1, 0, 1};
+  std::vector<Real> vec3 = {4, 5, 6};
+  std::vector<Real> vec4 = {2};
+  // Outputs for testing
+  //   None
+  // Value check
+  EXPECT_TRUE(MastodonUtils::checkEqual(vec1, vec2, 1));
+  EXPECT_FALSE(MastodonUtils::checkEqual(vec1, vec3));
+  EXPECT_FALSE(MastodonUtils::checkEqual(vec1, vec4));
+}
+
+// Test for isNegativeOrZero function in MastodonUtils
+TEST(MastodonUtils, isNegativeOrZero)
+{
+  // Inputs for testing
+  std::vector<Real> vec1 = {-1, 0, 1};
+  std::vector<Real> vec2 = {1, 2, 3};
+  // Outputs for testing
+  //   None
+  // Value check
+  EXPECT_TRUE(MastodonUtils::isNegativeOrZero(vec1));
+  EXPECT_FALSE(MastodonUtils::isNegativeOrZero(vec2));
+}
+
+// Test for mean function in MastodonUtils
+TEST(MastodonUtils, mean)
+{
+  // Inputs for testing
+  std::vector<Real> vec = {0.5, 0, 1, 1.3, 4};
+  // Outputs for testing
+  Real mean_of_vec = (0.5 + 0 + 1 + 1.3 + 4) / 5.0;
+  // Value check
+  EXPECT_EQ(MastodonUtils::mean(vec), mean_of_vec);
+}
+
+// Test for median function in MastodonUtils
+TEST(MastodonUtils, median)
+{
+  // Inputs for testing
+  std::vector<Real> odd_vec = {1, 0, 1.1, 1.3, 4};
+  std::vector<Real> even_vec = {4, 0, 1, -1};
+  // Outputs for testing
+  //  None
+  // Value check
+  EXPECT_EQ(MastodonUtils::median(odd_vec), 1.1);
+  EXPECT_EQ(MastodonUtils::median(even_vec, "linear"), 0.5);
+  EXPECT_EQ(MastodonUtils::median(even_vec, "lower"), 0);
+  EXPECT_EQ(MastodonUtils::median(even_vec, "higher"), 1);
+}
+
+// Test for percentile function in MastodonUtils
+TEST(MastodonUtils, percentile)
+{
+  // Inputs for testing
+  std::vector<Real> vec = {1.2, 0.1, 1.1, 1.3, 2.3, 8.9, 10.5, -1.4, 0.1, -0.3};
+  // sorted vector is {-1.4, -0.3, 0.1, 0.1, 1.1, 1.2, 1.3, 2.3, 8.9, 10.5}
+  // Outputs for testing
+  //  None
+  // Value check
+  EXPECT_EQ(MastodonUtils::percentile(vec, 0), -1.4);
+  EXPECT_EQ(MastodonUtils::percentile(vec, 100), 10.5);
+  EXPECT_EQ(MastodonUtils::percentile(vec, 84, "lower"), 2.3);
+  EXPECT_EQ(MastodonUtils::percentile(vec, 84, "higher"), 8.9);
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(MastodonUtils::percentile(vec, 84, "linear"), 4.94));
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(MastodonUtils::percentile(vec, 84), 4.94));
+}
+
+// Test for sigma function in MastodonUtils
+TEST(MastodonUtils, standardDeviation)
+{
+  // Inputs for testing
+  std::vector<Real> vec = {1.2, 0.1, 1.1, 1.3, 2.3, 8.9, 10.5, -1.4, 0.1, -0.3};
+  // sorted vector is {-1.4, -0.3, 0.1, 0.1, 1.1, 1.2, 1.3, 2.3, 8.9, 10.5}
+  // Outputs for testing
+  //  None
+  // Value check
+  Real vec_sigma = MastodonUtils::standardDeviation(vec);
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(vec_sigma, 4.00716, vec_sigma / 1000));
+}
+
+// Test for sigma function in MastodonUtils
+TEST(MastodonUtils, beta)
+{
+  // Inputs for testing
+  std::vector<Real> vec = {1.2, 0.1, 1.1, 1.3, 2.3, 8.9, 10.5, 1.52, 0.1, 0.39};
+  // sorted vector is {0.1, 0.1, 0.39, 1.1, 1.2, 1.3, 1.52, 2.3, 8.9, 10.5}
+  // sorted logvector is {-1}
+  // Outputs for testing
+  //  None
+  // Value check
+  Real vec_beta = MastodonUtils::lognormalStandardDeviation(vec);
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(vec_beta, 1.58875, vec_beta / 10000));
+}
+
+// Test for greaterProbability function in MastodonUtils
+TEST(MastodonUtils, greaterProbability)
+{
+  // Inputs for testing
+  boost::math::lognormal_distribution<> demand_distribution(log(0.71), 0.39);
+  boost::math::lognormal_distribution<> capacity_distribution(log(0.71), 0.39);
+  // Outputs for testing
+  //  None
+  // Value check
+  Real test_prob = MastodonUtils::greaterProbability(demand_distribution, capacity_distribution);
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(test_prob, 0.5, test_prob / 100));
+}
+
+// Test for zeropad function in MastodonUtils
+TEST(MastodonUtils, zeropad)
+{
+  // Inputs for testing
+  int n1 = 4;
+  int n2 = 15;
+  int n_tot = 1256;
+  // Outputs for testing
+  std::string zpad_n1 = MastodonUtils::zeropad(n1, n_tot);
+  std::string zpad_n2 = MastodonUtils::zeropad(n2, n_tot);
+  // Value check
+  EXPECT_EQ(zpad_n1.compare("0004"), 0);
+  EXPECT_EQ(zpad_n2.compare("0015"), 0);
+}

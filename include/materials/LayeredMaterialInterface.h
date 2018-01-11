@@ -46,20 +46,6 @@ public:
    */
   virtual void computeProperties() override;
 
-protected:
-  /// The variable containing the layer ids
-  const VariableValue & _layer_variable;
-
-  /**
-   * Get a reference to the current value of a input parameter for the current
-   * layer id.
-   * @param param_name Name of the parameter to lookup according to layer id, it
-   * must be the same length as "layer_ids"
-   *                   and of type std::vector<Real>.
-   */
-  template <typename P>
-  const MooseArray<P> & getLayerParam(const std::string & param_name);
-
   /*
    * Add a vector of data that corresponds with the "layer_ids" parameter.
    * @param data A reference to a vector of data to correspond with layer id
@@ -71,6 +57,20 @@ protected:
    */
   template <typename P>
   const MooseArray<P> & addLayerVector(const std::vector<P> & data);
+
+  /**
+   * Get a reference to the current value of a input parameter for the current
+   * layer id.
+   * @param param_name Name of the parameter to lookup according to layer id, it
+   * must be the same length as "layer_ids"
+   *                   and of type std::vector<Real>.
+   */
+  template <typename P>
+  const MooseArray<P> & getLayerParam(const std::string & param_name);
+
+protected:
+  /// The variable containing the layer ids
+  const VariableValue & _layer_variable;
 
   // The following are functions that shouldn't be modified in parent classes,
   // they are used to implement the internal
