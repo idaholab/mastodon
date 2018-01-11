@@ -3,13 +3,13 @@
 !syntax description /Materials/LinearSoilMaterial
 
 ## Description
-A material for computing the shear-wave speed ($v_s$) based on a linear relationship between shear modulus ($G$) and
+A material for computed the shear-wave speed ($v_s$) based on a linear relationship between shear modules ($G$) and
 density ($\rho$).
 
 This material defines the shear-wave speed as:
 
 $$
-v_s = \sqrt{\frac{G}{\rho}}
+v_s = \sqrt{\frac{G}{\rho}}.
 $$
 
 The shear-wave speed may differ for different materials throughout the domain. Materials are defined by "layer ids"

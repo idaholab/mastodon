@@ -6,7 +6,7 @@ a finite element application that aims at analyzing the response of 3-D
 soil-structure systems to natural and man-made hazards such as
 earthquakes, floods and fire. MASTODON currently focuses on the
 simulation of seismic events and has the capability to perform extensive
-'source-to-site' simulations including earthquake fault rupture,
+`source-to-site' simulations including earthquake fault rupture,
 nonlinear wave propagation and nonlinear soil-structure interaction
 (NLSSI) analysis. MASTODON is being developed to be a dynamic
 probabilistic risk assessment framework that enables analysts to not
@@ -237,19 +237,19 @@ The current version of I-soil implemented in MASTODON utilizes Masing type un/re
 
 Main input for the current version of I-soil in MASTODON is a backbone curve at a given reference pressure. MASTODON provides variety of options to built backbone curve for a given soil type and reference pressure using following methods :
 
- 1. User-defined backbone curve (soil\_type = 'user_defined'): The backbone curve can
+ 1. User-defined backbone curve (soil\_type = 0): The backbone curve can
   be provided in a .csv file where the first column is shear strain points and
   the second column is shear stress points. The number of nested components that will be generated from this backbone curve depends
   on the number of discrete shear strain - shear stress pairs defined in the .csv file. When layered soil profile is
   present, .csv file for each reference pressure can be provided to the corresponding elements in the mesh.
 
-2.  Darendeli backbone curve (soil\_type = 'darandeli'): The backbone curve can be
+2.  Darendeli backbone curve (soil\_type = 1): The backbone curve can be
   auto-generated based on empirical relations obtained from laboratory tests.
-  \citet{darendeli2001development} presents a functional form for normalized modulus reduction curves obtained from resonant column - torsional shear test for variety of soils. MASTODON utilizes this study and auto-generates the backbone shear stress - strain curves. The inputs for this option are (1) small strain shear modulus, (2) bulk modulus, (3) plasticity index, (4) overconsolidation ratio, (5) reference effective mean stress ($p_{ref}$) at which the backbone is constructed, and (6) number of shear stress - shear strain points preferred by user to construct piecewise linear backbone curve. All the other parameters except the number of shear stress - shear strain points can be provided as a vector for each soil layer.
+  \citet{darendeli2001development} presents a functional form for normalized modulus reduction curves obtained from resonant column - torsional shear test for variety of soils. MASTODON utilizes this study and auto-generates the backbone shear stress - strain curves. The inputs for this option are (1) small strain shear modulus, (2) bulk modulus, (3) plasticity index, (4) overconsolidation ratio, (5) reference effective mean stress (\(p_{ref}\)) at which the backbone is constructed, and (6) number of shear stress - shear strain points preferred by user to construct piecewise linear backbone curve. All the other parameters except the number of shear stress - shear strain points can be provided as a vector for each soil layer.
 
-  Darendeli (2001) study extrapolates the normalized modulus reduction curves after 0.1% shear strains. This extrapolation causes significant over/under estimation of the shear strength implied at large strains for different type of soils at different reference effective mean stresses \citep{hashash2010recent}. Thus user should be cautious about implied shear strength when utilizing this option.
+  Darendeli (2001) study extrapolates the normalized modulus reduction curves after 0.1 \% shear strains. This extrapolation causes significant over/under estimation of the shear strength implied at large strains for different type of soils at different reference effective mean stresses \citep{hashash2010recent}. Thus user should be cautious about implied shear strength when utilizing this option.
 
-3.  General Quadratic/Hyperbolic (GQ/H) backbone curve (soil\_type = 'gqh'):
+3.  General Quadratic/Hyperbolic (GQ/H) backbone curve (soil\_type = 2):
   \citet{darendeli2001development} study presented in previous item constructs the shear
   stress - shear strain curves based on experimentally obtained data. At small
   strains, the data is obtained using resonant column test, and towards
@@ -306,9 +306,9 @@ An efficient approach to modeling the foundation-soil interface is to create a t
 
 The red layer between the foundation (green) and soil (yellow) is the thin layer of I-Soil. The properties of this thin layer are then adjusted to simulate Coulomb friction between the surfaces. The Coulomb-friction-type behavior can be achieved by modeling the material of the thin soil layer as follows:
 
-1. Define an I-Soil material with a user-defined stress-strain curve.
+1. Define an I-Soil material with option 0, which corresponds to a user-defined stress-strain curve.
 
-2. Calculate the shear strength of the thin layer as $\tau_{max}=\mu \sigma_N$ , where $\tau_{max}$ is the shear strength, $\mu$ is the friction coefficient, and $\sigma_N$ is the normal stress on the contact surface. The shear strength of the thin layer is the stress at which sliding starts at the interface. Therefore, this shear strength should be proportional to the normal stress to simulate Coulomb friction. This can be achieved by setting the initial shear strength equal to the reference pressure, $p_{ref}$. The reference pressure can then be set to an arbitrary positive value, such as the average normal stress at the interface from gravity loads. The shear strength will then follow the equation
+2. Calculate the shear strength of the thin layer as $\tau_{max}=\mu \sigma_N$ , where $\tau_{max}$ is the shear strength, $\mu$ is the friction coefficient, and $p_{ref}$ is the reference pressure for the material. The reference pressure can be set arbitrarily, or set to the normal stress at the interface from gravity loads.
 
 \begin{equation}
 \tau_{max} = \mu p_{ref}

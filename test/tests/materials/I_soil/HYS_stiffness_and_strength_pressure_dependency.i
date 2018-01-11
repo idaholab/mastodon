@@ -1,11 +1,11 @@
-# One element test to test the auto-generated GQ/H backbone curve.
-# The back surface of the element (z=0) is fixed and the front surface (z=1)
-# is moved by applying a cyclic preset displacement.
+# One element test to check pressure dependent stiffness and yield strength calcualtion.
 
-# The resulting shear stress-strain curve was verified against obtained from DEEPSOIL.
+# The element is first intialized with stresses corresponding to acceleration due to gravity (g).
+# Then a body force equal to 3 * g is applied to the element thereby increasing the pressure experienced
+# by the element. The element is then sheared by moving the front surface (z = 0) in the x direction.
 
-# This file DOES NOT use ISoilAction
-
+# The resulting stress-strain curve is stiffer due to the increase in pressure and also the maximum/ultimate shear
+# stress at which the material completely fails is also higher due to the yield strength pressure correction.
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
   dim = 3 # Dimension of the mesh
@@ -20,8 +20,10 @@
   zmax = 1
 []
 
+
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
+  use_displaced_mesh = false
 []
 
 [Variables]
@@ -104,7 +106,6 @@
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
     zeta = 0.00006366
-    use_displaced_mesh = false
   [../]
   [./inertia_x]
     type = InertialForce
@@ -114,7 +115,6 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
-    use_displaced_mesh = false
   [../]
   [./inertia_y]
     type = InertialForce
@@ -124,7 +124,6 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
-    use_displaced_mesh = false
   [../]
   [./inertia_z]
     type = InertialForce
@@ -134,13 +133,11 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
-    use_displaced_mesh = false
   [../]
   [./gravity]
     type = Gravity
     variable = disp_z
-    value = -9.81
-    use_displaced_mesh = false
+    value = -29.43
   [../]
 []
 
@@ -279,7 +276,7 @@
     variable = layer_id
     interfaces = '2.0'
     direction = '0 0 1'
-    execute_on = initial
+    execute_on = 'initial'
   [../]
 []
 
@@ -336,36 +333,24 @@
 []
 
 [Materials]
-  [./sample_isoil]
-    type = ComputeISoilStress
-    soil_type = 'gqh'
-    layer_variable = layer_id
-    layer_ids = '0'
-    theta_1 = '-2.28'
-    theta_2 = '-5.54'
-    theta_3 = '1.0'
-    theta_4 = '1.0'
-    theta_5 = '0.99'
-    taumax = '7500'
-    initial_shear_modulus = '20000000'
-    number_of_points = 10
-    poissons_ratio = '0.3'
-    initial_soil_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
-  [../]
-  [./sample_isoil_strain]
-    type = ComputeIncrementalSmallStrain
-    block = '0'
-    displacements = 'disp_x disp_y disp_z'
-  [../]
-  [./sample_isoil_elasticitytensor]
-    type = ComputeIsotropicElasticityTensorSoil
-    block = '0'
-    elastic_modulus = '1.0'
-    poissons_ratio = '0.3'
-    density = '2000'
-    wave_speed_calculation = false
-    layer_ids = '0'
-    layer_variable = layer_id
+  [./I_Soil]
+    [./soil_1]
+      soil_type = 0
+      layer_variable = layer_id
+      layer_ids = '0'
+      data_file = 'stress_strain20.csv'
+      poissons_ratio = '0.3'
+      block = 0
+      initial_soil_stress = '-12613 0 0  0 -12613 0  0 0 -29430'
+      pressure_dependency = true
+      b_exp = 0.5
+      p_ref = 6072.86
+      tension_pressure_cut_off = -1
+      a0 = 0
+      a1 = 0
+      a2 = 1
+      density = '2000'
+    [../]
   [../]
 []
 
@@ -382,7 +367,7 @@
   nl_abs_tol = 1e-11
   nl_rel_tol = 1e-11
   start_time = 0
-  end_time = 8
+  end_time = 10
   dt = 0.01
   timestep_tolerance = 1e-6
   petsc_options = '-snes_ksp_ew'

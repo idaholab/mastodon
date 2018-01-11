@@ -334,12 +334,13 @@
 [Materials]
   [./I_Soil]
     [./soil_1]
-      soil_type = 'darendeli'
+      soil_type = 1
       layer_variable = layer_id
       layer_ids = '0'
       over_consolidation_ratio = '1'
       plasticity_index = '0'
       initial_shear_modulus = '20000'
+      initial_bulk_modulus = '43333.33'
       number_of_points = 10
       poissons_ratio = '0.3'
       block = 0

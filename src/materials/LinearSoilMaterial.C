@@ -19,8 +19,9 @@ validParams<LinearSoilMaterial>()
       "Vector of density values that map one-to-one with the number "
       "'layer_ids' parameter.");
   params.addClassDescription("Material for computing the shear wave speed "
-                             "and minimum element size as a function "
-                             "of shear modulus and density.");
+                             "($v_s$) and minimum element size as a function "
+                             "of shear modules ($G$) and density ($\rho$): "
+                             "$v_s = \\sqrt{\frac{G}{\rho}}.$");
   return params;
 }
 
