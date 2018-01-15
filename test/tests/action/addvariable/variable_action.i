@@ -17,8 +17,12 @@
 []
 
 [Mastodon]
-  add_variables = true
-  add_auxvariables = false
+  [./Model]
+    variables = true
+    auxvariables = false
+    inertia_kernels = false
+    auxkernels = false
+  [../]
 []
 
 [AuxVariables]

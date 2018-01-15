@@ -18,20 +18,20 @@
  * of the problem.
  **/
 
-#ifndef MASTODONADDVARIABLEACTION_H
-#define MASTODONADDVARIABLEACTION_H
+#ifndef MASTODONADDKERNELSACTION_H
+#define MASTODONADDKERNELSACTION_H
 
 #include "Action.h"
 
-class MastodonAddVariableAction : public Action
+class MastodonAddKernelsAction : public Action
 {
 public:
-  MastodonAddVariableAction(const InputParameters & params);
+  MastodonAddKernelsAction(const InputParameters & params);
 
   virtual void act() override;
 };
 
 template <>
-InputParameters validParams<MastodonAddVariableAction>();
+InputParameters validParams<MastodonAddKernelsAction>();
 
-#endif // MASTODONADDVARIABLEACTION_H
+#endif // MASTODONADDKERNELSACTION_H

@@ -10,7 +10,8 @@
 #include "StochasticToolsApp.h"
 
 // Actions
-#include "MastodonAddVariableAction.h"
+#include "MastodonAddVariablesAction.h"
+#include "MastodonAddKernelsAction.h"
 #include "ISoilAction.h"
 #include "NonReflectingBCAction.h"
 #include "SeismicDisplacementAction.h"
@@ -177,8 +178,11 @@ MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
   syntax.registerActionSyntax("ISoilAction", "Materials/I_Soil/*");
   registerAction(ISoilAction, "add_material");
 
-  syntax.registerActionSyntax("MastodonAddVariableAction", "Mastodon");
-  registerAction(MastodonAddVariableAction, "add_variable");
+  syntax.registerActionSyntax("MastodonAddVariablesAction", "Mastodon/Model");
+  registerAction(MastodonAddVariablesAction, "add_variable");
+
+  syntax.registerActionSyntax("MastodonAddKernelsAction", "Mastodon/Model");
+  registerAction(MastodonAddKernelsAction, "add_kernel");
 }
 
 void
