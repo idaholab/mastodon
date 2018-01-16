@@ -35,6 +35,8 @@
             - /Modules
             - /Modules/TensorMechanics
             - /Modules/TensorMechanics/GeneralizedPlaneStrain
+            - /Modules/TensorMechanics/Master/CommonTensorMechanicsAction
+            - /Modules/TensorMechanics/Master/TensorMechanicsAction
             - /Modules/TensorMechanics/Master
     links:
         Tests:
