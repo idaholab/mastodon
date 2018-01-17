@@ -23,7 +23,6 @@ moose:
         - docs/content/bib/**
 
     exclude:
-        - docs/content/documentation/systems/Modules/**
 
         - docs/content/documentation/systems/Kernels/misc/GaussContForcing.md
         - docs/content/documentation/systems/Kernels/framework/MaterialDerivativeRankFourTestKernel.md
