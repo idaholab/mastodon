@@ -46,3 +46,6 @@ doc/doxygen/html
 
 # Allow images in media directory
 !doc/content/media/**/*.png
+
+# Allow CSV in data directory
+!tests/data/**/*.csv

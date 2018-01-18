@@ -121,5 +121,20 @@ greaterProbability(T & demand_distribution, T & capacity_distribution)
  */
 std::string zeropad(const unsigned int n, const unsigned int n_tot);
 
+/**
+ * Return a list of numbered files from a base string.
+ */
+std::vector<std::string> glob(const std::string & pattern);
+
+/**
+ * Shift and scale std::vector components.
+ */
+std::vector<Real> adjust(const std::vector<Real> & input, const Real & scale, const Real & offset);
+
+/**
+ * Compute log (base 10) of the supplied vector entries.
+ */
+std::vector<Real> log10(const std::vector<Real> & input);
+
 } // namespace MastodonUtils
 #endif
