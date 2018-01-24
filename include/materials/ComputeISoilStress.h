@@ -24,6 +24,11 @@
 
 #include "ComputeFiniteStrainElasticStress.h"
 
+class ComputeISoilStress;
+
+template <>
+InputParameters validParams<ComputeISoilStress>();
+
 class ComputeISoilStress : public ComputeFiniteStrainElasticStress
 {
 public:
