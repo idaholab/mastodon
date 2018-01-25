@@ -20,6 +20,11 @@
 // Mastodon includes
 #include "LayeredMaterialInterface.h"
 
+class ComputeIsotropicElasticityTensorSoil;
+
+template <>
+InputParameters validParams<ComputeIsotropicElasticityTensorSoil>();
+
 /**
  * This material defines elasticity tensor for isotropic linear elastic
  * layer soil material and also calculates the material properties shear and P
