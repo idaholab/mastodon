@@ -386,7 +386,6 @@
   end_time = 8
   dt = 0.01
   timestep_tolerance = 1e-6
-  petsc_options = '-snes_ksp_ew'
   petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
   petsc_options_value = '201                hypre    boomeramg      4'
   line_search = 'none'
@@ -504,7 +503,9 @@
 []
 
 [Outputs]
-  exodus = true
-  csv = true
-  print_perf_log = false
+  [./out]
+    type = Exodus
+    sync_times = '0 1 2 3 4 5 6 7 8'
+    sync_only = true
+  [../]
 []
