@@ -483,7 +483,9 @@
 []
 
 [Outputs]
-  exodus = true
-  csv = true
-  print_perf_log = false
+  [./out]
+    type = Exodus
+    sync_times = '0 1 2 3 4 5 6 7 8'
+    sync_only = true
+  [../]
 []
