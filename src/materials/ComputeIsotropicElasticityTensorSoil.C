@@ -42,6 +42,9 @@ validParams<ComputeIsotropicElasticityTensorSoil>()
       "'layer_ids' parameter.");
   params.addParam<bool>(
       "wave_speed_calculation", true, "Set to False to turn off P and S wave speed calculation.");
+  // Controlled scaled parameters (temporary)
+  params.addParam<Real>("scale_factor_density", 1.0, "Scale factor for density.");
+  params.declareControllable("scale_factor_density");
   return params;
 }
 
@@ -81,7 +84,8 @@ ComputeIsotropicElasticityTensorSoil::ComputeIsotropicElasticityTensorSoil(
     _wave_speed_calculation(getParam<bool>("wave_speed_calculation")),
     _shear_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("shear_wave_speed") : NULL),
     _P_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("P_wave_speed") : NULL),
-    _density(declareProperty<Real>("density"))
+    _density(declareProperty<Real>("density")),
+    _scale_density(getParam<Real>("scale_factor_density"))
 {
   // all tensors created by this class are always isotropic
   issueGuarantee(_elasticity_tensor_name, Guarantee::ISOTROPIC);
@@ -100,7 +104,7 @@ ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
   _P_wave_modulus = _layer_shear_modulus[_qp] * 2.0 * (1.0 - _layer_poissons_ratio[_qp]) /
                     (1.0 - 2.0 * _layer_poissons_ratio[_qp]);
 
-  _density[_qp] = _layer_density[_qp];
+  _density[_qp] = _layer_density[_qp] * _scale_density;
 
   if (_wave_speed_calculation)
   {

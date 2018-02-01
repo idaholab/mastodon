@@ -45,6 +45,7 @@
 #include "ResponseHistoryBuilder.h"
 #include "ResponseSpectraCalculator.h"
 #include "HousnerSpectrumIntensity.h"
+#include "Fragility.h"
 
 // UserObjects
 #include "GroundMotionReader.h"
@@ -134,6 +135,7 @@ MastodonApp::registerObjects(Factory & factory)
   registerVectorPostprocessor(ResponseHistoryBuilder);
   registerVectorPostprocessor(ResponseSpectraCalculator);
   registerVectorPostprocessor(HousnerSpectrumIntensity);
+  registerVectorPostprocessor(Fragility);
 
   // UserObjects
   registerUserObject(GroundMotionReader);

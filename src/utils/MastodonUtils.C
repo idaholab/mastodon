@@ -260,3 +260,71 @@ MastodonUtils::greaterProbability(Distribution & demand_distribution,
   }
   return prob;
 }
+
+// Utils that require external Boost
+#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
+Real
+MastodonUtils::calcLogLikelihood(const std::vector<Real> & im,
+                  const std::vector<Real> & pf,
+                  const Real & loc,
+                  const Real & sca,
+                  const unsigned int & n)
+{
+  // error check
+  if (im.size() != pf.size())
+    mooseError("While calculating loglikelihood, intensity measure and failure probability vectors should be of the same size.");
+  if (MastodonUtils::isNegativeOrZero(im) || MastodonUtils::isNegativeOrZero(pf))
+    mooseError("While calculating loglikelihood, intensity measure or failure probability has a non-positive value.");
+  for (std::size_t i = 0; i<pf.size(); ++i)
+  {
+    if (pf[i] > 1.0)
+      mooseError("While calculating loglikelihood, a value greater than 1 is found in the failure probability vector.");
+  }
+  if (sca <= 0)
+    mooseError("While calculating loglikelihood, scale parameter should be positive.");
+  if (loc <= 0)
+    mooseError("While calculating loglikelihood, location parameter should be positive.");
+  // Calculating the likelihood at each IM value
+  boost::math::lognormal_distribution<Real> fragility_fit(log(loc), sca); // Initial estimate of fragility fit from the seed values
+  Real loglikelihood = 0;
+  for (std::size_t i = 0; i < im.size(); ++i)
+  {
+    // Binomial pdf in the below calculation is made in the log scale due to
+    // numerical errors (+inf) in calculating nCr for large trial sizes (n).
+    // Calculating log10(nCr)
+    unsigned int r = floor(n*pf[i]);
+    Real log10_nCr = 0.0;
+    for (std::size_t k = 1; k <= r; k++)
+      log10_nCr += std::log10(n - r + k) - std::log10(k);
+    Real p = boost::math::cdf(fragility_fit, im[i]);
+    // calculating sum of loglikelihoods. Each loglikelihood is the log(binomial pdf),
+    // which ends up to be the summation below.
+    loglikelihood += log10_nCr + r * std::log10(p) + (n - r) * std::log10(1.0 - p);
+  }
+  return loglikelihood;
+}
+
+// TODO: Use a better algorithm to maximize loglikelihood.
+std::vector<Real>
+MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
+                      const std::vector<Real> & pf,
+                      const std::vector<Real> & loc_space,
+                      const std::vector<Real> & sca_space,
+                      const unsigned int & n)
+{
+  Real loglikelihoodmax = MastodonUtils::calcLogLikelihood(im, pf, loc_space[0], sca_space[0], n);
+  std::vector<Real> max_values = {0.0, 0.0};
+  for (Real loc = loc_space[0]; loc < loc_space[1]; loc+=0.01)
+  {
+    for (Real sca = sca_space[0]; sca < sca_space[1]; sca+=0.01)
+    {
+      if (MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n) >= loglikelihoodmax)
+        {
+          loglikelihoodmax = MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n);
+          max_values = {loc, sca};
+        }
+    }
+  }
+  return max_values;
+}
+#endif // LIBMESH_HAVE_EXTERNAL_BOOST
