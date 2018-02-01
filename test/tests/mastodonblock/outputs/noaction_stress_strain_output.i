@@ -16,12 +16,6 @@
 []
 
 [Mastodon]
-  [./Model]
-    variables = false
-    auxvariables = false
-    inertia_kernels = true
-    auxkernels =  false
-  [../]
 []
 
 [Variables]
@@ -101,7 +95,6 @@
 []
 
 [Kernels]
-  inactive = 'inertia_x inertia_y inertia_z'
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
   [../]

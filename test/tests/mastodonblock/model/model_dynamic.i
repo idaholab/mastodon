@@ -17,14 +17,12 @@
 
 [Mastodon]
   [./Model]
-    variables = false
-    auxvariables = false
-    inertia_kernels = false
-    auxkernels =  false
+    dynamic_analysis = true
   [../]
 []
 
 [Variables]
+  inactive = 'disp_x disp_y disp_z'
   [./disp_x]
   [../]
   [./disp_y]
@@ -34,6 +32,7 @@
 []
 
 [AuxVariables]
+  inactive = 'accel_x vel_x accel_y vel_y accel_z vel_z'
   [./vel_x]
   [../]
   [./accel_x]
@@ -101,6 +100,7 @@
 []
 
 [Kernels]
+  inactive = 'DynamicTensorMechanics inertia_x inertia_y inertia_z'
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
   [../]
@@ -134,6 +134,7 @@
 []
 
 [AuxKernels]
+  inactive = 'accel_x vel_x accel_y vel_y accel_z vel_z'
   [./accel_x]
     type = NewmarkAccelAux
     variable = accel_x

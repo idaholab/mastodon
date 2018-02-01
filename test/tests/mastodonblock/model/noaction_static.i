@@ -16,12 +16,6 @@
 []
 
 [Mastodon]
-  [./Model]
-    variables = false
-    auxvariables = false
-    inertia_kernels = false
-    auxkernels =  true
-  [../]
 []
 
 [Variables]
@@ -34,18 +28,6 @@
 []
 
 [AuxVariables]
-  [./vel_x]
-  [../]
-  [./accel_x]
-  [../]
-  [./vel_y]
-  [../]
-  [./accel_y]
-  [../]
-  [./vel_z]
-  [../]
-  [./accel_z]
-  [../]
   [./stress_xy]
     order = CONSTANT
     family = MONOMIAL
@@ -104,166 +86,93 @@
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
   [../]
-  [./inertia_x]
-    type = InertialForce
-    variable = disp_x
-    velocity = vel_x
-    acceleration = accel_x
-    beta = 0.25
-    gamma = 0.5
-    use_displaced_mesh = false
-  [../]
-  [./inertia_y]
-    type = InertialForce
-    variable = disp_y
-    velocity = vel_y
-    acceleration = accel_y
-    beta = 0.25
-    gamma = 0.5
-    use_displaced_mesh = false
-  [../]
-  [./inertia_z]
-    type = InertialForce
-    variable = disp_z
-    velocity = vel_z
-    acceleration = accel_z
-    beta = 0.25
-    gamma = 0.5
-    use_displaced_mesh = false
-  [../]
 []
 
 [AuxKernels]
-  inactive = 'accel_x accel_y accel_z vel_x vel_y vel_z'
-  [./accel_x]
-    type = NewmarkAccelAux
-    variable = accel_x
-    displacement = disp_x
-    velocity = vel_x
-    beta = 0.25
-    execute_on = timestep_end
+  [./stress_xy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xy
+    index_i = 1
+    index_j = 0
   [../]
-  [./vel_x]
-    type = NewmarkVelAux
-    variable = vel_x
-    acceleration = accel_x
-    gamma = 0.5
-    execute_on = timestep_end
+  [./stress_yz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yz
+    index_i = 2
+    index_j = 1
   [../]
-  [./accel_y]
-    type = NewmarkAccelAux
-    variable = accel_y
-    displacement = disp_y
-    velocity = vel_y
-    beta = 0.25
-    execute_on = timestep_end
+  [./stress_zx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zx
+    index_i = 0
+    index_j = 2
   [../]
-  [./vel_y]
-    type = NewmarkVelAux
-    variable = vel_y
-    acceleration = accel_y
-    gamma = 0.5
-    execute_on = timestep_end
+  [./strain_xy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = stress_xy
+    index_i = 1
+    index_j = 0
   [../]
-  [./accel_z]
-    type = NewmarkAccelAux
-    variable = accel_z
-    displacement = disp_z
-    velocity = vel_z
-    beta = 0.25
-    execute_on = timestep_end
+  [./strain_yz]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_yz
+    index_i = 2
+    index_j = 1
   [../]
-  [./vel_z]
-    type = NewmarkVelAux
-    variable = vel_z
-    acceleration = accel_z
-    gamma = 0.5
-    execute_on = timestep_end
+  [./strain_zx]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_zx
+    index_i = 0
+    index_j = 2
   [../]
-  # [./stress_xy]
-  #   type = RankTwoAux
-  #   rank_two_tensor = stress
-  #   variable = stress_xy
-  #   index_i = 1
-  #   index_j = 0
-  # [../]
-  # [./stress_yz]
-  #   type = RankTwoAux
-  #   rank_two_tensor = stress
-  #   variable = stress_yz
-  #   index_i = 2
-  #   index_j = 1
-  # [../]
-  # [./stress_zx]
-  #   type = RankTwoAux
-  #   rank_two_tensor = stress
-  #   variable = stress_zx
-  #   index_i = 0
-  #   index_j = 2
-  # [../]
-  # [./strain_xy]
-  #   type = RankTwoAux
-  #   rank_two_tensor = total_strain
-  #   variable = stress_xy
-  #   index_i = 1
-  #   index_j = 0
-  # [../]
-  # [./strain_yz]
-  #   type = RankTwoAux
-  #   rank_two_tensor = total_strain
-  #   variable = strain_yz
-  #   index_i = 2
-  #   index_j = 1
-  # [../]
-  # [./strain_zx]
-  #   type = RankTwoAux
-  #   rank_two_tensor = total_strain
-  #   variable = strain_zx
-  #   index_i = 0
-  #   index_j = 2
-  # [../]
-  # [./stress_xx]
-  #   type = RankTwoAux
-  #   rank_two_tensor = stress
-  #   variable = stress_xx
-  #   index_i = 0
-  #   index_j = 0
-  # [../]
-  # [./stress_yy]
-  #   type = RankTwoAux
-  #   rank_two_tensor = stress
-  #   variable = stress_yy
-  #   index_i = 1
-  #   index_j = 1
-  # [../]
-  # [./stress_zz]
-  #   type = RankTwoAux
-  #   rank_two_tensor = stress
-  #   variable = stress_zz
-  #   index_i = 2
-  #   index_j = 2
-  # [../]
-  # [./strain_xx]
-  #   type = RankTwoAux
-  #   rank_two_tensor = total_strain
-  #   variable = strain_xx
-  #   index_i = 0
-  #   index_j = 0
-  # [../]
-  # [./strain_yy]
-  #   type = RankTwoAux
-  #   rank_two_tensor =total_strain
-  #   variable = strain_yy
-  #   index_i = 1
-  #   index_j = 1
-  # [../]
-  # [./strain_zz]
-  #   type = RankTwoAux
-  #   rank_two_tensor = total_strain
-  #   variable = strain_zz
-  #   index_i = 2
-  #   index_j = 2
-  # [../]
+  [./stress_xx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_zz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zz
+    index_i = 2
+    index_j = 2
+  [../]
+  [./strain_xx]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./strain_yy]
+    type = RankTwoAux
+    rank_two_tensor =total_strain
+    variable = strain_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./strain_zz]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_zz
+    index_i = 2
+    index_j = 2
+  [../]
   [./layer]
     type = UniformLayerAuxKernel
     variable = layer_id
@@ -275,22 +184,16 @@
 
 [BCs]
   [./x_bot]
-    type = PresetAcceleration
+    type = PresetBC
     boundary = 0
-    function = accel_bottom_x
     variable = disp_x
-    beta = 0.25
-    acceleration = accel_x
-    velocity = vel_x
+    value = 0
   [../]
   [./y_bot]
-    type = PresetAcceleration
+    type = PresetBC
     boundary = 0
-    function = accel_bottom_y
     variable = disp_y
-    beta = 0.25
-    acceleration = accel_y
-    velocity = vel_y
+    value = 0
   [../]
   [./z_bot]
     type = PresetBC
@@ -312,18 +215,30 @@
       translation = '0.0 1.0 0.0'
     [../]
   [../]
+  [./x_top]
+    type = FunctionDirichletBC
+    boundary = 5
+    variable = disp_x
+    function = disp_top_x
+  [../]
+  [./y_top]
+    type = FunctionDirichletBC
+    boundary = 5
+    variable = disp_y
+    function = disp_top_y
+  [../]
 []
 
 [Functions]
-  [./accel_bottom_x]
+  [./disp_top_x]
     type = PiecewiseLinear
-    data_file = 'accel.csv'
+    data_file = 'disp.csv'
     format = columns
     scale_factor = 1.0
   [../]
-  [./accel_bottom_y]
+  [./disp_top_y]
     type = PiecewiseLinear
-    data_file = 'accel.csv'
+    data_file = 'disp.csv'
     format = columns
     scale_factor = 2.0
   [../]
@@ -336,7 +251,7 @@
     layer_variable = layer_id
     layer_ids = '0'
     shear_modulus = '1.0e+2'
-    poissons_ratio = '0.2'
+    poissons_ratio = '0.3'
     density = '1.0'
   [../]
   [./strain_1]
@@ -391,36 +306,6 @@
     type = NodalVariableValue
     nodeid = 6
     variable = disp_z
-  [../]
-  [./vel_6x]
-    type = NodalVariableValue
-    nodeid = 6
-    variable = vel_x
-  [../]
-  [./vel_6y]
-    type = NodalVariableValue
-    nodeid = 6
-    variable = vel_y
-  [../]
-  [./vel_6z]
-    type = NodalVariableValue
-    nodeid = 6
-    variable = vel_z
-  [../]
-  [./accel_6x]
-    type = NodalVariableValue
-    nodeid = 6
-    variable = accel_x
-  [../]
-  [./accel_6y]
-    type = NodalVariableValue
-    nodeid = 6
-    variable = accel_y
-  [../]
-  [./accel_6z]
-    type = NodalVariableValue
-    nodeid = 6
-    variable = accel_z
   [../]
   [./stress_xy_el]
     type = ElementalVariableValue

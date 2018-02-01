@@ -13,25 +13,37 @@
 /*************************************************/
 
 /**
- * This action automatically creates the displacement Variables and the
- * velocity, acceleration, stress and strain AuxVariables based on the dimension of the mesh
- * of the problem.
+ * This action automatically creates the required objects for creating the
+ * requested outputs.
  **/
 
-#ifndef MASTODONADDKERNELSACTION_H
-#define MASTODONADDKERNELSACTION_H
+#ifndef MASTODONOUTPUTSACTION_H
+#define MASTODONOUTPUTSACTION_H
 
 #include "Action.h"
 
-class MastodonAddKernelsAction : public Action
+class MastodonOutputsAction : public Action
 {
 public:
-  MastodonAddKernelsAction(const InputParameters & params);
+  MastodonOutputsAction(const InputParameters & params);
 
   virtual void act() override;
+
+private:
+  void addStressStrainAuxVariables();
+  void addStressStrainAuxKernels();
+
+  // stress AuxVariable names
+  const std::vector<AuxVariableName> _stress_auxvariables;
+
+  // strain AuxVariable names
+  const std::vector<AuxVariableName> _strain_auxvariables;
+
+  // stress and strain tensor sizes based on problem dimension
+  const std::vector<std::size_t> _matrix_size;
 };
 
 template <>
-InputParameters validParams<MastodonAddKernelsAction>();
+InputParameters validParams<MastodonOutputsAction>();
 
-#endif // MASTODONADDKERNELSACTION_H
+#endif // MASTODONOUTPUTSACTION_H
