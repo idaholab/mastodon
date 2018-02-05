@@ -3,6 +3,9 @@
 #include "MastodonUtils.h"
 #include "MooseUtils.h"
 
+// Boost distribution includes
+#include "BoostDistribution.h"
+
 // Test for regularize function in MastodonUtils
 TEST(MastodonUtils, Regularize)
 {
@@ -183,6 +186,7 @@ TEST(MastodonUtils, lognormalStandardDeviation)
   EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(vec_beta, 1.58875, vec_beta / 10000));
 }
 
+#ifdef LIBMESH_HAVE_EXTERNAL_BOOST // only if Boost distributions can be used
 // Test for greaterProbability function in MastodonUtils
 TEST(MastodonUtils, greaterProbability)
 {
@@ -195,6 +199,7 @@ TEST(MastodonUtils, greaterProbability)
   Real test_prob = MastodonUtils::greaterProbability(demand_distribution, capacity_distribution);
   EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(test_prob, 0.5, test_prob / 100));
 }
+#endif
 
 // Test for zeropad function in MastodonUtils
 TEST(MastodonUtils, zeropad)

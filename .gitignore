@@ -1,9 +1,11 @@
+build
 .DS_Store
 lib
 .libs
 *.lo*
 mastodon-*
 include/base/MastodonRevision.h
+unit/include/base/Mastodon-unitRevision.h
 yaml_dump_mastodon-*
 syntax_dump_mastodon-*
 *.e
