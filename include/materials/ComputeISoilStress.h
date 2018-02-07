@@ -146,6 +146,19 @@ protected:
 
   /// initial stress components
   std::vector<Function *> _initial_soil_stress;
+
+  /// Tangent modulus for each soil layer.
+  RankFourTensor _initidentity;
+  RankFourTensor _initsymmfour;
+  RankFourTensor _tangent_mod_tensor;
+  const unsigned int _tangent_formulation;
+  /// Material property which stores the effective inelastic strain for each elastic
+  /// perfectly plastic curve.
+  std::vector<MaterialProperty<Real> *> _effective_inelastic_strain;
+
+  /// Material property which stores the old effectie inelastic strain for each
+  /// elastic perfectly plastic curve.
+  std::vector<const MaterialProperty<Real> *> _effective_inelastic_strain_old;
 };
 
 #endif // COMPUTEISOILSTRESS_H

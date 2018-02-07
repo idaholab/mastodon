@@ -168,6 +168,7 @@ validParams<ISoilAction>()
       "density",
       "Vector of density values that map one-to-one with the number "
       "'layer_ids' parameter.");
+  params.addParam<unsigned int>("tangent_formulation", 1, "1-continuum, 2-consistent and 3 - Andy's formulation");
   return params;
 }
 
@@ -190,6 +191,7 @@ ISoilAction::act()
   InputParameters params = _factory.getValidParams("ComputeISoilStress");
   params.set<std::vector<unsigned int>>("layer_ids") = layer_ids;
   params.set<std::vector<VariableName>>("layer_variable") = layer_variable;
+  params.set<unsigned int>("tangent_formulation") = getParam<unsigned int>("tangent_formulation"); 
   params.set<std::vector<SubdomainName>>("block") = block;
   params.set<std::vector<Real>>("poissons_ratio") = poissons_ratio;
   params.set<Real>("b_exp") = getParam<Real>("b_exp");

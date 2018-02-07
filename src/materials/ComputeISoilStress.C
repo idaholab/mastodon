@@ -81,6 +81,7 @@ validParams<ComputeISoilStress>()
                         false,
                         "Set to true to turn on pressure dependent stiffness "
                         "and yield strength calculation.");
+  params.addParam<unsigned int>("tangent_formulation",1, "1 - continuum, 2-consistent, 3- Andy's method");
   params.addParam<bool>(
       "wave_speed_calculation", true, "Set to false to turn off P and S wave speed calculation.");
   params.addParam<std::vector<FunctionName>>(
@@ -187,7 +188,13 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
     _pos(0),
     _initial_soil_stress_provided(
         getParam<std::vector<FunctionName>>("initial_soil_stress").size() ==
-        LIBMESH_DIM * LIBMESH_DIM)
+        LIBMESH_DIM * LIBMESH_DIM),
+    _initidentity(RankFourTensor::initIdentity),
+    _initsymmfour(RankFourTensor::initIdentitySymmetricFour),
+    _tangent_mod_tensor(_initidentity),
+    _tangent_formulation(getParam<unsigned int>("tangent_formulation")),
+    _effective_inelastic_strain(_base_models.size()),
+    _effective_inelastic_strain_old(_base_models.size())
 {
   // checking that density, and Poisson's ratio are the same size as layer_ids
   if (_poissons_ratio.size() != _layer_ids.size())
@@ -346,12 +353,16 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
   _stress_model.resize(_youngs[0].size());
   _stress_model_old.resize(_youngs[0].size());
   _base_models.resize(_youngs[0].size());
+  _effective_inelastic_strain.resize(_youngs[0].size());
+  _effective_inelastic_strain_old.resize(_youngs[0].size());
   for (std::size_t i = 0; i < _youngs[0].size(); i++)
   {
     _base_models[i] = Moose::stringify(i);
     _stress_model[i] = &declareProperty<RankTwoTensor>(_base_models[i] + "_stress_model");
     _stress_model_old[i] =
         &getMaterialPropertyOld<RankTwoTensor>(_base_models[i] + "_stress_model");
+    _effective_inelastic_strain[i] = &declareProperty<Real>(_base_models[i] + "inelastic_strain");
+    _effective_inelastic_strain_old[i] = &declarePropertyOld<Real>(_base_models[i] + "inelastic_strain");
   }
 
   const std::vector<FunctionName> & fcn_names(
@@ -468,11 +479,11 @@ ComputeISoilStress::computeQpStress()
   _stress[_qp] = _rotation_increment[_qp] * _stress_new * _rotation_increment[_qp].transpose();
 
   // Compute dstress_dstrain
-  if (std::abs(_tangent_modulus) < 1e-6)
-    _tangent_modulus = _youngs[_pos][_youngs.size() - 1];
+//  if (std::abs(_tangent_modulus) < 1e-6)
+//    _tangent_modulus = _youngs[_pos][_youngs.size() - 1];
 
   _Jacobian_mult[_qp] =
-      _elasticity_tensor[_qp] * _tangent_modulus; // This is NOT the exact jacobian
+     _Jacobian_mult[_qp] = _tangent_mod_tensor + _elasticity_tensor[_qp] * _tangent_modulus;
 }
 
 void
@@ -491,6 +502,7 @@ ComputeISoilStress::computeStress()
   _individual_stress_increment.zero();
   _deviatoric_trial_stress.zero();
   _tangent_modulus = 0.0;
+  _tangent_mod_tensor.zero();
 
   // current pressure calculation
   Real mean_stress = _stress_old[_qp].trace() / (-3.0);
@@ -505,7 +517,7 @@ ComputeISoilStress::computeStress()
                   _a2 * (mean_stress - _p0) * (mean_stress - _p0)) /
         std::sqrt(_a0 + _a1 * (_p_ref[_pos]) + _a2 * (_p_ref[_pos]) * (_p_ref[_pos]));
   }
-
+  //printf("youngs, yield, possion: %e, %e, %e \n", _youngs[_pos][0], _yield_stress[_pos][0], _poissons_ratio[_pos]);
   Real mean_pressure = 0.0;
   for (std::size_t i = 0; i < _base_models.size(); i++)
   {
@@ -533,8 +545,47 @@ ComputeISoilStress::computeStress()
         effective_trial_stress - _yield_stress[_pos][i] * _strength_pressure_correction;
 
     if (yield_condition > 0.0)
-      _deviatoric_trial_stress *=
+    {   mooseDoOnce(printf("yielded\n"));
+        _deviatoric_trial_stress *=
           _yield_stress[_pos][i] * _strength_pressure_correction / effective_trial_stress;
+
+        // continuum tangent matrix
+        if (_tangent_formulation == 1)
+          _tangent_mod_tensor += (1.0/ (3.0*(1.0 - 2.0 * _poissons_ratio[_pos])) * _initidentity +  1.0 / (1.0 + _poissons_ratio[_pos]) * (_initsymmfour - 1.0 / 3.0 * _initidentity -  _deviatoric_trial_stress.outerProduct(_deviatoric_trial_stress) / dev_trial_stress_squared)) * _youngs[_pos][i] * _stiffness_pressure_correction;
+        else if (_tangent_formulation == 2)
+        {
+          // consistent tangent matrix
+          _tangent_mod_tensor += (1.0/ (3.0*(1.0 - 2.0 * _poissons_ratio[_pos])) * _initidentity +  _yield_stress[_pos][i] * _strength_pressure_correction / (effective_trial_stress * (1.0 + _poissons_ratio[_pos])) * (_initsymmfour - 1.0 / 3.0 * _initidentity -  _deviatoric_trial_stress.outerProduct(_deviatoric_trial_stress) / dev_trial_stress_squared)) * _youngs[_pos][i] * _stiffness_pressure_correction;
+        }
+        else if (_tangent_formulation == 3)
+        {
+          // tangent matrix similar to wilk andy
+          // tangent modulus calculation similar to wilk andy
+          Real shear_modulus = _youngs[_pos][i] / (2.0 * (1.0 + _poissons_ratio[_pos]));
+          Real h = 3.0 * shear_modulus;
+
+          // updated deviatoric stress for model i
+          Real sigma_eq = _yield_stress[_pos][i] * _strength_pressure_correction * _youngs[_pos][i];
+          (*_effective_inelastic_strain[i])[_qp] = (*_effective_inelastic_strain_old[i])[_qp] + (effective_trial_stress - _yield_stress[_pos][i] * _strength_pressure_correction) * _youngs[_pos][i] / (3.0 / shear_modulus);
+          Real zeta = (*_effective_inelastic_strain[i])[_qp] / (1.0 + 3.0 * shear_modulus * (*_effective_inelastic_strain[i])[_qp] / sigma_eq);
+          Real secondInvariant = sigma_eq * sigma_eq / 3.0;
+          RankTwoTensor scaled_dev_stress = _deviatoric_trial_stress * _youngs[_pos][i];
+
+          RankFourTensor dflow_dstress = 0.5 * std::sqrt(3.0 / secondInvariant) * scaled_dev_stress.d2secondInvariant();
+          Real pre = -0.25 * std::sqrt(3.0) * std::pow(secondInvariant, -1.5);
+          RankTwoTensor dII = 0.5 * (scaled_dev_stress + scaled_dev_stress.transpose());
+
+          for (unsigned i = 0; i < 3; ++i)
+            for (unsigned j = 0; j < 3; ++j)
+              for (unsigned k = 0; k < 3; ++k)
+                for (unsigned l = 0; l < 3; ++l)
+                  dflow_dstress(i, j, k, l) += pre * dII(i, j) * dII(k, l);
+
+          _tangent_mod_tensor += _elasticity_tensor[_qp] * _youngs[_pos][i] - 3.0 * shear_modulus * shear_modulus / secondInvariant / h * scaled_dev_stress.outerProduct(scaled_dev_stress) - 4.0 * shear_modulus * shear_modulus * zeta * dflow_dstress;
+        }
+        else
+          mooseError("Unknown tangent formulation.");
+    }
     else
       _tangent_modulus += _youngs[_pos][i];
 

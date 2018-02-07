@@ -30,6 +30,12 @@ InputParameters validParams<ComputeIsotropicElasticityTensorSoil>();
  * layer soil material and also calculates the material properties shear and P
  * wave velocities.
  */
+
+class ComputeIsotropicElasticityTensorSoil;
+
+template <>
+InputParameters validParams<ComputeIsotropicElasticityTensorSoil>();
+
 class ComputeIsotropicElasticityTensorSoil
     : public LayeredMaterialInterface<ComputeElasticityTensorBase>
 {
