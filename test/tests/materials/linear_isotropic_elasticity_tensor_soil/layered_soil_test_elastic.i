@@ -61,8 +61,8 @@
 [Functions]
   [./layers_y]
     type = PiecewiseConstant
-    x = '-0.1667, 0.1667, 0.5'
-    y = ' 30,   20,      10'
+    x = '-0.1667 0.1667 0.5'
+    y = ' 30     20      10'
     axis=Y
     direction = right
   [../]
