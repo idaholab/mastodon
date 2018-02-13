@@ -1,2 +1,4 @@
 app_name = mastodon
-cli_args = '--error'
+allow_warnings = false
+allow_override = false
+allow_unused = false
