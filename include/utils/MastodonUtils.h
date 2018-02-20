@@ -18,7 +18,7 @@
 // MOOSE includes
 #include "GeneralVectorPostprocessor.h"
 // Other includes
-#include <boost/math/distributions.hpp>
+#include "BoostDistribution.h"
 
 // Forward Declarations
 namespace MastodonUtils
@@ -88,8 +88,15 @@ Real standardDeviation(const std::vector<Real> & vector);
 Real lognormalStandardDeviation(const std::vector<Real> & vector);
 
 /**
- * Function template to calculate the probability that one random variable is greater
+ * Function to calculate the probability that one random variable is greater
  * than another random variable
+ */
+Real greaterProbability(Distribution & demand_distribution, Distribution & capacity_distribution);
+
+#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
+/**
+ * Function template to calculate the probability that one random variable is greater
+ * than another random variable for Boost distribution
  */
 template <typename T>
 Real
@@ -114,6 +121,7 @@ greaterProbability(T & demand_distribution, T & capacity_distribution)
   }
   return prob;
 }
+#endif
 
 /**
  * This function zeropads the number n with zeros in the beginning and makes n

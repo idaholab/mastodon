@@ -3,12 +3,12 @@
 
 // STL includes
 #include <cmath>
+#include <numeric>
 
 // MOOSE contrib
 #include "pcrecpp.h"
 #include "tinydir.h"
 #include "MooseUtils.h"
-#include "BoostDistribution.h"
 
 // MASTODON includes
 #include "MastodonUtils.h"
@@ -239,4 +239,24 @@ MastodonUtils::log10(const std::vector<Real> & input)
     output[i] = std::log10(input[i]);
   }
   return output;
+}
+
+Real
+MastodonUtils::greaterProbability(Distribution & demand_distribution,
+                                  Distribution & capacity_distribution)
+{
+  Real min_demand = demand_distribution.quantile(0.001); //~ -3 sigma for normal distributions
+  Real max_demand = demand_distribution.quantile(0.999); //~ +3 sigma for normal distributions
+  Real prob = 0.0;
+  Real param = min_demand;
+  Real p_1, p_2;
+  Real delta = demand_distribution.median() / 1000;
+  while (param < max_demand)
+  {
+    p_1 = demand_distribution.pdf(param) * capacity_distribution.cdf(param);
+    p_2 = demand_distribution.pdf(param + delta) * capacity_distribution.cdf(param + delta);
+    prob += delta * (p_1 + p_2) / 2;
+    param += delta;
+  }
+  return prob;
 }
