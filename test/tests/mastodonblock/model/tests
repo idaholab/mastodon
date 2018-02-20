@@ -1,0 +1,34 @@
+[Tests]
+  [./noaction_static]
+    # 1 element static analysis with no Mastodon/model actions
+    type = Exodiff
+    input = noaction_static.i
+    exodiff = noaction_static_out.e
+  [../]
+
+  [./model_static]
+    # 1 element static analysis with Mastodon/model action for static analysis
+    type = Exodiff
+    input = model_static.i
+    exodiff = noaction_static_out.e
+    cli_args = "Outputs/file_base=noaction_static_out"
+    prereq = noaction_static
+  [../]
+
+  [./noaction_dynamic]
+    # 1 element dynamic analysis with no Mastodon/model actions
+    type = Exodiff
+    input = noaction_dynamic.i
+    exodiff = noaction_dynamic_out.e
+  [../]
+
+  [./model_dynamic]
+    # 1 element dynamic analysis with Mastodon/model action for dynamic analysis
+    type = Exodiff
+    input = model_dynamic.i
+    exodiff = noaction_dynamic_out.e
+    cli_args = "Outputs/file_base=noaction_dynamic_out"
+    prereq = noaction_dynamic
+  [../]
+
+[]

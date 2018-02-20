@@ -1,0 +1,168 @@
+/*************************************************/
+/*           DO NOT MODIFY THIS HEADER           */
+/*                                               */
+/*                     MASTODON                  */
+/*                                               */
+/*    (c) 2015 Battelle Energy Alliance, LLC     */
+/*            ALL RIGHTS RESERVED                */
+/*                                               */
+/*   Prepared by Battelle Energy Alliance, LLC   */
+/*     With the U. S. Department of Energy       */
+/*                                               */
+/*     See COPYRIGHT for full restrictions       */
+/*************************************************/
+
+#include "MastodonModelAction.h"
+
+// MOOSE includes
+#include "Conversion.h"
+#include "Factory.h"
+#include "FEProblem.h"
+#include "MooseMesh.h"
+#include "Action.h"
+#include "MooseObjectAction.h"
+
+template <>
+InputParameters
+validParams<MastodonModelAction>()
+{
+  InputParameters params = validParams<Action>();
+  params.addClassDescription("Creates the required displacement Variables, velocity and "
+                             "acceleration AuxVariables and AuxKernels, inertia kernels and the "
+                             "DynamicTensorMechanicsAction based on the dimension of the mesh and "
+                             "if static or dynamic analysis is being performed.");
+  params.addParam<bool>("dynamic_analysis", true, "false, if static analysis is to be performed.");
+  params.addParam<Real>("beta", 0.25, "beta parameter for Newmark time integration.");
+  params.addParam<Real>("gamma", 0.5, "gamma parameter for Newmark time integration.");
+  params.addParam<bool>(
+      "use_displaced_mesh", false, "true, if calculations are performed on displaced mesh.");
+  return params;
+}
+
+MastodonModelAction::MastodonModelAction(const InputParameters & params)
+  : Action(params),
+    _disp_variables({"disp_x", "disp_y", "disp_z"}),
+    _vel_auxvariables({"vel_x", "vel_y", "vel_z"}),
+    _accel_auxvariables({"accel_x", "accel_y", "accel_z"}),
+    _use_displaced_mesh(getParam<bool>("use_displaced_mesh"))
+{
+}
+
+void
+MastodonModelAction::act()
+{
+  // Adding displacement Variables
+  if (_current_task == "add_variable")
+    addDisplacementVariables();
+
+  // Adding DynamicTensorMechanicsAction
+  if (_current_task == "meta_action")
+    addDynamicTensorMechanicsAction();
+
+  // Adding AuxVariables and AuxKernels required for dynamic analysis. These
+  // include velocity and acceleration AuxVariables and AuxKernels.
+  const bool dynamic_analysis = getParam<bool>("dynamic_analysis");
+  if (dynamic_analysis)
+  {
+    // Adding velocity and acceleration AuxVariables
+    if (_current_task == "add_aux_variable")
+      addVelAccelAuxVariables();
+
+    // Adding inertia kernels
+    if (_current_task == "add_kernel")
+      addInertiaKernels();
+
+    // Adding velocity and acceleration Auxkernels
+    if (_current_task == "add_aux_kernel")
+      addVelAccelAuxKernels();
+  }
+}
+
+void
+MastodonModelAction::addDynamicTensorMechanicsAction()
+{
+  // Retrieve action parameters and set the parameters
+  InputParameters action_params = _action_factory.getValidParams("DynamicTensorMechanicsAction");
+  action_params.set<std::vector<NonlinearVariableName>>("displacements") = _disp_variables;
+  // Create the action and add it to the action warehouse
+  std::shared_ptr<Action> dynamictensormechanics_action =
+      std::static_pointer_cast<Action>(_action_factory.create(
+          "DynamicTensorMechanicsAction", "DynamicTensorMechanics", action_params));
+  _awh.addActionBlock(dynamictensormechanics_action);
+}
+
+void
+MastodonModelAction::addDisplacementVariables()
+{
+  const bool second = _problem->mesh().hasSecondOrderElements();
+  FEType disp_fe_type(second ? SECOND : FIRST, LAGRANGE);
+  for (std::size_t i = 0; i < _problem->mesh().dimension(); i++)
+    _problem->addVariable(_disp_variables[i], disp_fe_type, 1.0);
+}
+
+void
+MastodonModelAction::addVelAccelAuxVariables()
+{
+  const bool second = _problem->mesh().hasSecondOrderElements();
+  FEType vel_acc_fe_type(second ? SECOND : FIRST);
+  for (std::size_t j = 0; j < _problem->mesh().dimension(); j++)
+  {
+    _problem->addAuxVariable(_vel_auxvariables[j], vel_acc_fe_type);
+    _problem->addAuxVariable(_accel_auxvariables[j], vel_acc_fe_type);
+  }
+}
+
+void
+MastodonModelAction::addInertiaKernels()
+{
+  const std::vector<std::string> comp = {"x", "y", "z"};
+  for (std::size_t i = 0; i < _problem->mesh().dimension(); i++)
+  {
+    InputParameters params = _factory.getValidParams("InertialForce");
+    params.set<NonlinearVariableName>("variable") = _disp_variables[i];
+    params.set<std::vector<VariableName>>("velocity") = {_vel_auxvariables[i]};
+    params.set<std::vector<VariableName>>("acceleration") = {_accel_auxvariables[i]};
+    params.set<Real>("beta") = getParam<Real>("beta");
+    params.set<Real>("gamma") = getParam<Real>("gamma");
+    params.set<bool>("use_displaced_mesh") = _use_displaced_mesh;
+    _problem->addKernel("InertialForce", "inertia" + comp[i], params);
+  }
+}
+
+void
+MastodonModelAction::addVelAccelAuxKernels()
+{
+  const std::vector<std::string> vel_auxkernel = {"vel_x", "vel_y", "vel_z"};
+  const std::vector<std::string> accel_auxkernel = {"accel_x", "accel_y", "accel_z"};
+  const Real beta = getParam<Real>("beta");
+  const Real gamma = getParam<Real>("gamma");
+  for (std::size_t j = 0; j < _problem->mesh().dimension(); j++)
+  {
+    // Velocity AuxKernels: These Auxkernels are added as MooseObjectActions
+    // due to conflicts with DynamicTensorMechanicsAction when added using
+    // addAuxKernel method. TODO: See if this needs to be fixed later.
+    InputParameters action_params = _action_factory.getValidParams("AddKernelAction");
+    // Create the action
+    action_params.set<std::string>("type") = "NewmarkVelAux";
+    std::shared_ptr<MooseObjectAction> vel_action = std::static_pointer_cast<MooseObjectAction>(
+        _action_factory.create("AddKernelAction", vel_auxkernel[j], action_params));
+    vel_action->appendTask("add_aux_kernel");
+    // Assigning input parameters
+    InputParameters & vel_kernel_params = vel_action->getObjectParams();
+    vel_kernel_params.set<AuxVariableName>("variable") = _vel_auxvariables[j];
+    vel_kernel_params.set<std::vector<VariableName>>("acceleration") = {_accel_auxvariables[j]};
+    vel_kernel_params.set<Real>("gamma") = gamma;
+    vel_kernel_params.set<ExecFlagEnum>("execute_on") = EXEC_TIMESTEP_END;
+    // Add the action to the warehouse
+    _awh.addActionBlock(vel_action);
+
+    // Acceleration AuxKernels: Added using the addAuxKernel method
+    InputParameters accel_kernel_params = _factory.getValidParams("NewmarkAccelAux");
+    accel_kernel_params.set<AuxVariableName>("variable") = _accel_auxvariables[j];
+    accel_kernel_params.set<std::vector<VariableName>>("displacement") = {_disp_variables[j]};
+    accel_kernel_params.set<std::vector<VariableName>>("velocity") = {_vel_auxvariables[j]};
+    accel_kernel_params.set<Real>("beta") = beta;
+    accel_kernel_params.set<ExecFlagEnum>("execute_on") = EXEC_TIMESTEP_END;
+    _problem->addAuxKernel("NewmarkAccelAux", accel_auxkernel[j], accel_kernel_params);
+  }
+}

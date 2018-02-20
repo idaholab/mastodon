@@ -1,0 +1,17 @@
+[Tests]
+  [./noaction]
+    # 1 element problem with no Mastodon block actions
+    type = Exodiff
+    input = noaction.i
+    exodiff = noaction_out.e
+  [../]
+
+  [./mastodon_block_actions]
+    # 1 element problem with all Mastodon block actions
+    type = Exodiff
+    input = mastodon_block_actions.i
+    exodiff = noaction_out.e
+    cli_args = "Outputs/file_base=noaction_out"
+    prereq = noaction
+  [../]
+[]

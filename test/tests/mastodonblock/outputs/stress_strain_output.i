@@ -1,6 +1,5 @@
-# One element model to test Mastodon Actions
-# The back surface of the element (z=0) is fixed and the front surface (z=1)
-# is moved by applying a cyclic preset displacement.
+# One element model to test Mastodon Actions. Periodic boundary conditions are
+# applied and an acceleration is prescribed at the bottom surface.
 
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
@@ -17,11 +16,82 @@
 []
 
 [Mastodon]
-  add_variables = true
-  add_auxvariables = true
+  [./Outputs]
+    stress_strain_output = true
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./disp_z]
+  [../]
 []
 
 [AuxVariables]
+  inactive = 'stress_xx stress_yy stress_xy stress_zz stress_zx stress_yz strain_xx strain_yy strain_xy strain_zz strain_zx strain_yz'
+  [./vel_x]
+  [../]
+  [./accel_x]
+  [../]
+  [./vel_y]
+  [../]
+  [./accel_y]
+  [../]
+  [./vel_z]
+  [../]
+  [./accel_z]
+  [../]
+  [./stress_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_zx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_yz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_zx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
   [./layer_id]
     order = CONSTANT
     family = MONOMIAL
@@ -31,7 +101,6 @@
 [Kernels]
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
-    zeta = 0.00006366
   [../]
   [./inertia_x]
     type = InertialForce
@@ -40,7 +109,6 @@
     acceleration = accel_x
     beta = 0.25
     gamma = 0.5
-    eta = 7.854
     use_displaced_mesh = false
   [../]
   [./inertia_y]
@@ -50,7 +118,6 @@
     acceleration = accel_y
     beta = 0.25
     gamma = 0.5
-    eta = 7.854
     use_displaced_mesh = false
   [../]
   [./inertia_z]
@@ -60,12 +127,12 @@
     acceleration = accel_z
     beta = 0.25
     gamma = 0.5
-    eta = 7.854
     use_displaced_mesh = false
   [../]
 []
 
 [AuxKernels]
+  inactive = 'stress_xx stress_yy stress_xy stress_zz stress_zx stress_yz strain_xx strain_yy strain_xy strain_zz strain_zx strain_yz'
   [./accel_x]
     type = NewmarkAccelAux
     variable = accel_x
@@ -206,16 +273,22 @@
 
 [BCs]
   [./x_bot]
-    type = PresetBC
-    variable = disp_x
+    type = PresetAcceleration
     boundary = 0
-    value = 0.0
+    function = accel_bottom_x
+    variable = disp_x
+    beta = 0.25
+    acceleration = accel_x
+    velocity = vel_x
   [../]
   [./y_bot]
-    type = PresetBC
-    variable = disp_y
+    type = PresetAcceleration
     boundary = 0
-    value = 0.0
+    function = accel_bottom_y
+    variable = disp_y
+    beta = 0.25
+    acceleration = accel_y
+    velocity = vel_y
   [../]
   [./z_bot]
     type = PresetBC
@@ -237,22 +310,20 @@
       translation = '0.0 1.0 0.0'
     [../]
   [../]
-  [./top_x]
-    type = PresetDisplacement
-    boundary = 5
-    variable = disp_x
-    beta = 0.25
-    velocity = vel_x
-    acceleration = accel_x
-    function = top_disp
-  [../]
 []
 
 [Functions]
-  [./top_disp]
+  [./accel_bottom_x]
     type = PiecewiseLinear
-    data_file = Displacement2.csv
+    data_file = 'accel.csv'
     format = columns
+    scale_factor = 1.0
+  [../]
+  [./accel_bottom_y]
+    type = PiecewiseLinear
+    data_file = 'accel.csv'
+    format = columns
+    scale_factor = 2.0
   [../]
 []
 
@@ -266,13 +337,11 @@
     poissons_ratio = '0.2'
     density = '1.0'
   [../]
-
   [./strain_1]
     type = ComputeSmallStrain
     block = 0
     displacements = 'disp_x disp_y disp_z'
   [../]
-
   [./stress_1]
     type = ComputeLinearElasticStress
     store_stress_old = true
@@ -292,8 +361,8 @@
   solve_type = PJFNK
   nl_abs_tol = 1e-11
   nl_rel_tol = 1e-11
-  start_time = 3
-  end_time = 4
+  start_time = 32
+  end_time = 33
   dt = 0.01
   timestep_tolerance = 1e-6
   petsc_options = '-snes_ksp_ew'
@@ -415,5 +484,6 @@
 
 [Outputs]
   exodus = true
+  csv = true
   print_perf_log = false
 []
