@@ -9,6 +9,7 @@ moose:
         - docs/content/getting_started/**
         - docs/content/documentation/systems/**/index.md
         - docs/content/documentation/systems/**/framework/**
+        - docs/content/documentation/systems/Mesh/splitting.md
         - docs/content/documentation/systems/**/contact/**
         - docs/content/documentation/systems/**/solid_mechanics/**
         - docs/content/documentation/systems/**/tensor_mechanics/**

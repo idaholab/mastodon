@@ -29,7 +29,7 @@ ShearWaveIndicator::ShearWaveIndicator(const InputParameters & parameters)
     _shear_wave_speed(getMaterialProperty<Real>("shear_wave_speed")),
     _cutoff_frequency(getParam<Real>("cutoff_frequency")),
     _qrule(_assembly.qRule()),
-    _indicator_var(_sys.getVariable(_tid, name()))
+    _indicator_var(_sys.getFieldVariable<Real>(_tid, name()))
 {
 }
 
