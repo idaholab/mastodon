@@ -1,0 +1,12 @@
+[Tests]
+  [to_multiapp]
+    type = CSVDiff
+    input = to_master.i
+    csvdiff = 'to_master_out.csv to_master_out_sub0.csv'
+  []
+  [from_multiapp]
+    type = CSVDiff
+    input = from_master.i
+    csvdiff = 'from_master_out.csv from_master_out_sub0.csv'
+  []
+[]
