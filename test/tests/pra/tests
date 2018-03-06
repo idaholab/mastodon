@@ -1,0 +1,44 @@
+# test for the PRA infrastructure in MASTODON
+[Tests]
+  [./pra]
+    type = CSVDiff
+    input = master.i
+    boost = true
+    csvdiff = "master_out_run_hazard00_sub0.csv
+               master_out_run_hazard00_sub1.csv
+               master_out_run_hazard00_sub2.csv
+               master_out_run_hazard01_sub0.csv
+               master_out_run_hazard01_sub1.csv
+               master_out_run_hazard01_sub2.csv
+               master_out_run_hazard02_sub0.csv
+               master_out_run_hazard02_sub1.csv
+               master_out_run_hazard02_sub2.csv
+               master_out_run_hazard03_sub0.csv
+               master_out_run_hazard03_sub1.csv
+               master_out_run_hazard03_sub2.csv
+               master_out_run_hazard04_sub0.csv
+               master_out_run_hazard04_sub1.csv
+               master_out_run_hazard04_sub2.csv
+               master_out_run_hazard05_sub0.csv
+               master_out_run_hazard05_sub1.csv
+               master_out_run_hazard05_sub2.csv
+               master_out_run_hazard06_sub0.csv
+               master_out_run_hazard06_sub1.csv
+               master_out_run_hazard06_sub2.csv
+               master_out_run_hazard07_sub0.csv
+               master_out_run_hazard07_sub1.csv
+               master_out_run_hazard07_sub2.csv
+               master_out_run_hazard08_sub0.csv
+               master_out_run_hazard08_sub1.csv
+               master_out_run_hazard08_sub2.csv
+               master_out_run_hazard09_sub0.csv
+               master_out_run_hazard09_sub1.csv
+               master_out_run_hazard09_sub2.csv
+               master_out_run_hazard10_sub0.csv
+               master_out_run_hazard10_sub1.csv
+               master_out_run_hazard10_sub2.csv
+               master_out_run_hazard11_sub0.csv
+               master_out_run_hazard11_sub1.csv
+               master_out_run_hazard11_sub2.csv"
+  [../]
+[]

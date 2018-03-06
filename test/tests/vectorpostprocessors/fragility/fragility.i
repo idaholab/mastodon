@@ -1,310 +1,50 @@
-#@requirement F8.2
+# This is a test for Fragility VectorPostprocessor. This input file is set to
+# run for one time step with dummy mesh and variables.
 [Mesh]
+  # dummy mesh
   type = GeneratedMesh
   dim = 3
-  nx = 1
-  ny = 1
-  nz = 4
-  xmin = 0.0
-  xmax = 1.0
-  ymin = 0.0
-  ymax = 1.0
-  zmin = 0.0
-  zmax = 4.0
 []
 
 [Variables]
-  [./disp_x]
-  [../]
-  [./disp_y]
-  [../]
-  [./disp_z]
+  # dummy variables
+  [./u]
   [../]
 []
 
-[AuxVariables]
-  [./vel_x]
-  [../]
-  [./accel_x]
-  [../]
-  [./vel_y]
-  [../]
-  [./accel_y]
-  [../]
-  [./vel_z]
-  [../]
-  [./accel_z]
-  [../]
-  [./stress_zx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./strain_zx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./layer_id]
-    family = MONOMIAL
-    order = CONSTANT
-  [../]
-[]
-
-[Kernels]
-  [./DynamicTensorMechanics]
-    displacements = 'disp_x disp_y disp_z'
-    zeta = 0.000781
-    static_initialization = True
-    use_displaced_mesh = True
-  [../]
-  [./inertia_x]
-    type = InertialForce
-    variable = disp_x
-    velocity = vel_x
-    acceleration = accel_x
-    eta = 0.64026
-    beta = 0.25
-    gamma = 0.5
-    use_displaced_mesh = True
-  [../]
-  [./inertia_y]
-    type = InertialForce
-    variable = disp_y
-    velocity = vel_y
-    acceleration = accel_y
-    eta = 0.64026
-    beta = 0.25
-    gamma = 0.5
-    use_displaced_mesh = True
-  [../]
-  [./inertia_z]
-    type = InertialForce
-    variable = disp_z
-    velocity = vel_z
-    acceleration = accel_z
-    eta = 0.64026
-    beta = 0.25
-    gamma = 0.5
-    use_displaced_mesh = True
-  [../]
-  [./gravity]
-    type = Gravity
-    variable = disp_z
-    value = -9.81
-    use_displaced_mesh = True
-  [../]
-[]
-
-[AuxKernels]
-  [./accel_x]
-    type = NewmarkAccelAux
-    variable = accel_x
-    displacement = disp_x
-    velocity = vel_x
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./vel_x]
-    type = NewmarkVelAux
-    variable = vel_x
-    acceleration = accel_x
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./accel_y]
-    type = NewmarkAccelAux
-    variable = accel_y
-    displacement = disp_y
-    velocity = vel_y
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./vel_y]
-    type = NewmarkVelAux
-    variable = vel_y
-    acceleration = accel_y
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./accel_z]
-    type = NewmarkAccelAux
-    variable = accel_z
-    displacement = disp_z
-    velocity = vel_z
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./vel_z]
-    type = NewmarkVelAux
-    variable = vel_z
-    acceleration = accel_z
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./stress_zx]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_zx
-    index_i = 2
-    index_j = 0
-  [../]
-  [./strain_zx]
-    type = RankTwoAux
-    rank_two_tensor = total_strain
-    variable = strain_zx
-    index_i = 2
-    index_j = 0
-  [../]
-  [./layer_id]
-     type = UniformLayerAuxKernel
-     variable = layer_id
-     interfaces = '20'
-     direction = '0 0 1'
-     execute_on = initial
-  [../]
-[]
-
-[Materials]
-   [./elasticity_tensor]
-      type = ComputeIsotropicElasticityTensorSoil
-      block = 0
-      layer_variable = layer_id
-      layer_ids = '0'
-      poissons_ratio = '0.3'
-      density = '2000.0'
-      shear_modulus = '3e7'
-   [../]
-   [./stress1]
-     #Computes the stress, using linear elasticity
-     type = ComputeLinearElasticStress
-     store_stress_old = true
-     block = 0
-    [../]
-    [./strain1]
-      #Computes the strain, assuming small strains
-      type = ComputeSmallStrain
-      block = 0
-      displacements = 'disp_x disp_y disp_z'
-  [../]
-[]
-
-[BCs]
-  [./bottom_accel]
-    type = PresetAcceleration
-    boundary = back
-    function = accel_bottom
-    variable = disp_x
-    beta = 0.25
-    acceleration = accel_x
-    velocity = vel_x
-  [../]
-  [./bottom_z]
-    type = PresetBC
-    variable = disp_z
-    boundary = back
-    value = 0.0
-  [../]
-  [./bottom_y]
-    type = PresetBC
-    variable = disp_y
-    boundary = back
-    value = 0.0
-  [../]
-  [./Periodic]
-    [./x_dir]
-      primary = 'left'
-      secondary = 'right'
-      translation = '1.0 0.0 0.0'
-    [../]
-    [./y_dir]
-      primary = 'bottom'
-      secondary = 'top'
-      translation = '0.0 1.0 0.0'
-    [../]
-  [../]
-[]
-
-[Functions]
-  [./accel_bottom]
-    type = ConstantFunction
-    value = 0
-    #data_file = 'accel.csv'
-    #format = columns
-  [../]
+[Problem]
+  solve = false
+  kernel_coverage_check = false
 []
 
 [Executioner]
   type = Transient
-  solve_type = PJFNK
-  nl_abs_tol = 1e-8
-  nl_rel_tol = 1e-8
-  l_tol = 1e-8
-  start_time = 32
   num_steps = 1
-  dt = 0.005 # should be 0.005
-  timestep_tolerance = 1e-6
-  petsc_options = '-snes_ksp_ew'
-  petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
-  petsc_options_value = '201                hypre    boomeramg      4'
-  line_search = 'none'
 []
 
 [VectorPostprocessors]
   [./fragility_pump]
     type = Fragility
-    master_filename = 'monte_carlo'
-    ssc_name = 'pump'
-    demand_variable = 'accel19x'
-    frequency = 10
+    master_file = 'master' # name of the master file in this case is 'master.i'
+    hazard_multiapp = 'run_hazard'
+    probabilistic_multiapp = 'sub'
+    num_gms = 3
+    demand_variable = 'accel_2x'
+    frequency = 4
     damping_ratio = 0.05
     dt = 0.005
-    median_capacity = 2.1
-    beta_aleatory = 0.114
-    beta_epistemic = 0.114
-    num_samples = 10
-    num_bins = 1
-    execute_on = 'timestep_end'
-  [../]
-
-  [./fragility_battery]
-    type = Fragility
-    master_filename = 'monte_carlo'
-    ssc_name = 'battery'
-    demand_variable = 'accel19x'
-    frequency = 2.8
-    damping_ratio = 0.05
-    dt = 0.005
-    median_capacity = 4.1
-    beta_aleatory = 0.2
-    beta_epistemic = 0.1
-    num_samples = 10
-    num_bins = 1
-    execute_on = 'timestep_end'
-  [../]
-
-  [./fragility_switchgear]
-    type = Fragility
-    master_filename = 'monte_carlo'
-    ssc_name = 'switchgear'
-    demand_variable = 'accel11x'
-    frequency = 3
-    damping_ratio = 0.05
-    dt = 0.005
-    median_capacity = 3.8
-    beta_aleatory = 0.1
-    beta_epistemic = 0.2
-    num_samples = 10
-    num_bins = 1
-    execute_on = 'timestep_end'
+    median_capacity = 0.01
+    beta_capacity = 1.3
+    num_samples = 3
+    num_bins = 4
+    im_values = '0.3 0.5 0.7 0.9'
+    median_fragility_limits = '3.0 8.0'
+    beta_fragility_limits = '1.0 3.0'
+    execute_on = TIMESTEP_END
   [../]
 []
 
 [Outputs]
-  #[./accel_exodus]
-  #  type = Exodus
-  #  execute_on = 'initial timestep_end'
-  #[../]
-  [./fraglity_csv]
-    type = CSV
-    execute_on = 'final'
-  [../]
+  csv = true
+  execute_on = 'final'
 []
