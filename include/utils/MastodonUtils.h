@@ -127,21 +127,21 @@ greaterProbability(T & demand_distribution, T & capacity_distribution)
  * Function to calculate the loglikelihood (for MLE fiting) given the data
  * (im and pf) and the location and scale parameters of a lognormal distribution.
  */
-Real calcLogLikelihood (const std::vector<Real> & im,
-                        const std::vector<Real> & pf,
-                        const Real & loc,
-                        const Real & sca,
-                        const unsigned int & n);
+Real calcLogLikelihood(const std::vector<Real> & im,
+                       const std::vector<Real> & pf,
+                       const Real & loc,
+                       const Real & sca,
+                       const unsigned int & n);
 
 /**
  * Function to calculate location and scale parameters of a lognormal
  * distribution that maximizes the loglikelihood of fitting the data im and pf
  */
- std::vector<Real> maximizeLogLikelihood(const std::vector<Real> & im,
-                       const std::vector<Real> & pf,
-                       const std::vector<Real> & loc_space,
-                       const std::vector<Real> & sca_space,
-                       const unsigned int & n);
+std::vector<Real> maximizeLogLikelihood(const std::vector<Real> & im,
+                                        const std::vector<Real> & pf,
+                                        const std::vector<Real> & loc_space,
+                                        const std::vector<Real> & sca_space,
+                                        const unsigned int & n);
 #endif // LIBMESH_HAVE_EXTERNAL_BOOST
 
 /**

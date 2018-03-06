@@ -292,7 +292,8 @@ TEST(MastodonUtils, calcLogLikelihood)
   // Outputs for testing
   Real loglikelihood = MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n);
   // Value check
-  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(loglikelihood, -502.1889, std::abs(loglikelihood / 1000)));
+  EXPECT_TRUE(
+      MooseUtils::absoluteFuzzyEqual(loglikelihood, -502.1889, std::abs(loglikelihood / 1000)));
 }
 
 // Test for maximizeLogLikelihood function in MastodonUtils
@@ -305,9 +306,10 @@ TEST(MastodonUtils, maximizeLogLikelihood)
   std::vector<Real> sca_space = {0.1, 0.4};
   unsigned int n = 1000;
   // Outputs for testing
-  std::vector<Real> max_values = MastodonUtils::maximizeLogLikelihood(im, pf, loc_space, sca_space, n);
+  std::vector<Real> max_values =
+      MastodonUtils::maximizeLogLikelihood(im, pf, loc_space, sca_space, n);
   // Value check
   EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values[0], 0.4));
   EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values[1], 0.24));
 }
-#endif //LIBMESH_HAVE_EXTERNAL_BOOST
+#endif // LIBMESH_HAVE_EXTERNAL_BOOST

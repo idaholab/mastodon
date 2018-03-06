@@ -29,7 +29,8 @@ InputParameters validParams<Fragility>();
  *  given the dynamic properties of the component, capacity distribution of the component,
  *  and seismic demands from the probabilistic simulations. `Fragility` operates
  *  in the following steps: 1) calculate the demand distribution for each hazard bin, 2) use
- *  demand distribution and capacity distribution and calculate the conditional probability of failure
+ *  demand distribution and capacity distribution and calculate the conditional probability of
+ * failure
  *  in each bin, and 3) fit a lognormal distribution in the conditional probabilities to calculate a
  *  fragility. This kind of fragility is also referred to as 'enhanced fragility'.
  */
@@ -109,7 +110,6 @@ protected:
 
   /// Beta of the fitted fragility
   VectorPostprocessorValue & _beta_fragility;
-
 };
 
 #endif
