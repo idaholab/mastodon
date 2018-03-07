@@ -19,7 +19,7 @@ validParams<HazardCurveTransfer>()
   params.suppressParameter<MooseEnum>("direction");
   params.addRequiredParam<std::string>(
       "function",
-      "The name of the function on the sub application to which data will be transfered");
+      "The name of the function on the sub application to which data will be transferred");
   params.addParam<MooseEnum>(
       "component",
       MooseEnum("x=1 y=2 z=3", "x"), // These enums must correspond to GroundMotionReader::component
@@ -43,7 +43,7 @@ HazardCurveTransfer::execute()
     mooseError(
         "The HazardCurveTransfer '", name(), "' will only work with a HazardCurveMultiApp object.");
 
-  // Get input required for tranfer
+  // Get input required for transfer
   const HazardCurve & hazard_curve = ptr->getUserObject<HazardCurve>("hazard");
   const std::string & function_name = getParam<std::string>("function");
   GroundMotionReader::Component comp =

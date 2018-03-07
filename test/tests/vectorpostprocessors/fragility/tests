@@ -1,0 +1,9 @@
+# Test for Fragility VectorPostprocessor
+[Tests]
+  [./fragility]
+    type = CSVDiff
+    input = fragility.i
+    csvdiff = fragility_out_fragility_pump_0002.csv
+    boost = true
+  [../]
+[]
