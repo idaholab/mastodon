@@ -93,6 +93,7 @@ Real lognormalStandardDeviation(const std::vector<Real> & vector);
  */
 Real greaterProbability(Distribution & demand_distribution, Distribution & capacity_distribution);
 
+// Function declarations that require external Boost
 #ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 /**
  * Function template to calculate the probability that one random variable is greater
@@ -121,7 +122,27 @@ greaterProbability(T & demand_distribution, T & capacity_distribution)
   }
   return prob;
 }
-#endif
+
+/**
+ * Function to calculate the loglikelihood (for MLE fiting) given the data
+ * (im and pf) and the location and scale parameters of a lognormal distribution.
+ */
+Real calcLogLikelihood(const std::vector<Real> & im,
+                       const std::vector<Real> & pf,
+                       const Real & loc,
+                       const Real & sca,
+                       const unsigned int & n);
+
+/**
+ * Function to calculate location and scale parameters of a lognormal
+ * distribution that maximizes the loglikelihood of fitting the data im and pf
+ */
+std::vector<Real> maximizeLogLikelihood(const std::vector<Real> & im,
+                                        const std::vector<Real> & pf,
+                                        const std::vector<Real> & loc_space,
+                                        const std::vector<Real> & sca_space,
+                                        const unsigned int & n);
+#endif // LIBMESH_HAVE_EXTERNAL_BOOST
 
 /**
  * This function zeropads the number n with zeros in the beginning and makes n

@@ -65,6 +65,9 @@ protected:
   /// Density stored as a material property.
   MaterialProperty<Real> & _density;
 
+  /// Density scale factor
+  const Real & _scale_density;
+
   /// individual elasticity tensor
   RankFourTensor _Cijkl;
 };
