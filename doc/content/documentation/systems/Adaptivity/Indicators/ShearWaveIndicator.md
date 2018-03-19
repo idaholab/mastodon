@@ -3,6 +3,7 @@
 !syntax description /Adaptivity/Indicators/ShearWaveIndicator
 
 ## Description
+
 An indicator that computes the minimum element size based on the shear-wave speed.
 
 The minimum element length ($\lambda_{min}$), which this indicator computes, is computed based on the cutoff

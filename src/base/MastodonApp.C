@@ -58,8 +58,6 @@
 #include "HazardCurveTransfer.h"
 #include "PiecewiseFunctionTransfer.h"
 
-// Testing
-#include "TestLayeredMaterialInterface.h"
 
 template <>
 InputParameters
@@ -147,10 +145,6 @@ MastodonApp::registerObjects(Factory & factory)
   // Transfers
   registerTransfer(HazardCurveTransfer);
   registerTransfer(PiecewiseFunctionTransfer);
-
-  // Testing
-  registerMaterial(TestLayeredMaterialInterfaceDocString);
-  registerKernel(TestLayeredMaterialInterfaceTypeError);
 }
 
 // External entry point for dynamic syntax association

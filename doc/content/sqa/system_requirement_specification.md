@@ -1,14 +1,19 @@
 !SQA-load system_requirements_specification.md
 
 !SQA-template-item project_description
-!admonition note Work in Progress
+
+!alert construction
+Work in Progress
+
 The template for this page is currently under development, the completed SRS is available
 as a pdf here: [MASTODON SRS](https://hpcgitlab.inl.gov/idaholab/mastodon/uploads/d50895b47f1cf489b504bf3036d79bae/MastodonSoftwareRequirementsSpecification.pdf).
 
 MASTODON is a nonlinear, three-dimensional seismic soil-structure interaction analysis framework.
+
 !END-template-item
 
 !SQA-template-item system_scope
+
 Multi-hazard Analysis for STOchastic time-DOmaiN phenomena (MASTODON) is a ﬁnite element application
 that analyzes the response of 3-D soil-structure systems to earthquakes. MASTODON currently focuses
 on the simulation of seismic events and has the capability to perform extensive ‘source-to-site’
@@ -28,11 +33,14 @@ the simulation of inﬁnite or semi-inﬁnite domains, fault rupture model for s
 simulation, and the domain reduction method for the input of complex, three dimensional wave fields.
 Since MASTODON is a MOOSE-based application, it can efficiently solve problems using either standard
 workstations or very large high-performance computers.
+
 !END-template-item
 
 !SQA-template-item system_context
 
-!admonition warning Under Development
+!alert construction
+Under Development
+
 The current MOOSE template for the SRS is not complete and the sections do not align with
 the SRS for {{PROJECT}}. As development continues sections will be more configurable to meet
 the needs of application.
@@ -101,6 +109,7 @@ the needs of application.
     SI1.2 BlackBear
 
 ### Installation Considerations
+
 Detailed installation instructions, including the following installation considerations, will be included in the MASTODON User's Manual.
 
 !SQA-requirement-list

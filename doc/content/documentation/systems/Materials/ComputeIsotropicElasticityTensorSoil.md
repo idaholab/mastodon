@@ -1,8 +1,9 @@
-#ComputeIsotropicElasticityTensorSoil
+# ComputeIsotropicElasticityTensorSoil
 
 !syntax description /Materials/ComputeIsotropicElasticityTensorSoil
 
 ## Description
+
 There are three essential components which describe the mechanical behavior of a material. These are strain formulation, stress formulation and an elasticity tensor which connects the strains to stresses. In MASTODON, these three can be specified separately. This class defines the elasticity tensor for an isotropic material.
 
 The elasticity tensor ($C_{ijkl}$) is a fourth order tensor containing 81 components. In the case of an isotropic material, $C_{ijkl}$ can be constructed using just 2 independent constants which in this case are the shear modulus ($G$) and the Poisson's ratio ($\nu$). The elasticity tensor is a material property which is defined at quadrature point. So different parts of the domain can have different values for $C_{ijkl}$.

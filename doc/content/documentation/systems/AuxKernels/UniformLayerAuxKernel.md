@@ -1,4 +1,5 @@
 # UniformLayerAuxKernel
+
 !syntax description /AuxKernels/UniformLayerAuxKernel
 
 ## Description
@@ -6,7 +7,7 @@
 The `UniformLayerAuxKernel` is designed to create an arbitrary number of planar layers to be used
 as layer identifiers. The layers created can be oriented in any direction.
 
-For example, the following input file syntax will create the AuxVariable field shown in \ref{uniform_layer_3d}.
+For example, the following input file syntax will create the AuxVariable field shown in [uniform_layer_3d].
 
 !listing test/tests/auxkernels/uniform_layer/uniform_layer_3d.i block=AuxKernels
 

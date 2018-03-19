@@ -1,6 +1,8 @@
 ## Install MASTODON
 
-MASTODON is hosted on [GitHub](https://github.com/idaholab/mastodon) and should be cloned directly from there using [git](https://git-scm.com/). We recommend creating a directory named projects to put all of your MASTODON related work.
+MASTODON is hosted on [GitHub](https://github.com/idaholab/mastodon) and should be cloned directly
+from there using [git](https://git-scm.com/). We recommend creating a directory named projects to put
+all of your MASTODON related work.
 
 To install MASTODON run the following commands in a terminal.
 
@@ -14,7 +16,11 @@ git submodule update --init moose
 ```
 
 ## Compile libMesh
-MASTODON directly relies on the [libMesh](http://libmesh.github.io/) finite-element framework. Because of this strong tie MASTODON contains a particular version of libMesh that we have vetted for our users. To pull down and compile this version of libMesh you simply need to run a script in MOOSE:
+
+MASTODON directly relies on the [libMesh](http://libmesh.github.io/) finite-element
+framework. Because of this strong tie MASTODON contains a particular version of libMesh that we have
+vetted for our users. To pull down and compile this version of libMesh you simply need to run a
+script in MOOSE:
 
 ```bash
 cd ~/projects/mastodon/moose
@@ -22,6 +28,7 @@ cd ~/projects/mastodon/moose
 ```
 
 ## Compile and Test MASTODON
+
 After libMesh has compiled the next step is to compile and test MASTODON.
 
 ```bash
@@ -35,13 +42,15 @@ skipped depending on your system environment).
 
 At this point you now have a working copy of MASTODON.
 
-!!!note
-    The number 4 should be replaced with the number of processors you have available on your system.
+!alert note
+The number 4 should be replaced with the number of processors you have available on your system.
 
 
 ## Update MASTODON
-MASTODON does not use traditional versioning, is under heavy development, and is being updated continuously. Therefore, it is critical that you continue to update MASTODON regularly to
-get the latest features.
+
+MASTODON does not use traditional versioning, is under heavy development, and is being updated
+continuously. Therefore, it is critical that you continue to update MASTODON regularly to get the
+latest features.
 
 To update MASTODON use the following commands.
 ```bash

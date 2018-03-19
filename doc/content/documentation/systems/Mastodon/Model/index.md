@@ -1,1 +1,1 @@
-!include /Mastodon/Model/mastodon/MastodonModelAction.md
+!include /Mastodon/Model/MastodonModelAction.md
