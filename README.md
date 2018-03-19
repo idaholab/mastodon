@@ -1,8 +1,8 @@
 [MASTODON Documentation](http://mooseframework.org/mastodon)
 
-[MASTODON Code Coverage](http://mooseframework.org/docs/coverage/MASTODON/coverage/)
+[MASTODON Code Coverage](http://mooseframework.org/mastodon/docs/coverage/)
 
-[MASTODON Doxygen](http://mooseframework.org/docs/mastodon/docs/html/)
+[MASTODON Doxygen](http://mooseframework.org/mastodon/docs/doxygen/)
 
 ### Description
 Mastodon is a MOOSE-based application for nonlinear, three-dimensional seismic soil-structure interaction analysis.
