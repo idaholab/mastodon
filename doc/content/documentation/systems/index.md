@@ -1,1 +1,1 @@
-!syntax complete groups=mastodon
+!syntax complete group=Mastodon

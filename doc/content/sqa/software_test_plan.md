@@ -1,4 +1,4 @@
 # Software Test Plan (STP)
 
-!admonition error "Not Started"
+!alert construction
 The STP for MASTODON has not been started.

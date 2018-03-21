@@ -70,7 +70,7 @@ validParams<TestLayeredMaterialInterfaceKernel>()
  * LayeredMaterialInterface
  */
 class TestLayeredMaterialInterfaceTypeError
-    : public LayeredMaterialInterface<TestLayeredMaterialInterfaceKernel>
+  : public LayeredMaterialInterface<TestLayeredMaterialInterfaceKernel>
 {
 public:
   TestLayeredMaterialInterfaceTypeError(const InputParameters & parameters)

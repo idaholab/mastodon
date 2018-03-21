@@ -1,4 +1,4 @@
 # Software Design Description (SDD)
 
-!admonition error "Not Started"
+!alert construction
 The SDD for MASTODON has not been started.

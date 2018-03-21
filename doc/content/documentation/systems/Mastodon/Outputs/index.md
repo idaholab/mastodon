@@ -1,1 +1,1 @@
-!include /Mastodon/Outputs/mastodon/MastodonOutputsAction.md
+!include /Mastodon/Outputs/MastodonOutputsAction.md

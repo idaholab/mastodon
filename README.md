@@ -5,9 +5,11 @@
 [MASTODON Doxygen](http://mooseframework.org/mastodon/docs/doxygen/)
 
 ### Description
+
 Mastodon is a MOOSE-based application for nonlinear, three-dimensional seismic soil-structure interaction analysis.
 
 ### Other Software
+
 Idaho National Laboratory is a cutting edge research facility which is a constantly producing high quality research and software. Feel free to take a look at our other software and scientific offerings at:
 
 [Primary Technology Offerings Page](https://www.inl.gov/inl-initiatives/technology-deployment)
@@ -19,6 +21,7 @@ Idaho National Laboratory is a cutting edge research facility which is a constan
 [Unsupported Open Source Software](https://github.com/IdahoLabCuttingBoard)
 
 ### License
+
 Copyright 2017 Battelle Energy Alliance, LLC
 
 This library is free software; you can redistribute it and/or

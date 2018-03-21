@@ -46,9 +46,9 @@ Subblocks are opened and closed with the following syntax:
 [../]
 ```
 
-!!!note
-    All subblocks contained within a given block must have unique
-    names (within the opening [] brackets).
+!alert note
+All subblocks contained within a given block must have unique
+names (within the opening [] brackets).
 
 Parameters are defined with line commands, and are given as key/value
 pairs separated by an equals sign (=). They specify parameters to be
@@ -140,15 +140,17 @@ included in the MASTODON example set:
 ```bash
 cd ~/projects/mastodon/examples/ex01
 # To run with one processor
+
 ~/projects/mastodon/mastodon-opt -i HYS_darendeli.i
 # To run in parallel (2 processors)
+
 mpiexec -n 2 ../../mastodon-opt -i HYS_darendeli.i
 ```
 
-!!!note
-    The procedure for running this model in parallel is shown only
-    for illustrative purposes. This particular model is quite small, and would
-    not benefit from being run in parallel, although it can be run that way.
+!alert note
+The procedure for running this model in parallel is shown only
+for illustrative purposes. This particular model is quite small, and would
+not benefit from being run in parallel, although it can be run that way.
 
 ## Post Processing
 
@@ -168,8 +170,8 @@ line plots of global data or data from a particular node or element.
 
 It is worth noting that a graphical user interface (GUI) exists for all
 MOOSE-based applications. This GUI is named Peacock. Information about
-Peacock and how to set it up for use may be found on [the MOOSE wiki
-page](http://mooseframework.org/wiki/Peacock).
+Peacock and how to set it up for use may be found on
+[the MOOSE wiki page](http://mooseframework.org/wiki/Peacock).
 
 Peacock may be used to generate a text input file. It is also capable of
 submitting the analysis. It also provides basic post processing
