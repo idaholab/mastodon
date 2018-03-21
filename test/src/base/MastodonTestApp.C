@@ -4,6 +4,9 @@
 #include "AppFactory.h"
 #include "MooseSyntax.h"
 
+// Interface
+#include "TestLayeredMaterialInterface.h"
+
 template <>
 InputParameters
 validParams<MastodonTestApp>()
@@ -52,8 +55,10 @@ MastodonTestApp__registerObjects(Factory & factory)
   MastodonTestApp::registerObjects(factory);
 }
 void
-MastodonTestApp::registerObjects(Factory & /*factory*/)
+MastodonTestApp::registerObjects(Factory & factory)
 {
+  registerMaterial(TestLayeredMaterialInterfaceDocString);
+  registerKernel(TestLayeredMaterialInterfaceTypeError);
 }
 
 // External entry point for dynamic syntax association

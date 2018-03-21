@@ -1,8 +1,9 @@
 github_edit: False
 
 # SeismicDisplacement Syntax
+
 The input file syntax for SeismicDisplacement with the the `[BCs]` block provides
-syntax for creating the correct [PresetDisplacement](BCs/mastodon/NonReflectingBC.md) boundary
+syntax for creating the correct [PresetDisplacement](BCs/NonReflectingBC.md) boundary
 conditions for each direction components specified.
 
 If the ground excitation was measured at a depth within the soil by placing an accelerometer at that
@@ -12,6 +13,7 @@ This ground excitation is applied as a prescribed displacement boundary conditio
 `input_function` in this case should be the displacement time histories.
 
 ## Example Usage
+
 !listing test/tests/bcs/seismic_displacement/seismic_displacement.i block=BCs
 
 !syntax parameters /BCs/SeismicDisplacement/SeismicDisplacementAction

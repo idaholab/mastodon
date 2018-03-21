@@ -3,6 +3,7 @@
 !syntax description /VectorPostprocessors/Fragility
 
 ## Description
+
 The `Fragility` VectorPostprocessor computes the seismic fragility of a component
 given the dynamic properties of the component, capacity distribution of the component,
 and seismic demands from the probabilistic simulations. `Fragility` operates
@@ -12,12 +13,14 @@ in each bin, and 3) fit a lognormal distribution in the conditional probabilitie
 fragility. This kind of fragility is also referred to as 'enhanced fragility'.
 
 ### Assumptions and current limitations
+
 The `Fragility` VectorPostprocessor is currently limited to calculating the seismic fragilities
 of individual SSC's (systems, structures and components) and therefore, one VectorPostprocessor
 should be defined for each SSC. Additionally, `Fragility` VectorPostprocessor is limited to SSC's
 that are sensitive to floor spectral acceleration demands at a particular frequency of excitation.
 
 ### Usage
+
 An example usage of the `Fragility` VectorPostprocessor is below. Apart from the input file,
 `fragility.i` the this VectorPostprocessor requires the csv files containing the output data from
 the probabilistic or stochastic simulations. An example output data file, `master_out_run_hazard03_sub1.csv`,
@@ -44,7 +47,7 @@ are the final results, namely, the median and lognormal standard deviation of th
 seismic fragility distribution calculated for this SSC. This fragility distribution
 is calculated by fitting a lognormal distribution into the 'intensity' and 'conditional_pf'
 data using the Maximum Likelihood Estimate (MLE) fitting procedure described in
-\citet{bakermle2014}.
+[citet:bakermle2014].
 
 !listing test/tests/vectorpostprocessors/fragility/gold/fragility_out_fragility_pump_0002.csv
 
@@ -54,6 +57,6 @@ data using the Maximum Likelihood Estimate (MLE) fitting procedure described in
 
 !syntax children /VectorPostprocessors/Fragility
 
-## References
-\bibliographystyle{unsrt}
-\bibliography{doc/bib/mastodon.bib}
+
+
+!bibtex bibliography

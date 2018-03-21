@@ -1,8 +1,10 @@
 # NonReflectingBC
+
 !syntax description /BCs/NonReflectingBC
 
 ## Description
-This boundary condition applies a Lsymer damper \citep{lysmer1969finite} on a given boundary to absorb the waves hitting the boundary. To understand Lsymer dampers, let us consider an uniform linear elastic soil column and say a 1D vertically propagating P wave is traveling through this soil column. Then the normal stress at any location in the soil column is given by:
+
+This boundary condition applies a Lsymer damper [citep:lysmer1969finite] on a given boundary to absorb the waves hitting the boundary. To understand Lsymer dampers, let us consider an uniform linear elastic soil column and say a 1D vertically propagating P wave is traveling through this soil column. Then the normal stress at any location in the soil column is given by:
 
 $$
 \sigma = E \epsilon = E \frac{du}{dx} = \frac{E}{V_p} \frac{du}{dt}= \rho V_p \frac{du}{dt}, $$
@@ -18,6 +20,6 @@ If the soil is not linear elastic or if the wave is incident at an angle on the 
 
 !syntax children /BCs/NonReflectingBC
 
-## References
-\bibliographystyle{unsrt}
-\bibliography{doc/bib/mastodon.bib}
+
+
+!bibtex bibliography
