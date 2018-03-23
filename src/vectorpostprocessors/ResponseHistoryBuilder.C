@@ -8,6 +8,8 @@
 // C++ includes
 #include <unistd.h>
 
+registerMooseObject("MastodonApp", ResponseHistoryBuilder);
+
 template <>
 InputParameters
 validParams<ResponseHistoryBuilder>()

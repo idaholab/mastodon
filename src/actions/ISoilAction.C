@@ -23,6 +23,8 @@
 #include "Factory.h"
 #include "Parser.h"
 
+registerMooseAction("MastodonApp", ISoilAction, "add_material");
+
 template <>
 InputParameters
 validParams<ISoilAction>()

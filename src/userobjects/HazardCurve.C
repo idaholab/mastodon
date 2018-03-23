@@ -6,6 +6,8 @@
 #include "HazardCurve.h"
 #include "MastodonUtils.h"
 
+registerMooseObject("MastodonApp", HazardCurve);
+
 template <>
 InputParameters
 validParams<HazardCurve>()

@@ -4,6 +4,8 @@
 #include "VectorPostprocessorInterface.h"
 #include "MastodonUtils.h"
 
+registerMooseObject("MastodonApp", ResponseSpectraCalculator);
+
 template <>
 InputParameters
 validParams<ResponseSpectraCalculator>()

@@ -21,6 +21,8 @@
 * This action sets up the seismic source dirackernel in multiple directions.
 **/
 
+registerMooseAction("MastodonApp", SeismicSourceAction, "add_dirac_kernel");
+
 template <>
 InputParameters
 validParams<SeismicSourceAction>()

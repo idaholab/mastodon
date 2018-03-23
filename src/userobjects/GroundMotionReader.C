@@ -5,6 +5,8 @@
 #include "GroundMotionReader.h"
 #include "MastodonUtils.h"
 
+registerMooseObject("MastodonApp", GroundMotionReader);
+
 template <>
 InputParameters
 validParams<GroundMotionReader>()

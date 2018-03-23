@@ -9,6 +9,8 @@
 // Mastodon includes
 #include "ShearWaveIndicator.h"
 
+registerMooseObject("MastodonApp", ShearWaveIndicator);
+
 template <>
 InputParameters
 validParams<ShearWaveIndicator>()

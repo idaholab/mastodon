@@ -16,6 +16,8 @@
 #include "MooseMesh.h"
 #include "SeismicForce.h"
 
+registerMooseObject("MastodonApp", SeismicForce);
+
 template <>
 InputParameters
 validParams<SeismicForce>()

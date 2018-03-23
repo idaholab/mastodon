@@ -16,6 +16,8 @@
 #include "MooseMesh.h"
 #include "NonReflectingBC.h"
 
+registerMooseObject("MastodonApp", NonReflectingBC);
+
 template <>
 InputParameters
 validParams<NonReflectingBC>()

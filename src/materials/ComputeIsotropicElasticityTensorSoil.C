@@ -13,6 +13,8 @@
 /*************************************************/
 #include "ComputeIsotropicElasticityTensorSoil.h"
 
+registerMooseObject("MastodonApp", ComputeIsotropicElasticityTensorSoil);
+
 template <>
 InputParameters
 validParams<ComputeIsotropicElasticityTensorSoil>()
