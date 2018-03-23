@@ -22,6 +22,10 @@ validParams<MastodonApp>()
   return params;
 }
 
+// When using the new Registry system, this line is required so that
+// dependent apps know about the MastodonApp label.
+registerKnownLabel("MastodonApp");
+
 MastodonApp::MastodonApp(InputParameters parameters) : MooseApp(parameters)
 {
   Moose::registerObjects(_factory);
