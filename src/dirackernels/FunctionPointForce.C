@@ -15,6 +15,8 @@
 #include "FunctionPointForce.h"
 #include "MooseMesh.h"
 
+registerMooseObject("MastodonApp", FunctionPointForce);
+
 template <>
 InputParameters
 validParams<FunctionPointForce>()

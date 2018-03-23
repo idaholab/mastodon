@@ -1,5 +1,7 @@
 #include "HazardCurveMultiApp.h"
 
+registerMooseObject("MastodonApp", HazardCurveMultiApp);
+
 template <>
 InputParameters
 validParams<HazardCurveMultiApp>()

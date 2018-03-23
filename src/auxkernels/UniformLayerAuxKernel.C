@@ -1,6 +1,8 @@
 // Mastodon includes
 #include "UniformLayerAuxKernel.h"
 
+registerMooseObject("MastodonApp", UniformLayerAuxKernel);
+
 template <>
 InputParameters
 validParams<UniformLayerAuxKernel>()
