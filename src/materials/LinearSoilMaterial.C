@@ -1,6 +1,8 @@
 // Mastodon includes
 #include "LinearSoilMaterial.h"
 
+registerMooseObject("MastodonApp", LinearSoilMaterial);
+
 template <>
 InputParameters
 validParams<LinearSoilMaterial>()

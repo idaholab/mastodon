@@ -6,6 +6,8 @@
 // MASTODON includes
 #include "PiecewiseFunctionTransfer.h"
 
+registerMooseObject("MastodonApp", PiecewiseFunctionTransfer);
+
 template <>
 InputParameters
 validParams<PiecewiseFunctionTransfer>()

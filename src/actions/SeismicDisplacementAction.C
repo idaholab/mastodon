@@ -20,6 +20,8 @@
 // Mastodon includes
 #include "SeismicDisplacementAction.h"
 
+registerMooseAction("MastodonApp", SeismicDisplacementAction, "add_bc");
+
 template <>
 InputParameters
 validParams<SeismicDisplacementAction>()

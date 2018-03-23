@@ -5,6 +5,8 @@
 #include "MastodonUtils.h"
 #include "LinearInterpolation.h"
 
+registerMooseObject("MastodonApp", HousnerSpectrumIntensity);
+
 template <>
 InputParameters
 validParams<HousnerSpectrumIntensity>()

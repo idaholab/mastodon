@@ -9,6 +9,8 @@
 
 #include "MooseVariable.h"
 
+registerMooseObject("MastodonApp", LayerInterfaceIndicator);
+
 template <>
 InputParameters
 validParams<LayerInterfaceIndicator>()

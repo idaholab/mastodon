@@ -16,6 +16,8 @@
 #include "NonReflectingBC.h"
 #include "NonReflectingBCAction.h"
 
+registerMooseAction("MastodonApp", NonReflectingBCAction, "add_bc");
+
 template <>
 InputParameters
 validParams<NonReflectingBCAction>()

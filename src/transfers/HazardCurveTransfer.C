@@ -8,6 +8,8 @@
 #include "HazardCurveMultiApp.h"
 #include "HazardCurveTransfer.h"
 
+registerMooseObject("MastodonApp", HazardCurveTransfer);
+
 template <>
 InputParameters
 validParams<HazardCurveTransfer>()

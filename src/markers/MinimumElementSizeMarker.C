@@ -4,6 +4,8 @@
 // libMesh includes
 #include "libmesh/error_vector.h"
 
+registerMooseObject("MastodonApp", MinimumElementSizeMarker);
+
 template <>
 InputParameters
 validParams<MinimumElementSizeMarker>()

@@ -7,6 +7,8 @@
 #include "DelimitedFileReader.h"
 #include <string>
 
+registerMooseObject("MastodonApp", Fragility);
+
 template <>
 InputParameters
 validParams<Fragility>()

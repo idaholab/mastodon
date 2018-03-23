@@ -24,6 +24,8 @@
 #include "Conversion.h"
 #include "FEProblem.h"
 
+registerMooseObject("MastodonApp", ComputeISoilStress);
+
 template <>
 InputParameters
 validParams<ComputeISoilStress>()

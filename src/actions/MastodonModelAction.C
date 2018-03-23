@@ -22,6 +22,16 @@
 #include "Action.h"
 #include "MooseObjectAction.h"
 
+registerMooseAction("MastodonApp", MastodonModelAction, "meta_action");
+
+registerMooseAction("MastodonApp", MastodonModelAction, "add_variable");
+
+registerMooseAction("MastodonApp", MastodonModelAction, "add_aux_variable");
+
+registerMooseAction("MastodonApp", MastodonModelAction, "add_kernel");
+
+registerMooseAction("MastodonApp", MastodonModelAction, "add_aux_kernel");
+
 template <>
 InputParameters
 validParams<MastodonModelAction>()

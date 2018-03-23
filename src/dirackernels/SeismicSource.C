@@ -28,6 +28,8 @@
  *Chapter 4.
  **/
 
+registerMooseObject("MastodonApp", SeismicSource);
+
 template <>
 InputParameters
 validParams<SeismicSource>()
