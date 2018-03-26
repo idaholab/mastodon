@@ -57,3 +57,6 @@ Extensions:
     globals:
         type: MooseDocs.extensions.panoptic
         shortcuts: !include ${MOOSE_DIR}/framework/doc/globals.yml
+    acronyms:
+        type: MooseDocs.extensions.acronym
+        acronyms: !include ${MOOSE_DIR}/framework/doc/acronyms.yml
