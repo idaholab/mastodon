@@ -484,6 +484,9 @@ ComputeISoilStress::computeQpStress()
 
   _Jacobian_mult[_qp] =
      _Jacobian_mult[_qp] = _tangent_mod_tensor + _elasticity_tensor[_qp] * _tangent_modulus;
+
+  if (_stiffness_pressure_correction == 0.0)
+    _Jacobian_mult[_qp] = _elasticity_tensor[_qp] * _youngs[_pos][0];
 }
 
 void
@@ -546,16 +549,29 @@ ComputeISoilStress::computeStress()
 
     if (yield_condition > 0.0)
     {   mooseDoOnce(printf("yielded\n"));
+        RankTwoTensor old_dev_stress = _deviatoric_trial_stress;
         _deviatoric_trial_stress *=
           _yield_stress[_pos][i] * _strength_pressure_correction / effective_trial_stress;
 
+        Real new_dev_stress_sq = _deviatoric_trial_stress.doubleContraction(_deviatoric_trial_stress);
         // continuum tangent matrix
         if (_tangent_formulation == 1)
-          _tangent_mod_tensor += (1.0/ (3.0*(1.0 - 2.0 * _poissons_ratio[_pos])) * _initidentity +  1.0 / (1.0 + _poissons_ratio[_pos]) * (_initsymmfour - 1.0 / 3.0 * _initidentity -  _deviatoric_trial_stress.outerProduct(_deviatoric_trial_stress) / dev_trial_stress_squared)) * _youngs[_pos][i] * _stiffness_pressure_correction;
+        {//  _tangent_mod_tensor += (1.0/ (3.0*(1.0 - 2.0 * _poissons_ratio[_pos])) * _initidentity +  1.0 / (1.0 + _poissons_ratio[_pos]) * (_initsymmfour - 1.0 / 3.0 * _initidentity -  _deviatoric_trial_stress.outerProduct(_deviatoric_trial_stress) / new_dev_stress_sq)) * _youngs[_pos][i] * _stiffness_pressure_correction;
+
+          RankTwoTensor normal = std::sqrt(3/2) * _deviatoric_trial_stress / std::sqrt(new_dev_stress_sq);
+          RankTwoTensor c_df_ds = _elasticity_tensor[_qp] * normal;
+
+          _tangent_mod_tensor += _youngs[_pos][i] * _stiffness_pressure_correction * (_elasticity_tensor[_qp] - (c_df_ds.outerProduct(c_df_ds))/(c_df_ds.doubleContraction(normal))); 
+        }
         else if (_tangent_formulation == 2)
         {
           // consistent tangent matrix
-          _tangent_mod_tensor += (1.0/ (3.0*(1.0 - 2.0 * _poissons_ratio[_pos])) * _initidentity +  _yield_stress[_pos][i] * _strength_pressure_correction / (effective_trial_stress * (1.0 + _poissons_ratio[_pos])) * (_initsymmfour - 1.0 / 3.0 * _initidentity -  _deviatoric_trial_stress.outerProduct(_deviatoric_trial_stress) / dev_trial_stress_squared)) * _youngs[_pos][i] * _stiffness_pressure_correction;
+//          _tangent_mod_tensor += (1.0/ (3.0*(1.0 - 2.0 * _poissons_ratio[_pos])) * _initidentity +  _yield_stress[_pos][i] * _strength_pressure_correction / (effective_trial_stress * (1.0 + _poissons_ratio[_pos])) * (_initsymmfour - 1.0 / 3.0 * _initidentity -  _deviatoric_trial_stress.outerProduct(_deviatoric_trial_stress) / new_dev_stress_sq)) * _youngs[_pos][i] * _stiffness_pressure_correction;
+
+          Real delta_gamma_2_mu = (std::sqrt(dev_trial_stress_squared) - std::sqrt(2.0 / 3.0) * _yield_stress[_pos][i] * _strength_pressure_correction) * _youngs[_pos][i] * _stiffness_pressure_correction;
+          RankTwoTensor normal = old_dev_stress / std::sqrt(dev_trial_stress_squared);
+          RankTwoTensor c_n = _elasticity_tensor[_qp] * normal;
+          _tangent_mod_tensor += _youngs[_pos][i] * _stiffness_pressure_correction * (_elasticity_tensor[_qp] - std::sqrt(3.0/2.0) * (normal.outerProduct(c_n) + delta_gamma_2_mu / (std::sqrt(dev_trial_stress_squared) * _youngs[_pos][i] * _stiffness_pressure_correction) * (_initsymmfour - normal.outerProduct(normal)) * _elasticity_tensor[_qp]));
         }
         else if (_tangent_formulation == 3)
         {
