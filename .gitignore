@@ -5,6 +5,7 @@ build
 .libs
 *.lo*
 mastodon-*
+.previous_test_results.json
 include/base/MastodonRevision.h
 unit/include/base/Mastodon-unitRevision.h
 yaml_dump_mastodon-*

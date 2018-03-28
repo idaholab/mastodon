@@ -44,6 +44,10 @@ validParams<MastodonModelAction>()
   params.addParam<bool>("dynamic_analysis", true, "false, if static analysis is to be performed.");
   params.addParam<Real>("beta", 0.25, "beta parameter for Newmark time integration.");
   params.addParam<Real>("gamma", 0.5, "gamma parameter for Newmark time integration.");
+  params.addParam<MaterialPropertyName>(
+      "eta", 0.0, "eta parameter or mass matrix multiplier for Rayleigh damping.");
+  params.addParam<MaterialPropertyName>(
+      "zeta", 0.0, "zeta parameter or stiffness matrix multiplier for Rayleigh damping.");
   params.addParam<bool>(
       "use_displaced_mesh", false, "true, if calculations are performed on displaced mesh.");
   return params;
@@ -94,6 +98,7 @@ MastodonModelAction::addDynamicTensorMechanicsAction()
   // Retrieve action parameters and set the parameters
   InputParameters action_params = _action_factory.getValidParams("DynamicTensorMechanicsAction");
   action_params.set<std::vector<NonlinearVariableName>>("displacements") = _disp_variables;
+  action_params.set<MaterialPropertyName>("zeta") = getParam<MaterialPropertyName>("zeta");
   // Create the action and add it to the action warehouse
   std::shared_ptr<Action> dynamictensormechanics_action =
       std::static_pointer_cast<Action>(_action_factory.create(
@@ -134,6 +139,7 @@ MastodonModelAction::addInertiaKernels()
     params.set<std::vector<VariableName>>("acceleration") = {_accel_auxvariables[i]};
     params.set<Real>("beta") = getParam<Real>("beta");
     params.set<Real>("gamma") = getParam<Real>("gamma");
+    params.set<MaterialPropertyName>("eta") = getParam<MaterialPropertyName>("eta");
     params.set<bool>("use_displaced_mesh") = _use_displaced_mesh;
     _problem->addKernel("InertialForce", "inertia" + comp[i], params);
   }

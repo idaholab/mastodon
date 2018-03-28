@@ -7,8 +7,9 @@
 The Mastodon Model action creates the required displacement Variables, velocity and acceleration
 AuxVariables and AuxKernels, inertia Kernels and the DynamicTensorMechanicsAction. These objects are
 created based on the dimension of the mesh of the problem and if static or dynamic analysis is
-performed. The Mastodon Model action is created by the Model sub block of the Mastodon block as shown
-in the example input file below.
+performed. This action also allows the user to set the Rayleigh damping parameters `eta` and `zeta`,  
+which are the mass matrix and stiffness matrix multipliers, respectively. The Mastodon Model action
+is created by the Model sub block of the Mastodon block as shown in the example input file below.
 
 ## Constructed MooseObjects
 
