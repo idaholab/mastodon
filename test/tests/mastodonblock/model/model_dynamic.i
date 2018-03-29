@@ -18,6 +18,8 @@
 [Mastodon]
   [./Model]
     dynamic_analysis = true
+    eta = 0.64026
+    zeta = 0.000781
   [../]
 []
 

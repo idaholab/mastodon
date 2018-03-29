@@ -16,7 +16,8 @@
  * This action automatically creates the displacement, velocity and acceleration
  * Variables, AuxVariables, inertia kernels, and the DynamicTensorMechanicsAction
  * automatically based on the dimension of the mesh and if the analysis is
- * static or dynamic.
+ * static or dynamic. This action also provides the option to add Rayleigh
+ * damping.
  **/
 
 #ifndef MASTODONMODELACTION_H

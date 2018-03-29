@@ -97,6 +97,7 @@
 [Kernels]
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
+    zeta = 0.000781
   [../]
   [./inertia_x]
     type = InertialForce
@@ -106,6 +107,7 @@
     beta = 0.25
     gamma = 0.5
     use_displaced_mesh = false
+    eta = 0.64026
   [../]
   [./inertia_y]
     type = InertialForce
@@ -115,6 +117,7 @@
     beta = 0.25
     gamma = 0.5
     use_displaced_mesh = false
+    eta = 0.64026
   [../]
   [./inertia_z]
     type = InertialForce
@@ -124,6 +127,7 @@
     beta = 0.25
     gamma = 0.5
     use_displaced_mesh = false
+    eta = 0.64026
   [../]
 []
 
