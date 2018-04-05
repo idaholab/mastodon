@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-"""Tests for the FaultTree object."""
+"""Tests for the FTA.FaultTree object."""
 import unittest
-from mastodonutils import FaultTree
-from mastodonutils.FaultTree import Event
+from mastodonutils import FTA
+from mastodonutils.FTA import Event, FaultTree
 
 class TestFaultTree(unittest.TestCase):
     """
@@ -122,11 +122,11 @@ class TestFaultTree(unittest.TestCase):
         """
         Helper to make sure the mocus is correct.
         """
-        gold = [{Event('B4'), Event('B1')},
-                {Event('B1'), Event('B3'), Event('B5')},
-                {Event('B3'), Event('B2'), Event('B5')},
-                {Event('B1'), Event('B3'), Event('B2')},
-                {Event('B3'), Event('B4'), Event('B2'), Event('B5')}]
+        gold = [{Event('B2'), Event('B1')},
+                {Event('B4'), Event('B1')},
+                {Event('B1'), Event('B5'), Event('B3')},
+                {Event('B2'), Event('B5'), Event('B3')},
+                {Event('B4'), Event('B5'), Event('B3')}]
 
         self.assertEqual(len(mocus), len(gold))
         for i in range(len(mocus)): #pylint: disable=consider-using-enumerate
