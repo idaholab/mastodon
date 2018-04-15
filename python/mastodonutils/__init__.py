@@ -1,2 +1,2 @@
 """General utilities for Mastodon"""
-from FaultTree import FaultTree
+from FTA import Quantification
