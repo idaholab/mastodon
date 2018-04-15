@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""Test for the FaultTree.Event object."""
+"""Test for the FTA.Event object."""
 import unittest
-from mastodonutils.FaultTree import Event
+from mastodonutils.FTA import Event
 
 class TestEvent(unittest.TestCase):
     """
@@ -69,6 +69,56 @@ class TestEvent(unittest.TestCase):
 
         node.operator = None
         self.assertEqual(node.operator, None)
+
+    def testDist(self):
+        """
+        distribution attribute
+        """
+        node = Event('Test')
+        node.dist = ('LNORM', 'Fragility')
+        self.assertEqual(node.dist, 'LNORM')
+
+        node.dist = ('NORM', 'risk')
+        self.assertEqual(node.dist, 'NORM')
+
+        with self.assertRaises(TypeError) as cm:
+            node.dist = ('UNIF', 'Fragility')
+        self.assertIn('fragility must be one of the following', str(cm.exception))
+
+        with self.assertRaises(TypeError) as cm:
+            node.dist = ('LNORM', 'risk')
+        self.assertIn('risk must be one of the following', str(cm.exception))
+
+        node = Event('Test', Event.OR)
+        with self.assertRaises(AttributeError) as cm:
+            node.dist = ('LNORM', 'Fragility')
+        self.assertIn("can not have distribution.", str(cm.exception))
+
+    def testProb(self):
+        """
+        probability attribute
+        """
+        node = Event('Test')
+
+        with self.assertRaises(IndexError) as cm:
+            node.dist = ('LNORM', 'Fragility')
+            node.prob = ([3.78], 'Fragility', None, None, None, None)
+        self.assertIn('requires two inputs: Mean/Median and Standard_Deviaton', str(cm.exception))
+
+        with self.assertRaises(IndexError) as cm:
+            node.dist = ('PE', 'risk')
+            node.prob = ([3.78, 1], 'risk', None, None, None, None)
+        self.assertIn('requires only one input: Mean/Median probability', str(cm.exception))
+
+        with self.assertRaises(ValueError) as cm:
+            node.dist = ('PE', 'risk')
+            node.prob = ([3.78], 'risk', None, None, None, None)
+        self.assertIn('should be between 0 & 1', str(cm.exception))
+
+        with self.assertRaises(IndexError) as cm:
+            node.dist = ('NORM', 'risk')
+            node.prob = ([3.78], 'risk', None, None, None, None)
+        self.assertIn('requires two inputs: Mean/Median and Standard_Deviaton', str(cm.exception))
 
     def testString(self):
         """
