@@ -469,9 +469,9 @@ class Quantification(object):
                                                self.__im, self.__nsamp, self.__uc, self.__seed)
 
             # Top event fragility (lognormal parameters and plot)
-            self.__topfragility, self.__ln, self.__frag_plt = self.__TOPfragility(
+            self.__topfragility, self.__ln = self.__TOPfragility(
                 self.__Min_max, self.__mcsets, self.__MCprob,
-                self.__lnparameters, self.__im , self.__frag_plot
+                self.__lnparameters, self.__im
             )
 
             # dictionary of basic events risk (convoluting fragility and hazard)
@@ -830,32 +830,6 @@ class Quantification(object):
         return lognorm.cdf(intmes, beta, loc=0, scale=amedian)
 
     @staticmethod
-    def __frag_plot(intmes, fragility, para):
-        """
-        Plot the TOP Event fragility (data points and least square fit). Currently inactive and returns 0.
-        """
-        # import matplotlib.pyplot as plt
-        # from scipy.stats import lognorm
-        # #plot data points
-        # plt.plot(intmes, fragility, 'r.', label='Data points', linewidth=2.5)
-        # #plot points from least square fit parameters
-        # plt.plot(intmes, lognorm.cdf(intmes, para[1], loc=0, scale=para[0]), 'g-',
-        #          label='Least Square Fit')
-        # # plot the lines corresponing to meadian value
-        # x1, y1 = [para[0], para[0]], [0, 0.5]
-        # x2, y2 = [0, para[0]], [0.5, 0.5]
-        # plt.plot(x1, y1, 'b--', marker='o')
-        # plt.plot(x2, y2, 'b--', marker='o', label="Median: %f" % (para[0]))
-        # #plot parameters
-        # plt.legend(loc='upper left')
-        # plt.xlabel('Intensity Measure')
-        # plt.ylabel('Fragility')
-        # plt.title('TOP Event Fragility')
-        # plt.grid(True)
-        # plt.savefig('top_event_fragility.png')
-        return 0.0
-
-    @staticmethod
     def __hazInterp(haz, intmes):
         """
         Function for interpolating the hazard curve based on range of intensity measures
@@ -945,7 +919,7 @@ class Quantification(object):
         return data
 
     @staticmethod
-    def __TOPfragility(min_max, mcsets, mcprob, lnparameters, intmes, frag_plot):
+    def __TOPfragility(min_max, mcsets, mcprob, lnparameters, intmes):
         """
         Function for top event fragility.
         """
@@ -953,9 +927,7 @@ class Quantification(object):
         top_frag = min_max(mcsets, mcprob)
         # lognormal parameters of TOP Event fragility
         lnpar = lnparameters(intmes, top_frag)
-        # TOP event Fragility plot
-        frag_plt = frag_plot(intmes, top_frag, lnpar[0])
-        return top_frag, lnpar[0], frag_plt
+        return top_frag, lnpar[0]
 
     @staticmethod
     def __results(top_upper_bound, mcsets, mc_prob, mc_im, top_cal, bas_events, count,
