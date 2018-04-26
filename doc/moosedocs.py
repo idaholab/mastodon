@@ -8,14 +8,13 @@ if not os.path.exists(MOOSE_DIR):
     MOOSE_DIR = os.path.join(os.getenv('HOME'), 'projects', 'moose')
 if not os.path.exists(MOOSE_DIR):
     raise Exception('Failed to locate MOOSE, specify the MOOSE_DIR environment variable.')
-os.environ['MOOSEDOCS_MOOSE_DIR'] = MOOSE_DIR
+os.environ['MOOSE_DIR'] = MOOSE_DIR
 
 # Append MOOSE python directory
 MOOSE_PYTHON_DIR = os.path.join(MOOSE_DIR, 'python')
 if MOOSE_PYTHON_DIR not in sys.path:
     sys.path.append(MOOSE_PYTHON_DIR)
-import MooseDocs
-from MooseDocs import main
 
+from MooseDocs import main
 if __name__ == '__main__':
     sys.exit(main.run())
