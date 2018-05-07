@@ -35,7 +35,7 @@ public:
 
 protected:
   /// Initialize the properties
-  virtual void initQpStatefulProperties() override;
+  virtual void computeQpProperties() override;
 
   /// Computes the spring forces in global coordinate system
   void computeForces();

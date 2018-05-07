@@ -20,6 +20,10 @@ validParams<ComputeSpringDeformation>()
 {
   InputParameters params = validParams<Material>();
   params.addClassDescription("Compute the deformations rotations in a two-noded spring element.");
+  params.addRequiredParam<RealGradient>("y_orientation",
+                                      "Orientation of the y direction along "
+                                      "with Iyy is provided. This should be "
+                                      "perpendicular to the axis of the beam.");
   params.addRequiredCoupledVar(
       "rotations", "The rotation variables appropriate for the simulation geometry and coordinate system.");
   params.addRequiredCoupledVar(
@@ -29,6 +33,7 @@ validParams<ComputeSpringDeformation>()
                                         "Orientation of the y direction along "
                                         "with Ky is provided. This should be "
                                         "perpendicular to the axis of the spring.");
+  params.set<MooseEnum>("constant_on") = "ELEMENT"; // set _qp to 0
   return params;
 }
 
@@ -40,15 +45,12 @@ ComputeSpringDeformation::ComputeSpringDeformation(const InputParameters & param
     _disp_num(3),
     _deformations(declareProperty<RealVectorValue>("deformations")),
     _rotations(declareProperty<RealVectorValue>("rotations")),
-    _original_global_to_local_rotation(declareProperty<RankTwoTensor>("original_global_to_local_rotation")),
     _total_global_to_local_rotation(declareProperty<RankTwoTensor>("total_global_to_local_rotation"))
 {
-  // Checking for consistency between mesh dimension and length of the provided displacements vector
-  if (_ndisp != _mesh.dimension() || _nrot != _mesh.dimension())
-    mooseError("The number of variables supplied in 'displacements' and 'rotations' must match the "
-               "mesh dimension. \n Mesh dimension = ", _mesh.dimension(),
-               "\nNumber of displacement variables = ", _ndisp,
-               "\nNumber of rotation variables = ", _nrot, "\n");
+  // Checking for consistency between length of the provided displacements and rotations vector
+  if (_ndisp != _nrot)
+    mooseError("ComputeSpringDeformation: The number of variables supplied in 'displacements' "
+               "and 'rotations' input parameters must be equal.");
 
   // Fetch coupled variables and gradients (as stateful properties if necessary)
   for (unsigned int i = 0; i < _ndisp; ++i)
@@ -61,8 +63,53 @@ ComputeSpringDeformation::ComputeSpringDeformation(const InputParameters & param
   }
 }
 
+// void
+// ComputeSpringDeformation::initQpStatefulProperties()
+// {
+//   // // Compute initial orientation and length of the spring in global coordinate system
+//   // // Fetch the two nodes of the link element
+//   // std::vector<Node *> node;
+//   // for (unsigned int i = 0; i < 2; ++i)
+//   //   node.push_back(_current_elem->get_node(i));
+//   // RealGradient x_orientation;
+//   // for (unsigned int i = 0; i < _ndisp; ++i)
+//   //   x_orientation(i) = (*node[1])(i) - (*node[0])(i);
+//   // // _original_length[_qp] = x_orientation.norm();
+//   // x_orientation /= x_orientation.norm(); // Normalizing with length to get orientation
+//   //
+//   // std::cout << "x orientation" << x_orientation << std::endl;
+//   //
+//   // // Get y orientation of the spring in global coordinate system
+//   // RealGradient y_orientation = getParam<RealGradient>("y_orientation");
+//   // // Real dot = x_orientation(0) * y_orientation(0) + x_orientation(1) * y_orientation(1) +
+//   // //            x_orientation(2) * y_orientation(2);
+//   // Real dot = x_orientation * y_orientation;
+//   //
+//   // // Check if x and y orientations are perpendicular
+//   // if (abs(dot) > 1e-4)
+//   //   mooseError("Error in ComputeSpringDeformation: y_orientation should be perpendicular to "
+//   //              "the axis of the beam.");
+//   //
+//   // // Calculate z orientation in the global coordinate system as a cross product of the x and y orientations
+//   // RealGradient z_orientation = x_orientation.cross(y_orientation);
+//   // z_orientation(0) = (x_orientation(1) * y_orientation(2) - x_orientation(2) * y_orientation(1));
+//   // z_orientation(1) = (x_orientation(2) * y_orientation(0) - x_orientation(0) * y_orientation(2));
+//   // z_orientation(2) = (x_orientation(0) * y_orientation(1) - x_orientation(1) * y_orientation(0));
+//   //
+//   // // Calculate the rotation matrix from global to spring local configuration at t = 0
+//   // _original_global_to_local_rotation[_qp](0, 0) = x_orientation(0);
+//   // _original_global_to_local_rotation[_qp](0, 1) = x_orientation(1);
+//   // _original_global_to_local_rotation[_qp](1, 0) = y_orientation(0);
+//   // _original_global_to_local_rotation[_qp](1, 1) = y_orientation(1);
+//   // _original_global_to_local_rotation[_qp](0, 2) = x_orientation(2);
+//   // _original_global_to_local_rotation[_qp](1, 2) = y_orientation(2);
+//   // _original_global_to_local_rotation[_qp](2, 0) = z_orientation(0);
+//   // _original_global_to_local_rotation[_qp](2, 1) = z_orientation(1);
+//   // _original_global_to_local_rotation[_qp](2, 2) = z_orientation(2);
+// }
+
 void
-ComputeSpringDeformation::initQpStatefulProperties()
+ComputeSpringDeformation::computeProperties()
 {
   // Compute initial orientation and length of the spring in global coordinate system
   // Fetch the two nodes of the link element
@@ -93,33 +140,31 @@ ComputeSpringDeformation::initQpStatefulProperties()
   // z_orientation(2) = (x_orientation(0) * y_orientation(1) - x_orientation(1) * y_orientation(0));
 
   // Calculate the rotation matrix from global to spring local configuration at t = 0
-  _original_global_to_local_rotation[_qp](0, 0) = x_orientation(0);
-  _original_global_to_local_rotation[_qp](0, 1) = x_orientation(1);
-  _original_global_to_local_rotation[_qp](1, 0) = y_orientation(0);
-  _original_global_to_local_rotation[_qp](1, 1) = y_orientation(1);
-  _original_global_to_local_rotation[_qp](0, 2) = x_orientation(2);
-  _original_global_to_local_rotation[_qp](1, 2) = y_orientation(2);
-  _original_global_to_local_rotation[_qp](2, 0) = z_orientation(0);
-  _original_global_to_local_rotation[_qp](2, 1) = z_orientation(1);
-  _original_global_to_local_rotation[_qp](2, 2) = z_orientation(2);
-}
+  _original_global_to_local_rotation(0, 0) = x_orientation(0);
+  _original_global_to_local_rotation(0, 1) = x_orientation(1);
+  _original_global_to_local_rotation(1, 0) = y_orientation(0);
+  _original_global_to_local_rotation(1, 1) = y_orientation(1);
+  _original_global_to_local_rotation(0, 2) = x_orientation(2);
+  _original_global_to_local_rotation(1, 2) = y_orientation(2);
+  _original_global_to_local_rotation(2, 0) = z_orientation(0);
+  _original_global_to_local_rotation(2, 1) = z_orientation(1);
+  _original_global_to_local_rotation(2, 2) = z_orientation(2);
 
-void
-ComputeSpringDeformation::computeProperties()
-{
-  for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
-    computeQpDeformation();
+  // _qp = 0 because
+  computeQpDeformation();
 }
 
 void
 ComputeSpringDeformation::computeTotalRotation()
 {
+  _qp = 0;
+
   // Currently this forumation is limited to small deformations in the spring,
   // namely, it is assumed that there are no rigid body rotations in the spring,
   // and that the total rotation matrix from global to local coordinates
   // (calculated below) remains the same as the one at t = 0 throughout the
   // duration of the simulation.
-  _total_global_to_local_rotation[_qp] = _original_global_to_local_rotation[_qp];
+  _total_global_to_local_rotation[_qp] = _original_global_to_local_rotation;
 }
 
 void
@@ -135,10 +180,10 @@ ComputeSpringDeformation::computeQpDeformation()
   const NumericVector<Number> & sol = *nonlinear_sys.currentSolution();
 
   // Calculating global displacements and rotations at the end nodes
-  RealVectorValue global_disp0(_mesh.dimension(), 0.0); // node 0
-  RealVectorValue global_disp1(_mesh.dimension(), 0.0); // node 1
-  RealVectorValue global_rot0(_mesh.dimension(), 0.0); // node 0
-  RealVectorValue global_rot1(_mesh.dimension(), 0.0); // node 1
+  RealVectorValue global_disp0(3, 0.0); // node 0
+  RealVectorValue global_disp1(3, 0.0); // node 1
+  RealVectorValue global_rot0(3, 0.0); // node 0
+  RealVectorValue global_rot1(3, 0.0); // node 1
   for (unsigned int i = 0; i < _ndisp; ++i)
   {
     global_disp0(i) = sol(node[0]->dof_number(nonlinear_sys.number(), _disp_num[i], 0));
@@ -150,10 +195,10 @@ ComputeSpringDeformation::computeQpDeformation()
   // Convert spring nodal displacements and rotations from global coordinate system to local coordinate system
   // First, compute total rotation
   computeTotalRotation();
-  RealVectorValue local_disp0(_total_global_to_local_rotation[0] * global_disp0);
-  RealVectorValue local_disp1(_total_global_to_local_rotation[0] * global_disp1);
-  RealVectorValue local_rot0(_total_global_to_local_rotation[0] * global_rot0);
-  RealVectorValue local_rot1(_total_global_to_local_rotation[0] * global_rot1);
+  RealVectorValue local_disp0(_total_global_to_local_rotation[_qp] * global_disp0);
+  RealVectorValue local_disp1(_total_global_to_local_rotation[_qp] * global_disp1);
+  RealVectorValue local_rot0(_total_global_to_local_rotation[_qp] * global_rot0);
+  RealVectorValue local_rot1(_total_global_to_local_rotation[_qp] * global_rot1);
 
   // Calculating spring deformations and rotations. Deformations and rotations
   // are assumed to be constant through the length of the spring.

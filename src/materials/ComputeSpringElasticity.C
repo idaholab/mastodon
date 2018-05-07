@@ -26,6 +26,7 @@ validParams<ComputeSpringElasticity>()
   params.addRequiredCoupledVar("krx", "Torsional stiffness of the spring.");
   params.addRequiredCoupledVar("kry", "Rotational stiffness in the y direction of the spring.");
   params.addRequiredCoupledVar("krz", "Rotational stiffness in the z direction of the spring.");
+  params.set<MooseEnum>("constant_on") = "ELEMENT";
   return params;
 }
 
@@ -49,7 +50,7 @@ ComputeSpringElasticity::ComputeSpringElasticity(const InputParameters & paramet
 }
 
 void
-ComputeSpringElasticity::initQpStatefulProperties()
+ComputeSpringElasticity::computeQpProperties()
 {
   // computing spring forces
   computeForces();

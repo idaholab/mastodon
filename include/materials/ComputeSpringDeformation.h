@@ -35,7 +35,7 @@ public:
 
 protected:
   /// Initialize properties
-  virtual void initQpStatefulProperties() override;
+  // virtual void initQpStatefulProperties() override;
 
   /// Compute properties for each qp
   virtual void computeProperties() override;
@@ -66,7 +66,7 @@ protected:
   MaterialProperty<RealVectorValue> & _rotations;
 
   /// Rotational transformation from global coordinate system to spring local configuration at t = 0
-  MaterialProperty<RankTwoTensor> & _original_global_to_local_rotation;
+  RankTwoTensor _original_global_to_local_rotation;
 
   /// Rotational transformation from global coordinate system to spring local configuration at any time
   MaterialProperty<RankTwoTensor> & _total_global_to_local_rotation;

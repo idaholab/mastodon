@@ -1,11 +1,4 @@
-//* This file is part of the MOOSE framework
-//* https://www.mooseframework.org
-//*
-//* All rights reserved, see COPYRIGHT for full restrictions
-//* https://github.com/idaholab/moose/blob/master/COPYRIGHT
-//*
-//* Licensed under LGPL 2.1, please see LICENSE for details
-//* https://www.gnu.org/licenses/lgpl-2.1.html
+// MASTODON includes
 
 #include "StressDivergenceSpring.h"
 
@@ -137,36 +130,4 @@ StressDivergenceSpring::computeOffDiagJacobian(MooseVariableFEBase & jvar)
     computeJacobian();
 
   // Off diagonal elements are zero for linear elastic spring
-
-  // else
-  // // jacobian calculation for off-diagonal elements
-  // {
-  //   unsigned int coupled_component = 0;
-  //   bool disp_disp_coupled = false;
-  //   bool rot_rot_coupled = false;
-  //   bool disp_rot_coupled = false;
-  //
-  //   for (unsigned int i = 0; i < _ndisp; ++i) // finding which variable jvar is
-  //   {
-  //     if (jvar_num == _disp_var[i])
-  //     {
-  //       coupled_component = i;
-  //       disp_disp_coupled = true;
-  //       break;
-  //     }
-  //
-  //     if (jvar_num == _rot_var[i])
-  //     {
-  //       coupled_component = i + 3;
-  //
-  //     }
-  //   }
-  //
-  //   DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), jvar);
-  //
-  //   if (disp_coupled)
-  //     for (unsigned int i = 0; i < _test.size(); ++i)
-  //       for (unsigned int j = 0; j < _phi.size(); ++j)
-  //         ke(i, j) += (i == j ? 1 : -1) * computeStiffness(_component, coupled_component);
-  // }
 }
