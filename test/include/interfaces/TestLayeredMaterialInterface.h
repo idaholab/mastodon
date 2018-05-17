@@ -38,13 +38,7 @@ protected:
 };
 
 template <>
-InputParameters
-validParams<TestLayeredMaterialInterfaceDocString>()
-{
-  InputParameters params = validParams<Material>();
-  params += validParams<LayeredMaterialInterface<>>();
-  return params;
-}
+InputParameters validParams<TestLayeredMaterialInterfaceDocString>();
 
 /**
  * Test object needed to test Material type of LayeredMaterialInterface
@@ -59,15 +53,10 @@ protected:
 };
 
 template <>
-InputParameters
-validParams<TestLayeredMaterialInterfaceKernel>()
-{
-  return validParams<Kernel>();
-}
+InputParameters validParams<TestLayeredMaterialInterfaceKernel>();
 
 /**
- * Test object for checking Material type check error of
- * LayeredMaterialInterface
+ * Test object for checking Material type check error of LayeredMaterialInterface
  */
 class TestLayeredMaterialInterfaceTypeError
   : public LayeredMaterialInterface<TestLayeredMaterialInterfaceKernel>
@@ -81,12 +70,6 @@ public:
 };
 
 template <>
-InputParameters
-validParams<TestLayeredMaterialInterfaceTypeError>()
-{
-  InputParameters params = validParams<TestLayeredMaterialInterfaceKernel>();
-  params += validParams<LayeredMaterialInterface<>>();
-  return params;
-}
+InputParameters validParams<TestLayeredMaterialInterfaceTypeError>();
 
 #endif

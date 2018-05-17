@@ -2,12 +2,7 @@
 #include "MastodonApp.h"
 #include "Moose.h"
 #include "MooseSyntax.h"
-
-// Modules
-#include "ContactApp.h"
-#include "SolidMechanicsApp.h"
-#include "TensorMechanicsApp.h"
-#include "StochasticToolsApp.h"
+#include "ModulesApp.h"
 
 template <>
 InputParameters
@@ -29,46 +24,42 @@ registerKnownLabel("MastodonApp");
 MastodonApp::MastodonApp(InputParameters parameters) : MooseApp(parameters)
 {
   Moose::registerObjects(_factory);
+  ModulesApp::registerObjects(_factory);
   MastodonApp::registerObjects(_factory);
   MastodonApp::registerObjectDepends(_factory);
 
   Moose::associateSyntax(_syntax, _action_factory);
+  ModulesApp::associateSyntax(_syntax, _action_factory);
   MastodonApp::associateSyntax(_syntax, _action_factory);
   MastodonApp::associateSyntaxDepends(_syntax, _action_factory);
+
+  Moose::registerExecFlags(_factory);
+  ModulesApp::registerExecFlags(_factory);
+  MastodonApp::registerExecFlags(_factory);
 }
 
-MastodonApp::~MastodonApp() {}
-
-// External entry point for dynamic application loading
-extern "C" void
-MastodonApp__registerApps()
-{
-  MastodonApp::registerApps();
-}
 void
 MastodonApp::registerApps()
 {
   registerApp(MastodonApp);
 }
 
-// External entry point for dynamic object registration
-extern "C" void
-MastodonApp__registerObjects(Factory & factory)
+void
+MastodonApp::registerObjectDepends(Factory & /*factory*/)
 {
-  MastodonApp::registerObjects(factory);
 }
+
 void
 MastodonApp::registerObjects(Factory & factory)
 {
   Registry::registerObjectsTo(factory, {"MastodonApp"});
 }
 
-// External entry point for dynamic syntax association
-extern "C" void
-MastodonApp__associateSyntax(Syntax & syntax, ActionFactory & action_factory)
+void
+MastodonApp::associateSyntaxDepends(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
 {
-  MastodonApp::associateSyntax(syntax, action_factory);
 }
+
 void
 MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
 {
@@ -95,19 +86,34 @@ MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
 }
 
 void
-MastodonApp::registerObjectDepends(Factory & factory)
+MastodonApp::registerExecFlags(Factory & /*factory*/)
 {
-  SolidMechanicsApp::registerObjects(factory);
-  TensorMechanicsApp::registerObjects(factory);
-  ContactApp::registerObjects(factory);
-  StochasticToolsApp::registerObjects(factory);
+  /* Uncomment Factory parameter and register your new execution flags here! */
 }
 
-void
-MastodonApp::associateSyntaxDepends(Syntax & syntax, ActionFactory & action_factory)
+/***************************************************************************************************
+ *********************** Dynamic Library Entry Points - DO NOT MODIFY ******************************
+ **************************************************************************************************/
+extern "C" void
+MastodonApp__registerApps()
 {
-  SolidMechanicsApp::associateSyntax(syntax, action_factory);
-  TensorMechanicsApp::associateSyntax(syntax, action_factory);
-  ContactApp::associateSyntax(syntax, action_factory);
-  StochasticToolsApp::associateSyntax(syntax, action_factory);
+  MastodonApp::registerApps();
+}
+
+extern "C" void
+MastodonApp__registerObjects(Factory & factory)
+{
+  MastodonApp::registerObjects(factory);
+}
+
+extern "C" void
+MastodonApp__associateSyntax(Syntax & syntax, ActionFactory & action_factory)
+{
+  MastodonApp::associateSyntax(syntax, action_factory);
+}
+
+extern "C" void
+MastodonApp__registerExecFlags(Factory & factory)
+{
+  MastodonApp::registerExecFlags(factory);
 }

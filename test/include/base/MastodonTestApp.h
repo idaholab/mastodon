@@ -12,11 +12,11 @@ class MastodonTestApp : public MooseApp
 {
 public:
   MastodonTestApp(InputParameters parameters);
-  virtual ~MastodonTestApp();
 
   static void registerApps();
   static void registerObjects(Factory & factory);
   static void associateSyntax(Syntax & syntax, ActionFactory & action_factory);
+  static void registerExecFlags(Factory & factory);
 };
 
 #endif /* MASTODONTESTAPP_H */
