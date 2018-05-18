@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-# Written by Saran Srikanth Bodda, NC State University. Email: ssbodda@ncsu.edu
 """
-    Provides FaultTree class for creating fault trees and MCS given logic of fault tree.
-
-    Quantification class for calculating minimal cut set probabilities and system level probability
-        given basic event probabilities.
+Provides FaultTree class for creating fault trees and minimum cutsets, given the logic of a
+fault tree and Quantification class for calculating minimal cutset probabilities and system
+level probability, given the basic event probabilities.
 """
 import os
 
