@@ -293,13 +293,19 @@
     type = ComputeIncrementalSmallStrain
     block = 1001
     displacements = 'disp_x disp_y disp_z'
+    eigenstrain_names = 'ini_stress_bot'
   [../]
   [./stress_bot]
     #Computes the stress, using linear elasticity
     type = ComputeFiniteStrainElasticStress
     store_stress_old = true
     block = 1001
+  [../]
+  [./strain_from_initial_stress_bot]
+    type = ComputeEigenstrainFromInitialStress
+    block = 1001
     initial_stress = 'initial_ybot 0 0 0 initial_ybot 0 0 0 initial_zzbot'
+    eigenstrain_name = ini_stress_bot
   [../]
   [./den_bot]
     type = GenericConstantMaterial
