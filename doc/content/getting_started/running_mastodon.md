@@ -79,7 +79,7 @@ specified.  An error message is generated if a line command does not
 apply within the scope in which it is provided. Repeating a line within
 a block also results in an error. A full list of object types and the
 corresponding parameters valid for that object can be found in
-[systems](documentation/systems/index.md).
+[syntax](syntax/index.md).
 
 The name of a subblock (`[./name]`) is arbitrary. However, these
 names should be chosen to be meaningful because they can be used to

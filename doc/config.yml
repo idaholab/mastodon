@@ -26,8 +26,8 @@ Renderer:
             Software Quality: sqa/index.md
             User: manuals/user/index.md
         Documentation:
-            Systems: documentation/systems/index.md
-            Interfaces: documentation/interfaces/index.md
+            Syntax: syntax/index.md
+            Interfaces: interfaces/index.md
         Help:
             FAQ: help/faq.md
 

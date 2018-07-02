@@ -1,7 +1,7 @@
 # SeismicSource Syntax
 
 The input file syntax for SeismicSource with the the `[DiracKernels]` block provides
-syntax for creating the correct [SeismicSource](DiracKernels/SeismicSource.md) dirac
+syntax for creating the correct [SeismicSource](/SeismicSource.md) dirac
 kernels for each direction components specified.
 
 ## Example Usage
