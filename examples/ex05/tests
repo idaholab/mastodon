@@ -1,0 +1,9 @@
+[Tests]
+  [./ex05]
+    type = RunApp
+    input = '3Dsliding_32psi.i'
+    check_input = True
+    allow_warnings = true
+    method = opt
+  [../]
+[]

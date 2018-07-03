@@ -8,7 +8,7 @@ if not os.path.exists(MOOSE_DIR):
     MOOSE_DIR = os.path.join(os.getenv('HOME'), 'projects', 'moose')
 if not os.path.exists(MOOSE_DIR):
     raise Exception('Failed to locate MOOSE, specify the MOOSE_DIR environment variable.')
-os.environ['MOOSE_DIR'] = MOOSE_DIR
+os.environ['MOOSE_DIR'] = os.path.abspath(MOOSE_DIR)
 
 # Append MOOSE python directory
 MOOSE_PYTHON_DIR = os.path.join(MOOSE_DIR, 'python')
