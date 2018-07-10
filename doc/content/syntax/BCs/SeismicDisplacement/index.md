@@ -3,7 +3,7 @@ github_edit: False
 # SeismicDisplacement Syntax
 
 The input file syntax for SeismicDisplacement with the the `[BCs]` block provides
-syntax for creating the correct [PresetDisplacement](BCs/NonReflectingBC.md) boundary
+syntax for creating the correct [PresetDisplacement](/NonReflectingBC.md) boundary
 conditions for each direction components specified.
 
 If the ground excitation was measured at a depth within the soil by placing an accelerometer at that
