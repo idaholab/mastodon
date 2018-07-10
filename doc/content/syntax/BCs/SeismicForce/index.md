@@ -3,7 +3,7 @@ github_edit: False
 # SeismicForce Syntax
 
 The input file syntax for SeismicForce with the the `[BCs]` block provides
-syntax for creating the correct [SeismicForce](BCs/SeismicForce.md) boundary
+syntax for creating the correct [SeismicForce](/SeismicForce.md) boundary
 conditions for each direction components specified.
 
 In some cases, the ground excitation is measured at a rock outcrop (where rock is found at surface

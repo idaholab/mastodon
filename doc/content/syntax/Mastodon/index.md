@@ -15,8 +15,8 @@ other parameters in the near future.
 The Mastodon block is organized into several sub blocks that create different parameters. Currently
 included sub blocks are as follows:
 
-1. [Model](Mastodon/Model/MastodonModelAction.md)
-2. [Outputs](Mastodon/Outputs/MastodonOutputsAction.md)
+1. [Model](/MastodonModelAction.md)
+2. [Outputs](/MastodonOutputsAction.md)
 
 The usage of the Mastodon block along with the currently implemented sub blocks is illustrated in the
 example input file below.
