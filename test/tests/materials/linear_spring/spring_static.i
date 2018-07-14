@@ -342,6 +342,28 @@
   [../]
 []
 
+[Materials]
+  [./linear_spring_test]
+    type = LinearSpring
+    block = 0
+    y_orientation = '0.0 1.0 0.0'
+    displacements = 'disp_x disp_y disp_z'
+    rotations = 'rot_x rot_y rot_z'
+    kx = 1.0
+    ky = 2.0
+    kz = 3.0
+    krx = 10.0
+    kry = 20.0
+    krz = 30.0
+  [../]
+  [./density]
+    type = GenericConstantMaterial
+    block = 0
+    prop_names = 'density'
+    prop_values = '1.0'
+  [../]
+[]
+
 [Preconditioning]
   [./smp]
     type = SMP
@@ -360,32 +382,6 @@
   dt = 0.005
   dtmin = 1e-4
   timestep_tolerance = 1e-6
-[]
-
-[Materials]
-  [./stiffness]
-    type = ComputeSpringElasticity
-    block = 0
-    kx = 1.0
-    ky = 2.0
-    kz = 3.0
-    krx = 10.0
-    kry = 20.0
-    krz = 30.0
-  [../]
-  [./deformations]
-    type = ComputeSpringDeformation
-    block = '0'
-    y_orientation = '0.0 1.0 0.0'
-    displacements = 'disp_x disp_y disp_z'
-    rotations = 'rot_x rot_y rot_z'
-  [../]
-  [./density]
-    type = GenericConstantMaterial
-    block = 0
-    prop_names = 'density'
-    prop_values = '1.0'
-  [../]
 []
 
 [Postprocessors]

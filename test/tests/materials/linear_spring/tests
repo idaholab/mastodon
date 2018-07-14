@@ -4,15 +4,4 @@
     input = 'spring_static.i'
     csvdiff = 'spring_static_out.csv'
   [../]
-#  [./spring_dynamic]
-#    type = 'CSVDiff'
-#    input = 'spring_static.i'
-#    csvdiff = 'spring_static_out.csv'
-#  [../]
-  [./error_1]
-    type = 'RunException'
-    input = 'spring_static.i'
-    cli_args = "Kernels/spring_disp_x/rotations='rot_x rot_y' Outputs/csv=false Outputs/exodus=false"
-    expect_err = "Error in StressDivergenceSpring block spring_disp_x. The number of displacement and rotation variables should be the same."
-  [../]
 []

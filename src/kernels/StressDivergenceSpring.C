@@ -22,10 +22,11 @@ validParams<StressDivergenceSpring>()
 {
   InputParameters params = validParams<Kernel>();
   params.addClassDescription("Kernel for spring element");
-  params.addRequiredParam<unsigned int>("component",
-                                        "An integer corresponding to the direction "
-                                        "the variable this kernel acts in. (0 for x, "
-                                        "1 for y, 2 for z, 3 for rot_x, 4 for rot_y and 5 for rot_z).");
+  params.addRequiredParam<unsigned int>(
+      "component",
+      "An integer corresponding to the direction "
+      "the variable this kernel acts in. (0 for x, "
+      "1 for y, 2 for z, 3 for rot_x, 4 for rot_y and 5 for rot_z).");
   params.addRequiredCoupledVar("displacements", "The displacement variables for spring.");
   params.addRequiredCoupledVar("rotations", "The rotation variables for the spring.");
   params.set<bool>("use_displaced_mesh") = true;
@@ -44,13 +45,18 @@ StressDivergenceSpring::StressDivergenceSpring(const InputParameters & parameter
     _kdd(getMaterialPropertyByName<RankTwoTensor>("displacement_stiffness_matrix")),
     _krr(getMaterialPropertyByName<RankTwoTensor>("rotation_stiffness_matrix")),
     // _kdr(getMaterialPropertyByName<RankTwoTensor>("displacement_rotation_stiffness_matrix")),
-    _total_global_to_local_rotation(getMaterialPropertyByName<RankTwoTensor>("total_global_to_local_rotation"))
+    _total_global_to_local_rotation(
+        getMaterialPropertyByName<RankTwoTensor>("total_global_to_local_rotation"))
 {
   if (_component > 5)
-    mooseError("Error in StressDivergenceSpring block ", name(), ". Please enter an integer value between 0 and 5 for the 'component' parameter.");
+    mooseError("Error in StressDivergenceSpring block ",
+               name(),
+               ". Please enter an integer value between 0 and 5 for the 'component' parameter.");
 
   if (_ndisp != _nrot)
-    mooseError("Error in StressDivergenceSpring block ", name(), ". The number of displacement and rotation variables should be the same.");
+    mooseError("Error in StressDivergenceSpring block ",
+               name(),
+               ". The number of displacement and rotation variables should be the same.");
 
   for (unsigned int i = 0; i < _ndisp; ++i)
     _disp_var[i] = coupled("displacements", i);
@@ -125,8 +131,8 @@ StressDivergenceSpring::computeOffDiagJacobian(MooseVariableFEBase & jvar)
 {
   size_t jvar_num = jvar.number();
   if (jvar_num == _var.number())
-  // jacobian calculation if jvar is the same as the current variable i.e.,
-  // diagonal elements
+    // jacobian calculation if jvar is the same as the current variable i.e.,
+    // diagonal elements
     computeJacobian();
 
   // Off diagonal elements are zero for linear elastic spring
