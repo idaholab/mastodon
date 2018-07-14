@@ -29,7 +29,7 @@ MASTODON is being developed in accordance with the ASME NQA-1 safety software re
 !col-end!
 !row-end!
 
-# MOOSE-base Application class=center style=clear:both;font-weight:200;font-size:200%
+# A MOOSE-Based Application class=center style=clear:both;font-weight:200;font-size:200%
 
 MASTODON is built on the MOOSE framework and can efficiently solve problems using standard
 workstations or very large high-performance computers in different dimensions, including full 3D, 2D,
@@ -38,6 +38,4 @@ framework, and MOOSE-based applications. MASTODON therefore employs a well-defin
 testing strategy in which, code changes are only merged into the repository after both a manual code
 review and an automated regression test have been completed.
 
-MASTODON is developed by the [Idaho National Laboratory](http://inl.gov) by a team of computational
-scientists and earthquake engineers, and is supported by various funding agencies including the
-[United States Department of Energy](http://energy.gov).
+MASTODON is developed by the Facility Risk Group at the [Idaho National Laboratory](http://inl.gov) by a team of computational scientists and structural and earthquake engineers, and is supported by various funding agencies including the [United States Department of Energy](http://energy.gov).
