@@ -40,11 +40,10 @@ StressDivergenceSpring::StressDivergenceSpring(const InputParameters & parameter
     _disp_var(_ndisp),
     _nrot(coupledComponents("rotations")),
     _rot_var(_nrot),
-    _spring_forces(getMaterialPropertyByName<RealVectorValue>("forces")),
-    _spring_moments(getMaterialPropertyByName<RealVectorValue>("moments")),
+    _spring_forces_global(getMaterialPropertyByName<RealVectorValue>("global_forces")),
+    _spring_moments_global(getMaterialPropertyByName<RealVectorValue>("global_moments")),
     _kdd(getMaterialPropertyByName<RankTwoTensor>("displacement_stiffness_matrix")),
     _krr(getMaterialPropertyByName<RankTwoTensor>("rotation_stiffness_matrix")),
-    // _kdr(getMaterialPropertyByName<RankTwoTensor>("displacement_rotation_stiffness_matrix")),
     _total_global_to_local_rotation(
         getMaterialPropertyByName<RankTwoTensor>("total_global_to_local_rotation"))
 {
@@ -76,9 +75,9 @@ StressDivergenceSpring::computeResidual()
 
   // Calculating residual for node 0 (external forces on node 0)
   if (_component < 3)
-    _local_re(0) = -_spring_forces[0](_component);
+    _local_re(0) = -_spring_forces_global[0](_component);
   else
-    _local_re(0) = -_spring_moments[0](_component - 3);
+    _local_re(0) = -_spring_moments_global[0](_component - 3);
 
   // External force on node 1 = -1 * external force on node 0
   _local_re(1) = -_local_re(0);
@@ -135,5 +134,5 @@ StressDivergenceSpring::computeOffDiagJacobian(MooseVariableFEBase & jvar)
     // diagonal elements
     computeJacobian();
 
-  // Off diagonal elements are zero for linear elastic spring
+  // Off-diagonal elements are zero for linear elastic spring
 }

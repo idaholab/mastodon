@@ -47,19 +47,16 @@ protected:
   std::vector<unsigned int> _rot_var;
 
   /// Spring forces
-  const MaterialProperty<RealVectorValue> & _spring_forces;
+  const MaterialProperty<RealVectorValue> & _spring_forces_global;
 
   /// Spring moments
-  const MaterialProperty<RealVectorValue> & _spring_moments;
+  const MaterialProperty<RealVectorValue> & _spring_moments_global;
 
   /// Displacement stiffness matrix
   const MaterialProperty<RankTwoTensor> & _kdd;
 
   /// Rotation stiffness matrix
   const MaterialProperty<RankTwoTensor> & _krr;
-
-  /// Displacement rotation stiffness matrix
-  // const MaterialProperty<RankTwoTensor> & _kdr;
 
   /// Rotation stiffness matrix
   const MaterialProperty<RankTwoTensor> & _total_global_to_local_rotation;

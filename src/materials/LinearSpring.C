@@ -21,10 +21,6 @@ validParams<LinearSpring>()
   InputParameters params = validParams<Material>();
   params.addClassDescription(
       "Compute the deformations, forces and stiffness matrix of a two-noded spring element.");
-  params.addRequiredParam<RealGradient>("y_orientation",
-                                        "Orientation of the y direction along "
-                                        "with Iyy is provided. This should be "
-                                        "perpendicular to the axis of the beam.");
   params.addRequiredCoupledVar(
       "rotations",
       "The rotation variables appropriate for the simulation geometry and coordinate system.");
@@ -33,7 +29,7 @@ validParams<LinearSpring>()
       "The displacement variables appropriate for the simulation geometry and coordinate system.");
   params.addRequiredParam<RealGradient>("y_orientation",
                                         "Orientation of the y direction along "
-                                        "with Ky is provided. This should be "
+                                        "which, Ky is provided. This should be "
                                         "perpendicular to the axis of the spring.");
   params.addRequiredCoupledVar("kx", "Axial stiffness of the spring");
   params.addRequiredCoupledVar("ky", "Shear stiffness in the y direction of the spring.");
@@ -59,8 +55,8 @@ LinearSpring::LinearSpring(const InputParameters & parameters)
     _krx(coupledValue("krx")),
     _kry(coupledValue("kry")),
     _krz(coupledValue("krz")),
-    _spring_forces(declareProperty<RealVectorValue>("forces")),
-    _spring_moments(declareProperty<RealVectorValue>("moments")),
+    _spring_forces_global(declareProperty<RealVectorValue>("global_forces")),
+    _spring_moments_global(declareProperty<RealVectorValue>("global_moments")),
     _kdd(declareProperty<RankTwoTensor>("displacement_stiffness_matrix")),
     _krr(declareProperty<RankTwoTensor>("rotation_stiffness_matrix")),
     _total_global_to_local_rotation(
@@ -93,13 +89,10 @@ LinearSpring::computeQpProperties()
   RealGradient x_orientation;
   for (unsigned int i = 0; i < _ndisp; ++i)
     x_orientation(i) = (*node[1])(i) - (*node[0])(i);
-  // _original_length[_qp] = x_orientation.norm();
   x_orientation /= x_orientation.norm(); // Normalizing with length to get orientation
 
   // Get y orientation of the spring in global coordinate system
   RealGradient y_orientation = getParam<RealGradient>("y_orientation");
-  // Real dot = x_orientation(0) * y_orientation(0) + x_orientation(1) * y_orientation(1) +
-  //            x_orientation(2) * y_orientation(2);
   Real dot = x_orientation * y_orientation;
 
   // Check if x and y orientations are perpendicular
@@ -110,9 +103,6 @@ LinearSpring::computeQpProperties()
   // Calculate z orientation in the global coordinate system as a cross product of the x and y
   // orientations
   RealGradient z_orientation = x_orientation.cross(y_orientation);
-  // z_orientation(0) = (x_orientation(1) * y_orientation(2) - x_orientation(2) * y_orientation(1));
-  // z_orientation(1) = (x_orientation(2) * y_orientation(0) - x_orientation(0) * y_orientation(2));
-  // z_orientation(2) = (x_orientation(0) * y_orientation(1) - x_orientation(1) * y_orientation(0));
 
   // Calculate the rotation matrix from global to spring local configuration at t = 0
   _original_global_to_local_rotation(0, 0) = x_orientation(0);
@@ -161,55 +151,49 @@ LinearSpring::computeDeformations()
   const NumericVector<Number> & sol = *nonlinear_sys.currentSolution();
 
   // Calculating global displacements and rotations at the end nodes
-  RealVectorValue global_disp0(3, 0.0); // node 0
-  RealVectorValue global_disp1(3, 0.0); // node 1
-  RealVectorValue global_rot0(3, 0.0);  // node 0
-  RealVectorValue global_rot1(3, 0.0);  // node 1
   for (unsigned int i = 0; i < _ndisp; ++i)
   {
-    global_disp0(i) = sol(node[0]->dof_number(nonlinear_sys.number(), _disp_num[i], 0));
-    global_disp1(i) = sol(node[1]->dof_number(nonlinear_sys.number(), _disp_num[i], 0));
-    global_rot0(i) = sol(node[0]->dof_number(nonlinear_sys.number(), _rot_num[i], 0));
-    global_rot1(i) = sol(node[1]->dof_number(nonlinear_sys.number(), _rot_num[i], 0));
+    _global_disp0(i) = sol(node[0]->dof_number(nonlinear_sys.number(), _disp_num[i], 0));
+    _global_disp1(i) = sol(node[1]->dof_number(nonlinear_sys.number(), _disp_num[i], 0));
+    _global_rot0(i) = sol(node[0]->dof_number(nonlinear_sys.number(), _rot_num[i], 0));
+    _global_rot1(i) = sol(node[1]->dof_number(nonlinear_sys.number(), _rot_num[i], 0));
   }
 
   // Convert spring nodal displacements and rotations from global coordinate system to local
   // coordinate system First, compute total rotation
   computeTotalRotation();
-  RealVectorValue local_disp0(_total_global_to_local_rotation[_qp] * global_disp0);
-  RealVectorValue local_disp1(_total_global_to_local_rotation[_qp] * global_disp1);
-  RealVectorValue local_rot0(_total_global_to_local_rotation[_qp] * global_rot0);
-  RealVectorValue local_rot1(_total_global_to_local_rotation[_qp] * global_rot1);
+  _local_disp0 = _total_global_to_local_rotation[_qp] * _global_disp0;
+  _local_disp1 = _total_global_to_local_rotation[_qp] * _global_disp1;
+  _local_rot0 = _total_global_to_local_rotation[_qp] * _global_rot0;
+  _local_rot1 = _total_global_to_local_rotation[_qp] * _global_rot1;
 
-  // Calculating spring deformations and rotations. Deformations and rotations
-  // are assumed to be constant through the length of the spring.
-  _deformations[_qp] = local_disp1 - local_disp0;
-  _rotations[_qp] = local_rot1 - local_rot0;
+  // Calculating spring deformations and rotations in the local
+  // coordinate system. Deformations and rotations are assumed to be constant
+  // through the length of the spring.
+  _deformations[_qp] = _local_disp1 - _local_disp0;
+  _rotations[_qp] = _local_rot1 - _local_rot0;
 }
 
 void
 LinearSpring::computeForces()
-// spring forces = K * deformations
-// RealVectorValue spring_forces = dis_stiffness * _deformations;
-// // spring moments = Kr * rotations
-// RealVectorValue spring_moments = rot_stiffness * _rotations;
+// spring forces = Kdd * deformations
+// spring moments = Krr * rotations
 {
-  RealVectorValue spring_forces_local(3, 0.0);
-  RealVectorValue spring_moments_local(3, 0.0);
-
   // forces
-  spring_forces_local(0) = _kx[_qp] * _deformations[_qp](0);
-  spring_forces_local(1) = _ky[_qp] * _deformations[_qp](1);
-  spring_forces_local(2) = _kz[_qp] * _deformations[_qp](2);
+  _spring_forces_local(0) = _kx[_qp] * _deformations[_qp](0);
+  _spring_forces_local(1) = _ky[_qp] * _deformations[_qp](1);
+  _spring_forces_local(2) = _kz[_qp] * _deformations[_qp](2);
   // convert local forces to global
-  _spring_forces[_qp] = _total_global_to_local_rotation[_qp].transpose() * spring_forces_local;
+  _spring_forces_global[_qp] =
+      _total_global_to_local_rotation[_qp].transpose() * _spring_forces_local;
 
   // moments
-  spring_moments_local(0) = _krx[_qp] * _rotations[_qp](0);
-  spring_moments_local(1) = _kry[_qp] * _rotations[_qp](1);
-  spring_moments_local(2) = _krz[_qp] * _rotations[_qp](2);
+  _spring_moments_local(0) = _krx[_qp] * _rotations[_qp](0);
+  _spring_moments_local(1) = _kry[_qp] * _rotations[_qp](1);
+  _spring_moments_local(2) = _krz[_qp] * _rotations[_qp](2);
   // convert local moments to global
-  _spring_moments[_qp] = _total_global_to_local_rotation[_qp].transpose() * spring_moments_local;
+  _spring_moments_global[_qp] =
+      _total_global_to_local_rotation[_qp].transpose() * _spring_moments_local;
 }
 
 void
@@ -220,28 +204,22 @@ LinearSpring::computeStiffnessMatrix()
   // |  krd  krr  |
   // where kdd, krr, krd and kdr are all RankTwoTensors (3x3 matrix) and
   // matrix symmetry is assumed, namely, krd = kdr.transpose()
+  // This implementation of the spring element has only diagonal stiffness
+  // terms. Therefore, Kdr and Krd are zero.
 
   // calculating deformation stiffnesses
-  RankTwoTensor kdd_local;
-  kdd_local(0, 0) = _kx[_qp];
-  kdd_local(1, 1) = _ky[_qp];
-  kdd_local(2, 2) = _kz[_qp];
+  _kdd_local(0, 0) = _kx[_qp];
+  _kdd_local(1, 1) = _ky[_qp];
+  _kdd_local(2, 2) = _kz[_qp];
   // convert stiffness matrix from local to global
-  _kdd[_qp] = _total_global_to_local_rotation[_qp].transpose() * kdd_local *
+  _kdd[_qp] = _total_global_to_local_rotation[_qp].transpose() * _kdd_local *
               _total_global_to_local_rotation[_qp];
 
   // calculating rotational stiffness
-  RankTwoTensor krr_local;
-  krr_local(0, 0) = _krx[_qp];
-  krr_local(1, 1) = _kry[_qp];
-  krr_local(2, 2) = _krz[_qp];
+  _krr_local(0, 0) = _krx[_qp];
+  _krr_local(1, 1) = _kry[_qp];
+  _krr_local(2, 2) = _krz[_qp];
   // convert stiffness matrix from local to global
-  _krr[_qp] = _total_global_to_local_rotation[_qp].transpose() * krr_local *
+  _krr[_qp] = _total_global_to_local_rotation[_qp].transpose() * _krr_local *
               _total_global_to_local_rotation[_qp];
-
-  // calculating stiffness matrix relating displacement and rotational variables
-  // RankTwoTensor kdr_local;
-  // // This matrix is empty for linear elastic spring elements
-  // _kdr[_qp] = _total_global_to_local_rotation[0].transpose() * kdr_local *
-  // _total_global_to_local_rotation[0];
 }

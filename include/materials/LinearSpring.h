@@ -17,10 +17,6 @@
 
 #include "Material.h"
 #include "RankTwoTensor.h"
-/**
- * LinearSpring material simulates a linear spring with a diagonal stiffness
- * matrix, including rotational stiffnesses.
- */
 
 // Forward Declarations
 class LinearSpring;
@@ -28,6 +24,10 @@ class LinearSpring;
 template <>
 InputParameters validParams<LinearSpring>();
 
+/**
+ * LinearSpring material simulates a linear spring with a diagonal stiffness
+ * matrix, including rotational stiffnesses.
+ */
 class LinearSpring : public Material
 {
 public:
@@ -38,7 +38,9 @@ protected:
   virtual void computeQpProperties() override;
 
   /// Computes the total rotation matrix accounting for rigid body rotations.
-  /// Relevant for large rotation problems. Currently not implemented.
+  /// Relevant for large rotation problems. Currently approximated as the
+  /// initial rotation (t=0) matrix and the exact calculation of total rotation
+  /// is not implemented.
   void computeTotalRotation();
 
   /// Computes the displacement and rotation deformations of the spring element
@@ -66,10 +68,10 @@ protected:
   /// Deformations in the spring calculated at a time t in the spring local coordinates
   MaterialProperty<RealVectorValue> & _deformations;
 
-  /// Deformations in the spring calculated at a time t in the spring local coordinates
+  /// Rotations in the spring calculated at a time t in the spring local coordinates
   MaterialProperty<RealVectorValue> & _rotations;
 
-  /// Axial stiffness of the spring
+  /// Axial stiffness of the spring (local x direction)
   const VariableValue & _kx;
 
   /// Shear stiffness of the spring in local y direction
@@ -78,7 +80,7 @@ protected:
   /// Shear stiffness of the spring in local z direction
   const VariableValue & _kz;
 
-  /// Torsional stiffness of the spring
+  /// Torsional stiffness of the spring (local x direction)
   const VariableValue & _krx;
 
   /// Rotational stiffness of the spring in the local y direction
@@ -87,11 +89,47 @@ protected:
   /// Rotational stiffness of the spring in the local z direction
   const VariableValue & _krz;
 
+  /// Global displacement at node 0 of the spring element
+  RealVectorValue _global_disp0; // node 0
+
+  /// Global displacement at node 1 of the spring element
+  RealVectorValue _global_disp1; // node 1
+
+  /// Global rotation at node 0 of the spring element
+  RealVectorValue _global_rot0; // node 0
+
+  /// Global rotation at node 1 of the spring element
+  RealVectorValue _global_rot1; // node 1
+
+  /// Local displacement at node 0 of the spring element
+  RealVectorValue _local_disp0; // node 0
+
+  /// Local displacement at node 1 of the spring element
+  RealVectorValue _local_disp1; // node 1
+
+  /// Local rotation at node 0 of the spring element
+  RealVectorValue _local_rot0; // node 0
+
+  /// Local rotation at node 1 of the spring element
+  RealVectorValue _local_rot1; // node 1
+
+  /// Spring forces in the local coordinate system
+  RealVectorValue _spring_forces_local;
+
+  // Spring moments in the local coordinate system
+  RealVectorValue _spring_moments_local;
+
+  /// Spring displacement stiffness matrix in the local coordinate system
+  RankTwoTensor _kdd_local;
+
+  /// Spring rotational stiffness matrix in the local coordinate system
+  RankTwoTensor _krr_local;
+
   /// Spring forces in the global coordinate system
-  MaterialProperty<RealVectorValue> & _spring_forces;
+  MaterialProperty<RealVectorValue> & _spring_forces_global;
 
   /// Spring moments in the global coordinate system
-  MaterialProperty<RealVectorValue> & _spring_moments;
+  MaterialProperty<RealVectorValue> & _spring_moments_global;
 
   /// Spring displacement stiffness matrix in the global coordinate system
   MaterialProperty<RankTwoTensor> & _kdd;

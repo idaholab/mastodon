@@ -14,7 +14,7 @@ of the midpoint of the spring element.
 The linear spring element is currently limited to simulations involving small
 rigid body rotations of the spring. The inertia of the spring element can be
 simulated by modeling equivalent nodal masses using the `NodalTranslationalInertia` kernel.
-Providing density in the material kernel is not sufficient for inertia to be included.
+Providing density in the Materials block is not sufficient for inertia to be included.
 
 ## Usage
 

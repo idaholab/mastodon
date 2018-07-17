@@ -1,4 +1,8 @@
-# Test for linear spring in the axial direction
+# Test for linear spring material model
+# A sawtooth force history is applied at one node of a spring element in each
+# of the 6 degrees of freedom. The displacements and rotations are calculated
+# at this node. The other node is fixed in all directions.
+# This is a static analysis and therefore, the inertia kernels are ommitted.
 
 [Mesh]
   type = GeneratedMesh
@@ -31,57 +35,6 @@
     family = LAGRANGE
   [../]
   [./rot_z]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-[]
-
-[AuxVariables]
-  [./vel_x]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./vel_y]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./vel_z]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./accel_x]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./accel_y]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./accel_z]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./rot_vel_x]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./rot_vel_y]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./rot_vel_z]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./rot_accel_x]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./rot_accel_y]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./rot_accel_z]
     order = FIRST
     family = LAGRANGE
   [../]
@@ -135,99 +88,6 @@
     rotations = 'rot_x rot_y rot_z'
     component = 5
     variable = rot_z
-  [../]
-[]
-
-[AuxKernels]
-  [./accel_x]
-    type = NewmarkAccelAux
-    variable = accel_x
-    displacement = disp_x
-    velocity = vel_x
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./vel_x]
-    type = NewmarkVelAux
-    variable = vel_x
-    acceleration = accel_x
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./accel_y]
-    type = NewmarkAccelAux
-    variable = accel_y
-    displacement = disp_y
-    velocity = vel_y
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./vel_y]
-    type = NewmarkVelAux
-    variable = vel_y
-    acceleration = accel_y
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./accel_z]
-    type = NewmarkAccelAux
-    variable = accel_z
-    displacement = disp_z
-    velocity = vel_z
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./vel_z]
-    type = NewmarkVelAux
-    variable = vel_z
-    acceleration = accel_z
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./rot_accel_x]
-    type = NewmarkAccelAux
-    variable = rot_accel_x
-    displacement = rot_x
-    velocity = rot_vel_x
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./rot_vel_x]
-    type = NewmarkVelAux
-    variable = rot_vel_x
-    acceleration = rot_accel_x
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./rot_accel_y]
-    type = NewmarkAccelAux
-    variable = rot_accel_y
-    displacement = rot_y
-    velocity = rot_vel_y
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./rot_vel_y]
-    type = NewmarkVelAux
-    variable = rot_vel_y
-    acceleration = rot_accel_y
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./rot_accel_z]
-    type = NewmarkAccelAux
-    variable = rot_accel_z
-    displacement = rot_z
-    velocity = rot_vel_z
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./rot_vel_z]
-    type = NewmarkVelAux
-    variable = rot_vel_z
-    acceleration = rot_accel_z
-    gamma = 0.5
-    execute_on = timestep_end
   [../]
 []
 
@@ -355,12 +215,6 @@
     krx = 10.0
     kry = 20.0
     krz = 30.0
-  [../]
-  [./density]
-    type = GenericConstantMaterial
-    block = 0
-    prop_names = 'density'
-    prop_values = '1.0'
   [../]
 []
 
