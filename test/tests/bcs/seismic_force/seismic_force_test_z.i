@@ -302,7 +302,7 @@
 [Outputs]
    exodus = true
    csv = true
-   print_perf_log = true
+   perf_graph = true
    [./screen]
      type = Console
      max_rows = 1

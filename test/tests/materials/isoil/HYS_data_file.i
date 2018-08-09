@@ -486,5 +486,5 @@
 [Outputs]
   exodus = true
   csv = true
-  print_perf_log = false
+  perf_graph = false
 []
