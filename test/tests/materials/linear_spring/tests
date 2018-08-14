@@ -1,0 +1,7 @@
+[Tests]
+  [./spring_static]
+    type = CSVDiff
+    input = 'spring_static.i'
+    csvdiff = 'spring_static_out.csv'
+  [../]
+[]
