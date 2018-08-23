@@ -12,7 +12,10 @@ that defines the parameters of the run.  This text file specifies the
 set of code objects that are composed together to simulate a physical
 problem, and provides parameters that control how those objects behave
 and interact with each other.  This text file can be prepared using any
-text editor.
+text editor. The free and opensource [Atom](http://atom.io) text editor has
+several packages that help with creating MOOSE and MASTODON input files. Please
+read this [article](development/atomio.md) about using Atom for writing
+MASTODON input files.
 
 In addition to the text file describing the model parameters, MASTODON also
 requires a definition of the finite element mesh on which the physics
