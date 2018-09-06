@@ -27,9 +27,9 @@ Renderer:
             User: manuals/user/index.md
         Documentation:
             Syntax: syntax/index.md
-            Interfaces: interfaces/index.md
         Help:
             FAQ: help/faq.md
+            Contact: help/contact_us.md
 
 Extensions:
     appsyntax:

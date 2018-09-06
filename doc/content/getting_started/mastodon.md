@@ -52,7 +52,8 @@ MASTODON does not use traditional versioning, is under heavy development, and is
 continuously. Therefore, it is critical that you continue to update MASTODON regularly to get the
 latest features.
 
-To update MASTODON use the following commands.
+To update MASTODON, use the following commands:
+
 ```bash
 cd ~/projects/mastodon
 git fetch origin
