@@ -25,6 +25,7 @@ Renderer:
             Theory: manuals/theory/index.md
             Software Quality: sqa/index.md
             User: manuals/user/index.md
+            Developer: manuals/developer/index.md
         Documentation:
             Syntax: syntax/index.md
         Help:
