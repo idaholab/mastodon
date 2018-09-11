@@ -42,7 +42,7 @@ Then, $\frac{dI}{d \eta} = 0$ and $\frac{dI}{d \zeta}=0$ results in two equation
 \end{aligned}
 \end{equation}
 
-##### Rayleigh damping for soils
+#### Rayleigh damping for soils
 
 Small-strain material damping of soils is independent of loading frequency in frequency band of 0.01 Hz - 10 Hz ([cite:menq2003], [cite:shibuya2000damp],[cite:lopresti1997damp], and [cite:marmureanu2000damp]). The two mode Rayleigh damping is frequency dependent and can only achieve the specified damping at two frequencies while underestimating within and overestimating outside of these frequencies. The parameters $\eta$ and $\zeta$ for a given damping ratio can be calculated as follows:
 
