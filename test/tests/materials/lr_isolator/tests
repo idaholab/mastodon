@@ -1,0 +1,27 @@
+[Tests]
+  [./lr_isolator_axial_ct]
+    type = CSVDiff
+    input = 'lr_isolator_axial_ct.i'
+    csvdiff = 'lr_isolator_axial_ct_out.csv'
+  [../]
+  [./lr_isolator_tension]
+    type = CSVDiff
+    input = 'lr_isolator_tension.i'
+    csvdiff = 'lr_isolator_tension_out.csv'
+  [../]
+  [./lr_isolator_shear]
+    type = CSVDiff
+    input = 'lr_isolator_shear.i'
+    csvdiff = 'lr_isolator_shear_out.csv'
+  [../]
+   [./lr_isolator_Pdelta]
+    type = CSVDiff
+    input = 'lr_isolator_PDelta.i'
+    csvdiff = 'lr_isolator_PDelta_out.csv'
+  [../]
+  [./lr_isolator_seismic]
+    type = CSVDiff
+    input = 'lr_isolator_seismic.i'
+    csvdiff = 'lr_isolator_seismic_out.csv'
+  [../] 
+[]
