@@ -14,7 +14,7 @@ problem, and provides parameters that control how those objects behave
 and interact with each other.  This text file can be prepared using any
 text editor. The free and opensource [Atom](http://atom.io) text editor has
 several packages that help with creating MOOSE and MASTODON input files. Please
-read this [article](development/atomio.md) about using Atom for writing
+read this [article](development/Atom_Editor.md) about using Atom for writing
 MASTODON input files.
 
 In addition to the text file describing the model parameters, MASTODON also
