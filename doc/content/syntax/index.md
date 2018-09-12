@@ -1,1 +1,1 @@
-!syntax complete group=MastodonApp
+!syntax complete
