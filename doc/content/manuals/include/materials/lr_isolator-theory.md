@@ -46,7 +46,7 @@ This LR bearing model captures the following physical behaviors:
 
 #### Axial (local X direction)
 
-##### Compression style=font-weight:500;
+##### Compression
 
 The composite action of rubber and steel shims results in a large axial stiffness of the bearing. The LR bearing buckles
 under high axial loads and the expression for critical buckling load in compression is derived from the two-spring model
@@ -91,7 +91,7 @@ $A_r$ is the current overlap area of bonded rubber<br/>
 
 Once the bearing buckles, it does not provide any stiffness. However, to avoid numerical problems, a very small value of compression stiffness is assigned during the post-buckling phase.
 
-##### Tension style=font-weight:500;
+##### Tension
 
 In tension, the rubber layers of the LR bearing undergo cavitation, which is the formation of cavities in the rubber
 material. Cavitation results in an inelastic deformation due to the onset of permanent damage. The isolator exhibits linear elastic behavior, until the point of cavitation ($u_{cn}$,$F_{cn}$). After cavitation, the expression for stiffness of LR bearing is given by [citet:constantinouwhittaker2007]
