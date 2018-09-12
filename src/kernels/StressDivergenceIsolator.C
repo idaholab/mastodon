@@ -20,10 +20,11 @@ validParams<StressDivergenceIsolator>()
 {
   InputParameters params = validParams<Kernel>();
   params.addClassDescription("Kernel for isolator element");
-  params.addRequiredParam<unsigned int>("component",
-                                        "An integer corresponding to the direction "
-                                        "the variable this kernel acts in. (0 for x, "
-                                        "1 for y, 2 for z, 3 for rot_x, 4 for rot_y and 5 for rot_z).");
+  params.addRequiredParam<unsigned int>(
+      "component",
+      "An integer corresponding to the direction "
+      "the variable this kernel acts in. (0 for x, "
+      "1 for y, 2 for z, 3 for rot_x, 4 for rot_y and 5 for rot_z).");
   params.addRequiredCoupledVar("displacements", "The displacement variables for isolator.");
   params.addRequiredCoupledVar("rotations", "The rotation variables for the isolator.");
   params.set<bool>("use_displaced_mesh") = true;
@@ -39,14 +40,16 @@ StressDivergenceIsolator::StressDivergenceIsolator(const InputParameters & param
     _rot_var(_nrot),
     _Fg(getMaterialPropertyByName<ColumnMajorMatrix>("global_forces")),
     _Kg(getMaterialPropertyByName<ColumnMajorMatrix>("global_stiffness_matrix"))
-    // _kdr(getMaterialPropertyByName<ColumnMajorMatrix>("displacement_rotation_stiffness_matrix")),
-    // _total_global_to_local_rotation(getMaterialPropertyByName<ColumnMajorMatrix>("total_global_to_local_rotation"))
 {
   if (_component > 5)
-    mooseError("Error in StressDivergenceIsolator block ", name(), ". Please enter an integer value between 0 and 5 for the 'component' parameter.");
+    mooseError("Error in StressDivergenceIsolator block ",
+               name(),
+               ". Please enter an integer value between 0 and 5 for the 'component' parameter.");
 
   if (_ndisp != _nrot)
-    mooseError("Error in StressDivergenceIsolator block ", name(), ". The number of displacement and rotation variables should be the same.");
+    mooseError("Error in StressDivergenceIsolator block ",
+               name(),
+               ". The number of displacement and rotation variables should be the same.");
 
   for (unsigned int i = 0; i < _ndisp; ++i)
     _disp_var[i] = coupled("displacements", i);
@@ -72,8 +75,6 @@ StressDivergenceIsolator::computeResidual()
 
   re += _local_re;
 
-  // std::cout << "******RESIDUAL = \n" << re << "\n";
-
   if (_has_save_in)
   {
     Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
@@ -85,8 +86,6 @@ StressDivergenceIsolator::computeResidual()
 void
 StressDivergenceIsolator::computeJacobian()
 {
-  // std::cout << "$$$$$$$$$$$Executing ComputeJacobian\n";
-
   // Access Jacobian; size is n x n (n is number of nodes)
   DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), _var.number());
   _local_ke.resize(ke.m(), ke.n());
@@ -95,16 +94,9 @@ StressDivergenceIsolator::computeJacobian()
   // i and j are looping over nodes
   for (unsigned int i = 0; i < _test.size(); ++i)
     for (unsigned int j = 0; j < _phi.size(); ++j)
-    {
-      // if (i == j)
-      //   _local_ke(i, j) += _kg[0](i * 6 + _component, i * 6 + _component);
-      // else
-        _local_ke(i, j) += _Kg[0](i * 6 + _component, j * 6 + _component);
-    }
+      _local_ke(i, j) += _Kg[0](i * 6 + _component, j * 6 + _component);
 
   ke += _local_ke;
-
-  // std::cout << "diag JACOBIAN *************** for component " << _component << "\n" << ke << "\n";
 
   if (_has_diag_save_in)
   {
@@ -123,12 +115,10 @@ void
 StressDivergenceIsolator::computeOffDiagJacobian(MooseVariableFEBase & jvar)
 // coupling one variable to another (disp x to disp y, etc)
 {
-  // std::cout << "$$$$$$$$$$$Executing computeOffDiagJacobian\n";
-
   size_t jvar_num = jvar.number();
   if (jvar_num == _var.number())
-  // jacobian calculation if jvar is the same as the current variable i.e.,
-  // diagonal elements
+    // jacobian calculation if jvar is the same as the current variable i.e.,
+    // diagonal elements
     computeJacobian();
 
   else
@@ -140,17 +130,17 @@ StressDivergenceIsolator::computeOffDiagJacobian(MooseVariableFEBase & jvar)
     for (unsigned int i = 0; i < _ndisp; ++i)
     {
       if (jvar_num == _disp_var[i])
-        {
-          coupled_component = i;
-          coupled = true;
-          break;
-        }
+      {
+        coupled_component = i;
+        coupled = true;
+        break;
+      }
       else if (jvar_num == _rot_var[i])
-        {
-          coupled_component = i + 3;
-          coupled = true;
-          break;
-        }
+      {
+        coupled_component = i + 3;
+        coupled = true;
+        break;
+      }
     }
     // getting the jacobian from assembly
     DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), jvar_num);
@@ -160,7 +150,5 @@ StressDivergenceIsolator::computeOffDiagJacobian(MooseVariableFEBase & jvar)
         for (unsigned int j = 0; j < _phi.size(); ++j)
           ke(i, j) += _Kg[0](i * 6 + _component, j * 6 + coupled_component);
     }
-    // std::cout << "off diag JACOBIAN *************** for components " << _component << ", " << coupled_component << "\n" << ke << "\n";
-
   }
 }
