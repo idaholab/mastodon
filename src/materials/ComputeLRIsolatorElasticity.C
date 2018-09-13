@@ -1,3 +1,17 @@
+/*************************************************/
+/*           DO NOT MODIFY THIS HEADER           */
+/*                                               */
+/*                     MASTODON                  */
+/*                                               */
+/*    (c) 2015 Battelle Energy Alliance, LLC     */
+/*            ALL RIGHTS RESERVED                */
+/*                                               */
+/*   Prepared by Battelle Energy Alliance, LLC   */
+/*     With the U. S. Department of Energy       */
+/*                                               */
+/*     See COPYRIGHT for full restrictions       */
+/*************************************************/
+
 // MASTODON includes
 #include "ComputeLRIsolatorElasticity.h"
 
@@ -364,7 +378,7 @@ ComputeLRIsolatorElasticity::computeShear()
 
   ColumnMajorMatrix delta_ub = _basic_def[_qp] - _basic_def_old[_qp];
 
-  if (sqrt(pow(delta_ub(1), 2) + pow(delta_ub(2), 2)) >= 0.0)
+  if (std::sqrt(delta_ub(1) * delta_ub(1) + delta_ub(2) * delta_ub(2)) >= 0.0)
   {
     // yield displacement
     double uy = _qYield / _k0;

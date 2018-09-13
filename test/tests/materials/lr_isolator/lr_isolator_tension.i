@@ -42,52 +42,28 @@
 
 [AuxVariables]
   [./vel_x]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./vel_y]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./vel_z]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./accel_x]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./accel_y]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./accel_z]
-  order = FIRST
-  family = LAGRANGE
-  [../]
-  [./rot_vel_x]
-  order = FIRST
-  family = LAGRANGE
-  [../]
-  [./rot_vel_y]
-  order = FIRST
-  family = LAGRANGE
-  [../]
-  [./rot_vel_z]
-  order = FIRST
-  family = LAGRANGE
-  [../]
-  [./rot_accel_x]
-  order = FIRST
-  family = LAGRANGE
-  [../]
-  [./rot_accel_y]
-  order = FIRST
-  family = LAGRANGE
-  [../]
-  [./rot_accel_z]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./reaction_x]
   [../]
@@ -146,51 +122,6 @@
     type = NewmarkVelAux
     variable = vel_z
     acceleration = accel_z
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./rot_accel_x]
-    type = NewmarkAccelAux
-    variable = rot_accel_x
-    displacement = rot_x
-    velocity = rot_vel_x
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./rot_vel_x]
-    type = NewmarkVelAux
-    variable = rot_vel_x
-    acceleration = rot_accel_x
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./rot_accel_y]
-    type = NewmarkAccelAux
-    variable = rot_accel_y
-    displacement = rot_y
-    velocity = rot_vel_y
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./rot_vel_y]
-    type = NewmarkVelAux
-    variable = rot_vel_y
-    acceleration = rot_accel_y
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./rot_accel_z]
-    type = NewmarkAccelAux
-    variable = rot_accel_z
-    displacement = rot_z
-    velocity = rot_vel_z
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./rot_vel_z]
-    type = NewmarkVelAux
-    variable = rot_vel_z
-    acceleration = rot_accel_z
     gamma = 0.5
     execute_on = timestep_end
   [../]

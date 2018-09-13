@@ -1,3 +1,17 @@
+/*************************************************/
+/*           DO NOT MODIFY THIS HEADER           */
+/*                                               */
+/*                     MASTODON                  */
+/*                                               */
+/*    (c) 2015 Battelle Energy Alliance, LLC     */
+/*            ALL RIGHTS RESERVED                */
+/*                                               */
+/*   Prepared by Battelle Energy Alliance, LLC   */
+/*     With the U. S. Department of Energy       */
+/*                                               */
+/*     See COPYRIGHT for full restrictions       */
+/*************************************************/
+
 // MASTODON includes
 #include "ComputeIsolatorDeformation.h"
 
@@ -19,7 +33,7 @@ InputParameters
 validParams<ComputeIsolatorDeformation>()
 {
   InputParameters params = validParams<Material>();
-  params.addClassDescription("Compute the deformations rotations in a two-noded isolator element.");
+  params.addClassDescription("Compute the deformations and rotations in a two-noded isolator element.");
   params.addRequiredCoupledVar(
       "rotations",
       "The rotation variables appropriate for the simulation geometry and coordinate system.");
@@ -27,10 +41,10 @@ validParams<ComputeIsolatorDeformation>()
       "displacements",
       "The displacement variables appropriate for the simulation geometry and coordinate system.");
   params.addRequiredCoupledVar("velocities", "Translational velocity variables.");
-  params.addRequiredCoupledVar("accelerations", " acceleration variables.");
+  params.addRequiredCoupledVar("accelerations", "Translational acceleration variables.");
   params.addRequiredParam<RealGradient>("y_orientation",
-                                        "Orientation of the y direction along "
-                                        "with Ky is provided. This should be "
+                                        "Orientation of the local Y direction along "
+                                        "which, Ky is provided. This should be "
                                         "perpendicular to the axis of the isolator.");
   params.addParam<MaterialPropertyName>("sd_ratio", 0.5, "Shear distance ratio.");
   params.set<MooseEnum>("constant_on") = "ELEMENT"; // sets _qp to 0. Material properties are

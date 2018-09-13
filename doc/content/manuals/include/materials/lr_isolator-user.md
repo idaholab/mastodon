@@ -1,17 +1,34 @@
-### Lead-rubber isolator
+### Lead-rubber (LR) isolator
 
-The LR isolator material should be used with two-noded beam or link type elements in MASTODON.
-For each subdomain (which may contain multiple link elements), the material properties are
-defined by creating the material blocks, `ComputeIsolatorDeformation` and `ComputeLRIsolatorElasticity`,
-and the kernel block, `StressDivergenceIsolator`. A sample definition of the kernel and material
-blocks is shown in the input file below.
+The LR isolator material simulates an LR bearing using the formulation developed
+by [citet:manishkumarmceer2015]. This material model should be used with
+two-noded link elements with three degrees of freedom at each node. A detailed
+description of the formulation and the various behaviors included in the
+formulation is provided in the [theory manual](manuals/theory/index.md).
+The following input blocks should be created in order to model the LR isolator
+material in MASTODON. Input parameters and the syntax for these blocks can be
+found in their corresponding syntax pages in the links below.
+
+- [`ComputeIsolatorDeformation`](source/materials/ComputeIsolatorDeformation.md)
+- [`ComputeLRIsolatorElasticity`](source/materials/ComputeLRIsolatorElasticity.md)
+- [`StressDivergenceIsolator`](source/kernels/StressDivergenceIsolator.md)
+
+A sample input for these blocks is below.
 
 !listing test/tests/materials/lr_isolator/lr_isolator_axial_ct.i start=[Kernels] end=[Postprocessors]
 
-A description of each of the input parameters is provided in the syntax description below.
-Additionally, the behavior of the element in axial and shear directions is demonstrated
-through three examples described below. The analysis results are compared with verified
-and validated numerical models implemented in the commercial software code, ABAQUS [citet:abaqus2016].
+#### Limitations
+
+- Currently, this formulation is limited to small rigid deformations in the isolator. This is because
+  the isolator deformations are transformed from the global to local coordinate systems using a
+  transformation matrix that is calculated from the initial position of the isolator. However,
+  seismic isolators are typically placed between two large concrete slabs (which are almost
+  rigid) and therefore the rigid body rotations in the isolators are usually negligible.
+- The post-buckling behavior of the isolator is modeled using a very small axial stiffness ($1/1000^{th}$) of
+  initial stiffness, in order to avoid numerical convergence problems.
+- The mass of the LR bearing is not modeled in this material model. The user can model the mass of
+  the isolators using NodalKernels, and following a procedure similar to that shown in modeling the
+  superstructure mass in the examples above.
 
 #### Example 1: Response to axial loading
 
@@ -52,8 +69,10 @@ The loading profile and response of the LR isolator for cyclic loading in shear 
 
 The following input file simulates the response of the LR isolator under seismic loading. A superstructure
 mass of 146890 kg is assumed in this example, and is assigned to the top node of the isolator using a NodalKernel
-of type, `NodalTranslationInertia`. The three components of ground motion are applied at the bottom node as
-input accelerations, using the `PresetAcceleration` BC. It should be noted that a small time step in range of
+of type, [`NodalTranslationInertia`](source/nodalkernels/NodalTranslationalInertia.md).
+The three components of ground motion are applied at the bottom node as
+input accelerations, using the [`PresetAcceleration`](source/bcs/PresetAcceleration.md)
+BC. It should be noted that a small time step in range of
 0.0005-0.0001 sec is required for seismic analysis, especially for accuracy in the axial direction. It is
 recommended to iteratively reduce the time step until the change in the results is within a desired
 tolerance.
@@ -76,10 +95,3 @@ The following figures shows the response of LR isolator under seismic loading.
        style=width:100%;float:left
        id=fig:SeismicShearZ
        caption=Response of lead rubber bearing in shear (local z) direction under seismic loading.
-
-
-!syntax parameters /Materials/ComputeLRIsolatorElasticity
-
-!syntax inputs /Materials/ComputeLRIsolatorElasticity
-
-!syntax children /Materials/ComputeLRIsolatorElasticity

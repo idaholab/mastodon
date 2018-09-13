@@ -4,7 +4,7 @@ A lead-rubber (LR) isolator is composed of alternate layers of laminated rubber 
 two steel plates at the ends, and a cylindrical lead core in the center. Continuum modeling of LR
 bearings is computationally expensive and impractical for applications involving large structures
 with several (tens to hundreds) isolators. Hence, a discrete, two-noded model for LR bearings
-developed by [citet:manishkumarmceer2015] is adopted here. The discrete isolator model has has six
+developed by [citet:manishkumarmceer2015] is adopted here. The discrete isolator model has six
 degrees of freedom (3 translations and 3 rotations) at each node and is capable of simulating
 nonlinear behavior of the LR bearing in both axial and shear directions. The physical model of the
 two node isolator element is shown in [fig:physicalmodelofbearing] [citep:manishkumarEESD2014].
@@ -107,7 +107,7 @@ Integrating the above equation results in an expression for tensile force shown 
 F=F_c\left[1+\frac{1}{kT_r}\left(1-e^{-k(u-u_c)}\right)\right]
 \end{equation}
 
-$Fc$ is the initial cavitation force<br/>
+$F_c$ is the initial cavitation force<br/>
 $k$ is the cavitation parameter<br/>
 $u_c$ is the initial cavitation deformation<br/>
 $u$ is tensile deformation in bearings<br/>
@@ -259,16 +259,3 @@ shear deformation in the bearing. A simplified expression formulated by [citet:k
 \label{lr_eqn13}
 K_V = \frac{AE_c}{T_r}\left[1+\frac{3}{\pi^{2}}\left(\frac{u_h}{r}\right)^{2}\right],
 \end{equation}
-
-#### Limitations
-
-- Currently, this formulation is limited to small rigid deformations in the isolator. This is because
-  the isolator deformations are transformed from the global to local coordinate systems using a
-  transformation matrix that is calculated from the initial position of the isolator. However,
-  seismic isolators are typically placed between two large concrete slabs (which are almost
-  rigid) and therefore the rigid body rotations in the isolators are usually negligible.
-- The post-buckling behavior of the isolator is modeled using a very small axial stiffness ($1/1000^{th}$) of
-  initial stiffness, in order to avoid numerical convergence problems.
-- The mass of the LR bearing is not modeled in this material model. The user can model the mass of
-  the isolators using NodalKernels, and following a procedure similar to that shown in modeling the
-  superstructure mass in the examples above.
