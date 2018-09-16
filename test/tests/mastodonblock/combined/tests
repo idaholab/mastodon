@@ -6,6 +6,13 @@
     exodiff = noaction_out.e
   [../]
 
+  [./noaction_2D]
+    # 1 element 2D problem with no Mastodon block actions
+    type = Exodiff
+    input = noaction_2D.i
+    exodiff = noaction_2D_out.e
+  [../]
+
   [./mastodon_block_actions]
     # 1 element problem with all Mastodon block actions
     type = Exodiff
@@ -13,5 +20,14 @@
     exodiff = noaction_out.e
     cli_args = "Outputs/file_base=noaction_out"
     prereq = noaction
+  [../]
+
+  [./mastodon_block_actions_2D]
+    # 1 element 2D problem with all Mastodon block actions
+    type = Exodiff
+    input = mastodon_block_actions_2D.i
+    exodiff = noaction_2D_out.e
+    cli_args = "Outputs/file_base=noaction_2D_out"
+    prereq = noaction_2D
   [../]
 []

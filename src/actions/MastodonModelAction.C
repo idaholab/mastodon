@@ -41,9 +41,13 @@ validParams<MastodonModelAction>()
                              "acceleration AuxVariables and AuxKernels, inertia kernels and the "
                              "DynamicTensorMechanicsAction based on the dimension of the mesh and "
                              "if static or dynamic analysis is being performed.");
+  params.addParam<std::vector<SubdomainName>>("block",
+                                              "A list of ids of the blocks (subdomains) "
+                                              "that these model parameters apply to.");
   params.addParam<bool>("dynamic_analysis", true, "false, if static analysis is to be performed.");
   params.addParam<Real>("beta", 0.25, "beta parameter for Newmark time integration.");
   params.addParam<Real>("gamma", 0.5, "gamma parameter for Newmark time integration.");
+  params.addParam<unsigned int>("dim", 3, "Dimension of the mesh.");
   params.addParam<MaterialPropertyName>(
       "eta", 0.0, "eta parameter or mass matrix multiplier for Rayleigh damping.");
   params.addParam<MaterialPropertyName>(
@@ -58,8 +62,13 @@ MastodonModelAction::MastodonModelAction(const InputParameters & params)
     _disp_variables({"disp_x", "disp_y", "disp_z"}),
     _vel_auxvariables({"vel_x", "vel_y", "vel_z"}),
     _accel_auxvariables({"accel_x", "accel_y", "accel_z"}),
+    _dim(getParam<unsigned int>("dim")),
     _use_displaced_mesh(getParam<bool>("use_displaced_mesh"))
 {
+  if (_dim < 1 || _dim > 3)
+    mooseError("Error in MastodonModelAction block, ",
+               name(),
+               ". The paramater, dim should be 1, 2, or 3.");
 }
 
 void
@@ -95,9 +104,13 @@ MastodonModelAction::act()
 void
 MastodonModelAction::addDynamicTensorMechanicsAction()
 {
+  std::vector<NonlinearVariableName> dim_disp_variables(_disp_variables.begin(),
+                                                        _disp_variables.begin() + _dim);
   // Retrieve action parameters and set the parameters
   InputParameters action_params = _action_factory.getValidParams("DynamicTensorMechanicsAction");
-  action_params.set<std::vector<NonlinearVariableName>>("displacements") = _disp_variables;
+  action_params.set<std::vector<SubdomainName>>("block") =
+      getParam<std::vector<SubdomainName>>("block");
+  action_params.set<std::vector<NonlinearVariableName>>("displacements") = dim_disp_variables;
   action_params.set<MaterialPropertyName>("zeta") = getParam<MaterialPropertyName>("zeta");
   // Create the action and add it to the action warehouse
   std::shared_ptr<Action> dynamictensormechanics_action =
@@ -109,6 +122,12 @@ MastodonModelAction::addDynamicTensorMechanicsAction()
 void
 MastodonModelAction::addDisplacementVariables()
 {
+  if (_dim != _problem->mesh().dimension())
+    mooseError("Error in MastodonModelAction block, ",
+               name(),
+               ". dim is not equal to the mesh dimension, which is ",
+               _problem->mesh().dimension(),
+               ".");
   const bool second = _problem->mesh().hasSecondOrderElements();
   FEType disp_fe_type(second ? SECOND : FIRST, LAGRANGE);
   for (std::size_t i = 0; i < _problem->mesh().dimension(); i++)
