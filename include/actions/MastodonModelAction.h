@@ -48,6 +48,9 @@ private:
   // Acceleration AuxVariable names
   const std::vector<AuxVariableName> _accel_auxvariables;
 
+  // Mesh dimension
+  const unsigned int _dim;
+
   // Switch for performing calculations with displaced mesh
   const bool _use_displaced_mesh;
 };
