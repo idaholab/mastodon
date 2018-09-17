@@ -22,6 +22,13 @@
     exodiff = noaction_dynamic_out.e
   [../]
 
+  [./noaction_dynamic_2D]
+    # 1 element 2D dynamic analysis with no Mastodon/model actions
+    type = Exodiff
+    input = noaction_dynamic_2D.i
+    exodiff = noaction_dynamic_2D_out.e
+  [../]
+
   [./model_dynamic]
     # 1 element dynamic analysis with Mastodon/model action for dynamic analysis
     type = Exodiff
@@ -29,6 +36,23 @@
     exodiff = noaction_dynamic_out.e
     cli_args = "Outputs/file_base=noaction_dynamic_out"
     prereq = noaction_dynamic
+  [../]
+
+  [./model_dynamic_2D]
+    # 1 element 2D dynamic analysis with Mastodon/model action for dynamic analysis
+    type = Exodiff
+    input = model_dynamic_2D.i
+    exodiff = noaction_dynamic_2D_out.e
+    cli_args = "Outputs/file_base=noaction_dynamic_2D_out"
+    prereq = noaction_dynamic_2D
+  [../]
+
+  [./model_dynamic_2D_dim_error]
+    # 1 element 2D dynamic analysis with Mastodon/model action for dynamic analysis
+    type = RunException
+    input = model_dynamic_2D.i
+    cli_args = "Mastodon/Model/dim=3"
+    expect_err = "Error in MastodonModelAction block, Model. dim is not equal to the mesh dimension, which is 2."
   [../]
 
 []
