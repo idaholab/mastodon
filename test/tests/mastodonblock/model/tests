@@ -52,7 +52,7 @@
     type = RunException
     input = model_dynamic_2D.i
     cli_args = "Mastodon/Model/dim=3"
-    expect_err = "Error in MastodonModelAction block, Model. dim is not equal to the mesh dimension, which is 2\."
+    expect_err = "Error in MastodonModelAction block, Model. dim is not equal to the mesh dimension, which is 2."
   [../]
 
 []

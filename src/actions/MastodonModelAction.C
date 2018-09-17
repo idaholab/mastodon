@@ -47,7 +47,8 @@ validParams<MastodonModelAction>()
   params.addParam<bool>("dynamic_analysis", true, "false, if static analysis is to be performed.");
   params.addParam<Real>("beta", 0.25, "beta parameter for Newmark time integration.");
   params.addParam<Real>("gamma", 0.5, "gamma parameter for Newmark time integration.");
-  params.addParam<unsigned int>("dim", 3, "Dimension of the mesh.");
+  MooseEnum dim("1=1 2=2 3=3", "3");
+  params.addParam<MooseEnum>("dim", dim, "Dimension of the mesh.");
   params.addParam<MaterialPropertyName>(
       "eta", 0.0, "eta parameter or mass matrix multiplier for Rayleigh damping.");
   params.addParam<MaterialPropertyName>(
@@ -62,13 +63,9 @@ MastodonModelAction::MastodonModelAction(const InputParameters & params)
     _disp_variables({"disp_x", "disp_y", "disp_z"}),
     _vel_auxvariables({"vel_x", "vel_y", "vel_z"}),
     _accel_auxvariables({"accel_x", "accel_y", "accel_z"}),
-    _dim(getParam<unsigned int>("dim")),
+    _dim(getParam<MooseEnum>("dim")),
     _use_displaced_mesh(getParam<bool>("use_displaced_mesh"))
 {
-  if (_dim < 1 || _dim > 3)
-    mooseError("Error in MastodonModelAction block, ",
-               name(),
-               ". The paramater, dim should be 1, 2, or 3.");
 }
 
 void
