@@ -33,7 +33,8 @@ InputParameters
 validParams<ComputeIsolatorDeformation>()
 {
   InputParameters params = validParams<Material>();
-  params.addClassDescription("Compute the deformations and rotations in a two-noded isolator element.");
+  params.addClassDescription(
+      "Compute the deformations and rotations in a two-noded isolator element.");
   params.addRequiredCoupledVar(
       "rotations",
       "The rotation variables appropriate for the simulation geometry and coordinate system.");
@@ -78,7 +79,9 @@ ComputeIsolatorDeformation::ComputeIsolatorDeformation(const InputParameters & p
 
   // Checking for consistency between length of the provided displacements and rotations vector
   if (_ndisp != _nrot)
-    mooseError("ComputeIsolatorDeformation: The number of variables supplied in 'displacements' "
+    mooseError("Error in ComputeIsolatorDeformation block, ",
+               name(),
+               ". The number of variables supplied in 'displacements' "
                "and 'rotations' input parameters must be equal.");
 
   // Fetch coupled variables and gradients (as stateful properties if necessary)
@@ -111,7 +114,7 @@ ComputeIsolatorDeformation::computeQpProperties()
     x_orientation(i) = (*node[1])(i) - (*node[0])(i);
   _length[_qp] = x_orientation.norm();
   if (_length[_qp] == 0.0)
-    mooseError("Error in isolator material block, ",
+    mooseError("Error in ComputeIsolatorDeformation block, ",
                name(),
                ". Isolator element cannot be of zero length.");
   x_orientation /= _length[_qp]; // Normalizing with length to get orientation
@@ -122,9 +125,9 @@ ComputeIsolatorDeformation::computeQpProperties()
 
   // Check if x and y orientations are perpendicular
   if (abs(dot) > 1e-4)
-    mooseError("Error in isolator block, ",
+    mooseError("Error in ComputeIsolatorDeformation block, ",
                name(),
-               ". y_orientation should be perpendicular to "
+               ". 'y_orientation' should be perpendicular to ",
                "the axis of the isolator.");
 
   // Calculate z orientation in the global coordinate system as a cross product of the x and y
@@ -173,7 +176,7 @@ void
 ComputeIsolatorDeformation::computeTotalRotation()
 {
   std::size_t _qp = 0;
-  // Currently this formulation is limited to small deformations in the isolator,
+  // Currently, this formulation is limited to small deformations in the isolator,
   // namely, it is assumed that there are no rigid body rotations in the isolator,
   // and that the total rotation matrix from global to local coordinates
   // (calculated below) remains the same as the one at t = 0 throughout the

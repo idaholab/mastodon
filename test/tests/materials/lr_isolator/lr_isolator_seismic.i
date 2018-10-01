@@ -520,6 +520,6 @@
 [Outputs]
   csv = true
   exodus = true
-  print_perf_log = true
-  interval=10
+  perf_graph = true
+  interval = 10
 []
