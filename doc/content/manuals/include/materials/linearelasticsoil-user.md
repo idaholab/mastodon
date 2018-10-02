@@ -1,4 +1,4 @@
-#### Linear elastic soil
+### Linear elastic soil
 
 A linear elastic soil can be defined in MASTODON by defining a elasticity tensor using
 ComputeIsotropicElasticityTensor, stress calculator using ComputeLinearElasticStress, and a small

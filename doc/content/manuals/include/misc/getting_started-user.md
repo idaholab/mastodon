@@ -5,7 +5,7 @@ model for finite element analysis using the MASTODON framework.
 
 <!-- Need to generically describe the input file, mesh, kernels, materials, etc. Also need to describe the MASTODON block. -->
 
-#### Kernels
+### Kernels
 
 Kernels are related to the physics involved in the particular analysis. This document focusses on
 kernel commands related to the geotechnical earthquake engineering applications. Further information

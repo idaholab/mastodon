@@ -12,22 +12,22 @@
 /*     See COPYRIGHT for full restrictions       */
 /*************************************************/
 
-#ifndef STRESSDIVERGENCESPRING_H
-#define STRESSDIVERGENCESPRING_H
+#ifndef STRESSDIVERGENCEISOLATOR_H
+#define STRESSDIVERGENCEISOLATOR_H
 
 #include "Kernel.h"
+#include "ColumnMajorMatrix.h"
 
 // Forward Declarations
-class StressDivergenceSpring;
-class RankTwoTensor;
+class StressDivergenceIsolator;
 
 template <>
-InputParameters validParams<StressDivergenceSpring>();
+InputParameters validParams<StressDivergenceIsolator>();
 
-class StressDivergenceSpring : public Kernel
+class StressDivergenceIsolator : public Kernel
 {
 public:
-  StressDivergenceSpring(const InputParameters & parameters);
+  StressDivergenceIsolator(const InputParameters & parameters);
   virtual void computeResidual() override;
   virtual void computeJacobian() override;
   virtual void computeOffDiagJacobian(MooseVariableFEBase & jvar) override;
@@ -51,20 +51,11 @@ protected:
   /// Variable numbers corresponding to rotational variables
   std::vector<unsigned int> _rot_var;
 
-  /// Spring forces
-  const MaterialProperty<RealVectorValue> & _spring_forces_global;
+  /// Global isolator forces
+  const MaterialProperty<ColumnMajorMatrix> & _Fg;
 
-  /// Spring moments
-  const MaterialProperty<RealVectorValue> & _spring_moments_global;
-
-  /// Displacement stiffness matrix
-  const MaterialProperty<RankTwoTensor> & _kdd;
-
-  /// Rotation stiffness matrix
-  const MaterialProperty<RankTwoTensor> & _krr;
-
-  /// Rotation stiffness matrix
-  const MaterialProperty<RankTwoTensor> & _total_global_to_local_rotation;
+  /// GLobal stiffness matrix
+  const MaterialProperty<ColumnMajorMatrix> & _Kg;
 };
 
-#endif // STRESSDIVERGENCESPRING_H
+#endif // STRESSDIVERGENCEISOLATOR_H
