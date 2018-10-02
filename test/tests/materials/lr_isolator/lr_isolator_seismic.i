@@ -358,12 +358,12 @@
   type = Transient
   solve_type = NEWTON
   line_search = none
-  nl_rel_tol = 1e-4
+  nl_rel_tol = 1e-10
   nl_abs_tol = 1e-4
   start_time = 0
-  end_time =1
-  dt = 0.0001
-  dtmin = 0.0000001
+  end_time = 0.5
+  dt = 1e-4
+  dtmin = 1e-7
   timestep_tolerance = 1e-8
 []
 
@@ -521,5 +521,5 @@
   csv = true
   exodus = true
   perf_graph = true
-  interval = 10
+  # interval = 10
 []
