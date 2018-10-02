@@ -1,4 +1,4 @@
-#### Seismic force
+### Seismic force
 
 In some cases, the ground excitation is measured at a rock outcrop (where rock is found at surface
 level and there is no soil above it). To apply this to a location where rock is say $10$m deep and

@@ -1,4 +1,4 @@
-#### The I_Soil System
+### The I_Soil System
 
 The I-soil material model is a nonlinear hysteretic soil model that is based on the distributed
 element models developed by [citet:iwan1967on] and [citet:chiang1994anew]. In 1-D, this model takes

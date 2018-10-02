@@ -1,4 +1,4 @@
-#### Housner spectrum intensity
+### Housner spectrum intensity
 
 The response spectra is very useful for understanding the response of the system at one
 location. However, if the response at multiple locations have to be compared, a single value that can
