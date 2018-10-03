@@ -176,9 +176,10 @@ MastodonModelAction::addVelAccelAuxKernels()
     InputParameters action_params = _action_factory.getValidParams("AddKernelAction");
     // Create the action
     action_params.set<std::string>("type") = "NewmarkVelAux";
+    action_params.set<std::string>("task") = "add_aux_kernel";
     std::shared_ptr<MooseObjectAction> vel_action = std::static_pointer_cast<MooseObjectAction>(
         _action_factory.create("AddKernelAction", vel_auxkernel[j], action_params));
-    vel_action->appendTask("add_aux_kernel");
+
     // Assigning input parameters
     InputParameters & vel_kernel_params = vel_action->getObjectParams();
     vel_kernel_params.set<AuxVariableName>("variable") = _vel_auxvariables[j];

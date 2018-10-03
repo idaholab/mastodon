@@ -1,4 +1,4 @@
-### Thin-layer method
+#### Thin-layer method
 
 An efficient approach to modeling the foundation-soil interface is to create a thin layer of the
 I-Soil material at the interface, as illustrated in [fig:thin_layer] below.

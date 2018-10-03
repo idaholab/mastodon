@@ -1,4 +1,4 @@
-### Non-reflecting boundary
+#### Non-reflecting boundary
 
 This boundary condition applies a Lysmer damper [citep:lysmer1969finite] on a given boundary to
 absorb the waves hitting the boundary. To understand Lysmer dampers, let us consider an uniform

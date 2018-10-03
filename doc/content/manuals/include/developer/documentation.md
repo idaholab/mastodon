@@ -31,7 +31,7 @@ objects.
 Associated actions, and usage in the Mastodon block, if available. Link to the
 documentation of the corresponding Mastodon block action.
 
-Any known quirks/limitations about the usage of the model that need to be known.
+Quick demo of this feature including listings of input files and sample results.
 
 ```
 
@@ -53,6 +53,6 @@ manual document.
 Description of the physics, or the theory behind the feature including
 references, equations, figures, etc.
 
-Limitations, if any, of the formulation.
+Limitations, if any, of the implementation of this feature in MASTODON.
 
 ```

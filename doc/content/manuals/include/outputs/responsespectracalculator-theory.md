@@ -1,4 +1,4 @@
-### Response spectra
+#### Response spectra
 
 An important quantity that is used in understanding the response of a structure is the
 velocity/acceleration response spectra. This contains information about the frequency content of the
