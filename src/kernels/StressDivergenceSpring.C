@@ -1,17 +1,3 @@
-/*************************************************/
-/*           DO NOT MODIFY THIS HEADER           */
-/*                                               */
-/*                     MASTODON                  */
-/*                                               */
-/*    (c) 2015 Battelle Energy Alliance, LLC     */
-/*            ALL RIGHTS RESERVED                */
-/*                                               */
-/*   Prepared by Battelle Energy Alliance, LLC   */
-/*     With the U. S. Department of Energy       */
-/*                                               */
-/*     See COPYRIGHT for full restrictions       */
-/*************************************************/
-
 // MASTODON includes
 
 #include "StressDivergenceSpring.h"

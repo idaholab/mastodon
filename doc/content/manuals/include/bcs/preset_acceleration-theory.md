@@ -1,4 +1,4 @@
-### Preset acceleration
+#### Preset acceleration
 
 If the ground excitation was measured at a depth within the soil by placing an accelerometer at that
 location, then it is termed as a within-soil input. This time history contains the wave that was

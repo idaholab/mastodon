@@ -1,4 +1,4 @@
-### Domain reduction method (DRM)
+#### Domain reduction method (DRM)
 
 Earthquake 'source-to-site' simulations require simulating a huge soil domain (order of many
 kilometers) with a earthquake fault. The nuclear power plant structure, which is usually less than
