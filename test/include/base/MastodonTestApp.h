@@ -12,11 +12,8 @@ class MastodonTestApp : public MooseApp
 {
 public:
   MastodonTestApp(InputParameters parameters);
-
   static void registerApps();
-  static void registerObjects(Factory & factory);
-  static void associateSyntax(Syntax & syntax, ActionFactory & action_factory);
-  static void registerExecFlags(Factory & factory);
+  static void registerAll(Factory &, ActionFactory &, Syntax &, bool);
 };
 
 #endif /* MASTODONTESTAPP_H */

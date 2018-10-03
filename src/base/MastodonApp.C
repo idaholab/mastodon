@@ -23,19 +23,7 @@ registerKnownLabel("MastodonApp");
 
 MastodonApp::MastodonApp(InputParameters parameters) : MooseApp(parameters)
 {
-  Moose::registerObjects(_factory);
-  ModulesApp::registerObjects(_factory);
-  MastodonApp::registerObjects(_factory);
-  MastodonApp::registerObjectDepends(_factory);
-
-  Moose::associateSyntax(_syntax, _action_factory);
-  ModulesApp::associateSyntax(_syntax, _action_factory);
-  MastodonApp::associateSyntax(_syntax, _action_factory);
-  MastodonApp::associateSyntaxDepends(_syntax, _action_factory);
-
-  Moose::registerExecFlags(_factory);
-  ModulesApp::registerExecFlags(_factory);
-  MastodonApp::registerExecFlags(_factory);
+  MastodonApp::registerAll(_factory, _action_factory, _syntax);
 }
 
 void
@@ -45,25 +33,12 @@ MastodonApp::registerApps()
 }
 
 void
-MastodonApp::registerObjectDepends(Factory & /*factory*/)
+MastodonApp::registerAll(Factory & factory, ActionFactory & action_factory, Syntax & syntax)
 {
-}
 
-void
-MastodonApp::registerObjects(Factory & factory)
-{
   Registry::registerObjectsTo(factory, {"MastodonApp"});
-}
-
-void
-MastodonApp::associateSyntaxDepends(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
-{
-}
-
-void
-MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
-{
   Registry::registerActionsTo(action_factory, {"MastodonApp"});
+  ModulesApp::registerAll(factory, action_factory, syntax);
 
   syntax.registerActionSyntax("EmptyAction", "BCs/SeismicForce");
   syntax.registerActionSyntax("SeismicForceAction", "BCs/SeismicForce/*");
@@ -85,35 +60,8 @@ MastodonApp::associateSyntax(Syntax & syntax, ActionFactory & action_factory)
   syntax.registerActionSyntax("MastodonOutputsAction", "Mastodon/Outputs");
 }
 
-void
-MastodonApp::registerExecFlags(Factory & /*factory*/)
-{
-  /* Uncomment Factory parameter and register your new execution flags here! */
-}
-
-/***************************************************************************************************
- *********************** Dynamic Library Entry Points - DO NOT MODIFY ******************************
- **************************************************************************************************/
 extern "C" void
-MastodonApp__registerApps()
+MastodonApp__registerAll(Factory & f, ActionFactory & af, Syntax & s)
 {
-  MastodonApp::registerApps();
-}
-
-extern "C" void
-MastodonApp__registerObjects(Factory & factory)
-{
-  MastodonApp::registerObjects(factory);
-}
-
-extern "C" void
-MastodonApp__associateSyntax(Syntax & syntax, ActionFactory & action_factory)
-{
-  MastodonApp::associateSyntax(syntax, action_factory);
-}
-
-extern "C" void
-MastodonApp__registerExecFlags(Factory & factory)
-{
-  MastodonApp::registerExecFlags(factory);
+  MastodonApp::registerAll(f, af, s);
 }
