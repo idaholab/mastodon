@@ -27,6 +27,12 @@ MastodonApp::MastodonApp(InputParameters parameters) : MooseApp(parameters)
 }
 
 void
+MastodonApp::registerApps()
+{
+  registerApp(MastodonApp);
+}
+
+void
 MastodonApp::registerAll(Factory & factory, ActionFactory & action_factory, Syntax & syntax)
 {
 

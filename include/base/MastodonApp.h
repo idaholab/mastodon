@@ -12,6 +12,7 @@ class MastodonApp : public MooseApp
 {
 public:
   MastodonApp(InputParameters parameters);
+  static void registerApps();
   static void registerAll(Factory &, ActionFactory &, Syntax &);
 };
 
