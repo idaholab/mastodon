@@ -1,4 +1,4 @@
-### Response histories
+#### Response histories
 
 In MASTODON, the time history of any nodal variable (displacement, velocity, acceleration) or
 elemental variable (stress, strain) can be requested as output. The nodal variable time histories can

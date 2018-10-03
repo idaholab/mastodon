@@ -1,4 +1,4 @@
-### Linear elastic constitutive model
+#### Linear elastic constitutive model
 
 In scenarios where the material exhibits a linear relation between stress and strain, and does not
 retain any residual strain after unloading, is called a linear elastic material. In linear

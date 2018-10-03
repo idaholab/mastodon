@@ -1,4 +1,4 @@
-### Soil layers and meshing
+#### Soil layers and meshing
 
 Small strain properties (shear wave velocity, small strain modulus etc.) as well as mobilized shear strength of soils change with depth. Thus, in numerical models, soil profile (layers) is constructed to incorporate the depth dependent properties. The ground surface as well as layers that define the soil domain can be horizontal
 or non-horizontal. For the horizontal ground surface and layering scenario, the location

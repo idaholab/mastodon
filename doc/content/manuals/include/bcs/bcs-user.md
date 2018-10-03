@@ -14,7 +14,7 @@ value = 0 which provides the fixity by defining a zero displacement at the node.
 selects the nodes at the bottom surface of the element (labeled as surface 0) and assigns the
 boundary conditions.
 
-### Prescribed Displacement
+#### Prescribed Displacement
 
 The preset displacement boundary condition can be used to apply a displacement time history to a
 boundary (at the nodes). The displacement boundary condition first converts the user defined
@@ -43,7 +43,7 @@ displacement time history. The first column of this file should contain the time
 type of the function which is in this case piecewise-linear. “format” specifies the format of the
 data file, i.e. whether the data is in columns or rows.
 
-### Prescribed Acceleration
+#### Prescribed Acceleration
 
 The preset acceleration boundary condition can be used to apply an acceleration time history to a
 boundary. The preset acceleration boundary condition integrates the given acceleration time history
@@ -52,7 +52,7 @@ displacement boundary condition. Syntax is the same as prescribing a displaceme
 but with type = PresetAcceleration and the function describing time vs acceleration data instead of
 time vs displacement.
 
-### Periodic Boundary Conditions
+#### Periodic Boundary Conditions
 
 Periodic boundary conditions are used to constrain the nodes to move together in the specified
 directions. The following input is an example applied on the single element problem above and should be embedded into the BCs block segment as:
