@@ -8,5 +8,6 @@
     exodiff = interface_and_shear_wave_indicators_out.e
     min_parallel = 2
     vtk = true
+    method = opt
   [../]
 []
