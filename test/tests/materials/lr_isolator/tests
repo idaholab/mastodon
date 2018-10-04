@@ -20,9 +20,9 @@
     csvdiff = 'lr_isolator_PDelta_out.csv'
   [../]
   [./lr_isolator_seismic]
-    type = CSVDiff
+    type = Exodiff
     input = 'lr_isolator_seismic.i'
-    csvdiff = 'lr_isolator_seismic_out.csv'
+    exodiff = 'lr_isolator_seismic_out.e'
   [../]
   [./deformation_error1]
     type = RunException

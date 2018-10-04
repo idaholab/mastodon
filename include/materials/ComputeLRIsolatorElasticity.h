@@ -152,12 +152,6 @@ protected:
   /// Isolator old deformations rates in the basic system
   const MaterialProperty<ColumnMajorMatrix> & _basic_vel_old;
 
-  /// Isolator accelerations in the basic system
-  const MaterialProperty<ColumnMajorMatrix> & _basic_accel;
-
-  /// Isolator old accelerations in the basic system
-  const MaterialProperty<ColumnMajorMatrix> & _basic_accel_old;
-
   /// Isolator forces (including moments) in the basic system
   MaterialProperty<ColumnMajorMatrix> & _Fb;
 

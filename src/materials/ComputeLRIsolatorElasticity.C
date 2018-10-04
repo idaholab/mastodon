@@ -112,8 +112,6 @@ ComputeLRIsolatorElasticity::ComputeLRIsolatorElasticity(const InputParameters &
     _basic_def_old(getMaterialPropertyByName<ColumnMajorMatrix>("old deformations")),
     _basic_vel(getMaterialPropertyByName<ColumnMajorMatrix>("deformation_rates")),
     _basic_vel_old(getMaterialPropertyByName<ColumnMajorMatrix>("old deformations rates")),
-    _basic_accel(getMaterialPropertyByName<ColumnMajorMatrix>("velocity rates")),
-    _basic_accel_old(getMaterialPropertyByName<ColumnMajorMatrix>("old velocity rates")),
     _Fb(declareProperty<ColumnMajorMatrix>("basic_forces")),
     _Fb_old(getMaterialPropertyOld<ColumnMajorMatrix>("basic_forces")),
     _Fl(declareProperty<ColumnMajorMatrix>("local_forces")),
@@ -438,12 +436,16 @@ ComputeLRIsolatorElasticity::computeShear()
                  ".\n");
 
     // calculate derivative of hysteretic evolution parameter
-    Real du1du2 = delta_ub(1) / delta_ub(2);
-    Real du2du1 = delta_ub(2) / delta_ub(1);
+    Real du1du2, du2du1;
     if (delta_ub(1) * delta_ub(2) == 0)
     {
       du1du2 = 0.0;
       du2du1 = 0.0;
+    }
+    else
+    {
+      du1du2 = delta_ub(1) / delta_ub(2);
+      du2du1 = delta_ub(2) / delta_ub(1);
     }
     _dzdu(0, 0) =
         (1.0 / uy) * (1.0 - _z[_qp](0) * (_z[_qp](0) * tmp1 + _z[_qp](1) * tmp2 * du2du1));
