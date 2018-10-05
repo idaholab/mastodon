@@ -24,6 +24,8 @@
 
 !include include/materials/isoil-theory.md
 
+!include include/materials/lr_isolator-theory.md
+
 !include include/contact/intro_contact-theory.md
 
 !include include/contact/thin_layer-theory.md
