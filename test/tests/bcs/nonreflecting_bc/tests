@@ -5,6 +5,7 @@
     exodiff = 'non_reflecting_bc_test_out.e'
     compiler = 'GCC CLANG'
     max_parallel = 1
+    skip = "regold after moose PR"
   [../]
   [./displacements_error]
     type = RunException

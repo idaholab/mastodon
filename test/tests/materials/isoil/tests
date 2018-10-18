@@ -4,6 +4,8 @@
     type = Exodiff
     input = HYS_data_file.i
     exodiff = HYS_data_file_out.e
+    abs_zero = 5e-9
+    rel_err = 2e-5
   [../]
 
   [./data_file_noaction]
@@ -13,6 +15,8 @@
     exodiff = HYS_data_file_out.e
     cli_args = Outputs/file_base=HYS_data_file_out
     prereq = data_file
+    abs_zero = 5e-9
+    rel_err = 2e-5
   [../]
 
   [./darendeli]
@@ -36,6 +40,7 @@
     type = Exodiff
     input = HYS_GQH.i
     exodiff = HYS_GQH_out.e
+    abs_zero = 1e-9
   [../]
 
   [./GQH_noaction]
@@ -45,6 +50,7 @@
     exodiff = HYS_GQH_out.e
     cli_args = Outputs/file_base=HYS_GQH_out
     prereq = GQH
+    abs_zero = 1e-9
   [../]
 
   [./thin_layer]
@@ -75,6 +81,7 @@
     type = Exodiff
     input = HYS_stiffness_and_strength_pressure_dependency.i
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
+    abs_zero = 5e-9
   [../]
 
   [./stiffness_and_strength_pressure_dependency_noaction]
@@ -84,5 +91,6 @@
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
     cli_args = Outputs/file_base=HYS_stiffness_and_strength_pressure_dependency_out
     prereq = stiffness_and_strength_pressure_dependency
+    abs_zero = 5e-9
   [../]
 []
