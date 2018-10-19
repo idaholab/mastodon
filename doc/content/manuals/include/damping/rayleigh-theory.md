@@ -1,4 +1,4 @@
-#### Rayleigh damping
+### Rayleigh damping
 
 Rayleigh damping is the most common form of classical damping used in modeling structural dynamic problems. The more generalized form of classical damping, Caughey Damping [citep:caughey1960classical], is currently not implemented in MASTODON. Rayleigh damping is a specific form of Caughey damping that uses only the first two terms of the series. In this method, the viscous damping is proportional to the inertial contribution and contribution from the stiffness. This implies that in the matrix form of the governing equation, the damping matrix ($\mathbf{C}$) is assumed to be a linear combination of the mass ($\mathbf{M}$) and stiffness ($\mathbf{K}$) matrices, i.e., $\mathbf{C} = \eta \mathbf{M} +\zeta\mathbf{K}$. Here, $\eta$ and $\zeta$ are the mass and stiffness dependent Rayleigh damping parameters, respectively.
 
@@ -25,7 +25,7 @@ where, $\xi(f)$ is the damping ratio of the system as a function of frequency $f
        caption=Damping ratio as a function of frequency.
 
 
-#### Simulation of a constant damping ratio
+### Simulation of a constant damping ratio
 
 For the constant damping ratio scenario, the aim is to find $\zeta$ and $\eta$ such that the $\xi(f)$ is close to the target damping ratio $\xi_t$, which is a constant value, between the frequency range $[f_1, f_2]$. This can be achieved by minimizing the difference between $\xi_t$ and $\xi(f)$ for all the frequencies between $f_1$ and $f_2$, i.e., if
 
@@ -42,7 +42,7 @@ Then, $\frac{dI}{d \eta} = 0$ and $\frac{dI}{d \zeta}=0$ results in two equation
 \end{aligned}
 \end{equation}
 
-#### Rayleigh damping for soils
+### Rayleigh damping for soils
 
 Small-strain material damping of soils is independent of loading frequency in frequency band of 0.01 Hz - 10 Hz ([cite:menq2003], [cite:shibuya2000damp],[cite:lopresti1997damp], and [cite:marmureanu2000damp]). The two mode Rayleigh damping is frequency dependent and can only achieve the specified damping at two frequencies while underestimating within and overestimating outside of these frequencies. The parameters $\eta$ and $\zeta$ for a given damping ratio can be calculated as follows:
 

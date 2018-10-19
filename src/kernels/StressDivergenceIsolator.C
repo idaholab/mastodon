@@ -13,61 +13,55 @@
 /*************************************************/
 
 // MASTODON includes
-
-#include "StressDivergenceSpring.h"
+#include "StressDivergenceIsolator.h"
 
 // MOOSE includes
 #include "Assembly.h"
 #include "Material.h"
 #include "MooseVariable.h"
 #include "SystemBase.h"
-#include "RankTwoTensor.h"
 #include "NonlinearSystem.h"
 #include "MooseMesh.h"
 
 // libmesh includes
 #include "libmesh/quadrature.h"
 
-registerMooseObject("MastodonApp", StressDivergenceSpring);
+registerMooseObject("MastodonApp", StressDivergenceIsolator);
 
 template <>
 InputParameters
-validParams<StressDivergenceSpring>()
+validParams<StressDivergenceIsolator>()
 {
   InputParameters params = validParams<Kernel>();
-  params.addClassDescription("Kernel for spring element");
+  params.addClassDescription("Kernel for isolator element");
   params.addRequiredParam<unsigned int>(
       "component",
       "An integer corresponding to the direction "
       "the variable this kernel acts in. (0 for x, "
       "1 for y, 2 for z, 3 for rot_x, 4 for rot_y and 5 for rot_z).");
-  params.addRequiredCoupledVar("displacements", "The displacement variables for spring.");
-  params.addRequiredCoupledVar("rotations", "The rotation variables for the spring.");
+  params.addRequiredCoupledVar("displacements", "The displacement variables for isolator.");
+  params.addRequiredCoupledVar("rotations", "The rotation variables for the isolator.");
   params.set<bool>("use_displaced_mesh") = true;
   return params;
 }
 
-StressDivergenceSpring::StressDivergenceSpring(const InputParameters & parameters)
+StressDivergenceIsolator::StressDivergenceIsolator(const InputParameters & parameters)
   : Kernel(parameters),
     _component(getParam<unsigned int>("component")),
     _ndisp(coupledComponents("displacements")),
     _disp_var(_ndisp),
     _nrot(coupledComponents("rotations")),
     _rot_var(_nrot),
-    _spring_forces_global(getMaterialPropertyByName<RealVectorValue>("global_forces")),
-    _spring_moments_global(getMaterialPropertyByName<RealVectorValue>("global_moments")),
-    _kdd(getMaterialPropertyByName<RankTwoTensor>("displacement_stiffness_matrix")),
-    _krr(getMaterialPropertyByName<RankTwoTensor>("rotation_stiffness_matrix")),
-    _total_global_to_local_rotation(
-        getMaterialPropertyByName<RankTwoTensor>("total_global_to_local_rotation"))
+    _Fg(getMaterialPropertyByName<ColumnMajorMatrix>("global_forces")),
+    _Kg(getMaterialPropertyByName<ColumnMajorMatrix>("global_stiffness_matrix"))
 {
   if (_component > 5)
-    mooseError("Error in StressDivergenceSpring block ",
+    mooseError("Error in StressDivergenceIsolator block ",
                name(),
                ". Please enter an integer value between 0 and 5 for the 'component' parameter.");
 
   if (_ndisp != _nrot)
-    mooseError("Error in StressDivergenceSpring block ",
+    mooseError("Error in StressDivergenceIsolator block ",
                name(),
                ". The number of displacement and rotation variables should be the same.");
 
@@ -79,22 +73,19 @@ StressDivergenceSpring::StressDivergenceSpring(const InputParameters & parameter
 }
 
 void
-StressDivergenceSpring::computeResidual()
+StressDivergenceIsolator::computeResidual()
 {
   // Accessing residual vector, re, from MOOSE assembly
   DenseVector<Number> & re = _assembly.residualBlock(_var.number());
-  mooseAssert(re.size() == 2, "Spring element has and only has two nodes.");
+  mooseAssert(re.size() == 2, "Isolator element only has two nodes.");
   _local_re.resize(re.size());
   _local_re.zero();
 
   // Calculating residual for node 0 (external forces on node 0)
-  if (_component < 3)
-    _local_re(0) = -_spring_forces_global[0](_component);
-  else
-    _local_re(0) = -_spring_moments_global[0](_component - 3);
+  _local_re(0) = _Fg[0](_component);
 
-  // External force on node 1 = -1 * external force on node 0
-  _local_re(1) = -_local_re(0);
+  // External force on node 1 (external forces on node 1)
+  _local_re(1) = _Fg[0](_component + 6);
 
   re += _local_re;
 
@@ -107,21 +98,17 @@ StressDivergenceSpring::computeResidual()
 }
 
 void
-StressDivergenceSpring::computeJacobian()
+StressDivergenceIsolator::computeJacobian()
 {
   // Access Jacobian; size is n x n (n is number of nodes)
   DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), _var.number());
   _local_ke.resize(ke.m(), ke.n());
   _local_ke.zero();
 
+  // i and j are looping over nodes
   for (unsigned int i = 0; i < _test.size(); ++i)
     for (unsigned int j = 0; j < _phi.size(); ++j)
-    {
-      if (_component < 3)
-        _local_ke(i, j) += (i == j ? 1 : -1) * _kdd[0](_component, _component);
-      else
-        _local_ke(i, j) += (i == j ? 1 : -1) * _krr[0](_component - 3, _component - 3);
-    }
+      _local_ke(i, j) += _Kg[0](i * 6 + _component, j * 6 + _component);
 
   ke += _local_ke;
 
@@ -139,7 +126,7 @@ StressDivergenceSpring::computeJacobian()
 }
 
 void
-StressDivergenceSpring::computeOffDiagJacobian(MooseVariableFEBase & jvar)
+StressDivergenceIsolator::computeOffDiagJacobian(MooseVariableFEBase & jvar)
 // coupling one variable to another (disp x to disp y, etc)
 {
   size_t jvar_num = jvar.number();
@@ -148,5 +135,34 @@ StressDivergenceSpring::computeOffDiagJacobian(MooseVariableFEBase & jvar)
     // diagonal elements
     computeJacobian();
 
-  // Off-diagonal elements are zero for linear elastic spring
+  else
+  // jacobian calculation for off-diagonal elements
+  {
+    unsigned int coupled_component = 0;
+    bool coupled = false;
+    // finding which variable jvar is
+    for (unsigned int i = 0; i < _ndisp; ++i)
+    {
+      if (jvar_num == _disp_var[i])
+      {
+        coupled_component = i;
+        coupled = true;
+        break;
+      }
+      else if (jvar_num == _rot_var[i])
+      {
+        coupled_component = i + 3;
+        coupled = true;
+        break;
+      }
+    }
+    // getting the jacobian from assembly
+    DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), jvar_num);
+    if (coupled)
+    {
+      for (unsigned int i = 0; i < _test.size(); ++i)
+        for (unsigned int j = 0; j < _phi.size(); ++j)
+          ke(i, j) += _Kg[0](i * 6 + _component, j * 6 + coupled_component);
+    }
+  }
 }
