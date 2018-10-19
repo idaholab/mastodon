@@ -18,4 +18,8 @@
 
 !include include/materials/isoil-user.md
 
+!include include/materials/lr_isolator-user.md
+
 !include include/outputs/intro_outputs-user.md
+
+!bibtex bibliography
