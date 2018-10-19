@@ -6,7 +6,7 @@
 
 This material object calculates the deformation matrix of seismic isolator
 elements (such as lead-rubber and friction pendulum isolators), when modeled
-using a two-noded link elements. The syntax and input
+using two-noded link elements. The syntax and input
 parameters for this class are described below.
 
 !syntax parameters /Materials/ComputeIsolatorDeformation

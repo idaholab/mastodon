@@ -204,7 +204,7 @@ where,
 
 [lr_eq_8] is iteratively solved using the Newton-Raphson method to calculate the values of $Z_y$ and $Z_z$ at every analysis step in MASTODON.
 
-#### Heating of the lead core
+#### Lead core heating
 
 When the LR isolator is subjected to cyclic loads in shear, the temperature of the lead core increases.
 The effective yield stress of the lead core used in [lr_eq_7] varies with the temperature of the lead core, which is a function of time. Therefore, at every time step, the temperature of lead core is calculated and the

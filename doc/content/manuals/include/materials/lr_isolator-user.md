@@ -13,7 +13,7 @@ Additionally, the behavior of the LR isolator element in the axial and shear dir
 using the three examples described below. Analysis results are compared with verified
 and validated numerical models implemented in the commercial software code, ABAQUS [citet:abaqus2016].
 
-#### Example 1: Response to the axial loading id=axial_example
+#### Example 1: Response to axial loading id=axial_example
 
 The input file below demonstrates the response of the LR isolator element in the axial direction. A
 cyclic displacement is applied at the top node of the isolator in the axial (local X) direction while the
@@ -28,7 +28,7 @@ The response of the LR isolator to cyclic loading in the axial direction is show
        id=fig:axialresponse
        caption=Axial response of the LR isolator to the prescribed cyclic loading.
 
-#### Example 2: Response to the shear loading id=shear_example
+#### Example 2: Response to shear loading id=shear_example
 
 The input file below simulates the response of the LR isolator element in the shear direction. A sinusoidal displacement is applied at the top node of the isolator in the shear (local Y) direction. The isolator element
 has the same set of constraints as in Example 1. A constant axial load is applied to the isolator in the axial direction to simulate the weight of the superstructure.
