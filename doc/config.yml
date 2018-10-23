@@ -26,6 +26,7 @@ Renderer:
             Software Quality: sqa/index.md
             User: manuals/user/index.md
             Developer: manuals/developer/index.md
+        News: news/index.md    
         Documentation:
             Syntax: syntax/index.md
         Help:
