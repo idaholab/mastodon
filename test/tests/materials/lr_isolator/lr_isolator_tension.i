@@ -287,7 +287,6 @@
     displacements = 'disp_x disp_y disp_z'
     rotations = 'rot_x rot_y rot_z'
     velocities = 'vel_x vel_y vel_z'
-    accelerations = 'accel_z accel_y accel_z'
   [../]
   [./elasticity]
     type = ComputeLRIsolatorElasticity
