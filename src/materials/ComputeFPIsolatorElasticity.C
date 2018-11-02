@@ -163,11 +163,11 @@ ComputeFPIsolatorElasticity::computeShear()
   }
 
   // Compute resultant displacement in horizontal direction
-	Real resultantU =  sqrt(_basic_def[_qp](1,0)*_basic_def[_qp](1,0)+_basic_def[_qp](2,0)*_basic_def[_qp](2,0));
+  Real resultantU = sqrt(_basic_def[_qp](1,0)*_basic_def[_qp](1,0)+_basic_def[_qp](2,0)*_basic_def[_qp](2,0));
 
   // Calculate radii in basic y- and z- direction
-	Real r_y = sqrt(pow(_r_eff,2)-pow(_basic_def[_qp](1,0),2));
-	Real r_z = sqrt(pow(_r_eff,2)-pow(_basic_def[_qp](2,0),2));
+  Real r_y = sqrt(pow(_r_eff,2)-pow(_basic_def[_qp](1,0),2));
+  Real r_z = sqrt(pow(_r_eff,2)-pow(_basic_def[_qp](2,0),2));
 
   // Calculate velocities based on current deformations according to Newmark formulation
   Real vel1 = _basic_vel_old[_qp](1,0)+ (_gamma/_beta)*(((_basic_def[_qp](1, 0)-_basic_def_old[_qp](1,0))/_dt)-(_basic_vel_old[_qp](1,0)));
@@ -177,36 +177,36 @@ ComputeFPIsolatorElasticity::computeShear()
   Real velAbs = sqrt(pow(vel1/r_y*_basic_def[_qp](1,0) + vel2/r_z*_basic_def[_qp](2,0),2) + pow(vel1,2) + pow(vel2,2));
 
   // Check for uplift
-	Real is_uplift = 0.0;
-	Real kFactUplift = 1.0E-6;
-	if (_Fb[_qp](0,0) >= 0.0)
+  Real is_uplift = 0.0;
+  Real kFactUplift = 1.0E-6;
+  if (_Fb[_qp](0,0) >= 0.0)
   {
-	  _Fb[_qp](0,0) = -0.0001*_Fb[_qp](0,0);
-		is_uplift = 1.0;
-	}
+    _Fb[_qp](0,0) = -0.0001*_Fb[_qp](0,0);
+  is_uplift = 1.0;
+  }
 
   //Unit conversion for pressure to be used in the pressure factor computation
- 	Real p_Unit_Convert; //To convert to MPa
- 	if (_unit == 1) { p_Unit_Convert=0.000001; }
- 	if (_unit == 2) { p_Unit_Convert=0.001; }
- 	if (_unit == 3) { p_Unit_Convert=1.0; }
- 	if (_unit == 4) { p_Unit_Convert=1000.0; }
- 	if (_unit == 5) { p_Unit_Convert=0.006894; }
- 	if (_unit == 6) { p_Unit_Convert=6.894; }
- 	if (_unit == 7) { p_Unit_Convert=0.00004788; }
- 	if (_unit == 8) { p_Unit_Convert=0.04788; }
+   Real p_Unit_Convert; //To convert to MPa
+   if (_unit == 1) { p_Unit_Convert=0.000001; }
+   if (_unit == 2) { p_Unit_Convert=0.001; }
+   if (_unit == 3) { p_Unit_Convert=1.0; }
+   if (_unit == 4) { p_Unit_Convert=1000.0; }
+   if (_unit == 5) { p_Unit_Convert=0.006894; }
+   if (_unit == 6) { p_Unit_Convert=6.894; }
+   if (_unit == 7) { p_Unit_Convert=0.00004788; }
+   if (_unit == 8) { p_Unit_Convert=0.04788; }
 
   // Calculate normal force
-	Real N = -_Fb[_qp](0,0);
+  Real N = -_Fb[_qp](0,0);
 
   // Calculate instantaneous pressure
-	Real Inst_Pressure=fabs(N)/(_pi*_r_contact*_r_contact);
+  Real Inst_Pressure=fabs(N)/(_pi*_r_contact*_r_contact);
 
   // Calculate displacement increment in the current step
   _disp_currentstep = sqrt(pow((_basic_def[_qp](1,0)-_basic_def_old[_qp](1,0)),2)+pow((_basic_def[_qp](2,0)-_basic_def_old[_qp](2,0)),2));
 
   // Calculate sliding velocity
-	_vel_currentstep=_disp_currentstep/(_vec_time[_t_step]-_vec_time[_t_step-1]);
+  _vel_currentstep=_disp_currentstep/(_vec_time[_t_step]-_vec_time[_t_step-1]);
 
   if (velAbs > 0.0)
     _vel_currentstep = velAbs;
@@ -219,13 +219,13 @@ ComputeFPIsolatorElasticity::computeShear()
   if (_temperature_dependent)
   {
     // Calculate flux
-	  if (resultantU < (_r_contact*sqrt(_pi/4)))
+    if (resultantU < (_r_contact*sqrt(_pi/4)))
       _vec_heatflux[_t_step]=_mu_adj*(fabs(N)/(_pi*_r_contact*_r_contact))*_vel_currentstep;
 
     else
       _vec_heatflux[_t_step]=0.0;
 
-	  _heatflux_center = _vec_heatflux[_t_step];
+    _heatflux_center = _vec_heatflux[_t_step];
 
     // Temperature at the sliding surface
     Real temperature_change = 0.0;
