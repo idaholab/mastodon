@@ -23,14 +23,16 @@ Continuum modeling of FP bearings is computationally expensive and impractical f
        id=fig:fp_physicalmodel
        caption=Discrete, two-noded model of an FP bearing: (a) degrees of freedom, and (b) discrete spring representation [citep:manishkumarEESD2014].
 
+#### Force-displacement relationship
+
+Friction Pendulum<sup>TM</sup> bearings dissipate the energy induced during an earthquake through nonlinear hysteretic behavior in shear. The lateral force-displacement relationship of a single concave FP bearing is characterized by two parameters: yield strength and post elastic stiffness, and can be represented by the bi-linear curve of [fig:fp_forcedisplacement].
+
 !media media/materials/fp_isolator/fp_forcedisplacement.png
         style=width:40%;margin-left:2%;float:right;
         id=fig:fp_forcedisplacement
         caption=Lateral force-displacement relationship of a single concave FP bearing
 
-#### Force-displacement relationship
-
-Friction Pendulum<sup>TM</sup> bearings dissipate the energy induced during an earthquake through nonlinear hysteretic behavior in shear. The lateral force-displacement relationship of a single concave FP bearing is characterized by two parameters: yield strength and post elastic stiffness, and can be represented by the bi-linear curve of [fig:fp_forcedisplacement].
+The yield strength and the post-elastic stiffness can be calculated as,
 
 \begin{equation}
 \label{fp_eqn1}

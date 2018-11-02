@@ -3,10 +3,10 @@
 Lead-rubber (LR) seismic isolators are composed of alternating layers of natural rubber and steel shims with
 steel flange plates at top and bottom, and a central cylindrical lead core. Continuum modeling of LR
 bearings is computationally expensive and impractical for applications involving large structures
-with tens to hundreds of isolators. Hence, the two-node model developed by [citet:manishkumarmceer2015] is adopted here.
+with tens to hundreds of isolators. Hence, the two-node model developed by [citet:manishkumarmceer2015a] is adopted here.
 The isolator model has six degrees of freedom (3 translations and 3 rotations) at each node and is capable of
 simulating nonlinear behavior in both axial and shear directions. The physical model of the
-two-node isolator element is shown in [fig:physicalmodelofbearing]. For a detailed description on the implementation of numerical model, refer to [citet:manishkumarmceer2015].
+two-node isolator element is shown in [fig:physicalmodelofbearing]. For a detailed description on the implementation of numerical model, refer to [citet:manishkumarmceer2015a].
 
 !media media/materials/lr_isolator/physicalmodel.png
        style=width:70%;margin-left:150px;float:center;
@@ -143,7 +143,7 @@ viscoelastic behavior of the rubber layers and the hysteretic behavior of the le
 !media media/materials/lr_isolator/shearformulation.png
        style=width:60%;margin-left:150px;float:center;
        id=fig:shearformulation
-       caption=Shear behavior of the LR isolator [citep:manishkumarmceer2015].
+       caption=Shear behavior of the LR isolator [citep:manishkumarmceer2015a].
 
 \begin{equation}
 \label{lr_eq_7}
