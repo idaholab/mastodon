@@ -42,7 +42,6 @@ validParams<ComputeIsolatorDeformation>()
       "displacements",
       "The displacement variables appropriate for the simulation geometry and coordinate system.");
   params.addRequiredCoupledVar("velocities", "Translational velocity variables.");
-  params.addRequiredCoupledVar("accelerations", "Translational acceleration variables.");
   params.addRequiredParam<RealGradient>("y_orientation",
                                         "Orientation of the local Y direction along "
                                         "which, Ky is provided. This should be "
@@ -59,18 +58,14 @@ ComputeIsolatorDeformation::ComputeIsolatorDeformation(const InputParameters & p
     _nrot(coupledComponents("rotations")),
     _ndisp(coupledComponents("displacements")),
     _nvel(coupledComponents("velocities")),
-    _naccel(coupledComponents("accelerations")),
     _rot_num(3),
     _disp_num(3),
     _vel_num(3),
-    _accel_num(3),
     _sD(getMaterialProperty<Real>("sd_ratio")),
     _basic_disp(declareProperty<ColumnMajorMatrix>("deformations")),
-    _basic_disp_old(declareProperty<ColumnMajorMatrix>("old deformations")),
+    _basic_disp_old(declareProperty<ColumnMajorMatrix>("old_deformations")),
     _basic_vel(declareProperty<ColumnMajorMatrix>("deformation_rates")),
-    _basic_vel_old(declareProperty<ColumnMajorMatrix>("old deformations rates")),
-    _basic_accel(declareProperty<ColumnMajorMatrix>("velocity rates")),
-    _basic_accel_old(declareProperty<ColumnMajorMatrix>("old velocity rates")),
+    _basic_vel_old(declareProperty<ColumnMajorMatrix>("old_deformation_rates")),
     _original_gl(declareProperty<ColumnMajorMatrix>("original_global_to_local_transformation")),
     _total_gl(declareProperty<ColumnMajorMatrix>("total_global_to_local_transformation")),
     _total_lb(declareProperty<ColumnMajorMatrix>("total_local_to_basic_transformation")),
@@ -96,8 +91,6 @@ ComputeIsolatorDeformation::ComputeIsolatorDeformation(const InputParameters & p
     MooseVariable * rot_variable = getVar("rotations", i);
     _rot_num[i] = rot_variable->number(); // Rotation variable numbers in MOOSE
 
-    MooseVariable * accel_variable = getVar("accelerations", i);
-    _accel_num[i] = accel_variable->number(); // acceleration variable numbers in MOOSE
   }
 }
 
@@ -208,8 +201,6 @@ ComputeIsolatorDeformation::computeDeformation()
   ColumnMajorMatrix global_vel(12, 1);
   ColumnMajorMatrix global_disp_old(12, 1);
   ColumnMajorMatrix global_vel_old(12, 1);
-  ColumnMajorMatrix global_accel(12, 1);
-  ColumnMajorMatrix global_accel_old(12, 1);
   for (unsigned int i = 0; i < _ndisp; ++i)
   {
     global_disp(i) =
@@ -236,22 +227,6 @@ ComputeIsolatorDeformation::computeDeformation()
         aux.number(), _vel_num[i], 0)); // node 0 velocities; rotational velocity terms remain zero
     global_vel_old(i + 6) = aux_sol_old(node[1]->dof_number(
         aux.number(), _vel_num[i], 0)); // node 1 velocities; rotational velocity terms remain zero
-    global_accel(i) = aux_sol(
-        node[0]->dof_number(aux.number(),
-                            _accel_num[i],
-                            0)); // node 0 accelerations; rotational accelration terms remain zero
-    global_accel(i + 6) = aux_sol_old(
-        node[1]->dof_number(aux.number(),
-                            _accel_num[i],
-                            0)); // node 1 accelerations; rotational accelerations terms remain zero
-    global_accel_old(i) = aux_sol_old(
-        node[0]->dof_number(aux.number(),
-                            _accel_num[i],
-                            0)); // node 0 accelerations; rotational accelerations terms remain zero
-    global_accel_old(i + 6) = aux_sol_old(
-        node[1]->dof_number(aux.number(),
-                            _accel_num[i],
-                            0)); // node 1 accelerations; rotational accelerations terms remain zero
   }
 
   // Converting global deformations and deformation rates to the isolator
@@ -260,13 +235,9 @@ ComputeIsolatorDeformation::computeDeformation()
   _basic_vel[_qp].reshape(6, 1);
   _basic_disp_old[_qp].reshape(6, 1);
   _basic_vel_old[_qp].reshape(6, 1);
-  _basic_accel[_qp].reshape(6, 1);
-  _basic_accel_old[_qp].reshape(6, 1);
 
   _basic_disp[_qp] = _total_lb[_qp] * _total_gl[_qp] * global_disp;
   _basic_vel[_qp] = _total_lb[_qp] * _total_gl[_qp] * global_vel;
   _basic_disp_old[_qp] = _total_lb[_qp] * _total_gl[_qp] * global_disp_old;
   _basic_vel_old[_qp] = _total_lb[_qp] * _total_gl[_qp] * global_vel_old;
-  _basic_accel[_qp] = _total_lb[_qp] * _total_gl[_qp] * global_accel;
-  _basic_accel_old[_qp] = _total_lb[_qp] * _total_gl[_qp] * global_accel_old;
 }
