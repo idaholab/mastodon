@@ -211,11 +211,10 @@ protected:
   RealVectorValue _qTrial;
 
   /// Vector to store analysis time at each step
-  std::vector<Real>_vec_time;
+  std::vector<Real> _vec_time;
 
   /// Vector to store heatflux at each step
-  std::vector<Real>_vec_heatflux;
-
+  std::vector<Real> _vec_heatflux;
 };
 
 #endif // COMPUTEFPISOLATORELASTICITY_H
