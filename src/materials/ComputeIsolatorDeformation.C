@@ -62,6 +62,7 @@ ComputeIsolatorDeformation::ComputeIsolatorDeformation(const InputParameters & p
     _disp_num(3),
     _vel_num(3),
     _sD(getMaterialProperty<Real>("sd_ratio")),
+    _local_disp(declareProperty<ColumnMajorMatrix>("local_deformations")),
     _basic_disp(declareProperty<ColumnMajorMatrix>("deformations")),
     _basic_disp_old(declareProperty<ColumnMajorMatrix>("old_deformations")),
     _basic_vel(declareProperty<ColumnMajorMatrix>("deformation_rates")),
@@ -231,11 +232,13 @@ ComputeIsolatorDeformation::computeDeformation()
 
   // Converting global deformations and deformation rates to the isolator
   // basic system.
+  _local_disp[_qp].reshape(12, 1);
   _basic_disp[_qp].reshape(6, 1);
   _basic_vel[_qp].reshape(6, 1);
   _basic_disp_old[_qp].reshape(6, 1);
   _basic_vel_old[_qp].reshape(6, 1);
 
+  _local_disp[_qp] = _total_gl[_qp] * global_disp;
   _basic_disp[_qp] = _total_lb[_qp] * _total_gl[_qp] * global_disp;
   _basic_vel[_qp] = _total_lb[_qp] * _total_gl[_qp] * global_vel;
   _basic_disp_old[_qp] = _total_lb[_qp] * _total_gl[_qp] * global_disp_old;

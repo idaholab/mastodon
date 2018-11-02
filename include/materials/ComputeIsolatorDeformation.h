@@ -65,6 +65,9 @@ protected:
   /// Shear distance ratio
   const MaterialProperty<Real> & _sD;
 
+  /// Displacements in the isolator local system, namely, deformations
+  MaterialProperty<ColumnMajorMatrix> & _local_disp;
+
   /// Displacements in the isolator basic system, namely, deformations
   MaterialProperty<ColumnMajorMatrix> & _basic_disp;
 

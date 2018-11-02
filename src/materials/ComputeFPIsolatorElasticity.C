@@ -69,7 +69,7 @@ ComputeFPIsolatorElasticity::ComputeFPIsolatorElasticity(const InputParameters &
     _tol(getParam<Real>("tol")),
     _maxiter(getParam<Real>("maxiter")),
     _sD(0.5),
-    _local_def(getMaterialPropertyByName<ColumnMajorMatrix>("local deformations")),
+    _local_def(getMaterialPropertyByName<ColumnMajorMatrix>("local_deformations")),
     _basic_def(getMaterialPropertyByName<ColumnMajorMatrix>("deformations")),
     _basic_def_old(getMaterialPropertyByName<ColumnMajorMatrix>("old_deformations")),
     _basic_vel(getMaterialPropertyByName<ColumnMajorMatrix>("deformation_rates")),
