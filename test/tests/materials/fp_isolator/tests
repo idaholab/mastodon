@@ -1,0 +1,27 @@
+[Tests]
+  [./shear_P]
+    type = CSVDiff
+    input = fp_isolator_shear_P.i
+    csvdiff = fp_isolator_shear_P_out.csv
+  [../]
+  [./shear_V]
+    type = CSVDiff
+    input = fp_isolator_shear_V.i
+    csvdiff = fp_isolator_shear_V_out.csv
+  [../]
+  [./shear_T]
+    type = CSVDiff
+    input = fp_isolator_shear_T.i
+    csvdiff = fp_isolator_shear_T_out.csv
+  [../]
+  [./shear_PTV]
+    type = CSVDiff
+    input = fp_isolator_shear_PTV.i
+    csvdiff = fp_isolator_shear_PTV_out.csv
+  [../]
+  [./seismic_PTV]
+    type = CSVDiff
+    input = fp_isolator_seismic_PTV.i
+    csvdiff = fp_isolator_seismic_PTV_out.csv
+  [../]
+[]
