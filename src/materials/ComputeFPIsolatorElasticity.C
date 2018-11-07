@@ -32,18 +32,36 @@ validParams<ComputeFPIsolatorElasticity>()
       "velocity_dependent",
       "Switch for modeling friction dependence on the instantaneous sliding velocity.");
   // Material properties
-  params.addRequiredParam<Real>("mu_ref", "Reference co-efficient of friction.");
-  params.addRequiredParam<Real>("p_ref", "Reference axial pressure.");
-  params.addRequiredParam<Real>("diffusivity", "Thermal diffusivity of steel.");
-  params.addRequiredParam<Real>("conductivity", "Thermal conductivity of steel.");
-  params.addRequiredParam<Real>("a", "Rate parameter.");
-  params.addRequiredParam<Real>("r_eff", "Effective radius of curvature of sliding surface.");
-  params.addRequiredParam<Real>("r_contact", "Radius of contact area at sliding surface.");
-  params.addRequiredParam<Real>("uy", "Yield displacement of the bearing in shear.");
-  params.addRequiredParam<Real>(
-      "unit", "Unit conversion for pressure to be used in the pressure factor computation.");
-  params.addRequiredParam<Real>("gamma", "Gamma parameter of Newmark algorithm.");
-  params.addRequiredParam<Real>("beta", "Beta parameter of Newmark algorithm.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "mu_ref", "mu_ref>0.0", "Reference co-efficient of friction.");
+  params.addRequiredRangeCheckedParam<Real>("p_ref", "p_ref>0.0", "Reference axial pressure.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "diffusivity", "diffusivity>0.0", "Thermal diffusivity of steel.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "conductivity", "conductivity>0.0", "Thermal conductivity of steel.");
+  params.addRequiredRangeCheckedParam<Real>("a", "a>0.0", "Rate parameter.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "r_eff", "r_eff>0.0", "Effective radius of curvature of sliding surface.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "r_contact", "r_contact>0.0", "Radius of contact area at sliding surface.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "uy", "uy>0.0", "Yield displacement of the bearing in shear.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "gamma", "gamma>0.0", "Gamma parameter of Newmark algorithm.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "beta", "beta>0.0", "Beta parameter of Newmark algorithm.");
+  params.addRequiredRangeCheckedParam<Real>("unit",
+                                            "8.0>unit>0.0",
+                                            "Tag for conversion in the pressure factor computation "
+                                            "when different unit systems are used. Enter "
+                                            "1.0 for N m s C;  "
+                                            "2.0 for kN m s C;  "
+                                            "3.0 for N mm s C;  "
+                                            "4.0 for kN mm s C;  "
+                                            "5.0 for lb in s C;  "
+                                            "6.0 for kip in s C;  "
+                                            "7.0 for lb ft s C;  "
+                                            "8.0 for kip ft s C. ");
   params.addParam<Real>(
       "k_x",
       10e13,

@@ -12,7 +12,7 @@ A description of each of the input parameters is provided [here](source/material
 `velocity_dependent = true` <br/>
 `temperature_change = true` <br/>
 
-The axial and rotational terms of the basic stiffness matrix of the bearing element can be specified using the optional parameters: `k_x, k_xx, k_yy, k_zz`. A default value `10e13` is assumed when SI units are used. Additionally, the behavior of the FP bearing element in the shear direction is demonstrated using the examples described below. Analysis results are compared with verified and validated numerical models implemented in the open-source finite element package OpenSees [citep:opensees2009].
+The axial and rotational terms of the basic stiffness matrix of the bearing element can be specified using the optional parameters: `k_x, k_xx, k_yy, k_zz`. A default value `10e13` is assumed when SI units are used. In the pressure factor computation `kp`, the instantaneous pressure and reference pressure values are in MPa. The user is required to provide information on the current unit system used in the material parameter `unit`, so that corresponding conversion factors are computed. The behavior of the FP bearing element in the shear direction is demonstrated using the examples described below. Analysis results are compared with verified and validated numerical models implemented in the open-source finite element package OpenSees [citep:opensees2009].
 
 #### Example: Response to the cyclic loading in shear
 
