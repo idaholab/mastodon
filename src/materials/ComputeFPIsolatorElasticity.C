@@ -160,10 +160,10 @@ ComputeFPIsolatorElasticity::computeQpProperties()
   computeShear();
 
   // Compute forces in other directions
-  _Fb[_qp](0) = _Kb[_qp](0, 0) * _basic_def[_qp](0); // translation in basic x direction
-  _Fb[_qp](3) = _Kb[_qp](3, 3) * _basic_def[_qp](3); // rotation along basic x direction
-  _Fb[_qp](4) = _Kb[_qp](4, 4) * _basic_def[_qp](4); // rotation along basic y direction
-  _Fb[_qp](5) = _Kb[_qp](5, 5) * _basic_def[_qp](5); // rotation along basic z direction
+  _Fb[_qp](0, 0) = _Kb[_qp](0, 0) * _basic_def[_qp](0, 0); // translation in basic x direction
+  _Fb[_qp](3, 0) = _Kb[_qp](3, 3) * _basic_def[_qp](3, 0); // rotation along basic x direction
+  _Fb[_qp](4, 0) = _Kb[_qp](4, 4) * _basic_def[_qp](4, 0); // rotation along basic y direction
+  _Fb[_qp](5, 0) = _Kb[_qp](5, 5) * _basic_def[_qp](5, 0); // rotation along basic z direction
 
   // Finalize forces and stiffness matrix and convert them into global co-ordinate system
   finalize();
@@ -460,14 +460,14 @@ ComputeFPIsolatorElasticity::addPDeltaEffects()
   _Kl[_qp](10, 10) -= _Fb[_qp](0, 0) * Ls;
 
   // Add V-Delta torsion stiffness terms
-  _Kl[_qp](3, 1) += _Fb[_qp](2, 2);
-  _Kl[_qp](3, 2) -= _Fb[_qp](1, 1);
-  _Kl[_qp](3, 7) -= _Fb[_qp](2, 2);
-  _Kl[_qp](3, 8) += _Fb[_qp](1, 1);
-  _Kl[_qp](3, 10) += _Fb[_qp](1, 1) * Ls;
-  _Kl[_qp](3, 11) += _Fb[_qp](2, 2) * Ls;
-  _Kl[_qp](9, 10) -= _Fb[_qp](1, 1) * Ls;
-  _Kl[_qp](9, 11) -= _Fb[_qp](2, 2) * Ls;
+  _Kl[_qp](3, 1) += _Fb[_qp](2, 0);
+  _Kl[_qp](3, 2) -= _Fb[_qp](1, 0);
+  _Kl[_qp](3, 7) -= _Fb[_qp](2, 0);
+  _Kl[_qp](3, 8) += _Fb[_qp](1, 0);
+  _Kl[_qp](3, 10) += _Fb[_qp](1, 0) * Ls;
+  _Kl[_qp](3, 11) += _Fb[_qp](2, 0) * Ls;
+  _Kl[_qp](9, 10) -= _Fb[_qp](1, 0) * Ls;
+  _Kl[_qp](9, 11) -= _Fb[_qp](2, 0) * Ls;
 }
 
 void
