@@ -1,18 +1,24 @@
 ### Friction Pendulum<sup>TM</sup> Isolator
 
-`ComputeFPIsolatorElasticity` material simulates the behavior of a single concave Friction Pendulum<sup>TM</sup> bearing in MASTODON, and is used with a two-noded link type element. For each subdomain (that may contain multiple link elements), the material properties are defined by creating material blocks: [`ComputeIsolatorDeformation`](source/materials/ComputeIsolatorDeformation.md) and [`ComputeFPIsolatorElasticity`](source/materials/ComputeFPIsolatorElasticity.md),
-and the kernel block, [`StressDivergenceIsolator`](source/materials/StressDivergenceIsolator,md).
-A sample definition of the kernel and the material block is shown in the input file below.
-
-!listing test/tests/materials/fp_isolator/fp_isolator_shear_PTV.i start=[Kernels] end=[Postprocessors]
-
-A description of each of the input parameters is provided [here](source/materials/ComputeFPIsolatorElasticity.md). To model the co-efficient of sliding friction as a function of the axial pressure, sliding velocity, and the instantaneous temperature, the following switch parameters are used:
+`ComputeFPIsolatorElasticity` material simulates the behavior of a single concave Friction Pendulum<sup>TM</sup> bearing in MASTODON, and is used with a two-noded link type element. The material properties are defined by creating material blocks: [`ComputeIsolatorDeformation`](source/materials/ComputeIsolatorDeformation.md) and [`ComputeFPIsolatorElasticity`](source/materials/ComputeFPIsolatorElasticity.md),
+and the kernel block, [`StressDivergenceIsolator`](source/materials/StressDivergenceIsolator,md). A description of each of the input parameters is provided [here](source/materials/ComputeFPIsolatorElasticity.md). To model the co-efficient of sliding friction as a function of the axial pressure, sliding velocity, and the instantaneous temperature, the following switch parameters are used:
 
 `pressure_dependent = true` <br/>
 `velocity_dependent = true` <br/>
 `temperature_change = true` <br/>
 
-The axial and rotational terms of the basic stiffness matrix of the bearing element can be specified using the optional parameters: `k_x, k_xx, k_yy, k_zz`. A default value `10e13` is assumed when SI units are used. In the pressure factor computation `kp`, the instantaneous pressure and reference pressure values are in MPa. The user is required to provide information on the current unit system used in the material parameter `unit`, so that corresponding conversion factors are computed. The behavior of the FP bearing element in the shear direction is demonstrated using the examples described below. Analysis results are compared with verified and validated numerical models implemented in the open-source finite element package OpenSees [citep:opensees2009].
+The axial and rotational terms of the basic stiffness matrix of the bearing element can be specified using the optional parameters: `k_x, k_xx, k_yy, k_zz`. A default value `10e13` is assumed when SI units are used. The stiffness value should be sufficiently high to simulate rigid behavior in these degrees of freedom. In the pressure factor computation `kp`, the instantaneous pressure and reference pressure values are in MPa. The user is required to provide information on the current unit system used in the material parameter `unit`, so that corresponding conversion factors are computed.
+
+`unit =  1.0` for N, m, s; <br/>
+`unit =  2.0` for kN, m, s; <br/>
+`unit =  3.0` for N, mm, s; <br/>
+`unit =  4.0` for kN, mm, s; <br/>
+`unit =  5.0` for lb, in, s; <br/>
+`unit =  6.0` for kip, in, s; <br/>
+`unit =  7.0` for lb, ft, s; <br/>
+`unit =  8.0` for kip, ft, s; <br/>
+
+The behavior of the FP bearing element in the shear direction is demonstrated using the examples described below. Analysis results are compared with verified and validated numerical models implemented in the open-source finite element package OpenSees [citep:opensees2009].
 
 #### Example: Response to the cyclic loading in shear
 
@@ -39,7 +45,7 @@ mass of 640745 kg is assumed for the purpose of this example, and is assigned to
 
 !listing test/tests/materials/fp_isolator/fp_isolator_seismic_PTV.i
 
-The figures below show the response of the FP bearing to the prescribed seismic loading. The local co-ordinate system for the FP bearing can be identified [here](manuals/include/materials/fp_isolator-theory.md#physical_model).
+The figures below show the response of the FP bearing to the prescribed seismic loading. The local co-ordinate system for the FP bearing can be identified [here](manuals/include/materials/lr_isolator-theory.md#lrisolator).
 
 !media media/materials/fp_isolator/fp_seismicshearY.png
        style=width:100%;float:left;

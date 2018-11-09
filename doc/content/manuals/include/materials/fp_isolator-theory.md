@@ -1,4 +1,4 @@
-### Friction Pendulum<sup>TM</sup> Isolator id=physical_model
+### Friction Pendulum<sup>TM</sup> Isolator
 
 Friction Pendulum<sup>TM</sup> (FP) bearings are used to seismically isolate structures, including critical facilities such as nuclear power plants. The single concave FP bearing consists of a spherical sliding surface, a slider coated with PTFE-type composite material, and a housing plate. [fig:fp_components] and [fig:fp_sectionalview] shows components and part sectional view of a single concave Friction Pendulum<sup>TM</sup> bearing, respectively.
 
@@ -10,18 +10,13 @@ Friction Pendulum<sup>TM</sup> (FP) bearings are used to seismically isolate str
       caption=Components of a single Friction Pendulum<sup>TM</sup> bearing [citep:EPS]
 
 !media media/materials/fp_isolator/fp_sectionalview.png
-      style=width:51%;margin-left:0%;margin-right:4%;float:right;
+      style=width:50.39%;margin-left:1%;margin-right:4%;float:right;
       id=fig:fp_sectionalview
       caption=Sectional view of a single concave Friction Pendulum<sup>TM</sup> bearing [citep:manishkumarmceer2015b]
 
 !row-end!
 
-Continuum modeling of FP bearings is computationally expensive and impractical for applications involving structures with tens to hundreds of bearings. Hence a two-node model developed by [citet:manishkumarmceer2015b] is adopted here. The bottom node represents the concave sliding surface, and the top node represents the articulated slider. The two-node model has six degrees of freedom (3 translations and 3 rotations), at each node and is capable of simulating nonlinear hysteric behavior in the FP bearing. [fig:fp_physicalmodel] reproduced from [citet:manishkumarEESD2014], shows the physical model and spring representation of the two-node isolator element.
-
-!media media/materials/fp_isolator/fp_physicalmodel.png
-       style=width:60%;margin-left:175px;float:center;
-       id=fig:fp_physicalmodel
-       caption=Discrete, two-noded model of an FP bearing: (a) degrees of freedom, and (b) discrete spring representation [citep:manishkumarEESD2014].
+Continuum modeling of FP bearings is computationally expensive and impractical for applications involving structures with tens to hundreds of bearings. Hence a two-node model developed by [citet:manishkumarmceer2015b] is adopted here. The bottom node represents the concave sliding surface, and the top node represents the articulated slider. The two-node model has six degrees of freedom (3 translations and 3 rotations), at each node and is capable of simulating nonlinear hysteric behavior in the FP bearing. The physical model and spring representation of the two-node isolator element is shown [here](manuals/include/materials/lr_isolator-theory.md#lrisolator).
 
 #### Force-displacement relationship
 
