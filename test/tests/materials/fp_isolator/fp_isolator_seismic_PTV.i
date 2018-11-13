@@ -1,6 +1,6 @@
 # Test for Friction Pendulum isolator under seismic loading
 
-# Co-efficient of friction depends on velocity, pressure and temperature
+# coefficient of friction depends on velocity, pressure and temperature
 
 #Loading conditions
 
@@ -53,52 +53,52 @@
 
 [AuxVariables]
   [./vel_x]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./vel_y]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./vel_z]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./accel_x]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./accel_y]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./accel_z]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_vel_x]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_vel_y]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_vel_z]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_accel_x]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_accel_y]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_accel_z]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./reaction_x]
   [../]
@@ -266,61 +266,43 @@
 []
 
 [BCs]
-[./fixx0]
-  type = DirichletBC
-  variable = disp_x
-  boundary = left
-  value = 0.0
-[../]
-[./fixy0]
-  type = DirichletBC
-  variable = disp_y
-  boundary = left
-  value = 0.0
-[../]
-[./fixz0]
-  type = DirichletBC
-  variable = disp_z
-  boundary = left
-  value = 0.0
-[../]
-[./fixrx0]
-  type = DirichletBC
-  variable = rot_x
-  boundary = left
-  value = 0.0
-[../]
-[./fixry0]
-  type = DirichletBC
-  variable = rot_y
-  boundary = left
-  value = 0.0
-[../]
-[./fixrz0]
-  type = DirichletBC
-  variable = rot_z
-  boundary = left
-  value = 0.0
-[../]
-[./fixrx1]
-  type = DirichletBC
-  variable = rot_x
-  boundary = right
-  value = 0.0
-[../]
-[./fixry1]
-  type = DirichletBC
-  variable = rot_y
-  boundary = right
-  value = 0.0
-[../]
-[./fixrz1]
-  type = DirichletBC
-  variable = rot_z
-  boundary = right
-  value = 0.0
-[../]
-[./accel_x0]
+  [./fixrx0]
+    type = DirichletBC
+    variable = rot_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./fixry0]
+    type = DirichletBC
+    variable = rot_y
+    boundary = left
+    value = 0.0
+  [../]
+  [./fixrz0]
+    type = DirichletBC
+    variable = rot_z
+    boundary = left
+    value = 0.0
+  [../]
+  [./fixrx1]
+    type = DirichletBC
+    variable = rot_x
+    boundary = right
+    value = 0.0
+  [../]
+  [./fixry1]
+    type = DirichletBC
+    variable = rot_y
+    boundary = right
+    value = 0.0
+  [../]
+  [./fixrz1]
+    type = DirichletBC
+    variable = rot_z
+    boundary = right
+    value = 0.0
+  [../]
+  [./accel_x0]
     type = PresetAcceleration
     boundary = 'left'
     function = acceleration_x
@@ -328,8 +310,8 @@
     beta = 0.25
     acceleration = 'accel_x'
     velocity = 'vel_x'
-[../]
-[./accel_y0]
+  [../]
+  [./accel_y0]
     type = PresetAcceleration
     boundary = 'left'
     function = acceleration_y
@@ -337,8 +319,8 @@
     beta = 0.25
     acceleration = 'accel_y'
     velocity = 'vel_y'
-[../]
-[./accel_z0]
+  [../]
+  [./accel_z0]
     type = PresetAcceleration
     boundary = 'left'
     function = acceleration_z
@@ -346,75 +328,74 @@
     beta = 0.25
     acceleration = 'accel_z'
     velocity = 'vel_z'
-[../]
+  [../]
 []
 
 [NodalKernels]
-[./x_inertial1]
-  type = NodalTranslationalInertia
-  variable = disp_x
-  velocity = vel_x
-  acceleration = accel_x
-  boundary = right
-  beta = 0.25
-  gamma = 0.5
-  mass = 640745
-  alpha =0
-  eta =0
-[../]
-[./y_inertial1]
-  type = NodalTranslationalInertia
-  variable = disp_y
-  velocity = vel_y
-  acceleration = accel_y
-  boundary = right
-  beta = 0.25
-  gamma = 0.5
-  mass = 640745
-  alpha =0
-  eta =0
-[../]
-[./z_inertial1]
-  type = NodalTranslationalInertia
-  variable = disp_z
-  velocity = vel_z
-  acceleration = accel_z
-  boundary = right
-  beta = 0.25
-  gamma = 0.5
-  mass = 640745
-  alpha =0
-  eta =0
-[../]
-
-[./force_x]
-  type = UserForcingFunctionNodalKernel
-  variable = disp_x
-  boundary = 'right'
-  function = force_x
+  [./x_inertial1]
+    type = NodalTranslationalInertia
+    variable = disp_x
+    velocity = vel_x
+    acceleration = accel_x
+    boundary = right
+    beta = 0.25
+    gamma = 0.5
+    mass = 640745
+    alpha =0
+    eta =0
+  [../]
+  [./y_inertial1]
+    type = NodalTranslationalInertia
+    variable = disp_y
+    velocity = vel_y
+    acceleration = accel_y
+    boundary = right
+    beta = 0.25
+    gamma = 0.5
+    mass = 640745
+    alpha =0
+    eta =0
+  [../]
+  [./z_inertial1]
+    type = NodalTranslationalInertia
+    variable = disp_z
+    velocity = vel_z
+    acceleration = accel_z
+    boundary = right
+    beta = 0.25
+    gamma = 0.5
+    mass = 640745
+    alpha =0
+    eta =0
+  [../]
+  [./force_x]
+    type = UserForcingFunctionNodalKernel
+    variable = disp_x
+    boundary = 'right'
+    function = force_x
   [../]
 []
 
 [Functions]
-[./acceleration_x]
-  type = PiecewiseLinear
-  data_file = accel_x.csv
-  format=columns
-[../]
-[./acceleration_y]
-  type = PiecewiseLinear
-  data_file = accel_y.csv
-  format=columns
-[../]
-[./acceleration_z]
-  type = PiecewiseLinear
-  data_file = accel_z.csv
-  format=columns
-[../]
-[./force_x]
-  type = PiecewiseLinear
-  x='0.0 0.05 50.11'
-  y='0.0 -6285710 -6285710'
+  [./acceleration_x]
+    type = PiecewiseLinear
+    data_file = accel_x.csv
+    format=columns
+  [../]
+  [./acceleration_y]
+    type = PiecewiseLinear
+    data_file = accel_y.csv
+    format=columns
+  [../]
+  [./acceleration_z]
+    type = PiecewiseLinear
+    data_file = accel_z.csv
+    format=columns
+  [../]
+  [./force_x]
+    type = PiecewiseLinear
+    x='0.0 0.05 50.11'
+    y='0.0 -6285710 -6285710'
   [../]
 []
 
@@ -439,141 +420,141 @@
 []
 
 [Materials]
-[./deformation]
-  type = ComputeIsolatorDeformation
-  block = '0'
-  sd_ratio = 0.5
-  y_orientation = '0.0 1.0 0.0'
-  displacements = 'disp_x disp_y disp_z'
-  rotations = 'rot_x rot_y rot_z'
-  velocities = 'vel_x vel_y vel_z'
-[../]
-[./elasticity]
-  type = ComputeFPIsolatorElasticity
-  block = '0'
-  mu_ref = 0.06
-  p_ref = 50e6
-  diffusivity = 4.4e-6
-  conductivity = 18
-  a = 100
-  r_eff = 2.2352
-  r_contact = 0.2
-  uy = 0.001
-  unit = 1
-  gamma = 0.5
-  beta = 0.25
-  pressure_dependent = true
-  temperature_dependent = true
-  velocity_dependent = true
-[../]
+  [./deformation]
+    type = ComputeIsolatorDeformation
+    block = '0'
+    sd_ratio = 0.5
+    y_orientation = '0.0 1.0 0.0'
+    displacements = 'disp_x disp_y disp_z'
+    rotations = 'rot_x rot_y rot_z'
+    velocities = 'vel_x vel_y vel_z'
+  [../]
+  [./elasticity]
+    type = ComputeFPIsolatorElasticity
+    block = '0'
+    mu_ref = 0.06
+    p_ref = 50e6
+    diffusivity = 4.4e-6
+    conductivity = 18
+    a = 100
+    r_eff = 2.2352
+    r_contact = 0.2
+    uy = 0.001
+    unit = 1
+    gamma = 0.5
+    beta = 0.25
+    pressure_dependent = true
+    temperature_dependent = true
+    velocity_dependent = true
+  [../]
 []
 
 [Postprocessors]
-[./disp_x0]
-  type = NodalVariableValue
-  nodeid = 0
-  variable = disp_x
-[../]
-[./vel_x0]
-  type = NodalVariableValue
-  nodeid = 0
-  variable = vel_x
-[../]
-[./accel_x0]
-  type = NodalVariableValue
-  nodeid = 0
-  variable = accel_x
-[../]
-[./disp_x1]
-  type = NodalVariableValue
-  nodeid = 1
-  variable = disp_x
-[../]
-[./vel_x1]
-  type = NodalVariableValue
-  nodeid = 1
-  variable = vel_x
-[../]
-[./accel_x1]
-  type = NodalVariableValue
-  nodeid = 1
-  variable = accel_x
-[../]
-[./reaction_x]
-  type = NodalSum
-  variable = reaction_x
-  boundary = left
-[../]
-[./disp_y0]
-  type = NodalVariableValue
-  nodeid = 0
-  variable = disp_y
-[../]
-[./vel_y0]
-  type = NodalVariableValue
-  nodeid = 0
-  variable = vel_y
-[../]
-[./accel_y0]
-  type = NodalVariableValue
-  nodeid = 0
-  variable = accel_y
-[../]
-[./disp_y1]
-  type = NodalVariableValue
-  nodeid = 1
-  variable = disp_y
-[../]
-[./vel_y1]
-  type = NodalVariableValue
-  nodeid = 1
-  variable = vel_y
-[../]
-[./accel_y1]
-  type = NodalVariableValue
-  nodeid = 1
-  variable = accel_y
-[../]
-[./reaction_y]
-  type = NodalSum
-  variable = reaction_y
-  boundary = left
-[../]
-[./disp_z0]
-  type = NodalVariableValue
-  nodeid = 0
-  variable = disp_z
-[../]
-[./vel_z0]
-  type = NodalVariableValue
-  nodeid = 0
-  variable = vel_z
-[../]
-[./accel_z0]
-  type = NodalVariableValue
-  nodeid = 0
-  variable = accel_z
-[../]
-[./disp_z1]
-  type = NodalVariableValue
-  nodeid = 1
-  variable = disp_z
-[../]
-[./vel_z1]
-  type = NodalVariableValue
-  nodeid = 1
-  variable = vel_z
-[../]
-[./accel_z1]
-  type = NodalVariableValue
-  nodeid = 1
-  variable = accel_z
-[../]
-[./reaction_z]
-  type = NodalSum
-  variable = reaction_z
-  boundary = left
-[../]
+  [./disp_x0]
+    type = NodalVariableValue
+    nodeid = 0
+    variable = disp_x
+  [../]
+  [./vel_x0]
+    type = NodalVariableValue
+    nodeid = 0
+    variable = vel_x
+  [../]
+  [./accel_x0]
+    type = NodalVariableValue
+    nodeid = 0
+    variable = accel_x
+  [../]
+  [./disp_x1]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = disp_x
+  [../]
+  [./vel_x1]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = vel_x
+  [../]
+  [./accel_x1]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = accel_x
+  [../]
+  [./reaction_x]
+    type = NodalSum
+    variable = reaction_x
+    boundary = left
+  [../]
+  [./disp_y0]
+    type = NodalVariableValue
+    nodeid = 0
+    variable = disp_y
+  [../]
+  [./vel_y0]
+    type = NodalVariableValue
+    nodeid = 0
+    variable = vel_y
+  [../]
+  [./accel_y0]
+    type = NodalVariableValue
+    nodeid = 0
+    variable = accel_y
+  [../]
+  [./disp_y1]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = disp_y
+  [../]
+  [./vel_y1]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = vel_y
+  [../]
+  [./accel_y1]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = accel_y
+  [../]
+  [./reaction_y]
+    type = NodalSum
+    variable = reaction_y
+    boundary = left
+  [../]
+  [./disp_z0]
+    type = NodalVariableValue
+    nodeid = 0
+    variable = disp_z
+  [../]
+  [./vel_z0]
+    type = NodalVariableValue
+    nodeid = 0
+    variable = vel_z
+  [../]
+  [./accel_z0]
+    type = NodalVariableValue
+    nodeid = 0
+    variable = accel_z
+  [../]
+  [./disp_z1]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = disp_z
+  [../]
+  [./vel_z1]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = vel_z
+  [../]
+  [./accel_z1]
+    type = NodalVariableValue
+    nodeid = 1
+    variable = accel_z
+  [../]
+  [./reaction_z]
+    type = NodalSum
+    variable = reaction_z
+    boundary = left
+  [../]
 []
 
 [Outputs]

@@ -43,52 +43,52 @@
 
 [AuxVariables]
   [./vel_x]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./vel_y]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./vel_z]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./accel_x]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./accel_y]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./accel_z]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_vel_x]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_vel_y]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_vel_z]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_accel_x]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_accel_y]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./rot_accel_z]
-  order = FIRST
-  family = LAGRANGE
+    order = FIRST
+    family = LAGRANGE
   [../]
   [./reaction_x]
   [../]

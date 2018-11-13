@@ -90,7 +90,7 @@ protected:
   const Real & _uy;
 
   /// Unit conversion for pressure to be used in the pressure factor computation
-  const Real & _unit;
+  const unsigned int & _unit;
 
   /// Gamma parameter of Newmark algorithm
   const Real & _gamma;

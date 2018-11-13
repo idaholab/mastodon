@@ -1,19 +1,4 @@
 [Tests]
-  [./shear_P]
-    type = CSVDiff
-    input = fp_isolator_shear_P.i
-    csvdiff = fp_isolator_shear_P_out.csv
-  [../]
-  [./shear_V]
-    type = CSVDiff
-    input = fp_isolator_shear_V.i
-    csvdiff = fp_isolator_shear_V_out.csv
-  [../]
-  [./shear_T]
-    type = CSVDiff
-    input = fp_isolator_shear_T.i
-    csvdiff = fp_isolator_shear_T_out.csv
-  [../]
   [./shear_PTV]
     type = CSVDiff
     input = fp_isolator_shear_PTV.i

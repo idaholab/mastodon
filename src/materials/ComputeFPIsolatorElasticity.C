@@ -50,18 +50,19 @@ validParams<ComputeFPIsolatorElasticity>()
       "gamma", "gamma>0.0", "Gamma parameter of Newmark algorithm.");
   params.addRequiredRangeCheckedParam<Real>(
       "beta", "beta>0.0", "Beta parameter of Newmark algorithm.");
-  params.addRequiredRangeCheckedParam<Real>("unit",
-                                            "8.0>unit>0.0",
-                                            "Tag for conversion in the pressure factor computation "
-                                            "when different unit systems are used. Enter "
-                                            "1.0 for N m s C;  "
-                                            "2.0 for kN m s C;  "
-                                            "3.0 for N mm s C;  "
-                                            "4.0 for kN mm s C;  "
-                                            "5.0 for lb in s C;  "
-                                            "6.0 for kip in s C;  "
-                                            "7.0 for lb ft s C;  "
-                                            "8.0 for kip ft s C. ");
+  params.addRequiredRangeCheckedParam<unsigned int>(
+      "unit",
+      "8 > unit > 0",
+      "Tag for conversion in the pressure factor computation "
+      "when different unit systems are used. Enter "
+      "1 for N m s C;  "
+      "2 for kN m s C;  "
+      "3 for N mm s C;  "
+      "4 for kN mm s C;  "
+      "5 for lb in s C;  "
+      "6 for kip in s C;  "
+      "7 for lb ft s C;  "
+      "8 for kip ft s C. ");
   params.addParam<Real>(
       "k_x",
       10e13,
@@ -99,7 +100,7 @@ ComputeFPIsolatorElasticity::ComputeFPIsolatorElasticity(const InputParameters &
     _r_eff(getParam<Real>("r_eff")),
     _r_contact(getParam<Real>("r_contact")),
     _uy(getParam<Real>("uy")),
-    _unit(getParam<Real>("unit")),
+    _unit(getParam<unsigned int>("unit")),
     _gamma(getParam<Real>("gamma")),
     _beta(getParam<Real>("beta")),
     _k_x(getParam<Real>("k_x")),
@@ -224,12 +225,12 @@ ComputeFPIsolatorElasticity::computeShear()
            pow(vel1, 2) + pow(vel2, 2));
 
   // Check for uplift
-  Real is_uplift = 0.0;
+  bool is_uplift = 0;
   Real kFactUplift = 1.0E-6;
   if (_Fb[_qp](0, 0) >= 0.0)
   {
     _Fb[_qp](0, 0) = -0.0001 * _Fb[_qp](0, 0);
-    is_uplift = 1.0;
+    is_uplift = 1;
   }
 
   // Unit conversion for pressure to be used in the pressure factor computation
@@ -278,7 +279,7 @@ ComputeFPIsolatorElasticity::computeShear()
                            pow((_basic_def[_qp](2, 0) - _basic_def_old[_qp](2, 0)), 2));
 
   // Calculate sliding velocity
-  _vel_currentstep = _disp_currentstep / (_vec_time[_t_step] - _vec_time[_t_step - 1]);
+  _vel_currentstep = _disp_currentstep / _dt;
 
   if (velAbs > 0.0)
     _vel_currentstep = velAbs;
@@ -311,7 +312,7 @@ ComputeFPIsolatorElasticity::computeShear()
 
       for (int jTemp = 1; jTemp <= _t_step; jTemp++)
       {
-        dt_analysis = _vec_time[_t_step] - _vec_time[_t_step - 1];
+        dt_analysis = _dt;
         tau = _vec_time[jTemp];
 
         temperature_change =
@@ -336,7 +337,7 @@ ComputeFPIsolatorElasticity::computeShear()
   _mu_adj = _mu_ref * _kpF * _ktF * _kvF;
 
   // Calculate shear forces and stiffness in basic y- and z-direction
-  int iter = 0;
+  unsigned int iter = 0;
   _qbOld.zero();
 
   do
@@ -358,7 +359,7 @@ ComputeFPIsolatorElasticity::computeShear()
 
     // Account for uplift
     kFactUplift = 1.0E-6;
-    if (fabs(is_uplift - 1.0) <= 0.00001)
+    if (is_uplift)
     {
       k0y = kFactUplift * k0y;
       k0z = kFactUplift * k0z;
@@ -385,7 +386,7 @@ ComputeFPIsolatorElasticity::computeShear()
       _Kb[_qp](1, 2) = _Kb[_qp](2, 1) = 0.0;
 
       // Account for uplift
-      if (fabs(is_uplift - 1.0) <= 0.00001)
+      if (is_uplift)
       {
         _Kb[_qp](1, 1) = kFactUplift * _k0;
         _Kb[_qp](2, 2) = kFactUplift * _k0;
@@ -415,7 +416,7 @@ ComputeFPIsolatorElasticity::computeShear()
       // Account for uplift
       Real k0Plastic = _k0;
 
-      if (fabs(is_uplift - 1.0) <= 0.00001)
+      if (is_uplift)
         k0Plastic = kFactUplift * _k0;
 
       // Set tangent stiffness
