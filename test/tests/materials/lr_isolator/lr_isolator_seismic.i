@@ -361,7 +361,7 @@
   nl_rel_tol = 1e-4
   nl_abs_tol = 1e-4
   start_time = 0
-  end_time = 0.5
+  end_time = 0.125
   dt = 1e-4
   dtmin = 1e-7
   timestep_tolerance = 1e-8

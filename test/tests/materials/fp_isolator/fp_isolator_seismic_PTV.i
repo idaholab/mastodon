@@ -413,7 +413,7 @@
   nl_rel_tol = 1e-8
   nl_abs_tol = 1e-8
   start_time = 0
-  end_time =0.25
+  end_time =0.15
   dt = 0.001
   dtmin = 0.0000001
   timestep_tolerance = 1e-8
