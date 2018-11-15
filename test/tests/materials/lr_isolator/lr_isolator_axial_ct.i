@@ -230,7 +230,7 @@
   nl_rel_tol = 1e-8
   nl_abs_tol = 1e-8
   start_time = -0.02
-  end_time = 10
+  end_time = 2.5
   dt = 0.005
   dtmin = 0.001
   timestep_tolerance = 1e-6
@@ -302,7 +302,6 @@
     displacements = 'disp_x disp_y disp_z'
     rotations = 'rot_x rot_y rot_z'
     velocities = 'vel_x vel_y vel_z'
-    accelerations = 'accel_x accel_y accel_z'
   [../]
   [./elasticity]
     type = ComputeLRIsolatorElasticity
@@ -396,30 +395,15 @@
     variable = reaction_z
     boundary = left
   [../]
-  [./rot_x]
-    type = NodalVariableValue
-    nodeid = 1
-    variable = rot_x
-  [../]
   [./reaction_xx]
     type = NodalSum
     variable = reaction_xx
     boundary = left
   [../]
-  [./rot_y]
-    type = NodalVariableValue
-    nodeid = 1
-    variable = rot_y
-  [../]
   [./reaction_yy]
     type = NodalSum
     variable = reaction_yy
     boundary = left
-  [../]
-  [./rot_z]
-    type = NodalVariableValue
-    nodeid = 1
-    variable = rot_z
   [../]
   [./reaction_zz]
     type = NodalSum

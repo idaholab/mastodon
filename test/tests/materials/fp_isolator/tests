@@ -1,0 +1,33 @@
+[Tests]
+  [./shear_PTV]
+    type = CSVDiff
+    input = fp_isolator_shear_PTV.i
+    csvdiff = fp_isolator_shear_PTV_out.csv
+  [../]
+  [./shear_V]
+    type = CSVDiff
+    input = fp_isolator_shear_PTV.i
+    csvdiff = fp_isolator_shear_V_out.csv
+    cli_args = 'Materials/elasticity/pressure_dependent=false Materials/elasticity/temperature_dependent=false Outputs/file_base=fp_isolator_shear_V_out'
+    prereq = shear_PTV
+  [../]
+  [./shear_T]
+    type = CSVDiff
+    input = fp_isolator_shear_PTV.i
+    csvdiff = fp_isolator_shear_T_out.csv
+    cli_args = 'Materials/elasticity/pressure_dependent=false Materials/elasticity/velocity_dependent=false Outputs/file_base=fp_isolator_shear_T_out'
+    prereq = shear_PTV
+  [../]
+  [./shear_P]
+    type = CSVDiff
+    input = fp_isolator_shear_PTV.i
+    csvdiff = fp_isolator_shear_P_out.csv
+    cli_args = 'Materials/elasticity/velocity_dependent=false Materials/elasticity/temperature_dependent=false Outputs/file_base=fp_isolator_shear_P_out'
+    prereq = shear_PTV
+  [../]
+  [./seismic_PTV]
+    type = CSVDiff
+    input = fp_isolator_seismic_PTV.i
+    csvdiff = fp_isolator_seismic_PTV_out.csv
+  [../]
+[]
