@@ -53,9 +53,6 @@ protected:
   /// Number of coupled velocity variables
   unsigned int _nvel;
 
-  /// Number of coupled acceleration variables
-  unsigned int _naccel;
-
   /// Variable numbers corresponding to the rotational variables
   std::vector<unsigned int> _rot_num;
 
@@ -65,11 +62,11 @@ protected:
   /// Variable numbers corresponding to the velocity variables
   std::vector<unsigned int> _vel_num;
 
-  /// Variable numbers corresponding to the acceleration variables
-  std::vector<unsigned int> _accel_num;
-
   /// Shear distance ratio
   const MaterialProperty<Real> & _sD;
+
+  /// Displacements in the isolator local system, namely, deformations
+  MaterialProperty<ColumnMajorMatrix> & _local_disp;
 
   /// Displacements in the isolator basic system, namely, deformations
   MaterialProperty<ColumnMajorMatrix> & _basic_disp;
@@ -82,12 +79,6 @@ protected:
 
   /// Velocities in the isolator basic system, namely, old deformation rates
   MaterialProperty<ColumnMajorMatrix> & _basic_vel_old;
-
-  /// Accelerations in the isolator basic system
-  MaterialProperty<ColumnMajorMatrix> & _basic_accel;
-
-  /// Old accelerations in the isolator basic system
-  MaterialProperty<ColumnMajorMatrix> & _basic_accel_old;
 
   /// Transformation matrix from global coordinate system to isolator local configuration at t=0
   MaterialProperty<ColumnMajorMatrix> & _original_gl;
