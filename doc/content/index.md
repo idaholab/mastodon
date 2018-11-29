@@ -1,4 +1,4 @@
-!config renderer breadcrumbs=False scrollspy=False
+!config navigation breadcrumbs=False scrollspy=False
 
 !media mastodon_logo.png style=width:70%;margin:auto;
 
