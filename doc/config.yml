@@ -5,37 +5,45 @@ Content:
     - ${MOOSE_DIR}/modules/solid_mechanics/doc/content
     - ${MOOSE_DIR}/modules/stochastic_tools/doc/content
     - ${MOOSE_DIR}/modules/tensor_mechanics/doc/content
+    - moose:
+        root_dir: ${MOOSE_DIR}/modules/doc/content
+        content:
+            - getting_started/**
+            - help/development/**
+            - media/**
+
 Renderer:
     type: MooseDocs.base.MaterializeRenderer
     name: MASTODON
     repo: https://github.com/idaholab/mastodon
     home: https://www.mooseframework.org/mastodon
-    navigation:
-        Getting Started:
-            Installation (MacOS): getting_started/macos.md
-            Installation (Ubuntu): getting_started/ubuntu.md
-            Running MASTODON: getting_started/running_mastodon.md
-        Examples:
-            Overview: examples/index.md
-            Example 1: examples/example1.md
-            Example 2: examples/example2.md
-            Example 3: examples/example3.md
-            Example 4: examples/example4.md
-        Manuals:
-            Theory: manuals/theory/index.md
-            Software Quality: sqa/index.md
-            User: manuals/user/index.md
-            Developer: manuals/developer/index.md
-        News: news/index.md    
-        Documentation:
-            Syntax: syntax/index.md
-        Help:
-            FAQ: help/faq.md
-            Contact: help/contact_us.md
 
 Extensions:
-    appsyntax:
-        type: MooseDocs.extensions.appsyntax
+    MooseDocs.extensions.navigation:
+        menu:
+            Getting Started:
+                Installation (MacOS): getting_started/macos.md
+                Installation (Ubuntu): getting_started/ubuntu.md
+                Running MASTODON: getting_started/running_mastodon.md
+            Examples:
+                Overview: examples/index.md
+                Example 1: examples/example1.md
+                Example 2: examples/example2.md
+                Example 3: examples/example3.md
+                Example 4: examples/example4.md
+            Manuals:
+                Theory: manuals/theory/index.md
+                Software Quality: sqa/index.md
+                User: manuals/user/index.md
+                Developer: manuals/developer/index.md
+            News: news/index.md
+            Documentation:
+                Syntax: syntax/index.md
+            Help:
+                FAQ: help/faq.md
+                Contact: help/contact_us.md
+
+    MooseDocs.extensions.appsyntax:
         executable: ${ROOT_DIR}
         hide:
             framework: !include ${MOOSE_DIR}/framework/doc/hidden.yml
@@ -56,9 +64,9 @@ Extensions:
             - ${MOOSE_DIR}/modules/solid_mechanics/include
             - ${MOOSE_DIR}/modules/stochastic_tools/include
             - ${MOOSE_DIR}/modules/tensor_mechanics/include
-    globals:
-        type: MooseDocs.extensions.panoptic
+
+    MooseDocs.extensions.common:
         shortcuts: !include ${MOOSE_DIR}/framework/doc/globals.yml
-    acronyms:
-        type: MooseDocs.extensions.acronym
+
+    MooseDocs.extensions.acronym:
         acronyms: !include ${MOOSE_DIR}/framework/doc/acronyms.yml
