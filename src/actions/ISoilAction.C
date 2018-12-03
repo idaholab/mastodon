@@ -202,7 +202,6 @@ ISoilAction::act()
   params.set<bool>("wave_speed_calculation") = true;
   params.set<std::vector<FunctionName>>("initial_soil_stress") =
       getParam<std::vector<FunctionName>>("initial_soil_stress");
-  params.set<bool>("store_stress_old") = true;
   params.set<MooseEnum>("soil_type") = soil_type;
   // setting soiltype specific parameters
   if (soil_type == "user_defined")
