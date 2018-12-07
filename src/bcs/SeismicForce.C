@@ -33,6 +33,12 @@ validParams<SeismicForce>()
   params.addParam<FunctionName>("velocity_function",
                                 "The function that describes the input ground velocity.");
   params.addCoupledVar("velocity", "The variable that describes the input velocity.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "density", "density>0.0", "Density of the underlying bedrock.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "p_wave_speed", "p_wave_speed>0.0", "P-wave speed of the underlying bedrock.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "shear_wave_speed", "shear_wave_speed>0.0", "shear wave speed of the underlying bedrock.");
   params.addParam<Real>(
       "alpha", 0.0, "The alpha parameter required for HHT time integration scheme.");
   params.set<bool>("use_displaced_mesh") = true;
@@ -45,9 +51,9 @@ SeismicForce::SeismicForce(const InputParameters & parameters)
     _vel_component(getParam<unsigned int>("vel_component")),
     _factor(getParam<Real>("factor")),
     _alpha(getParam<Real>("alpha")),
-    _density(getMaterialProperty<Real>("density")),
-    _shear_wave_speed(getMaterialProperty<Real>("shear_wave_speed")),
-    _P_wave_speed(getMaterialProperty<Real>("P_wave_speed"))
+    _density(getParam<Real>("density")),
+    _p_wave_speed(getParam<Real>("p_wave_speed")),
+    _shear_wave_speed(getParam<Real>("shear_wave_speed"))
 {
   if (_component >= _mesh.dimension())
     mooseError("Invalid value for 'component' (",
@@ -97,7 +103,7 @@ SeismicForce::computeQpResidual()
   for (unsigned int i = 0; i < _mesh.dimension(); i++)
     tangential_vel[i] = vel[i] - normal_vel * _normals[_qp](i);
 
-  return _factor * _test[_i][_qp] * _density[_qp] *
-         (_P_wave_speed[_qp] * normal_vel * _normals[_qp](_component) +
-          _shear_wave_speed[_qp] * tangential_vel[_component]);
+  return _factor * _test[_i][_qp] * _density *
+         (_p_wave_speed * normal_vel * _normals[_qp](_component) +
+          _shear_wave_speed * tangential_vel[_component]);
 }

@@ -25,6 +25,9 @@
       displacements = 'disp_x disp_y'
       input_components = '0 1'
       boundary = 'front'
+      shear_wave_speed = 1.0
+      p_wave_speed = 3.5
+      density = 1.0
     [../]
   [../]
 []

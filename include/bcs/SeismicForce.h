@@ -46,14 +46,14 @@ protected:
   /// alpha Parameter for HHT time integration scheme
   const Real _alpha;
 
-  /// density of the soil
-  const MaterialProperty<Real> & _density;
+  /// density of the underlying bedrock
+  const Real & _density;
 
-  /// shear wave speed of the soil
-  const MaterialProperty<Real> & _shear_wave_speed;
+  /// P wave speed of the underlying bedrock
+  const Real & _p_wave_speed;
 
-  /// P wave speed of the soil
-  const MaterialProperty<Real> & _P_wave_speed;
+  /// shear wave speed of the underlying bedrock
+  const Real & _shear_wave_speed;
 };
 
 #endif // SEISMICFORCE_H
