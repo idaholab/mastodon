@@ -14,12 +14,12 @@ Content:
 
 Renderer:
     type: MooseDocs.base.MaterializeRenderer
-    name: MASTODON
-    repo: https://github.com/idaholab/mastodon
-    home: https://www.mooseframework.org/mastodon
 
 Extensions:
     MooseDocs.extensions.navigation:
+        name: MASTODON
+        repo: https://github.com/idaholab/mastodon
+        home: https://www.mooseframework.org/mastodon
         menu:
             Getting Started:
                 Installation (MacOS): getting_started/macos.md
