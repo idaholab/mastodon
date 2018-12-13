@@ -72,13 +72,13 @@ protected:
   const Real _alpha;
 
   /// Density of the soil
-  const MaterialProperty<Real> & _density;
-
-  /// Shear wave speed of the soil
-  const MaterialProperty<Real> & _shear_wave_speed;
+  const Real & _density;
 
   /// P wave speed of the soil
-  const MaterialProperty<Real> & _P_wave_speed;
+  const Real & _p_wave_speed;
+
+  /// Shear wave speed of the soil
+  const Real & _shear_wave_speed;
 };
 
 #endif // NONREFLECTINGBC_H
