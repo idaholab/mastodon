@@ -48,6 +48,12 @@ validParams<SeismicForceAction>()
                                              "input_component.");
   params.addParam<Real>(
       "alpha", 0.0, "The alpha parameter required for HHT time integration scheme.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "density", "density>0.0", "Density of the underlying bedrock.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "p_wave_speed", "p_wave_speed>0.0", "P-wave speed of the underlying bedrock.");
+  params.addRequiredRangeCheckedParam<Real>(
+      "shear_wave_speed", "shear_wave_speed>0.0", "shear wave speed of the underlying bedrock.");
   return params;
 }
 
@@ -97,6 +103,9 @@ SeismicForceAction::act()
   InputParameters params = _factory.getValidParams("SeismicForce");
   params.set<std::vector<BoundaryName>>("boundary") = _boundary;
   params.set<Real>("alpha") = getParam<Real>("alpha");
+  params.set<Real>("density") = getParam<Real>("density");
+  params.set<Real>("p_wave_speed") = getParam<Real>("p_wave_speed");
+  params.set<Real>("shear_wave_speed") = getParam<Real>("shear_wave_speed");
 
   // Loop through each component and create SeismicForce object
   std::string prefix = "mastodon_seismic_force";

@@ -191,21 +191,27 @@
 
 [BCs]
   [./SeismicForce]
-   [./top_stress]
-       displacements = 'disp_x disp_y disp_z'
-       input_components = '2'
-       boundary = 'front'
-       velocity_functions = 'z_vel'
-   [../]
+    [./top_stress]
+      displacements = 'disp_x disp_y disp_z'
+      input_components = '2'
+      boundary = 'front'
+      velocity_functions = 'z_vel'
+      shear_wave_speed = 3718.204815052883833
+      p_wave_speed = 7381.527628151251754
+      density = 4.9419e-3
+    [../]
   [../]
   [./NonReflectingBC]
     [./back]
-        displacements = 'disp_x disp_y disp_z'
-        velocities = 'vel_x vel_y vel_z'
-        accelerations = 'accel_x accel_y accel_z'
-        beta = 0.25
-        gamma = 0.5
-        boundary = 'back'
+      displacements = 'disp_x disp_y disp_z'
+      velocities = 'vel_x vel_y vel_z'
+      accelerations = 'accel_x accel_y accel_z'
+      beta = 0.25
+      gamma = 0.5
+      boundary = 'back'
+      shear_wave_speed = 3718.204815052883833
+      p_wave_speed = 7381.527628151251754
+      density = 4.9419e-3
     [../]
   [../]
   [./Periodic]

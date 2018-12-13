@@ -144,16 +144,16 @@
 
 
 [BCs]
- [./front]
-   type = PresetDisplacement
-   variable = disp_x
-   function = x_vel
-   boundary = front
-   acceleration = accel_x
-   velocity = vel_x
-   beta = 0.25
- [../]
- [./NonReflectingBC]
+  [./front]
+    type = PresetDisplacement
+    variable = disp_x
+    function = x_vel
+    boundary = front
+    acceleration = accel_x
+    velocity = vel_x
+    beta = 0.25
+  [../]
+  [./NonReflectingBC]
     [./back]
       displacements = 'disp_x disp_y disp_z'
       velocities = 'vel_x vel_y vel_z'
@@ -161,6 +161,9 @@
       beta = 0.25
       gamma = 0.5
       boundary = 'back'
+      shear_wave_speed = 10.0
+      p_wave_speed = 16.329931618554521
+      density = 1.0
     [../]
   [../]
   [./Periodic]
