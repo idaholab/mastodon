@@ -132,6 +132,20 @@
   [../]
 []
 
+[Materials]
+  [./elasticity]
+    type = ComputeFVDamperElasticity
+    block = 0
+    y_orientation = '0.0 1.0 0.0'
+    displacements = 'disp_x disp_y disp_z'
+    cd = 2226502
+    alpha = 0.3
+    k =300000000
+    gamma = 0.5
+    beta = 0.25
+  [../]
+[]
+
 [BCs]
   [./fixx0]
     type = DirichletBC
@@ -167,20 +181,6 @@
     type = PiecewiseLinear
     data_file = disp_axial.csv
     format = columns
-  [../]
-[]
-
-[Materials]
-  [./elasticity]
-    type = ComputeFVDamperElasticity
-    block = 0
-    y_orientation = '0.0 1.0 0.0'
-    displacements = 'disp_x disp_y disp_z'
-    Cd = 2226502
-    alpha = 0.3
-    k =300000000
-    gamma = 0.5
-    beta = 0.25
   [../]
 []
 

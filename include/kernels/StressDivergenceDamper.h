@@ -34,7 +34,6 @@ public:
   using Kernel::computeOffDiagJacobian;
 
 protected:
-
   virtual Real computeQpResidual() override { return 0.0; }
 
   /// direction along which force is calculated

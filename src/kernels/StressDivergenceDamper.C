@@ -39,7 +39,9 @@ StressDivergenceDamper::StressDivergenceDamper(const InputParameters & parameter
 
 {
   if (_component > 2)
-    mooseError("Error in StressDivergenceDamper block ", name(), ". Please enter an integer value between 0 and 2 for the 'component' parameter.");
+    mooseError("Error in StressDivergenceDamper block ",
+               name(),
+               ". Please enter an integer value between 0 and 2 for the 'component' parameter.");
 
   for (unsigned int i = 0; i < _ndisp; ++i)
     _disp_var[i] = coupled("displacements", i);
@@ -106,9 +108,9 @@ StressDivergenceDamper::computeOffDiagJacobian(MooseVariableFEBase & jvar)
 {
   size_t jvar_num = jvar.number();
   if (jvar_num == _var.number())
-  // jacobian calculation if jvar is the same as the current variable i.e.,
-  // diagonal elements
-  computeJacobian();
+    // jacobian calculation if jvar is the same as the current variable i.e.,
+    // diagonal elements
+    computeJacobian();
 
   else
   // jacobian calculation for off-diagonal elements
@@ -119,11 +121,11 @@ StressDivergenceDamper::computeOffDiagJacobian(MooseVariableFEBase & jvar)
     for (unsigned int i = 0; i < _ndisp; ++i)
     {
       if (jvar_num == _disp_var[i])
-        {
-          coupled_component = i;
-          coupled = true;
-          break;
-        }
+      {
+        coupled_component = i;
+        coupled = true;
+        break;
+      }
     }
     // getting the jacobian from assembly
     DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), jvar_num);

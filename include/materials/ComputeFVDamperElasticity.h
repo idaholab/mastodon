@@ -21,7 +21,7 @@
 /**
  * ComputeFVDamperElasticity calculates the deformations,forces and stiffness matrix
  * of a damper element.
-**/
+ **/
 
 // Forward Declarations
 class ComputeFVDamperElasticity;
@@ -35,7 +35,6 @@ public:
   ComputeFVDamperElasticity(const InputParameters & parameters);
 
 protected:
-
   virtual void computeQpProperties() override;
 
   void initQpStatefulProperties() override;
@@ -55,8 +54,9 @@ protected:
   /// convert basic forces and stiffness into global co-ordinate system
   void finalize();
 
-  /// function to obtain numerical solution of damper element
-  void dormandPrince(Real _TVel, Real _TVel_new, Real _TFd, Real h, Real& yt, Real& eps, Real& error);
+  /// function to obtain numerical solution of the damper element
+  void
+  dormandPrince(Real _TVel, Real _TVel_new, Real _TFd, Real h, Real & yt, Real & eps, Real & error);
 
   /// function that returns the force rate
   Real fdot(Real v, Real fd);
@@ -73,7 +73,7 @@ protected:
   // damper material, response and geomtric parameters
   //
   /// damping co-efficient
-  const Real & _Cd;
+  const Real & _cd;
 
   /// velocity exponent of the damper
   const Real & _alpha;
@@ -88,10 +88,10 @@ protected:
   const Real & _beta;
 
   /// relative tolerance for error in adaptive algorithm
-  const Real & _Rel_tol;
+  const Real & _rel_tol;
 
   /// absolute tolerance for error in adaptive algorithm
-  const Real & _Abs_tol;
+  const Real & _abs_tol;
 
   /// displacements in the damper basic system, namely, deformations
   MaterialProperty<Real> & _basic_def;

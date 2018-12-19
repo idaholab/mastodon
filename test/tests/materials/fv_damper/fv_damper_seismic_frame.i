@@ -1,5 +1,5 @@
 # Test for a protal frame installed with a diagonal Fluid Viscous Damper element
-# The mesh for the geometry is imported from exodus file "frame.e"
+# The mesh for the geometry is imported from exodus file "fv_damper_frame.e"
 # Beam-column elements are modeled as Euler-Bernouli beam elements
 
 # Dimesnions
@@ -137,6 +137,33 @@
   [../]
 []
 
+[Kernels]
+  [./damper_disp_x]
+    type = StressDivergenceDamper
+    block = '3'
+    displacements = 'disp_x disp_y disp_z'
+    component = 0
+    variable = disp_x
+    save_in = reaction_x
+  [../]
+  [./damper_disp_y]
+    type = StressDivergenceDamper
+    block = '3'
+    displacements = 'disp_x disp_y disp_z'
+    component = 1
+    variable = disp_y
+    save_in = reaction_y
+  [../]
+  [./damper_disp_z]
+    type = StressDivergenceDamper
+    block = '3'
+    displacements = 'disp_x disp_y disp_z'
+    component = 2
+    variable = disp_z
+    save_in = reaction_z
+  [../]
+[]
+
 [NodalKernels]
   [./x_inertial]
     type = NodalTranslationalInertia
@@ -208,30 +235,28 @@
   [../]
 []
 
-[Kernels]
-  [./damper_disp_x]
-    type = StressDivergenceDamper
-    block = '3'
-    displacements = 'disp_x disp_y disp_z'
-    component = 0
-    variable = disp_x
-    save_in = reaction_x
+[Materials]
+  [./elasticity_beamcolumn]
+    type = ComputeElasticityBeam
+    youngs_modulus = 20e9
+    poissons_ratio = -0.9
+    shear_coefficient = 1
+    block = '1 2'
   [../]
-  [./damper_disp_y]
-    type = StressDivergenceDamper
-    block = '3'
-    displacements = 'disp_x disp_y disp_z'
-    component = 1
-    variable = disp_y
-    save_in = reaction_y
+  [./stress_beam]
+    type = ComputeBeamResultants
+    block = '1 2'
   [../]
-  [./damper_disp_z]
-    type = StressDivergenceDamper
+  [./elasticity_damper]
+    type = ComputeFVDamperElasticity
     block = '3'
+    y_orientation = '-0.5144 0.85749 0'
     displacements = 'disp_x disp_y disp_z'
-    component = 2
-    variable = disp_z
-    save_in = reaction_z
+    cd = 232764
+    alpha = 0.35
+    k = 25000000
+    gamma = 0.5
+    beta = 0.25
   [../]
 []
 
@@ -305,31 +330,6 @@
   timestep_tolerance = 1e-6
 []
 
-[Materials]
-  [./elasticity_beamcolumn]
-    type = ComputeElasticityBeam
-    youngs_modulus = 20e9
-    poissons_ratio = -0.9
-    shear_coefficient = 1
-    block = '1 2'
-  [../]
-  [./stress_beam]
-    type = ComputeBeamResultants
-    block = '1 2'
-  [../]
-  [./elasticity_damper]
-    type = ComputeFVDamperElasticity
-    block = '3'
-    y_orientation = '-0.5144 0.85749 0'
-    displacements = 'disp_x disp_y disp_z'
-    Cd = 232764
-    alpha = 0.35
-    k = 25000000
-    gamma = 0.5
-    beta = 0.25
-  [../]
-[]
-
 [Postprocessors]
   # For basicdisp and basicforce postprocessors, divide the output values
   # by a scale factor equal to 'length of the damper element; (5.83 for this
@@ -354,6 +354,11 @@
     type = PointValue
     variable = disp_x
     point = '5 3 0'
+  [../]
+  [./accel_bottom_right]
+    type = PointValue
+    variable = accel_x
+    point = '5 0 0'
   [../]
 []
 
