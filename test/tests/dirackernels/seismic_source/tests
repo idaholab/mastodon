@@ -1,9 +1,96 @@
-[tests]
-  [./seismic_source]
+[Tests]
+  [./one_seismic_source]
     type = 'Exodiff'
     input = 'one_seismic_source.i'
     exodiff = 'one_seismic_source_out.e'
     abs_zero = 1e-06
     compiler = 'GCC CLANG'
+  [../]
+  [./synchronous_rupture]
+    type = 'Exodiff'
+    input = 'synchronous_rupture.i'
+    exodiff = 'synchronous_rupture_out.e'
+  [../]
+  [./asynchronous_rupture]
+    type = 'Exodiff'
+    input = 'asynchronous_rupture.i'
+    exodiff = 'asynchronous_rupture_out.e'
+  [../]
+  [./displacement_error]
+    type = 'RunException'
+    input = 'seismic_source_error.i'
+    cli_args = 'DiracKernels/SeismicSource/one_source/displacements=disp_x'
+    expect_err = "Error in one_source. The number of displacement variables must match the mesh dimension."
+  [../]
+  [./point_error]
+    type = 'RunException'
+    input = 'seismic_source_error.i'
+    expect_err = "Error in mastodon_seismic_source0. Either a point of a set of points should be given as input."
+  [../]
+  [./number_error]
+    type = 'RunException'
+    input = 'seismic_source_error.i'
+    cli_args = "DiracKernels/SeismicSource/one_source/position_function='pos'"
+    expect_err = "Error in mastodon_seismic_source0. Please specify number of source points defined in the function."
+  [../]
+  [./position_number_error]
+    type = 'RunException'
+    input = 'seismic_source_error.i'
+    cli_args = "DiracKernels/SeismicSource/one_source/position_function='pos'
+                DiracKernels/SeismicSource/one_source/number=3"
+    expect_err = "Error in mastodon_seismic_source0. The number of position functions should be equal to mesh dimension."
+  [../]
+  [./no_rupture_speed_error]
+    type = 'RunException'
+    input = 'seismic_source_error.i'
+    cli_args = "DiracKernels/SeismicSource/one_source/position_function='pos pos pos'
+                DiracKernels/SeismicSource/one_source/number=3
+                DiracKernels/SeismicSource/one_source/epicenter='0.2 0.2 0.2'"
+    expect_err = "Error in mastodon_seismic_source0. Either both rupture speed and epicenter should be provided or neither should be provided."
+  [../]
+  [./no_epicenter_error]
+    type = 'RunException'
+    input = 'seismic_source_error.i'
+    cli_args = "DiracKernels/SeismicSource/one_source/position_function='pos pos pos'
+                DiracKernels/SeismicSource/one_source/number=3
+                DiracKernels/SeismicSource/one_source/rupture_speed=1"
+    expect_err = "Error in mastodon_seismic_source0. Either both rupture speed and epicenter should be provided or neither should be provided."
+  [../]
+  [./epicenter_number_error]
+    type = 'RunException'
+    input = 'seismic_source_error.i'
+    cli_args = "DiracKernels/SeismicSource/one_source/position_function='pos pos pos'
+                DiracKernels/SeismicSource/one_source/number=3
+                DiracKernels/SeismicSource/one_source/rupture_speed=1
+                DiracKernels/SeismicSource/one_source/epicenter=0.2"
+    expect_err = "Error in mastodon_seismic_source0. Epicenter should be same size as mesh dimension."
+  [../]
+  [./point_rupture_speed]
+    type = 'RunException'
+    input = 'seismic_source_error.i'
+    cli_args = "DiracKernels/SeismicSource/one_source/point='0.1 0.2 0.3'
+                DiracKernels/SeismicSource/one_source/number=3
+                DiracKernels/SeismicSource/one_source/rupture_speed=1
+                DiracKernels/SeismicSource/one_source/epicenter=0.2"
+    expect_err = "Error in mastodon_seismic_source0. Rupture speed and epicenter should only be provided when multiple point sources are specified."
+  [../]
+  [./negative_speed_error]
+    type = 'RunException'
+    input = 'seismic_source_error.i'
+    cli_args = "DiracKernels/SeismicSource/one_source/position_function='pos pos pos'
+                DiracKernels/SeismicSource/one_source/number=3
+                DiracKernels/SeismicSource/one_source/rupture_speed=-1
+                DiracKernels/SeismicSource/one_source/epicenter='0.2 0.2 0.2'"
+    expect_err = "Error in mastodon_seismic_source0. Rupture speed has to be positive."
+  [../]
+  [./2D_non_strike_error]
+     type = 'RunException'
+     input = '2D_seismic_source_error.i'
+     expect_err = "Error in mastodon_seismic_source0. A non-zero strike angle for 2D models will create an out-of-plane earthquake wave. This is currently not supported."
+  [../]
+  [./1D_error]
+    type = 'RunException'
+    input = '1D_seismic_source_error.i'
+    expect_err = "Error in mastodon_seismic_source0. Only mesh dimensions of 2 and 3 are currently supported."
   [../]
 []
