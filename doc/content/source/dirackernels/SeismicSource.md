@@ -55,6 +55,8 @@ M_{ij}(\vec{x}, t)}{\partial x_j} = \sum_{j=1}^{3} M_{ij}(t) \frac{\partial \del
 \end{equation}
 where $\delta(.)$ is the delta function in space.
 
+If an asynchronous fault rupture is being simulated, the rupture time of each point source is calculated based on the distance of the point source from the epicenter and the rupture speed. The slip time history is then shifted by the rupture time to simulate asynchronous fault rupture.
+
 !syntax parameters /DiracKernels/SeismicSource
 
 !syntax inputs /DiracKernels/SeismicSource

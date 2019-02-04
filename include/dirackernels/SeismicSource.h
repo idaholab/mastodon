@@ -42,6 +42,12 @@ class SeismicSource : public DiracKernel
 public:
   SeismicSource(const InputParameters & parameters);
 
+  /**
+   * Method for returning parameters that are shared between SeismicSource and
+   * SeismicSourceAction
+   */
+  static InputParameters commonParameters();
+
   virtual void addPoints() override;
   virtual Real computeQpResidual() override;
 
@@ -73,6 +79,12 @@ protected:
 
   /// force in each coordinate direction. Used in residual calculation
   Real _force;
+
+  /// Speed at which the fault ruptures.
+  Real _rupture_speed;
+
+  /// Coordinates of the epicenter from which the fault rupture orginates.
+  std::vector<Real> _epicenter;
 };
 
 #endif // SEISMICSOURCE_H
