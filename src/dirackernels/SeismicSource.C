@@ -36,6 +36,17 @@ validParams<SeismicSource>()
 {
   InputParameters params = validParams<DiracKernel>();
   params.addClassDescription("This class applies a seismic source at a given point.");
+  params += SeismicSource::commonParameters();
+
+  params.addRequiredParam<unsigned int>("component",
+                                        "The direction in which the force is applied.");
+  return params;
+}
+
+InputParameters
+SeismicSource::commonParameters()
+{
+  InputParameters params = emptyInputParameters();
   params.addRequiredParam<Real>("strike", "The strike angle of the fault in degrees.");
   params.addRequiredParam<Real>("dip", "The dip angle of the fault in degrees.");
   params.addRequiredParam<Real>("rake", "The rake angle of the fault in degrees.");
@@ -45,22 +56,26 @@ validParams<SeismicSource>()
   params.addRequiredParam<Real>("shear_modulus",
                                 "The shear modulus of the soil around the seismic source.");
   params.addParam<Real>("alpha", 0, "The Hilber Hughes Taylor (HHT) time integration parameter.");
-  params.addRequiredParam<unsigned int>("component",
-                                        "The direction in which the force is applied.");
-  params.addParam<std::vector<Real>>("point", "The x,y,z coordinates of the source.");
-  params.addParam<FunctionName>("x_position",
-                                "The function containing the x coordinates of the points. "
-                                "The first column gives source number (starting with 1) "
-                                "and second column gives x coordinate.");
-  params.addParam<FunctionName>("y_position",
-                                "The function containing the y coordinates of the points. "
-                                "The first column gives source number (starting with 1) "
-                                "and second column gives y coordinate.");
-  params.addParam<FunctionName>("z_position",
-                                "The function containing the z coordinates of the points. "
-                                "The first column gives source number (starting with 1) "
-                                "and second column gives z coordinate.");
-  params.addParam<unsigned int>("number", "The number of source points.");
+  params.addParam<std::vector<Real>>("point",
+                                     "The x, y and z coordinate of a single point source.");
+  params.addParam<std::vector<FunctionName>>(
+      "position_function",
+      "The vector of function names that describes the x, "
+      "y and z coordinates of the source. Only the x position"
+      "function is required for 1 dimensional problems, x and y"
+      "positions are required for 2 dimensional problems and x, "
+      "y and z positions are required for 3D problems. The first"
+      "column in these functions gives source number (starting"
+      "with 1) and the second column contains the coordinate.");
+  params.addParam<unsigned int>("number",
+                                "The number of point sources. This number should be same as "
+                                "number of entries in the function files describing the "
+                                "position of the point source.");
+  params.addParam<Real>("rupture_speed",
+                        "The speed at which the earthquake rupture propogates "
+                        "through the fault (usually around 0.8 * shear wave "
+                        "speed).");
+  params.addParam<std::vector<Real>>("epicenter", "The x, y and z coordinates of the epicenter.");
   return params;
 }
 
@@ -72,38 +87,29 @@ SeismicSource::SeismicSource(const InputParameters & parameters)
     _area(getParam<Real>("area")),
     _slip_function(&getFunction("slip")),
     _moment_magnitude(0.0),
-    _force(0.0)
+    _force(0.0),
+    _rupture_speed(std::numeric_limits<unsigned int>::max()),
+    _epicenter(_mesh.dimension(), 0.0)
 {
-  if (!isParamValid("point") && !isParamValid("x_position"))
+  if (!isParamValid("point") && !isParamValid("position_function"))
     mooseError("Error in " + name() +
                ". Either a point of a set of points should be given as input.");
 
-  if (isParamValid("x_position") && !isParamValid("number"))
+  if (isParamValid("position_function") && !isParamValid("number"))
     mooseError("Error in " + name() +
                ". Please specify number of source points defined in the function.");
 
-  if (_mesh.dimension() > 1)
+  if (isParamValid("position_function"))
   {
-    if (isParamValid("x_position") && !isParamValid("y_position"))
+    std::vector<FunctionName> pos_function =
+        getParam<std::vector<FunctionName>>("position_function");
+    if (pos_function.size() != _mesh.dimension())
       mooseError("Error in " + name() + ". The number of position functions "
                                         "should be equal to mesh dimension.");
-
-    if (_mesh.dimension() > 2)
-    {
-      if (isParamValid("x_position") && !isParamValid("z_position"))
-        mooseError("Error in " + name() + ". The number of position functions "
-                                          "should be equal to mesh dimension.");
-    }
   }
 
   if (_component >= _mesh.dimension())
     mooseError("Error in " + name() + ". component cannot exceed mesh dimensions.");
-
-  if (_mesh.dimension() != 3)
-    mooseWarning("Warning in " + name() +
-                 ". For accurate results, please ensure strike, rake and dip "
-                 "are interpreted correctly. By default, stike = 0 degrees "
-                 "implies x axis is aligned with geographic north.");
 
   // calulating seismic moment tensor
   Real pi = libMesh::pi;
@@ -111,19 +117,66 @@ SeismicSource::SeismicSource(const InputParameters & parameters)
   Real strike = getParam<Real>("strike") / 180.0 * pi;
   Real rake = getParam<Real>("rake") / 180.0 * pi;
 
-  _moment.resize(3, std::vector<Real>(3, 0.0));
-  _moment[0][0] = -(sin(dip) * cos(rake) * sin(2.0 * strike) +
-                    sin(2.0 * dip) * sin(rake) * sin(strike) * sin(strike));
-  _moment[0][1] = (sin(dip) * cos(rake) * cos(2.0 * strike) +
-                   0.5 * sin(2.0 * dip) * sin(rake) * sin(2.0 * strike));
-  _moment[1][0] = _moment[0][1];
-  _moment[0][2] = -(cos(dip) * cos(rake) * cos(strike) + cos(2.0 * dip) * sin(rake) * sin(strike));
-  _moment[2][0] = _moment[0][2];
-  _moment[1][1] = (sin(dip) * cos(rake) * sin(2.0 * strike) -
-                   sin(2.0 * dip) * sin(rake) * cos(strike) * cos(strike));
-  _moment[1][2] = -(cos(dip) * cos(rake) * sin(strike) - cos(2.0 * dip) * sin(rake) * cos(strike));
-  _moment[2][1] = _moment[1][2];
-  _moment[2][2] = sin(2.0 * dip) * sin(rake);
+  if (_mesh.dimension() == 3)
+  {
+    _moment.resize(3, std::vector<Real>(3, 0.0));
+    _moment[0][0] = -(sin(dip) * cos(rake) * sin(2.0 * strike) +
+                      sin(2.0 * dip) * sin(rake) * sin(strike) * sin(strike));
+    _moment[0][1] = (sin(dip) * cos(rake) * cos(2.0 * strike) +
+                     0.5 * sin(2.0 * dip) * sin(rake) * sin(2.0 * strike));
+    _moment[1][0] = _moment[0][1];
+    _moment[0][2] =
+        -(cos(dip) * cos(rake) * cos(strike) + cos(2.0 * dip) * sin(rake) * sin(strike));
+    _moment[2][0] = _moment[0][2];
+    _moment[1][1] = (sin(dip) * cos(rake) * sin(2.0 * strike) -
+                     sin(2.0 * dip) * sin(rake) * cos(strike) * cos(strike));
+    _moment[1][2] =
+        -(cos(dip) * cos(rake) * sin(strike) - cos(2.0 * dip) * sin(rake) * cos(strike));
+    _moment[2][1] = _moment[1][2];
+    _moment[2][2] = sin(2.0 * dip) * sin(rake);
+  }
+  else if (_mesh.dimension() == 2)
+  {
+    // x direction is aligned with north and y direction is aligned with vertical.
+    // This will result in an in-plane earthquake wave.
+    if (strike != 0.0)
+      mooseError("Error in " + name() +
+                 ". A non-zero strike angle for 2D models will create an "
+                 "out-of-plane earthquake wave. This is currently not "
+                 "supported.");
+    _moment.resize(2, std::vector<Real>(2, 0.0));
+    _moment[0][0] = (sin(dip) * cos(rake) * sin(2.0 * strike) -
+                     sin(2.0 * dip) * sin(rake) * cos(strike) * cos(strike));
+    _moment[0][1] =
+        -(cos(dip) * cos(rake) * sin(strike) - cos(2.0 * dip) * sin(rake) * cos(strike));
+    _moment[1][0] = _moment[0][1];
+    _moment[1][1] = sin(2.0 * dip) * sin(rake);
+  }
+  else
+    mooseError("Error in " + name() + ". Only mesh dimensions of 2 and 3 are currently supported.");
+
+  if (isParamValid("rupture_speed") && isParamValid("epicenter"))
+  {
+    if (isParamValid("point"))
+      mooseError("Error in " + name() +
+                 ". Rupture speed and epicenter should only be provided "
+                 "when multiple point sources are specified.");
+
+    std::vector<Real> epi = getParam<std::vector<Real>>("epicenter");
+    if (epi.size() != _mesh.dimension())
+      mooseError("Error in " + name() + ". Epicenter should be same size as mesh dimension.");
+
+    _rupture_speed = getParam<Real>("rupture_speed");
+    _epicenter = getParam<std::vector<Real>>("epicenter");
+
+    if (_rupture_speed <= 0.0)
+      mooseError("Error in " + name() + ". Rupture speed has to be positive.");
+  }
+  else if ((isParamValid("rupture_speed") & !isParamValid("epicenter")) ||
+           (!isParamValid("rupture_speed") & isParamValid("epicenter")))
+    mooseError("Error in " + name() +
+               ". Either both rupture speed and epicenter should be "
+               "provided or neither should be provided.");
 }
 
 void
@@ -141,26 +194,21 @@ SeismicSource::addPoints()
     }
     addPoint(_source_location);
   }
-  else if (isParamValid("x_position"))
+  else if (isParamValid("position_function"))
   {
     unsigned int number = getParam<unsigned int>("number");
+    std::vector<FunctionName> position_function =
+        getParam<std::vector<FunctionName>>("position_function");
+    std::vector<Function *> pos_function(_mesh.dimension());
+
+    for (unsigned int i = 0; i < _mesh.dimension(); ++i)
+      pos_function[i] = &getFunctionByName(position_function[i]);
 
     for (unsigned int i = 0; i < number; ++i)
     {
-      Function * const function_x = &getFunction("x_position");
-      _source_location(0) = function_x->value(i + 1, _qp);
+      for (unsigned int j = 0; j < _mesh.dimension(); ++j)
+        _source_location(j) = (pos_function[j])->value(i + 1, _qp);
 
-      if (_mesh.dimension() > 1)
-      {
-        Function * const function_y = &getFunction("y_position");
-        _source_location(1) = function_y->value(i + 1, _qp);
-
-        if (_mesh.dimension() > 2)
-        {
-          Function * const function_z = &getFunction("z_position");
-          _source_location(2) = function_z->value(i + 1, _qp);
-        }
-      }
       addPoint(_source_location, i);
     }
   }
@@ -170,14 +218,40 @@ Real
 SeismicSource::computeQpResidual()
 {
   /**
+   * The time at which each point source ruptures is given by time_shift.
+   * The time_shift parameter is calculated based on rupture speed and the distance
+   * of the source from the epicenter.
+   **/
+
+  Real time_shift = 0.0;
+  if (_rupture_speed != std::numeric_limits<unsigned int>::max())
+  {
+    Real distance = 0.0;
+    if (_mesh.dimension() == 1)
+      distance = std::abs(_physical_point[_qp](0) - _epicenter[0]);
+    else if (_mesh.dimension() == 2)
+      distance = std::sqrt(pow(_physical_point[_qp](0) - _epicenter[0], 2.0) +
+                           pow(_physical_point[_qp](1) - _epicenter[1], 2.0));
+    else if (_mesh.dimension() == 3)
+      distance = std::sqrt(pow(_physical_point[_qp](0) - _epicenter[0], 2.0) +
+                           pow(_physical_point[_qp](1) - _epicenter[1], 2.0) +
+                           pow(_physical_point[_qp](2) - _epicenter[2], 2.0));
+
+    time_shift = distance / _rupture_speed;
+  }
+
+  /**
    *  f_i(x,t) = - d M_ij(x,t)/ d x_j (summation over index j)
    *  For a point source applied at p, M_ij(x,t) = M_ij(t)*delta(x-p)
    *  Therefore f_i(x,t) = - M_ij(t)*d delta(x-p)/ d x_j
    *  This in weak form simplifies to the volume integral of M_ij(t)* delta(x-p)
    ** d test_i / d x_j
    **/
-
-  _moment_magnitude = _shear_modulus * _area * _slip_function->value(_t + _alpha * _dt, _qp);
+  if (_t > time_shift)
+    _moment_magnitude =
+        _shear_modulus * _area * _slip_function->value(_t + _alpha * _dt - time_shift, _qp);
+  else
+    _moment_magnitude = 0.0;
 
   _force = 0.0;
   for (unsigned int i = 0; i < _mesh.dimension(); i++)
