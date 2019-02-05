@@ -101,13 +101,13 @@ MastodonModelAction::act()
 void
 MastodonModelAction::addDynamicTensorMechanicsAction()
 {
-  std::vector<NonlinearVariableName> dim_disp_variables(_disp_variables.begin(),
-                                                        _disp_variables.begin() + _dim);
+  std::vector<VariableName> dim_disp_variables(_disp_variables.begin(),
+                                               _disp_variables.begin() + _dim);
   // Retrieve action parameters and set the parameters
   InputParameters action_params = _action_factory.getValidParams("DynamicTensorMechanicsAction");
   action_params.set<std::vector<SubdomainName>>("block") =
       getParam<std::vector<SubdomainName>>("block");
-  action_params.set<std::vector<NonlinearVariableName>>("displacements") = dim_disp_variables;
+  action_params.set<std::vector<VariableName>>("displacements") = dim_disp_variables;
   action_params.set<MaterialPropertyName>("zeta") = getParam<MaterialPropertyName>("zeta");
   // Create the action and add it to the action warehouse
   std::shared_ptr<Action> dynamictensormechanics_action =
