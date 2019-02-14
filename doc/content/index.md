@@ -8,21 +8,21 @@
 
 
 !row!
-!col! class=s12 m4 l4 icon=check_box
+!col! small=12 medium=4 large=4 icon=check_box
 ### Nonlinear SSI class=center style=font-weight:200;
 
 MASTODON is a highly-parallelizable, finite-element analysis code capable of three-dimensional
 nonlinear soil-structure analysis including the simulation of source-to-site wave propagation.
 !col-end!
 
-!col! class=s12 m4 l4 icon=check_box
+!col! small=12 medium=4 large=4 icon=check_box
 ### Risk Assessment class=center style=font-weight:200;
 
 MASTODON is being developed to be a probabilistic risk assessment framework that enables not only
 deterministic analyses, but also probabilistic simulations.
 !col-end!
 
-!col! class=s12 m4 l4 icon=check_box
+!col! small=12 medium=4 large=4 icon=check_box
 ### Quality Assurance class=center style=font-weight:200;
 
 MASTODON is being developed in accordance with the ASME NQA-1 safety software requirements.
