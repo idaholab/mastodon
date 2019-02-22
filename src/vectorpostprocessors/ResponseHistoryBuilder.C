@@ -15,7 +15,7 @@ InputParameters
 validParams<ResponseHistoryBuilder>()
 {
   InputParameters params = validParams<NodalVectorPostprocessor>();
-  params.addRequiredParam<unsigned int>("node",
+  params.addParam<unsigned int>("node",
                                         "Node number at which the response history is requested.");
   params.set<ExecFlagEnum>("execute_on") = {EXEC_INITIAL, EXEC_TIMESTEP_END};
   params.addRequiredCoupledVar("variables",
@@ -27,10 +27,12 @@ validParams<ResponseHistoryBuilder>()
 
 ResponseHistoryBuilder::ResponseHistoryBuilder(const InputParameters & parameters)
   : NodalVectorPostprocessor(parameters),
-    _history_time(declareVector("_time")),
-    _node(getParam<unsigned int>("node"))
+    _history_time(declareVector("time"))
+    // _node(getParam<unsigned int>("node"))
 
 {
+  // find the node and set it to _node
+  std::cout << "BOUNDARY" << hasBoundary(getParam<std::vector<BoundaryName>>("boundary")) << std::endl;
   const std::vector<VariableName> & names = getParam<std::vector<VariableName>>("variables");
   for (std::size_t i = 0; i < names.size(); ++i)
   {
@@ -48,7 +50,7 @@ ResponseHistoryBuilder::initialize()
 void
 ResponseHistoryBuilder::finalize()
 {
-  // When running in parallel the data must be transfered from the processor that owns the node that
+  // When running in parallel the data must be transferred from the processor that owns the node that
   // is being utilized to all other processors.
   if (n_processors() > 1)
   {
@@ -90,15 +92,15 @@ ResponseHistoryBuilder::threadJoin(const UserObject & uo)
   const ResponseHistoryBuilder & builder = static_cast<const ResponseHistoryBuilder &>(uo);
 
   // Prior to the execute() call the _node_rank is set to an invalid value. When execute() occurs
-  // data is only added to the vectors for a single node. This happends on one processor and one
+  // data is only added to the vectors for a single node. This happens on one processor and one
   // thread. When the data is added the _node_rank is also set to be the processor id of the node.
-  // Therefor, if the object passed in has a valid _node_rank then this is the object that has the
+  // Therefore, if the object passed in has a valid _node_rank then this is the object that has the
   // most updated data, so add its most recent data to this object. Also, if the node happens to be
   // stored on thread 0 then this loop will never do anything, which is fine, because the purpose
   // of this method is to get the data to the 0 thread copy.
   if (builder._node_rank != DofObject::invalid_processor_id)
   {
-    _node_rank = builder._node_rank; // required for MPI communcation in finailize
+    _node_rank = builder._node_rank; // required for MPI communcation in finalize
     _history_time.push_back(builder._history_time.back());
     for (size_t i = 0; i < _history.size(); ++i)
       _history[i]->push_back(builder._history[i]->back());
@@ -108,11 +110,14 @@ ResponseHistoryBuilder::threadJoin(const UserObject & uo)
 void
 ResponseHistoryBuilder::execute()
 {
-  if (_current_node->id() == _node)
-  {
+  // std::cout << "Current node is: " << _current_node->id() << std::endl;
+  // std::cout << "EXECUTING!\n";
+  // if (_current_node->id() == _node)
+  // {
+    std::cout << "EXECUTING!" << _current_node->id() << std::endl;
     _node_rank = _current_node->processor_id();
     _history_time.push_back(_t);
     for (size_t i = 0; i < _history.size(); ++i)
       _history[i]->push_back((*_variables[i])[0]);
-  }
+  // }
 }

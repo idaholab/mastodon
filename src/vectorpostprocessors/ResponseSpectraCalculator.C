@@ -45,9 +45,9 @@ ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & par
     _freq_end(getParam<Real>("end_frequency")),
     _freq_num(getParam<Real>("num_frequencies")),
     _reg_dt(getParam<Real>("dt_output")),
-    _frequency(declareVector("_frequency")),
+    _frequency(declareVector("frequency")),
     // Time vector from the response history builder vector postprocessor
-    _history_time(getVectorPostprocessorValue("vectorpostprocessor", "_time"))
+    _history_time(getVectorPostprocessorValue("vectorpostprocessor", "time"))
 
 {
   // Check for starting and ending frequency
@@ -85,12 +85,14 @@ ResponseSpectraCalculator::initialize()
 void
 ResponseSpectraCalculator::execute()
 {
+  std::cout << "EXECUTING RSA\n";
   // Only performing the calculation if current time is equal to calculation
   // time. Sometimes _t is not exactly equal to the _calc_time. Therefore, the
   // calculation is performed when the distance between _t and _calc_time is
   // smaller than the _dt at that time step. The makes sure that the
   // calculation is performed only once.
-  for (std::size_t i = 0; i < _varnames.size() && abs(_t - _calc_time) < _dt; ++i)
+  // for (std::size_t i = 0; i < _varnames.size() && abs(_t - _calc_time) < _dt; ++i)
+  for (std::size_t i = 0; i < _varnames.size(); ++i)
   {
     // The acceleration responses may or may not have a constant time step.
     // Therefore, they are regularized by default to a constant time step by the

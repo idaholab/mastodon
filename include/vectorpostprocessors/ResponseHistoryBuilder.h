@@ -49,7 +49,7 @@ protected:
   std::vector<const VariableValue *> _variables;
 
   /// Reference to the node number where the response histories are requested.
-  const dof_id_type & _node;
+  // const dof_id_type & _node;
 
   /// Stores the processor id that owns the data collected from the node, this is set to an invalid
   /// value during initialize() and then set to the node processor id that contains the data that
