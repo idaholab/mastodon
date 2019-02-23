@@ -48,8 +48,8 @@ protected:
   /// Vector of pointers to the values of the variables at each time step.
   std::vector<const VariableValue *> _variables;
 
-  /// Reference to the node number where the response histories are requested.
-  // const dof_id_type & _node;
+  /// Map with (key, value) = (nodeid, VPP in _history)
+  std::map<dof_id_type, std::size_t> _node_map;
 
   /// Stores the processor id that owns the data collected from the node, this is set to an invalid
   /// value during initialize() and then set to the node processor id that contains the data that

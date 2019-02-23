@@ -77,7 +77,7 @@
   [./accel]
     type = ResponseHistoryBuilder
     variables = 'u accel_x'
-    node = 2
+    nodes = 2
     execute_on = 'initial timestep_end'
   [../]
 []
