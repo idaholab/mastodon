@@ -2,12 +2,12 @@
   [./builder]
     type = CSVDiff
     input = response_history_builder.i
-    csvdiff = response_history_builder_out_accel_0006.csv
+    csvdiff = 'response_history_builder_out_accel_nodes.csv response_history_builder_out_accel_bnd.csv'
   [../]
   [./builder_parallel]
     type = CSVDiff
     input = response_history_builder.i
-    csvdiff = response_history_builder_out_accel_0006.csv
+    csvdiff = 'response_history_builder_out_accel_nodes.csv response_history_builder_out_accel_bnd.csv'
     prereq = builder
     min_parallel = 3
     max_parallel = 3
@@ -15,14 +15,14 @@
   [./builder_threads]
     type = CSVDiff
     input = response_history_builder.i
-    csvdiff = response_history_builder_out_accel_0006.csv
+    csvdiff = 'response_history_builder_out_accel_nodes.csv response_history_builder_out_accel_bnd.csv'
     prereq = builder_parallel
     min_threads = 6
   [../]
   [./builder_threads_parallel]
     type = CSVDiff
     input = response_history_builder.i
-    csvdiff = response_history_builder_out_accel_0006.csv
+    csvdiff = 'response_history_builder_out_accel_nodes.csv response_history_builder_out_accel_bnd.csv'
     prereq = builder_threads
     min_threads = 4
     min_parallel = 2

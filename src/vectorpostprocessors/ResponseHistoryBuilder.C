@@ -25,6 +25,9 @@ validParams<ResponseHistoryBuilder>()
   params.set<ExecFlagEnum>("execute_on") = {EXEC_INITIAL, EXEC_TIMESTEP_END};
   params.suppressParameter<ExecFlagEnum>("execute_on");
 
+  params.set<bool>("contains_complete_history") = true;
+  params.suppressParameter<bool>("contains_complete_history");
+
   params.addRequiredCoupledVar("variables",
                                "Variable name for which the response history is requested.");
   params.addClassDescription("Calculates response histories for a given node and variable(s).");
@@ -102,12 +105,12 @@ ResponseHistoryBuilder::finalize()
 
   if (n_processors() > 1)
   {
-    // On each processor _current_data is sized for the number of history vectors (N).The allgather
-    // puts these vectors together on the root processor in a single vector. Therefore, if there
+    // On each processor _current_data is sized for the number of history vectors (N). The allgather
+    // method puts these vectors together on the root processor in a single vector. Therefore, if there
     // are two processors (A and B) then the _current_data for each processors are:
     //    A = [A_0, A_1, ..., A_N]
     //    B = [B_0, B_1, ..., B_N]
-    // After the allgather the _current_data on the root processor becomes:
+    // After allgather is executed the _current_data on the root processor becomes:
     //    _current_data = [A_0, A_1, ..., A_N, B_0, B_1, ..., B_N]
     _communicator.allgather(_current_data, true);
 
@@ -147,7 +150,7 @@ ResponseHistoryBuilder::threadJoin(const UserObject & uo)
 void
 ResponseHistoryBuilder::execute()
 {
-  // finding location of the vector in _history corresponding to _current_node
+  // finding the index of the VPP corresponding to _current_node in _history
   if (_node_map.find(_current_node->id()) != _node_map.end())
   {
     // The index of the data within the _history vector for the current node
