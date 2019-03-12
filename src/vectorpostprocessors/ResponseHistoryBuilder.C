@@ -23,6 +23,7 @@ validParams<ResponseHistoryBuilder>()
   params.suppressParameter<bool>("unique_node_execute");
 
   params.set<ExecFlagEnum>("execute_on") = {EXEC_INITIAL, EXEC_TIMESTEP_END};
+  params.suppressParameter<ExecFlagEnum>("execute_on");
 
   params.addRequiredCoupledVar("variables",
                                "Variable name for which the response history is requested.");
