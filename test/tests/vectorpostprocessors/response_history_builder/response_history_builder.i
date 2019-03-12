@@ -75,10 +75,7 @@
 
 [Outputs]
   exodus = true
-  [./out]
-    type = CSV
-    execute_on = final
-  [../]
+  csv = true
 []
 
 [VectorPostprocessors]
