@@ -51,11 +51,8 @@ protected:
   /// Map with (key, value) = (nodeid, VPP in _history)
   std::map<dof_id_type, std::size_t> _node_map;
 
-  /// Stores the processor id that owns the data collected from the node, this is set to an invalid
-  /// value during initialize() and then set to the node processor id that contains the data that
-  /// is being stored. Thus, this is used to dictate which processor as well as thread has the
-  /// latest data.
-  processor_id_type _node_rank;
+  /// Stores the data for each VPP on the current timestep
+  std::vector<Real> _current_data;
 };
 
 #endif

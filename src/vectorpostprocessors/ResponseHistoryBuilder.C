@@ -15,33 +15,45 @@ InputParameters
 validParams<ResponseHistoryBuilder>()
 {
   InputParameters params = validParams<NodalVectorPostprocessor>();
-  params.addParam<std::vector<dof_id_type>>("nodes", "Node number(s) at which the response history is needed.");
+  params.addParam<std::vector<dof_id_type>>(
+      "nodes", "Node number(s) at which the response history is needed.");
+
+  // Force the object to only execute once per node even if it has multiple boundary ids
+  params.set<bool>("unique_node_execute") = true;
+  params.suppressParameter<bool>("unique_node_execute");
+
   params.set<ExecFlagEnum>("execute_on") = {EXEC_INITIAL, EXEC_TIMESTEP_END};
-  params.addRequiredCoupledVar("variables", "Variable name for which the response history is requested.");
+
+  params.addRequiredCoupledVar("variables",
+                               "Variable name for which the response history is requested.");
   params.addClassDescription("Calculates response histories for a given node and variable(s).");
   return params;
 }
 
 ResponseHistoryBuilder::ResponseHistoryBuilder(const InputParameters & parameters)
-  : NodalVectorPostprocessor(parameters),
-    _history_time(declareVector("time"))
+  : NodalVectorPostprocessor(parameters), _history_time(declareVector("time"))
 {
   // Retrieving variable names from input
   const std::vector<VariableName> & var_names = getParam<std::vector<VariableName>>("variables");
 
-   // Set that will store the union of node ids from all the boundaries or requested nodes
+  // Set that will store the union of node ids from all the boundaries or requested nodes
   std::set<dof_id_type> history_nodes;
 
   if (parameters.isParamValid("boundary") && parameters.isParamValid("nodes"))
-    mooseError("Error in VectorPostprocessor, '", name(), "'. Please specify either of boundary or node, but not both.");
+    mooseError("Error in VectorPostprocessor, '",
+               name(),
+               "'. Please specify either of boundary or node, but not both.");
 
   if (!parameters.isParamValid("boundary") && !parameters.isParamValid("nodes"))
-    mooseError("Error in VectorPostprocessor, '", name(), "'. Please provide either boundary or node for response history output.");
+    mooseError("Error in VectorPostprocessor, '",
+               name(),
+               "'. Please provide either boundary or node for response history output.");
 
   if (parameters.isParamValid("boundary"))
   {
     // Retrieving boundaries and making a set of all the nodes in these boundaries
-    std::set<BoundaryID> bnd_ids = boundaryIDs(); // Set containing the boundary IDs input by the user
+    std::set<BoundaryID> bnd_ids =
+        boundaryIDs(); // Set containing the boundary IDs input by the user
     for (auto id : boundaryIDs())
       history_nodes.insert(_mesh.getNodeList(id).begin(), _mesh.getNodeList(id).end());
   }
@@ -63,7 +75,8 @@ ResponseHistoryBuilder::ResponseHistoryBuilder(const InputParameters & parameter
   for (dof_id_type node_id : history_nodes)
   {
     for (std::size_t i = 0; i < var_names.size(); ++i)
-      _history[count * var_names.size() + i] = &declareVector("node_" + Moose::stringify(node_id) + "_" + var_names[i]);
+      _history[count * var_names.size() + i] =
+          &declareVector("node_" + Moose::stringify(node_id) + "_" + var_names[i]);
     _node_map[node_id] = count;
     count++;
   }
@@ -76,106 +89,69 @@ ResponseHistoryBuilder::ResponseHistoryBuilder(const InputParameters & parameter
 void
 ResponseHistoryBuilder::initialize()
 {
-  std::cout << "*********** Executing initialize\n";
-  _node_rank = DofObject::invalid_processor_id;
+  _current_data.clear();
+  _current_data.resize(_history.size());
 }
 
 void
 ResponseHistoryBuilder::finalize()
 {
-  // When running in parallel the data must be transferred from the processor that owns the node that
-  // is being utilized to all other processors.
+  // Data to be added to the current vectors
+  std::vector<Real> data(_history.size());
+
   if (n_processors() > 1)
   {
-    // Create a vector for storing the data from the last time execution that should be appended
-    // to all vectors on the other processors. This is the storage that will be used with broadcast.
-    std::vector<Real> data(_history.size() + 1);
-    // std::cout << "DATASIZE\t" << data.size() << std::endl;
-    // On the processor with the data, pack the data to be broadcast
-    if (_node_rank == processor_id())
-    {
-      std::cout << "*********** Executing finalize 1 \n";
-      data[0] = _history_time.back();
-      std::cout << "*********** Executing finalize 2 \n";
-      for (size_t i = 0; i < _history.size(); ++i)
-        {
-          std::cout << "*********** Executing finalize 3 \n";
-          std::cout << "HISTORY is: \n" << Moose::stringify(*_history[i]) << std::endl;
-          data[i + 1] = _history[i]->back();
-          std::cout << "*********** Executing finalize 4 \n";
-        }
-    }
+    // On each processor _current_data is sized for the number of history vectors (N).The allgather
+    // puts these vectors together on the root processor in a single vector. Therefore, if there
+    // are two processors (A and B) then the _current_data for each processors are:
+    //    A = [A_0, A_1, ..., A_N]
+    //    B = [B_0, B_1, ..., B_N]
+    // After the allgather the _current_data on the root processor becomes:
+    //    _current_data = [A_0, A_1, ..., A_N, B_0, B_1, ..., B_N]
+    _communicator.allgather(_current_data, true);
 
-    // Communicate which processor owns the data, use int because libMesh specializations do not
-    // include bool types.
-    std::vector<int> recieve;
-    int send = processor_id() == _node_rank;
-    std::cout << "*********** Executing finalize 4.5 \n";
-    _communicator.allgather(send, recieve);
-    std::cout << "*********** Executing finalize 5 \n";
-
-    // Determine the "root id" from which the data is to be broadcast, then broadcast
-    int root_id = std::distance(recieve.begin(), std::find(recieve.begin(), recieve.end(), 1));
-    _communicator.broadcast(data, root_id);
-    std::cout << "*********** Executing finalize 6 \n";
-
-    // Update the data on processors that don't already have it
-    if (_node_rank != processor_id())
-    {
-      _history_time.push_back(data[0]);
-      std::cout << "*********** Executing finalize 7 \n";
-      for (size_t i = 0; i < _history.size(); ++i)
-        _history[i]->push_back(data[i + 1]);
-    }
-    std::cout << "*********** Executing finalize 8 \n";
+    // The values for _current_data are zero everywhere except on the processor on which it was
+    // computed and there should never be repeated values because "unique_node_execute" is true and
+    // the execute method sets the data by index so any repeated calls would overwrite a previous
+    // calculation. Therefore, the data that needs to be added is simply the sum of all the vector
+    // across processors.
+    const std::size_t N = _history.size();
+    for (dof_id_type rank = 0; rank < n_processors(); ++rank)
+      for (std::size_t i = 0; i < _history.size(); ++i)
+        data[i] += _current_data[rank * N + i];
   }
+
+  else
+    data = _current_data;
+
+  // Update the history vectors with the new data
+  for (std::size_t i = 0; i < _history.size(); ++i)
+    _history[i]->push_back(data[i]);
+
+  // Update the time vector
+  _history_time.push_back(_t);
 }
 
 void
 ResponseHistoryBuilder::threadJoin(const UserObject & uo)
 {
+  // As detailed in the finalize() method the _current_data are zero everywhere except on the
+  // process and thread where it was computed. Thus, adding the values from the other threads
+  // updates the root thread correctly.
   const ResponseHistoryBuilder & builder = static_cast<const ResponseHistoryBuilder &>(uo);
-
-  // Prior to the execute() call the _node_rank is set to an invalid value. When execute() occurs
-  // data is only added to the vectors for a single node. This happens on one processor and one
-  // thread. When the data is added the _node_rank is also set to be the processor id of the node.
-  // Therefore, if the object passed in has a valid _node_rank then this is the object that has the
-  // most updated data, so add its most recent data to this object. Also, if the node happens to be
-  // stored on thread 0 then this loop will never do anything, which is fine, because the purpose
-  // of this method is to get the data to the 0 thread copy.
-  if (builder._node_rank != DofObject::invalid_processor_id)
-  {
-    _node_rank = builder._node_rank; // required for MPI communcation in finalize
-    _history_time.push_back(builder._history_time.back());
-    for (size_t i = 0; i < _history.size(); ++i)
-      _history[i]->push_back(builder._history[i]->back());
-  }
+  for (std::size_t i = 0; i < _history.size(); ++i)
+    _current_data[i] += builder._current_data[i];
 }
 
 void
 ResponseHistoryBuilder::execute()
 {
-  std::cout << "EXECUTING CURRENT NODE !!!!!!!\t" << _current_node->id() << std::endl;
-  _node_rank = _current_node->processor_id();
-
-  // building time vector. Need to do this only once per timestep
-  _history_time.resize(_t_step + 1);
-  _history_time[_t_step] = _t;
-
   // finding location of the vector in _history corresponding to _current_node
   if (_node_map.find(_current_node->id()) != _node_map.end())
   {
-    // std::cout << "*****************************\n";
+    // The index of the data within the _history vector for the current node
     std::size_t loc = _node_map[_current_node->id()];
     for (std::size_t i = 0; i < _variables.size(); ++i)
-    {
-      // Resizing corresponding VPP value to current number of time num_steps
-      // Doing this to avoid the usage of pushback() because execute() may
-      // go through the same node more than once.
-      _history[loc * _variables.size() + i]->resize(_t_step + 1);
-      // Assigning the value to the vector, instead of using pushback()
-      (*_history[loc * _variables.size() + i])[_t_step] = (*_variables[i])[0];
-    }
+      _current_data[loc * _variables.size() + i] = (*_variables[i])[0];
   }
-  std::cout << "HISTORY IN EXECUTE is: \n" << Moose::stringify(*_history[0]) << std::endl;
 }

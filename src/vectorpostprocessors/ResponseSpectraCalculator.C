@@ -85,7 +85,6 @@ ResponseSpectraCalculator::initialize()
 void
 ResponseSpectraCalculator::execute()
 {
-  std::cout << "EXECUTING RSA\n";
   // Only performing the calculation if current time is equal to calculation
   // time. Sometimes _t is not exactly equal to the _calc_time. Therefore, the
   // calculation is performed when the distance between _t and _calc_time is
