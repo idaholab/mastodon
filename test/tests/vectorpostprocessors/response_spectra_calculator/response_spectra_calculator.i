@@ -255,33 +255,8 @@
   line_search = 'none'
 []
 
-[Postprocessors]
-  [./_dt]
-    type = TimestepSize
-  [../]
-  [./accel_top_x]
-    type = NodalVariableValue
-    nodeid = 9
-    variable = accel_x
-  [../]
-  [./accel_top_y]
-    type = NodalVariableValue
-    nodeid = 9
-    variable = accel_y
-  [../]
-  [./accel_top_z]
-    type = NodalVariableValue
-    nodeid = 9
-    variable = accel_z
-  [../]
-[]
-
 [Outputs]
-  [./accel_exodus]
-    type = Exodus
-    execute_on = 'initial timestep_end'
-  [../]
-  [./accel_csv]
+  [./out]
     type = CSV
     execute_on = 'final'
   [../]
@@ -291,8 +266,7 @@
   [./accel_hist]
     type = ResponseHistoryBuilder
     variables = 'accel_x accel_y'
-    node = 9
-    execute_on = 'initial timestep_end'
+    nodes = 9
   [../]
 []
 
@@ -301,9 +275,9 @@
     type = ResponseSpectraCalculator
     vectorpostprocessor = accel_hist
     variables = 'accel_x'
+    node = 9
     damping_ratio = 0.05
-    dt_output = 0.005
-    calculation_time = 33
-    execute_on = timestep_end
+    regularize_dt = 0.005
+    outputs = out
   [../]
 []

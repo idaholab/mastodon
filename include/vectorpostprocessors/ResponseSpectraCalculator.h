@@ -45,10 +45,6 @@ protected:
   /// Damping ratio.
   const Real & _xi;
 
-  /// Time at which, the response spectrum calculation is to be made. Generally
-  /// at the end of the simulation.
-  const Real & _calc_time;
-
   /// Start frequency for the response spectra calculation. Generally about
   /// 0.01Hz for earthquakes.
   const Real & _freq_start;

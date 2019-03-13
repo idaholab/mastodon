@@ -266,16 +266,17 @@
 []
 
 [Outputs]
-  csv = true
-  execute_on = final
+  [./out]
+    type = CSV
+    execute_on = 'final'
+  [../]
 []
 
 [VectorPostprocessors]
   [./accel_hist]
     type = ResponseHistoryBuilder
     variables = 'accel_x accel_y'
-    node = 9
-    execute_on = 'initial timestep_end'
+    nodes = 9
   [../]
 []
 
@@ -284,9 +285,9 @@
     type = HousnerSpectrumIntensity
     vectorpostprocessor = accel_hist
     variables = 'accel_x accel_y'
+    node = 9
     damping_ratio = 0.05
     regularize_dt = 0.005
-    calculation_time = 33
-    execute_on = timestep_end
+    outputs = out
   [../]
 []

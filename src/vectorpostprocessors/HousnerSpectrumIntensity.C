@@ -18,11 +18,8 @@ validParams<HousnerSpectrumIntensity>()
       "HSIs are calculated.");
   params.addRequiredParam<std::vector<VariableName>>(
       "variables", "Variables for which HSIs are requested (accelerations only).");
+  params.addRequiredParam<unsigned int>("node", "Node at which the response spectrum is requested.");
   params.addParam<Real>("damping_ratio", 0.05, "Damping ratio for HSI calculation.");
-  params.addRequiredParam<Real>("calculation_time",
-                                "Analysis time when the HSI calculation is "
-                                "made. Usually at the end of the "
-                                "simulation.");
   params.addParam<Real>("start_period", 0.25, "Start period for the HSI calculation.");
   params.addParam<Real>("end_period", 2.5, "End period for the HSI calculation.");
   params.addParam<Real>("num_periods", 140, "Number of frequencies for the HSI calculation.");
@@ -30,6 +27,12 @@ validParams<HousnerSpectrumIntensity>()
                                 "dt for HSI calculation. The acceleration "
                                 "response will be regularized to this dt prior to "
                                 "the HSI calculation.");
+  // Make sure that csv files are created only at the final timestep
+  params.set<bool>("contains_complete_history") = true;
+  params.suppressParameter<bool>("contains_complete_history");
+
+  params.set<ExecFlagEnum>("execute_on") = {EXEC_FINAL};
+  params.suppressParameter<ExecFlagEnum>("execute_on");
   params.addClassDescription("Calculate the HSI for the requested acceleration variables.");
   return params;
 }
@@ -38,14 +41,13 @@ HousnerSpectrumIntensity::HousnerSpectrumIntensity(const InputParameters & param
   : GeneralVectorPostprocessor(parameters),
     _varnames(getParam<std::vector<VariableName>>("variables")),
     _xi(getParam<Real>("damping_ratio")),
-    _calc_time(getParam<Real>("calculation_time")),
     _per_start(getParam<Real>("start_period")),
     _per_end(getParam<Real>("end_period")),
     _per_num(getParam<Real>("num_periods")),
     _reg_dt(getParam<Real>("regularize_dt")),
     _hsi_vec(declareVector("hsi")),
     // Time vector from the ResponseHistoryBuilder vectorpostprocessor.
-    _history_time(getVectorPostprocessorValue("vectorpostprocessor", "_time"))
+    _history_time(getVectorPostprocessorValue("vectorpostprocessor", "time"))
 
 {
   // Check for starting and ending period
@@ -61,9 +63,13 @@ HousnerSpectrumIntensity::HousnerSpectrumIntensity(const InputParameters & param
     mooseError("Error in " + name() + ". dt must be positive.");
 
   for (unsigned int i = 0; i < _varnames.size(); ++i)
+  {
     // Acceleration vectors corresponding to the variables from the
     // ResponseHistoryBuilder vectorpostprocessor.
-    _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", _varnames[i]));
+    std::string vecname = "node_" + Moose::stringify(getParam<unsigned int>("node")) + "_" + _varnames[i];
+    _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", vecname));
+  }
+
 }
 
 void
@@ -80,12 +86,7 @@ HousnerSpectrumIntensity::execute()
   std::vector<Real> vel_spectrum;
   Real freq_start = 1 / _per_end;
   Real freq_end = 1 / _per_start;
-  // Only performing the calculation if current time is equal to calculation
-  // time. Sometimes _t is not exactly equal to the _calc_time. Therefore, the
-  // calculation is performed when the distance between _t and _calc_time is
-  // smaller than the _dt at that time step. The makes sure that the
-  // calculation is performed only once.
-  for (unsigned int i = 0; i < _varnames.size() && abs(_t - _calc_time) < _dt; ++i)
+  for (unsigned int i = 0; i < _varnames.size(); ++i)
   {
     // The acceleration responses may or may not have a constant time step.
     // Therefore, they are regularized by default to a constant time step by the

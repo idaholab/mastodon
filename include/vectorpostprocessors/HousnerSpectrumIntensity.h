@@ -49,10 +49,6 @@ protected:
   /// Damping ratio.
   const Real & _xi;
 
-  /// Time at which, the HSI calculation is to be made. Generally
-  /// at the end of the simulation.
-  const Real & _calc_time;
-
   /// Start period for the HSI calculation. Housner (1952) recommends 0.25sec.
   const Real & _per_start;
 

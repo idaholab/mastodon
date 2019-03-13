@@ -15,23 +15,27 @@ validParams<ResponseSpectraCalculator>()
       "vectorpostprocessor",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "
       "response spectra are calculated.");
+  params.addRequiredParam<unsigned int>("node", "Node at which the response spectrum is requested.");
   params.addRequiredParam<std::vector<VariableName>>(
       "variables", "Variables for which response spectra are requested (accelerations only).");
   params.addRequiredParam<Real>("damping_ratio", "Damping ratio for response spectra calculation.");
-  params.addRequiredParam<Real>("calculation_time",
-                                "Time, when the response spectrum calculation "
-                                "is made. Usually the final time of the "
-                                "simulation.");
   params.addParam<Real>(
       "start_frequency", 0.01, "Start frequency for the response spectra calculation.");
   params.addParam<Real>(
       "end_frequency", 100.0, "End frequency for the response spectra calculation.");
   params.addParam<Real>(
       "num_frequencies", 401, "Number of frequencies for the response spectra calculation.");
-  params.addRequiredParam<Real>("dt_output",
+  params.addRequiredParam<Real>("regularize_dt",
                                 "dt for response spectra calculation. The "
                                 "acceleration response will be regularized to this dt "
                                 "prior to the response spectrum calculation.");
+  // Make sure that csv files are created only at the final timestep
+  params.set<bool>("contains_complete_history") = true;
+  params.suppressParameter<bool>("contains_complete_history");
+
+  params.set<ExecFlagEnum>("execute_on") = {EXEC_FINAL};
+  params.suppressParameter<ExecFlagEnum>("execute_on");
+
   params.addClassDescription("Calculate the response spectrum at the requested nodes or points.");
   return params;
 }
@@ -40,11 +44,10 @@ ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & par
   : GeneralVectorPostprocessor(parameters),
     _varnames(getParam<std::vector<VariableName>>("variables")),
     _xi(getParam<Real>("damping_ratio")),
-    _calc_time(getParam<Real>("calculation_time")),
     _freq_start(getParam<Real>("start_frequency")),
     _freq_end(getParam<Real>("end_frequency")),
     _freq_num(getParam<Real>("num_frequencies")),
-    _reg_dt(getParam<Real>("dt_output")),
+    _reg_dt(getParam<Real>("regularize_dt")),
     _frequency(declareVector("frequency")),
     // Time vector from the response history builder vector postprocessor
     _history_time(getVectorPostprocessorValue("vectorpostprocessor", "time"))
@@ -67,10 +70,11 @@ ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & par
   // for each variable name input by the user.
   for (const std::string & name : _varnames)
   {
-    _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", name));
-    _spectrum.push_back(&declareVector(name + "_sd"));
-    _spectrum.push_back(&declareVector(name + "_sv"));
-    _spectrum.push_back(&declareVector(name + "_sa"));
+    std::string vecname = "node_" + Moose::stringify(getParam<unsigned int>("node")) + "_" + name;
+    _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", vecname));
+    _spectrum.push_back(&declareVector(vecname + "_sd"));
+    _spectrum.push_back(&declareVector(vecname + "_sv"));
+    _spectrum.push_back(&declareVector(vecname + "_sa"));
   }
 }
 
@@ -85,12 +89,6 @@ ResponseSpectraCalculator::initialize()
 void
 ResponseSpectraCalculator::execute()
 {
-  // Only performing the calculation if current time is equal to calculation
-  // time. Sometimes _t is not exactly equal to the _calc_time. Therefore, the
-  // calculation is performed when the distance between _t and _calc_time is
-  // smaller than the _dt at that time step. The makes sure that the
-  // calculation is performed only once.
-  // for (std::size_t i = 0; i < _varnames.size() && abs(_t - _calc_time) < _dt; ++i)
   for (std::size_t i = 0; i < _varnames.size(); ++i)
   {
     // The acceleration responses may or may not have a constant time step.
