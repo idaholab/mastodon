@@ -18,7 +18,8 @@ validParams<HousnerSpectrumIntensity>()
       "HSIs are calculated.");
   params.addRequiredParam<std::vector<VariableName>>(
       "variables", "Variables for which HSIs are requested (accelerations only).");
-  params.addRequiredParam<unsigned int>("node", "Node at which the response spectrum is requested.");
+  params.addRequiredParam<unsigned int>("node",
+                                        "Node at which the response spectrum is requested.");
   params.addParam<Real>("damping_ratio", 0.05, "Damping ratio for HSI calculation.");
   params.addParam<Real>("start_period", 0.25, "Start period for the HSI calculation.");
   params.addParam<Real>("end_period", 2.5, "End period for the HSI calculation.");
@@ -66,10 +67,10 @@ HousnerSpectrumIntensity::HousnerSpectrumIntensity(const InputParameters & param
   {
     // Acceleration vectors corresponding to the variables from the
     // ResponseHistoryBuilder vectorpostprocessor.
-    std::string vecname = "node_" + Moose::stringify(getParam<unsigned int>("node")) + "_" + _varnames[i];
+    std::string vecname =
+        "node_" + Moose::stringify(getParam<unsigned int>("node")) + "_" + _varnames[i];
     _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", vecname));
   }
-
 }
 
 void

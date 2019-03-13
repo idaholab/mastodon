@@ -106,8 +106,8 @@ ResponseHistoryBuilder::finalize()
   if (n_processors() > 1)
   {
     // On each processor _current_data is sized for the number of history vectors (N). The allgather
-    // method puts these vectors together on the root processor in a single vector. Therefore, if there
-    // are two processors (A and B) then the _current_data for each processors are:
+    // method puts these vectors together on the root processor in a single vector. Therefore, if
+    // there are two processors (A and B) then the _current_data for each processors are:
     //    A = [A_0, A_1, ..., A_N]
     //    B = [B_0, B_1, ..., B_N]
     // After allgather is executed the _current_data on the root processor becomes:

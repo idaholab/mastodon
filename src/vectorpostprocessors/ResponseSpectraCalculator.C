@@ -15,7 +15,8 @@ validParams<ResponseSpectraCalculator>()
       "vectorpostprocessor",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "
       "response spectra are calculated.");
-  params.addRequiredParam<unsigned int>("node", "Node at which the response spectrum is requested.");
+  params.addRequiredParam<unsigned int>("node",
+                                        "Node at which the response spectrum is requested.");
   params.addRequiredParam<std::vector<VariableName>>(
       "variables", "Variables for which response spectra are requested (accelerations only).");
   params.addRequiredParam<Real>("damping_ratio", "Damping ratio for response spectra calculation.");
