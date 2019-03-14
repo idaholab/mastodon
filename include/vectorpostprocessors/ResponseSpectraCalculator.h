@@ -44,7 +44,7 @@ protected:
   // const std::vector<VariableName> & _varnames;
 
   /// ResponseHistoryBuilder VPP from which the acceleration histories are taken
-  const ResponseHistoryBuilder & _history_vpp;
+  //const ResponseHistoryBuilder & _history_vpp;
 
   /// Damping ratio.
   const Real & _xi;

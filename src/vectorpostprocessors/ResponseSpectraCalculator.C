@@ -11,10 +11,11 @@ InputParameters
 validParams<ResponseSpectraCalculator>()
 {
   InputParameters params = validParams<GeneralVectorPostprocessor>();
-  params.addRequiredParam<UserObjectName>(
+  params.addRequiredParam<VectorPostprocessorName>(
       "vectorpostprocessor",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "
       "response spectra are calculated.");
+
   // params.addRequiredParam<unsigned int>("node",
   //                                       "Node at which the response spectrum is requested.");
   // params.addRequiredParam<std::vector<VariableName>>(
@@ -44,7 +45,7 @@ validParams<ResponseSpectraCalculator>()
 ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & parameters)
   : GeneralVectorPostprocessor(parameters),
     // _varnames(getParam<std::vector<VariableName>>("variables")),
-    _history_vpp(getUserObject<ResponseHistoryBuilder>("vectorpostprocessor")),
+    //_history_vpp(getUserObject<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("vectorpostprocessor"))),
     _xi(getParam<Real>("damping_ratio")),
     _freq_start(getParam<Real>("start_frequency")),
     _freq_end(getParam<Real>("end_frequency")),
@@ -75,7 +76,8 @@ ResponseSpectraCalculator::initialSetup()
 {
   // auto acc_history_vpp = getUserObject<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("vectorpostprocessor"));
   // auto acc_history_vpp = getUserObject<ResponseHistoryBuilder>("vectorpostprocessor");
-  std::vector<std::string> history_names = _history_vpp.getHistoryNames();
+  const ResponseHistoryBuilder & history_vpp = getUserObjectByName<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("vectorpostprocessor"));
+  std::vector<std::string> history_names = history_vpp.getHistoryNames();
   _history_acc.resize(history_names.size());
 
   // Declaring three spectrum vectors: displacement, velocity and acceleration
@@ -85,7 +87,7 @@ ResponseSpectraCalculator::initialSetup()
   {
     // std::string vecname = "node_" + Moose::stringify(getParam<unsigned int>("node")) + "_" + name;
     // _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", vecname));
-    _history_acc[i] = (_history_vpp.getHistories())[i];
+    _history_acc[i] = history_vpp.getHistories()[i];
     _spectrum.push_back(&declareVector(history_names[i] + "_sd"));
     _spectrum.push_back(&declareVector(history_names[i] + "_sv"));
     _spectrum.push_back(&declareVector(history_names[i] + "_sa"));
