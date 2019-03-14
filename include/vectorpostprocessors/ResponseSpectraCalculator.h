@@ -39,13 +39,6 @@ public:
   virtual void execute() override;
 
 protected:
-  /// Vector containing the names of the variables where the response spectrum
-  /// is requested.
-  // const std::vector<VariableName> & _varnames;
-
-  /// ResponseHistoryBuilder VPP from which the acceleration histories are taken
-  //const ResponseHistoryBuilder & _history_vpp;
-
   /// Damping ratio.
   const Real & _xi;
 
@@ -58,7 +51,7 @@ protected:
   const Real & _freq_end;
 
   /// Number of frequencies for the response spectra calculation.
-  const Real & _freq_num;
+  const unsigned int & _freq_num;
 
   /// dt for response spectra calculation. This dt will also be used to
   /// regularize the acceleration response to a uniform dt before calculating

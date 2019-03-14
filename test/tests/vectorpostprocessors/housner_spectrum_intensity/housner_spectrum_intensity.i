@@ -276,17 +276,11 @@
   [./accel_hist]
     type = ResponseHistoryBuilder
     variables = 'accel_x accel_y'
-    nodes = 9
+    nodes = '8 9'
   [../]
-[]
-
-[VectorPostprocessors]
   [./accel_hsi]
     type = HousnerSpectrumIntensity
     vectorpostprocessor = accel_hist
-    variables = 'accel_x accel_y'
-    node = 9
-    damping_ratio = 0.05
     regularize_dt = 0.005
     outputs = out
   [../]

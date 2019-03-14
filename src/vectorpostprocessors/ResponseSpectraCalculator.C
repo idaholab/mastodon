@@ -3,6 +3,7 @@
 #include "PostprocessorInterface.h"
 #include "VectorPostprocessorInterface.h"
 #include "MastodonUtils.h"
+#include "ResponseHistoryBuilder.h"
 
 registerMooseObject("MastodonApp", ResponseSpectraCalculator);
 
@@ -15,19 +16,14 @@ validParams<ResponseSpectraCalculator>()
       "vectorpostprocessor",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "
       "response spectra are calculated.");
-
-  // params.addRequiredParam<unsigned int>("node",
-  //                                       "Node at which the response spectrum is requested.");
-  // params.addRequiredParam<std::vector<VariableName>>(
-  //     "variables", "Variables for which response spectra are requested (accelerations only).");
-  params.addRequiredParam<Real>("damping_ratio", "Damping ratio for response spectra calculation.");
+  params.addParam<Real>("damping_ratio", 0.05, "Damping ratio for response spectra calculation.");
   params.addParam<Real>(
       "start_frequency", 0.01, "Start frequency for the response spectra calculation.");
   params.addParam<Real>(
       "end_frequency", 100.0, "End frequency for the response spectra calculation.");
-  params.addParam<Real>(
+  params.addParam<unsigned int>(
       "num_frequencies", 401, "Number of frequencies for the response spectra calculation.");
-  params.addRequiredParam<Real>("regularize_dt",
+  params.addRequiredRangeCheckedParam<Real>("regularize_dt", "regularize_dt>0.0",
                                 "dt for response spectra calculation. The "
                                 "acceleration response will be regularized to this dt "
                                 "prior to the response spectrum calculation.");
@@ -44,12 +40,10 @@ validParams<ResponseSpectraCalculator>()
 
 ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & parameters)
   : GeneralVectorPostprocessor(parameters),
-    // _varnames(getParam<std::vector<VariableName>>("variables")),
-    //_history_vpp(getUserObject<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("vectorpostprocessor"))),
     _xi(getParam<Real>("damping_ratio")),
     _freq_start(getParam<Real>("start_frequency")),
     _freq_end(getParam<Real>("end_frequency")),
-    _freq_num(getParam<Real>("num_frequencies")),
+    _freq_num(getParam<unsigned int>("num_frequencies")),
     _reg_dt(getParam<Real>("regularize_dt")),
     _frequency(declareVector("frequency")),
     // Time vector from the response history builder vector postprocessor
@@ -64,20 +58,13 @@ ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & par
   // Check for damping
   if (_xi <= 0)
     mooseError("Error in " + name() + ". Damping ratio must be positive.");
-
-  // Check for dt
-  if (_reg_dt <= 0)
-    mooseError("Error in " + name() + ". dt must be positive.");
-
 }
 
 void
 ResponseSpectraCalculator::initialSetup()
 {
-  // auto acc_history_vpp = getUserObject<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("vectorpostprocessor"));
-  // auto acc_history_vpp = getUserObject<ResponseHistoryBuilder>("vectorpostprocessor");
   const ResponseHistoryBuilder & history_vpp = getUserObjectByName<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("vectorpostprocessor"));
-  std::vector<std::string> history_names = history_vpp.getHistoryNames();
+  std::vector<std::string> history_names = history_vpp.getHistoryNames(); // names of the vectors in responsehistorybuilder
   _history_acc.resize(history_names.size());
 
   // Declaring three spectrum vectors: displacement, velocity and acceleration
@@ -85,8 +72,6 @@ ResponseSpectraCalculator::initialSetup()
   // for (const std::string & name : _varnames)
   for (std::size_t i = 0; i < history_names.size(); i++)
   {
-    // std::string vecname = "node_" + Moose::stringify(getParam<unsigned int>("node")) + "_" + name;
-    // _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", vecname));
     _history_acc[i] = history_vpp.getHistories()[i];
     _spectrum.push_back(&declareVector(history_names[i] + "_sd"));
     _spectrum.push_back(&declareVector(history_names[i] + "_sv"));

@@ -4,6 +4,7 @@
 #include "VectorPostprocessorInterface.h"
 #include "MastodonUtils.h"
 #include "LinearInterpolation.h"
+#include "ResponseHistoryBuilder.h"
 
 registerMooseObject("MastodonApp", HousnerSpectrumIntensity);
 
@@ -16,15 +17,11 @@ validParams<HousnerSpectrumIntensity>()
       "vectorpostprocessor",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "
       "HSIs are calculated.");
-  params.addRequiredParam<std::vector<VariableName>>(
-      "variables", "Variables for which HSIs are requested (accelerations only).");
-  params.addRequiredParam<unsigned int>("node",
-                                        "Node at which the response spectrum is requested.");
   params.addParam<Real>("damping_ratio", 0.05, "Damping ratio for HSI calculation.");
   params.addParam<Real>("start_period", 0.25, "Start period for the HSI calculation.");
   params.addParam<Real>("end_period", 2.5, "End period for the HSI calculation.");
-  params.addParam<Real>("num_periods", 140, "Number of frequencies for the HSI calculation.");
-  params.addRequiredParam<Real>("regularize_dt",
+  params.addParam<unsigned int>("num_periods", 140, "Number of frequencies for the HSI calculation.");
+  params.addRequiredRangeCheckedParam<Real>("regularize_dt", "regularize_dt>0.0",
                                 "dt for HSI calculation. The acceleration "
                                 "response will be regularized to this dt prior to "
                                 "the HSI calculation.");
@@ -40,13 +37,11 @@ validParams<HousnerSpectrumIntensity>()
 
 HousnerSpectrumIntensity::HousnerSpectrumIntensity(const InputParameters & parameters)
   : GeneralVectorPostprocessor(parameters),
-    _varnames(getParam<std::vector<VariableName>>("variables")),
     _xi(getParam<Real>("damping_ratio")),
     _per_start(getParam<Real>("start_period")),
     _per_end(getParam<Real>("end_period")),
-    _per_num(getParam<Real>("num_periods")),
+    _per_num(getParam<unsigned int>("num_periods")),
     _reg_dt(getParam<Real>("regularize_dt")),
-    _hsi_vec(declareVector("hsi")),
     // Time vector from the ResponseHistoryBuilder vectorpostprocessor.
     _history_time(getVectorPostprocessorValue("vectorpostprocessor", "time"))
 
@@ -58,25 +53,29 @@ HousnerSpectrumIntensity::HousnerSpectrumIntensity(const InputParameters & param
   // Check for damping
   if (_xi <= 0)
     mooseError("Error in " + name() + ". Damping ratio must be positive.");
+}
 
-  // Check for damping
-  if (_reg_dt <= 0)
-    mooseError("Error in " + name() + ". dt must be positive.");
-
-  for (unsigned int i = 0; i < _varnames.size(); ++i)
+void
+HousnerSpectrumIntensity::initialSetup()
+{
+  const ResponseHistoryBuilder & history_vpp = getUserObjectByName<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("vectorpostprocessor"));
+  std::vector<std::string> history_names = history_vpp.getHistoryNames(); // names of the vectors in responsehistorybuilder
+  _history_acc.resize(history_names.size());
+  for (unsigned int i = 0; i < history_names.size(); ++i)
   {
     // Acceleration vectors corresponding to the variables from the
     // ResponseHistoryBuilder vectorpostprocessor.
-    std::string vecname =
-        "node_" + Moose::stringify(getParam<unsigned int>("node")) + "_" + _varnames[i];
-    _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", vecname));
+    _history_acc[i] = history_vpp.getHistories()[i];
+    _hsi_vec.push_back(&declareVector(history_names[i] + "_hsi"));
   }
+
 }
 
 void
 HousnerSpectrumIntensity::initialize()
 {
-  _hsi_vec.clear();
+  for (std::size_t i = 0; i < _hsi_vec.size(); ++i)
+    _hsi_vec[i]->clear();
 }
 
 void
@@ -87,7 +86,7 @@ HousnerSpectrumIntensity::execute()
   std::vector<Real> vel_spectrum;
   Real freq_start = 1 / _per_end;
   Real freq_end = 1 / _per_start;
-  for (unsigned int i = 0; i < _varnames.size(); ++i)
+  for (unsigned int i = 0; i < _hsi_vec.size(); ++i)
   {
     // The acceleration responses may or may not have a constant time step.
     // Therefore, they are regularized by default to a constant time step by the
@@ -107,6 +106,6 @@ HousnerSpectrumIntensity::execute()
     LinearInterpolation hsi_calc(period, vel_spectrum);
     // HSI is calculated as the area below the vel_spectrum curve. HSI is output
     // into the csv file in the same order as the variables in the .i file.
-    _hsi_vec.push_back(hsi_calc.integrate());
+    _hsi_vec[i]->push_back(hsi_calc.integrate());
   }
 }

@@ -196,10 +196,10 @@
 []
 
 [BCs]
-  [./bottom_accel]
+  [./bottom_accel_x]
     type = PresetAcceleration
     boundary = back
-    function = accel_bottom
+    function = accel_bottom_x
     variable = disp_x
     beta = 0.25
     acceleration = accel_x
@@ -211,11 +211,14 @@
     boundary = back
     value = 0.0
   [../]
-  [./bottom_y]
-    type = PresetBC
-    variable = disp_y
+  [./bottom_accel_y]
+    type = PresetAcceleration
     boundary = back
-    value = 0.0
+    function = accel_bottom_y
+    variable = disp_y
+    beta = 0.25
+    acceleration = accel_y
+    velocity = vel_y
   [../]
   [./Periodic]
     [./x_dir]
@@ -232,10 +235,17 @@
 []
 
 [Functions]
-  [./accel_bottom]
+  [./accel_bottom_x]
     type = PiecewiseLinear
     data_file = 'accel.csv'
     format = columns
+    scale_factor = 1.0
+  [../]
+  [./accel_bottom_y]
+    type = PiecewiseLinear
+    data_file = 'accel.csv'
+    format = columns
+    scale_factor = 2.0
   [../]
 []
 
@@ -266,15 +276,11 @@
   [./accel_hist]
     type = ResponseHistoryBuilder
     variables = 'accel_x accel_y'
-    nodes = 9
+    nodes = '8 9'
   [../]
-
   [./accel_spec]
     type = ResponseSpectraCalculator
     vectorpostprocessor = accel_hist
-    # variables = 'accel_x'
-    # node = 9
-    damping_ratio = 0.05
     regularize_dt = 0.005
     outputs = out
   [../]

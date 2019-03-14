@@ -38,14 +38,11 @@ class HousnerSpectrumIntensity : public GeneralVectorPostprocessor
 {
 public:
   HousnerSpectrumIntensity(const InputParameters & parameters);
+  virtual void initialSetup() override;
   virtual void initialize() override;
   virtual void execute() override;
 
 protected:
-  /// Vector of variable names in the ResponseHistoryBuilder VectorPostprocessor
-  /// where the HSI is requested. Accelerations only.
-  const std::vector<VariableName> & _varnames;
-
   /// Damping ratio.
   const Real & _xi;
 
@@ -57,7 +54,7 @@ protected:
 
   /// Number of periods for the HSI calculation. The periods are distributed
   /// uniformly in the log scale.
-  const Real & _per_num;
+  const unsigned int & _per_num;
 
   /// dt for HSI calculation. This dt will also be used to
   /// regularize the acceleration response to a uniform dt before calculating
@@ -66,7 +63,7 @@ protected:
 
   /// Vector containing the HSIs for all the variables. This vector is ouput
   /// into a csv file along with the variable names.
-  VectorPostprocessorValue & _hsi_vec;
+  std::vector<VectorPostprocessorValue *> _hsi_vec;
 
   /// Acceleration histories corresponding to the variables for which,
   /// HSIs are requested.
