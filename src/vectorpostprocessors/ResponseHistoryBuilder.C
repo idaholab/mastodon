@@ -35,11 +35,10 @@ validParams<ResponseHistoryBuilder>()
 }
 
 ResponseHistoryBuilder::ResponseHistoryBuilder(const InputParameters & parameters)
-  : NodalVectorPostprocessor(parameters), _history_time(declareVector("time"))
+  : NodalVectorPostprocessor(parameters),
+  _var_names(getParam<std::vector<VariableName>>("variables")),
+  _history_time(declareVector("time"))
 {
-  // Retrieving variable names from input
-  const std::vector<VariableName> & var_names = getParam<std::vector<VariableName>>("variables");
-
   // Set that will store the union of node ids from all the boundaries or requested nodes
   std::set<dof_id_type> history_nodes;
 
@@ -71,22 +70,25 @@ ResponseHistoryBuilder::ResponseHistoryBuilder(const InputParameters & parameter
   }
 
   // Resizing _history to the number of nodes * number of variables
-  _history.resize(var_names.size() * history_nodes.size());
+  _history.resize(_var_names.size() * history_nodes.size());
+  _history_names.resize(_history.size());
 
   // Declaring _history vectors and creating map from node_id to the location of
   // the corresponding VPP in _history
   std::size_t count = 0;
   for (dof_id_type node_id : history_nodes)
   {
-    for (std::size_t i = 0; i < var_names.size(); ++i)
-      _history[count * var_names.size() + i] =
-          &declareVector("node_" + Moose::stringify(node_id) + "_" + var_names[i]);
+    for (std::size_t i = 0; i < _var_names.size(); ++i)
+      {
+        _history_names[count * _var_names.size() + i] = "node_" + Moose::stringify(node_id) + "_" + _var_names[i];
+        _history[count * _var_names.size() + i] = &declareVector(_history_names[count * _var_names.size() + i]);
+      }
     _node_map[node_id] = count;
     count++;
   }
 
   // Coupling variables
-  for (std::size_t i = 0; i < var_names.size(); ++i)
+  for (std::size_t i = 0; i < _var_names.size(); ++i)
     _variables.push_back(&coupledValue("variables", i));
 }
 
@@ -158,4 +160,16 @@ ResponseHistoryBuilder::execute()
     for (std::size_t i = 0; i < _variables.size(); ++i)
       _current_data[loc * _variables.size() + i] = (*_variables[i])[0];
   }
+}
+
+const std::vector<VectorPostprocessorValue *> &
+ResponseHistoryBuilder::getHistories() const
+{
+  return _history;
+}
+
+const std::vector<std::string> &
+ResponseHistoryBuilder::getHistoryNames() const
+{
+  return _history_names;
 }

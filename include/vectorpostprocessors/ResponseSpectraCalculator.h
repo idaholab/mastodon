@@ -34,13 +34,17 @@ class ResponseSpectraCalculator : public GeneralVectorPostprocessor
 {
 public:
   ResponseSpectraCalculator(const InputParameters & parameters);
+  virtual void initialSetup() override;
   virtual void initialize() override;
   virtual void execute() override;
 
 protected:
   /// Vector containing the names of the variables where the response spectrum
   /// is requested.
-  const std::vector<VariableName> & _varnames;
+  // const std::vector<VariableName> & _varnames;
+
+  /// ResponseHistoryBuilder VPP from which the acceleration histories are taken
+  const ResponseHistoryBuilder & _history_vpp;
 
   /// Damping ratio.
   const Real & _xi;
@@ -69,7 +73,7 @@ protected:
 
   /// Acceleration histories corresponding to the variables for which,
   /// response spectra are requested.
-  std::vector<const VectorPostprocessorValue *> _history_acc;
+  std::vector<VectorPostprocessorValue *> _history_acc;
 
   /// Vector containing the time values in the simulation.
   const VectorPostprocessorValue & _history_time;

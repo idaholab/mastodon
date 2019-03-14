@@ -268,14 +268,12 @@
     variables = 'accel_x accel_y'
     nodes = 9
   [../]
-[]
 
-[VectorPostprocessors]
   [./accel_spec]
     type = ResponseSpectraCalculator
     vectorpostprocessor = accel_hist
-    variables = 'accel_x'
-    node = 9
+    # variables = 'accel_x'
+    # node = 9
     damping_ratio = 0.05
     regularize_dt = 0.005
     outputs = out

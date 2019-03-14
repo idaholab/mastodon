@@ -11,14 +11,14 @@ InputParameters
 validParams<ResponseSpectraCalculator>()
 {
   InputParameters params = validParams<GeneralVectorPostprocessor>();
-  params.addRequiredParam<VectorPostprocessorName>(
+  params.addRequiredParam<UserObjectName>(
       "vectorpostprocessor",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "
       "response spectra are calculated.");
-  params.addRequiredParam<unsigned int>("node",
-                                        "Node at which the response spectrum is requested.");
-  params.addRequiredParam<std::vector<VariableName>>(
-      "variables", "Variables for which response spectra are requested (accelerations only).");
+  // params.addRequiredParam<unsigned int>("node",
+  //                                       "Node at which the response spectrum is requested.");
+  // params.addRequiredParam<std::vector<VariableName>>(
+  //     "variables", "Variables for which response spectra are requested (accelerations only).");
   params.addRequiredParam<Real>("damping_ratio", "Damping ratio for response spectra calculation.");
   params.addParam<Real>(
       "start_frequency", 0.01, "Start frequency for the response spectra calculation.");
@@ -43,7 +43,8 @@ validParams<ResponseSpectraCalculator>()
 
 ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & parameters)
   : GeneralVectorPostprocessor(parameters),
-    _varnames(getParam<std::vector<VariableName>>("variables")),
+    // _varnames(getParam<std::vector<VariableName>>("variables")),
+    _history_vpp(getUserObject<ResponseHistoryBuilder>("vectorpostprocessor")),
     _xi(getParam<Real>("damping_ratio")),
     _freq_start(getParam<Real>("start_frequency")),
     _freq_end(getParam<Real>("end_frequency")),
@@ -67,15 +68,27 @@ ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & par
   if (_reg_dt <= 0)
     mooseError("Error in " + name() + ". dt must be positive.");
 
+}
+
+void
+ResponseSpectraCalculator::initialSetup()
+{
+  // auto acc_history_vpp = getUserObject<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("vectorpostprocessor"));
+  // auto acc_history_vpp = getUserObject<ResponseHistoryBuilder>("vectorpostprocessor");
+  std::vector<std::string> history_names = _history_vpp.getHistoryNames();
+  _history_acc.resize(history_names.size());
+
   // Declaring three spectrum vectors: displacement, velocity and acceleration
-  // for each variable name input by the user.
-  for (const std::string & name : _varnames)
+  // for each vector in history VPP.
+  // for (const std::string & name : _varnames)
+  for (std::size_t i = 0; i < history_names.size(); i++)
   {
-    std::string vecname = "node_" + Moose::stringify(getParam<unsigned int>("node")) + "_" + name;
-    _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", vecname));
-    _spectrum.push_back(&declareVector(vecname + "_sd"));
-    _spectrum.push_back(&declareVector(vecname + "_sv"));
-    _spectrum.push_back(&declareVector(vecname + "_sa"));
+    // std::string vecname = "node_" + Moose::stringify(getParam<unsigned int>("node")) + "_" + name;
+    // _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", vecname));
+    _history_acc[i] = (_history_vpp.getHistories())[i];
+    _spectrum.push_back(&declareVector(history_names[i] + "_sd"));
+    _spectrum.push_back(&declareVector(history_names[i] + "_sv"));
+    _spectrum.push_back(&declareVector(history_names[i] + "_sa"));
   }
 }
 
@@ -90,7 +103,7 @@ ResponseSpectraCalculator::initialize()
 void
 ResponseSpectraCalculator::execute()
 {
-  for (std::size_t i = 0; i < _varnames.size(); ++i)
+  for (std::size_t i = 0; i < _history_acc.size(); ++i)
   {
     // The acceleration responses may or may not have a constant time step.
     // Therefore, they are regularized by default to a constant time step by the
