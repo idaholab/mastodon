@@ -36,8 +36,8 @@ validParams<ResponseHistoryBuilder>()
 
 ResponseHistoryBuilder::ResponseHistoryBuilder(const InputParameters & parameters)
   : NodalVectorPostprocessor(parameters),
-  _var_names(getParam<std::vector<VariableName>>("variables")),
-  _history_time(declareVector("time"))
+    _var_names(getParam<std::vector<VariableName>>("variables")),
+    _history_time(declareVector("time"))
 {
   // Set that will store the union of node ids from all the boundaries or requested nodes
   std::set<dof_id_type> history_nodes;
@@ -79,10 +79,12 @@ ResponseHistoryBuilder::ResponseHistoryBuilder(const InputParameters & parameter
   for (dof_id_type node_id : history_nodes)
   {
     for (std::size_t i = 0; i < _var_names.size(); ++i)
-      {
-        _history_names[count * _var_names.size() + i] = "node_" + Moose::stringify(node_id) + "_" + _var_names[i];
-        _history[count * _var_names.size() + i] = &declareVector(_history_names[count * _var_names.size() + i]);
-      }
+    {
+      _history_names[count * _var_names.size() + i] =
+          "node_" + Moose::stringify(node_id) + "_" + _var_names[i];
+      _history[count * _var_names.size() + i] =
+          &declareVector(_history_names[count * _var_names.size() + i]);
+    }
     _node_map[node_id] = count;
     count++;
   }

@@ -20,11 +20,13 @@ validParams<HousnerSpectrumIntensity>()
   params.addParam<Real>("damping_ratio", 0.05, "Damping ratio for HSI calculation.");
   params.addParam<Real>("start_period", 0.25, "Start period for the HSI calculation.");
   params.addParam<Real>("end_period", 2.5, "End period for the HSI calculation.");
-  params.addParam<unsigned int>("num_periods", 140, "Number of frequencies for the HSI calculation.");
-  params.addRequiredRangeCheckedParam<Real>("regularize_dt", "regularize_dt>0.0",
-                                "dt for HSI calculation. The acceleration "
-                                "response will be regularized to this dt prior to "
-                                "the HSI calculation.");
+  params.addParam<unsigned int>(
+      "num_periods", 140, "Number of frequencies for the HSI calculation.");
+  params.addRequiredRangeCheckedParam<Real>("regularize_dt",
+                                            "regularize_dt>0.0",
+                                            "dt for HSI calculation. The acceleration "
+                                            "response will be regularized to this dt prior to "
+                                            "the HSI calculation.");
   // Make sure that csv files are created only at the final timestep
   params.set<bool>("contains_complete_history") = true;
   params.suppressParameter<bool>("contains_complete_history");
@@ -58,8 +60,10 @@ HousnerSpectrumIntensity::HousnerSpectrumIntensity(const InputParameters & param
 void
 HousnerSpectrumIntensity::initialSetup()
 {
-  const ResponseHistoryBuilder & history_vpp = getUserObjectByName<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("vectorpostprocessor"));
-  std::vector<std::string> history_names = history_vpp.getHistoryNames(); // names of the vectors in responsehistorybuilder
+  const ResponseHistoryBuilder & history_vpp = getUserObjectByName<ResponseHistoryBuilder>(
+      getParam<VectorPostprocessorName>("vectorpostprocessor"));
+  std::vector<std::string> history_names =
+      history_vpp.getHistoryNames(); // names of the vectors in responsehistorybuilder
   _history_acc.resize(history_names.size());
   for (unsigned int i = 0; i < history_names.size(); ++i)
   {
@@ -68,7 +72,6 @@ HousnerSpectrumIntensity::initialSetup()
     _history_acc[i] = history_vpp.getHistories()[i];
     _hsi_vec.push_back(&declareVector(history_names[i] + "_hsi"));
   }
-
 }
 
 void

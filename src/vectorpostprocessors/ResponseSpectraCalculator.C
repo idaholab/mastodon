@@ -23,10 +23,11 @@ validParams<ResponseSpectraCalculator>()
       "end_frequency", 100.0, "End frequency for the response spectra calculation.");
   params.addParam<unsigned int>(
       "num_frequencies", 401, "Number of frequencies for the response spectra calculation.");
-  params.addRequiredRangeCheckedParam<Real>("regularize_dt", "regularize_dt>0.0",
-                                "dt for response spectra calculation. The "
-                                "acceleration response will be regularized to this dt "
-                                "prior to the response spectrum calculation.");
+  params.addRequiredRangeCheckedParam<Real>("regularize_dt",
+                                            "regularize_dt>0.0",
+                                            "dt for response spectra calculation. The "
+                                            "acceleration response will be regularized to this dt "
+                                            "prior to the response spectrum calculation.");
   // Make sure that csv files are created only at the final timestep
   params.set<bool>("contains_complete_history") = true;
   params.suppressParameter<bool>("contains_complete_history");
@@ -63,8 +64,10 @@ ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & par
 void
 ResponseSpectraCalculator::initialSetup()
 {
-  const ResponseHistoryBuilder & history_vpp = getUserObjectByName<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("vectorpostprocessor"));
-  std::vector<std::string> history_names = history_vpp.getHistoryNames(); // names of the vectors in responsehistorybuilder
+  const ResponseHistoryBuilder & history_vpp = getUserObjectByName<ResponseHistoryBuilder>(
+      getParam<VectorPostprocessorName>("vectorpostprocessor"));
+  std::vector<std::string> history_names =
+      history_vpp.getHistoryNames(); // names of the vectors in responsehistorybuilder
   _history_acc.resize(history_names.size());
 
   // Declaring three spectrum vectors: displacement, velocity and acceleration
