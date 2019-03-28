@@ -2,12 +2,12 @@
   [./spectrum]
     type = CSVDiff
     input = response_spectra_calculator.i
-    csvdiff = response_spectra_calculator_accel_csv_accel_spec_0201.csv
+    csvdiff = response_spectra_calculator_out_accel_spec.csv
   [../]
   [./spectrum_parallel]
     type = CSVDiff
     input = response_spectra_calculator.i
-    csvdiff = response_spectra_calculator_accel_csv_accel_spec_0201.csv
+    csvdiff = response_spectra_calculator_out_accel_spec.csv
     prereq = spectrum
     min_parallel = 3
     max_parallel = 3
@@ -15,14 +15,14 @@
   [./spectrum_threads]
     type = CSVDiff
     input = response_spectra_calculator.i
-    csvdiff = response_spectra_calculator_accel_csv_accel_spec_0201.csv
+    csvdiff = response_spectra_calculator_out_accel_spec.csv
     prereq = spectrum_parallel
     min_threads = 3
   [../]
   [./spectrum_threads_parallel]
     type = CSVDiff
     input = response_spectra_calculator.i
-    csvdiff = response_spectra_calculator_accel_csv_accel_spec_0201.csv
+    csvdiff = response_spectra_calculator_out_accel_spec.csv
     prereq = spectrum_threads
     min_threads = 3
     min_parallel = 2

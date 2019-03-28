@@ -6,6 +6,14 @@
   ny = 3
 []
 
+[MeshModifiers]
+  [./add_bnd]
+    type = AddExtraNodeset
+    new_boundary = 'bnd'
+    nodes = '2 10'
+  [../]
+[]
+
 [Variables]
   [./u]
   [../]
@@ -67,17 +75,18 @@
 
 [Outputs]
   exodus = true
-  [./out]
-    type = CSV
-    execute_on = final
-  [../]
+  csv = true
 []
 
 [VectorPostprocessors]
-  [./accel]
+  [./accel_nodes]
     type = ResponseHistoryBuilder
     variables = 'u accel_x'
-    node = 2
-    execute_on = 'initial timestep_end'
+    nodes = '2 10'
+  [../]
+  [./accel_bnd]
+    type = ResponseHistoryBuilder
+    variables = 'u accel_x'
+    boundary = 'bnd'
   [../]
 []
