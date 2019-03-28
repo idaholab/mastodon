@@ -2,12 +2,12 @@
   [./hsi]
     type = CSVDiff
     input = housner_spectrum_intensity.i
-    csvdiff = housner_spectrum_intensity_out_accel_hsi_0201.csv
+    csvdiff = housner_spectrum_intensity_out_accel_hsi.csv
   [../]
   [./hsi_parallel]
     type = CSVDiff
     input = housner_spectrum_intensity.i
-    csvdiff = housner_spectrum_intensity_out_accel_hsi_0201.csv
+    csvdiff = housner_spectrum_intensity_out_accel_hsi.csv
     prereq = hsi
     min_parallel = 3
     max_parallel = 3
@@ -15,14 +15,14 @@
   [./hsi_threads]
     type = CSVDiff
     input = housner_spectrum_intensity.i
-    csvdiff = housner_spectrum_intensity_out_accel_hsi_0201.csv
+    csvdiff = housner_spectrum_intensity_out_accel_hsi.csv
     prereq = hsi_parallel
     min_threads = 3
   [../]
   [./hsi_threads_parallel]
     type = CSVDiff
     input = housner_spectrum_intensity.i
-    csvdiff = housner_spectrum_intensity_out_accel_hsi_0201.csv
+    csvdiff = housner_spectrum_intensity_out_accel_hsi.csv
     prereq = hsi_threads
     min_threads = 3
     min_parallel = 2

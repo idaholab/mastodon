@@ -3,6 +3,7 @@
 #include "PostprocessorInterface.h"
 #include "VectorPostprocessorInterface.h"
 #include "MastodonUtils.h"
+#include "ResponseHistoryBuilder.h"
 
 registerMooseObject("MastodonApp", ResponseSpectraCalculator);
 
@@ -15,39 +16,39 @@ validParams<ResponseSpectraCalculator>()
       "vectorpostprocessor",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "
       "response spectra are calculated.");
-  params.addRequiredParam<std::vector<VariableName>>(
-      "variables", "Variables for which response spectra are requested (accelerations only).");
-  params.addRequiredParam<Real>("damping_ratio", "Damping ratio for response spectra calculation.");
-  params.addRequiredParam<Real>("calculation_time",
-                                "Time, when the response spectrum calculation "
-                                "is made. Usually the final time of the "
-                                "simulation.");
+  params.addParam<Real>("damping_ratio", 0.05, "Damping ratio for response spectra calculation.");
   params.addParam<Real>(
       "start_frequency", 0.01, "Start frequency for the response spectra calculation.");
   params.addParam<Real>(
       "end_frequency", 100.0, "End frequency for the response spectra calculation.");
-  params.addParam<Real>(
+  params.addParam<unsigned int>(
       "num_frequencies", 401, "Number of frequencies for the response spectra calculation.");
-  params.addRequiredParam<Real>("dt_output",
-                                "dt for response spectra calculation. The "
-                                "acceleration response will be regularized to this dt "
-                                "prior to the response spectrum calculation.");
+  params.addRequiredRangeCheckedParam<Real>("regularize_dt",
+                                            "regularize_dt>0.0",
+                                            "dt for response spectra calculation. The "
+                                            "acceleration response will be regularized to this dt "
+                                            "prior to the response spectrum calculation.");
+  // Make sure that csv files are created only at the final timestep
+  params.set<bool>("contains_complete_history") = true;
+  params.suppressParameter<bool>("contains_complete_history");
+
+  params.set<ExecFlagEnum>("execute_on") = {EXEC_FINAL};
+  params.suppressParameter<ExecFlagEnum>("execute_on");
+
   params.addClassDescription("Calculate the response spectrum at the requested nodes or points.");
   return params;
 }
 
 ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & parameters)
   : GeneralVectorPostprocessor(parameters),
-    _varnames(getParam<std::vector<VariableName>>("variables")),
     _xi(getParam<Real>("damping_ratio")),
-    _calc_time(getParam<Real>("calculation_time")),
     _freq_start(getParam<Real>("start_frequency")),
     _freq_end(getParam<Real>("end_frequency")),
-    _freq_num(getParam<Real>("num_frequencies")),
-    _reg_dt(getParam<Real>("dt_output")),
-    _frequency(declareVector("_frequency")),
+    _freq_num(getParam<unsigned int>("num_frequencies")),
+    _reg_dt(getParam<Real>("regularize_dt")),
+    _frequency(declareVector("frequency")),
     // Time vector from the response history builder vector postprocessor
-    _history_time(getVectorPostprocessorValue("vectorpostprocessor", "_time"))
+    _history_time(getVectorPostprocessorValue("vectorpostprocessor", "time"))
 
 {
   // Check for starting and ending frequency
@@ -58,19 +59,26 @@ ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & par
   // Check for damping
   if (_xi <= 0)
     mooseError("Error in " + name() + ". Damping ratio must be positive.");
+}
 
-  // Check for dt
-  if (_reg_dt <= 0)
-    mooseError("Error in " + name() + ". dt must be positive.");
+void
+ResponseSpectraCalculator::initialSetup()
+{
+  const ResponseHistoryBuilder & history_vpp = getUserObjectByName<ResponseHistoryBuilder>(
+      getParam<VectorPostprocessorName>("vectorpostprocessor"));
+  std::vector<std::string> history_names =
+      history_vpp.getHistoryNames(); // names of the vectors in responsehistorybuilder
+  _history_acc.resize(history_names.size());
 
   // Declaring three spectrum vectors: displacement, velocity and acceleration
-  // for each variable name input by the user.
-  for (const std::string & name : _varnames)
+  // for each vector in history VPP.
+  // for (const std::string & name : _varnames)
+  for (std::size_t i = 0; i < history_names.size(); i++)
   {
-    _history_acc.push_back(&getVectorPostprocessorValue("vectorpostprocessor", name));
-    _spectrum.push_back(&declareVector(name + "_sd"));
-    _spectrum.push_back(&declareVector(name + "_sv"));
-    _spectrum.push_back(&declareVector(name + "_sa"));
+    _history_acc[i] = history_vpp.getHistories()[i];
+    _spectrum.push_back(&declareVector(history_names[i] + "_sd"));
+    _spectrum.push_back(&declareVector(history_names[i] + "_sv"));
+    _spectrum.push_back(&declareVector(history_names[i] + "_sa"));
   }
 }
 
@@ -85,12 +93,7 @@ ResponseSpectraCalculator::initialize()
 void
 ResponseSpectraCalculator::execute()
 {
-  // Only performing the calculation if current time is equal to calculation
-  // time. Sometimes _t is not exactly equal to the _calc_time. Therefore, the
-  // calculation is performed when the distance between _t and _calc_time is
-  // smaller than the _dt at that time step. The makes sure that the
-  // calculation is performed only once.
-  for (std::size_t i = 0; i < _varnames.size() && abs(_t - _calc_time) < _dt; ++i)
+  for (std::size_t i = 0; i < _history_acc.size(); ++i)
   {
     // The acceleration responses may or may not have a constant time step.
     // Therefore, they are regularized by default to a constant time step by the

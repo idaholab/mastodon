@@ -34,20 +34,13 @@ class ResponseSpectraCalculator : public GeneralVectorPostprocessor
 {
 public:
   ResponseSpectraCalculator(const InputParameters & parameters);
+  virtual void initialSetup() override;
   virtual void initialize() override;
   virtual void execute() override;
 
 protected:
-  /// Vector containing the names of the variables where the response spectrum
-  /// is requested.
-  const std::vector<VariableName> & _varnames;
-
   /// Damping ratio.
   const Real & _xi;
-
-  /// Time at which, the response spectrum calculation is to be made. Generally
-  /// at the end of the simulation.
-  const Real & _calc_time;
 
   /// Start frequency for the response spectra calculation. Generally about
   /// 0.01Hz for earthquakes.
@@ -58,7 +51,7 @@ protected:
   const Real & _freq_end;
 
   /// Number of frequencies for the response spectra calculation.
-  const Real & _freq_num;
+  const unsigned int & _freq_num;
 
   /// dt for response spectra calculation. This dt will also be used to
   /// regularize the acceleration response to a uniform dt before calculating
@@ -73,7 +66,7 @@ protected:
 
   /// Acceleration histories corresponding to the variables for which,
   /// response spectra are requested.
-  std::vector<const VectorPostprocessorValue *> _history_acc;
+  std::vector<VectorPostprocessorValue *> _history_acc;
 
   /// Vector containing the time values in the simulation.
   const VectorPostprocessorValue & _history_time;

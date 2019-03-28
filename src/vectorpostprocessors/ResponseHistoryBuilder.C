@@ -15,104 +15,163 @@ InputParameters
 validParams<ResponseHistoryBuilder>()
 {
   InputParameters params = validParams<NodalVectorPostprocessor>();
-  params.addRequiredParam<unsigned int>("node",
-                                        "Node number at which the response history is requested.");
+  params.addParam<std::vector<dof_id_type>>(
+      "nodes", "Node number(s) at which the response history is needed.");
+
+  // Force the object to only execute once per node even if it has multiple boundary ids
+  params.set<bool>("unique_node_execute") = true;
+  params.suppressParameter<bool>("unique_node_execute");
+
   params.set<ExecFlagEnum>("execute_on") = {EXEC_INITIAL, EXEC_TIMESTEP_END};
+  params.suppressParameter<ExecFlagEnum>("execute_on");
+
+  params.set<bool>("contains_complete_history") = true;
+  params.suppressParameter<bool>("contains_complete_history");
+
   params.addRequiredCoupledVar("variables",
                                "Variable name for which the response history is requested.");
   params.addClassDescription("Calculates response histories for a given node and variable(s).");
-
   return params;
 }
 
 ResponseHistoryBuilder::ResponseHistoryBuilder(const InputParameters & parameters)
   : NodalVectorPostprocessor(parameters),
-    _history_time(declareVector("_time")),
-    _node(getParam<unsigned int>("node"))
-
+    _var_names(getParam<std::vector<VariableName>>("variables")),
+    _history_time(declareVector("time"))
 {
-  const std::vector<VariableName> & names = getParam<std::vector<VariableName>>("variables");
-  for (std::size_t i = 0; i < names.size(); ++i)
+  // Set that will store the union of node ids from all the boundaries or requested nodes
+  std::set<dof_id_type> history_nodes;
+
+  if (parameters.isParamValid("boundary") && parameters.isParamValid("nodes"))
+    mooseError("Error in VectorPostprocessor, '",
+               name(),
+               "'. Please specify either of boundary or node, but not both.");
+
+  if (!parameters.isParamValid("boundary") && !parameters.isParamValid("nodes"))
+    mooseError("Error in VectorPostprocessor, '",
+               name(),
+               "'. Please provide either boundary or node for response history output.");
+
+  if (parameters.isParamValid("boundary"))
   {
-    _history.push_back(&declareVector(names[i]));
-    _variables.push_back(&coupledValue("variables", i));
+    // Retrieving boundaries and making a set of all the nodes in these boundaries
+    std::set<BoundaryID> bnd_ids =
+        boundaryIDs(); // Set containing the boundary IDs input by the user
+    for (auto id : boundaryIDs())
+      history_nodes.insert(_mesh.getNodeList(id).begin(), _mesh.getNodeList(id).end());
   }
+
+  if (parameters.isParamValid("nodes"))
+  {
+    // Retrieving vector of nodes from input and storing them in a set, in case
+    // there are repetetions
+    std::vector<dof_id_type> vec = getParam<std::vector<dof_id_type>>("nodes");
+    history_nodes.insert(vec.begin(), vec.end());
+  }
+
+  // Resizing _history to the number of nodes * number of variables
+  _history.resize(_var_names.size() * history_nodes.size());
+  _history_names.resize(_history.size());
+
+  // Declaring _history vectors and creating map from node_id to the location of
+  // the corresponding VPP in _history
+  std::size_t count = 0;
+  for (dof_id_type node_id : history_nodes)
+  {
+    for (std::size_t i = 0; i < _var_names.size(); ++i)
+    {
+      _history_names[count * _var_names.size() + i] =
+          "node_" + Moose::stringify(node_id) + "_" + _var_names[i];
+      _history[count * _var_names.size() + i] =
+          &declareVector(_history_names[count * _var_names.size() + i]);
+    }
+    _node_map[node_id] = count;
+    count++;
+  }
+
+  // Coupling variables
+  for (std::size_t i = 0; i < _var_names.size(); ++i)
+    _variables.push_back(&coupledValue("variables", i));
 }
 
 void
 ResponseHistoryBuilder::initialize()
 {
-  _node_rank = DofObject::invalid_processor_id;
+  _current_data.clear();
+  _current_data.resize(_history.size());
 }
 
 void
 ResponseHistoryBuilder::finalize()
 {
-  // When running in parallel the data must be transfered from the processor that owns the node that
-  // is being utilized to all other processors.
+  // Data to be added to the current vectors
+  std::vector<Real> data(_history.size());
+
   if (n_processors() > 1)
   {
-    // Create a vector for storing the data from the last time execution that should be appended
-    // to all vectors on the other processors. This is the storage that will be used with broadcast.
-    std::vector<Real> data(_history.size() + 1);
+    // On each processor _current_data is sized for the number of history vectors (N). The allgather
+    // method puts these vectors together on the root processor in a single vector. Therefore, if
+    // there are two processors (A and B) then the _current_data for each processors are:
+    //    A = [A_0, A_1, ..., A_N]
+    //    B = [B_0, B_1, ..., B_N]
+    // After allgather is executed the _current_data on the root processor becomes:
+    //    _current_data = [A_0, A_1, ..., A_N, B_0, B_1, ..., B_N]
+    _communicator.allgather(_current_data, true);
 
-    // On the processor with the data, pack the data to be broadcast
-    if (_node_rank == processor_id())
-    {
-      data[0] = _history_time.back();
-      for (size_t i = 0; i < _history.size(); ++i)
-        data[i + 1] = _history[i]->back();
-    }
-
-    // Communicate which processor owns the data, use int because libMesh specializations do not
-    // include bool types.
-    std::vector<int> recieve;
-    int send = processor_id() == _node_rank;
-    _communicator.allgather(send, recieve);
-
-    // Determine the "root id" from which the data is to be broadcast, then broadcast
-    int root_id = std::distance(recieve.begin(), std::find(recieve.begin(), recieve.end(), 1));
-    _communicator.broadcast(data, root_id);
-
-    // Update the data on processors that don't already have it
-    if (_node_rank != processor_id())
-    {
-      _history_time.push_back(data[0]);
-      for (size_t i = 0; i < _history.size(); ++i)
-        _history[i]->push_back(data[i + 1]);
-    }
+    // The values for _current_data are zero everywhere except on the processor on which it was
+    // computed and there should never be repeated values because "unique_node_execute" is true and
+    // the execute method sets the data by index so any repeated calls would overwrite a previous
+    // calculation. Therefore, the data that needs to be added is simply the sum of all the vector
+    // across processors.
+    const std::size_t N = _history.size();
+    for (dof_id_type rank = 0; rank < n_processors(); ++rank)
+      for (std::size_t i = 0; i < _history.size(); ++i)
+        data[i] += _current_data[rank * N + i];
   }
+
+  else
+    data = _current_data;
+
+  // Update the history vectors with the new data
+  for (std::size_t i = 0; i < _history.size(); ++i)
+    _history[i]->push_back(data[i]);
+
+  // Update the time vector
+  _history_time.push_back(_t);
 }
 
 void
 ResponseHistoryBuilder::threadJoin(const UserObject & uo)
 {
+  // As detailed in the finalize() method the _current_data are zero everywhere except on the
+  // process and thread where it was computed. Thus, adding the values from the other threads
+  // updates the root thread correctly.
   const ResponseHistoryBuilder & builder = static_cast<const ResponseHistoryBuilder &>(uo);
-
-  // Prior to the execute() call the _node_rank is set to an invalid value. When execute() occurs
-  // data is only added to the vectors for a single node. This happends on one processor and one
-  // thread. When the data is added the _node_rank is also set to be the processor id of the node.
-  // Therefor, if the object passed in has a valid _node_rank then this is the object that has the
-  // most updated data, so add its most recent data to this object. Also, if the node happens to be
-  // stored on thread 0 then this loop will never do anything, which is fine, because the purpose
-  // of this method is to get the data to the 0 thread copy.
-  if (builder._node_rank != DofObject::invalid_processor_id)
-  {
-    _node_rank = builder._node_rank; // required for MPI communcation in finailize
-    _history_time.push_back(builder._history_time.back());
-    for (size_t i = 0; i < _history.size(); ++i)
-      _history[i]->push_back(builder._history[i]->back());
-  }
+  for (std::size_t i = 0; i < _history.size(); ++i)
+    _current_data[i] += builder._current_data[i];
 }
 
 void
 ResponseHistoryBuilder::execute()
 {
-  if (_current_node->id() == _node)
+  // finding the index of the VPP corresponding to _current_node in _history
+  if (_node_map.find(_current_node->id()) != _node_map.end())
   {
-    _node_rank = _current_node->processor_id();
-    _history_time.push_back(_t);
-    for (size_t i = 0; i < _history.size(); ++i)
-      _history[i]->push_back((*_variables[i])[0]);
+    // The index of the data within the _history vector for the current node
+    std::size_t loc = _node_map[_current_node->id()];
+    for (std::size_t i = 0; i < _variables.size(); ++i)
+      _current_data[loc * _variables.size() + i] = (*_variables[i])[0];
   }
+}
+
+const std::vector<VectorPostprocessorValue *> &
+ResponseHistoryBuilder::getHistories() const
+{
+  return _history;
+}
+
+const std::vector<std::string> &
+ResponseHistoryBuilder::getHistoryNames() const
+{
+  return _history_names;
 }
