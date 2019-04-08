@@ -60,6 +60,14 @@
     exodiff = HYS_thin_layer_out.e
   [../]
 
+  [./thin_layer_userdefined]
+    # 1 element problem with thinlayer properties defined using a userdefined backbone curve
+    type = Exodiff
+    input = HYS_thin_layer_userdefined.i
+    exodiff = HYS_thin_layer_userdefined_out.e
+    allow_warnings = true
+  [../]
+
   [./thin_layer_noaction]
     # 1 element problem without ISoilAction to check auto-generated thin_layer stress-strain curves
     type = Exodiff

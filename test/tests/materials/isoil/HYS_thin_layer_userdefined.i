@@ -331,18 +331,21 @@
 [Materials]
   [./I_Soil]
     [./soil_thin_layer]
-      soil_type = 'thin_layer'
+      soil_type = 'user_defined'
       layer_variable = layer_id
       layer_ids = '0'
       initial_shear_modulus = '20000'
       poissons_ratio = '0.45'
       block = 0
       density = '2.0'
-      friction_coefficient = '0.7'
-      hardening_ratio = '0.001'
       p_ref = '8.6209091' # Pressure from initial stress
       initial_soil_stress = '-8.0263636 0 0  0 -8.0263636 0  0 0 -9.810'
+      pressure_dependency = true
+      a0 = 0
+      a1 = 0
+      a2 = 1
       finite_strain = true
+      backbone_curve_files = 'thinlayer_bbcurve.csv'
     [../]
   [../]
 []

@@ -243,7 +243,7 @@ ISoilAction::act()
   // strain calculation
   std::vector<VariableName> displacements = getParam<std::vector<VariableName>>("displacements");
   bool finite_strain = getParam<bool>("finite_strain");
-  if (!finite_strain && soil_type != "thin_layer")
+  if (!finite_strain)
   {
     // create small incremental strain block
     params = _factory.getValidParams("ComputeIncrementalSmallStrain");
@@ -255,9 +255,8 @@ ISoilAction::act()
   }
   else
   {
-    if (soil_type == "thin_layer")
-      // create finite strain block
-      params = _factory.getValidParams("ComputeFiniteStrain");
+    // create finite strain block
+    params = _factory.getValidParams("ComputeFiniteStrain");
     std::string unique_strain_name = "strain_" + block[0];
     params.set<std::vector<SubdomainName>>("block") = block;
     params.set<std::vector<VariableName>>("displacements") = displacements;
