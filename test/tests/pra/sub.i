@@ -50,7 +50,7 @@
   [./sub]
     # creates sub files for each monte carlo sample and each scaled ground motion
     # Total number of simulations = number_of_bins * num_gms * n_samples
-    type = SamplerMultiApp
+    type = SamplerTransientMultiApp
     input_files = 'sub_sub.i'
     sampler = monte_carlo
     execute_on = TIMESTEP_BEGIN
