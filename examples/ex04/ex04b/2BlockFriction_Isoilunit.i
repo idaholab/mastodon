@@ -347,7 +347,6 @@
   [./stress_top]
     #Computes the stress, using linear elasticity
     type = ComputeFiniteStrainElasticStress
-    store_stress_old = true
     block = 1003
   [../]
   [./den_top]
@@ -373,7 +372,6 @@
   [./stress_bot]
     #Computes the stress, using linear elasticity
     type = ComputeFiniteStrainElasticStress
-    store_stress_old = true
     block = 1001
   [../]
   # [./strain_from_initial_stress_bot]

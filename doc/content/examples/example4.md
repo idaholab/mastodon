@@ -95,4 +95,4 @@ From the results it is observed that the thin layer element does not reach the c
       id=fig:results
       caption=Shear stress vs. shear strain response of the interface element.
 
-Once the contact element is yielded, the upper block starts sliding on top of the lower block and the average stresses in the thin layer equal the Coulomb frictional shear stresses.
+Once the interface element yields, the upper block starts sliding on top of the lower block and the average stresses in the thin layer equal the Coulomb frictional shear stresses.
