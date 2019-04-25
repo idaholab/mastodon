@@ -59,6 +59,7 @@ cd ~/projects/mastodon
 git fetch origin
 git rebase origin/master
 git submodule update
+./moose/scripts/update_and_rebuild_libmesh.sh
 ```
 
 To verify that the new version is working correctly is must be compiled and tested.
