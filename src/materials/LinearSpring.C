@@ -83,9 +83,9 @@ LinearSpring::computeQpProperties()
 {
   // Compute initial orientation and length of the spring in global coordinate system
   // Fetch the two nodes of the link element
-  std::vector<Node *> node;
+  std::vector<const Node *> node;
   for (unsigned int i = 0; i < 2; ++i)
-    node.push_back(_current_elem->get_node(i));
+    node.push_back(_current_elem->node_ptr(i));
   RealGradient x_orientation;
   for (unsigned int i = 0; i < _ndisp; ++i)
     x_orientation(i) = (*node[1])(i) - (*node[0])(i);
@@ -142,9 +142,9 @@ void
 LinearSpring::computeDeformations()
 {
   // fetch the two end nodes for _current_elem
-  std::vector<Node *> node;
+  std::vector<const Node *> node;
   for (unsigned int i = 0; i < 2; ++i)
-    node.push_back(_current_elem->get_node(i));
+    node.push_back(_current_elem->node_ptr(i));
 
   // Fetch the solution for the two end nodes at time t
   NonlinearSystemBase & nonlinear_sys = _fe_problem.getNonlinearSystemBase();
