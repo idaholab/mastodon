@@ -35,7 +35,7 @@ protected:
   std::vector<Real> _minimum_element_size;
 
   /// The current quadrature rule
-  QBase *& _qrule;
+  const QBase * const & _qrule;
 
   /// The quadrature point index for looping
   unsigned int _qp;
