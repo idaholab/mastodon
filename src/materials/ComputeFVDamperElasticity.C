@@ -110,7 +110,7 @@ void
 ComputeFVDamperElasticity::computeTransformationMatrix()
 {
   // Fetch the two nodes of the link element
-  std::vector< const Node *> node;
+  std::vector<const Node *> node;
   for (unsigned int i = 0; i < 2; ++i)
     node.push_back(_current_elem->node_ptr(i));
 
