@@ -22,7 +22,7 @@
 
 !include include/materials/fp_isolator-user.md
 
-!include include/materials/fv_damper-theory.md
+!include include/materials/fv_damper-user.md
 
 !include include/outputs/intro_outputs-user.md
 

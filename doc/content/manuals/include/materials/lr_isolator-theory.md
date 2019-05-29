@@ -246,7 +246,7 @@ K_V = \frac{AE_c}{T_r}\left[1+\frac{3}{\pi^{2}}\left(\frac{u_h}{r}\right)^{2}\ri
 where, <br/>
 $u_h$ is the current shear deformation
 
-### Limitations
+#### Limitations
 
 - Currently, this formulation is limited to simulations that result in small rigid-body rotations in the isolator because the isolator deformations are transformed from the global to the local coordinate system using a transformation matrix that is calculated from the initial position of the isolator. This transformation matrix is not updated during the analysis because, seismic isolators typically undergo very small rigid-body rotations.
 - The post-buckling behavior of the LR isolator is modeled using a very small axial stiffness ($1/1000^{th}$) of the initial stiffness to avoid numerical convergence problems.
