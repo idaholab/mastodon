@@ -110,9 +110,9 @@ void
 ComputeFVDamperElasticity::computeTransformationMatrix()
 {
   // Fetch the two nodes of the link element
-  std::vector<Node *> node;
+  std::vector< const Node *> node;
   for (unsigned int i = 0; i < 2; ++i)
-    node.push_back(_current_elem->get_node(i));
+    node.push_back(_current_elem->node_ptr(i));
 
   // Defining orientation of damper (direction cosines)
   RealGradient x_orientation;
@@ -152,9 +152,9 @@ void
 ComputeFVDamperElasticity::computeDeformation()
 {
   // Fetch the two end nodes for _current_elem
-  std::vector<Node *> node;
+  std::vector<const Node *> node;
   for (unsigned int i = 0; i < 2; ++i)
-    node.push_back(_current_elem->get_node(i));
+    node.push_back(_current_elem->node_ptr(i));
 
   // Fetch the solution for the two end nodes at current time
   NonlinearSystemBase & nonlinear_sys = _fe_problem.getNonlinearSystemBase();
