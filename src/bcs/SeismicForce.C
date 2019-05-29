@@ -89,7 +89,7 @@ SeismicForce::computeQpResidual()
 
   if (isParamValid("velocity_function"))
   {
-    Function * const velocity_function = &getFunction("velocity_function");
+    const Function * const velocity_function = &getFunction("velocity_function");
     vel[_vel_component] = velocity_function->value(_t + _alpha * _dt, _q_point[_qp]);
   }
   else
