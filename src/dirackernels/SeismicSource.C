@@ -199,7 +199,7 @@ SeismicSource::addPoints()
     unsigned int number = getParam<unsigned int>("number");
     std::vector<FunctionName> position_function =
         getParam<std::vector<FunctionName>>("position_function");
-    std::vector<Function *> pos_function(_mesh.dimension());
+    std::vector<const Function *> pos_function(_mesh.dimension());
 
     for (unsigned int i = 0; i < _mesh.dimension(); ++i)
       pos_function[i] = &getFunctionByName(position_function[i]);

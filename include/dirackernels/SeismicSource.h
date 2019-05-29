@@ -71,7 +71,7 @@ protected:
   const Real _area;
 
   /// Function describing slip time history
-  Function * const _slip_function;
+  const Function * const _slip_function;
 
   /// Magnitude of moment = _shear_modulus * _area * slip. Used in residual
   /// calculation

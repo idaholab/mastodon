@@ -145,7 +145,7 @@ protected:
   unsigned int _current_id;
 
   /// initial stress components
-  std::vector<Function *> _initial_soil_stress;
+  std::vector<const Function *> _initial_soil_stress;
 };
 
 #endif // COMPUTEISOILSTRESS_H

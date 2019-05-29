@@ -96,17 +96,17 @@ FunctionPointForce::addPoints()
 
     for (unsigned int i = 0; i < number; ++i)
     {
-      Function * const function_x = &getFunction("x_position");
+      const Function * const function_x = &getFunction("x_position");
       _p(0) = function_x->value(i + 1, _qp);
 
       if (_mesh.dimension() > 1)
       {
-        Function * const function_y = &getFunction("y_position");
+        const Function * const function_y = &getFunction("y_position");
         _p(1) = function_y->value(i + 1, _qp);
 
         if (_mesh.dimension() > 2)
         {
-          Function * const function_z = &getFunction("z_position");
+          const Function * const function_z = &getFunction("z_position");
           _p(2) = function_z->value(i + 1, _qp);
         }
       }
@@ -118,7 +118,7 @@ FunctionPointForce::addPoints()
 Real
 FunctionPointForce::computeQpResidual()
 {
-  Function * const force_function = &getFunction("function");
+  const Function * const force_function = &getFunction("function");
   Real alpha = getParam<Real>("alpha");
 
   Real force = force_function->value(_t + alpha * _dt, _qp);
