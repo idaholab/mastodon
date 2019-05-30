@@ -3,8 +3,6 @@
 This section provides step-by-step instructions to define the basic components of a numerical
 model for finite element analysis using the MASTODON framework.
 
-<!-- Need to generically describe the input file, mesh, kernels, materials, etc. Also need to describe the MASTODON block. -->
-
 ### Kernels
 
 Kernels are related to the physics involved in the particular analysis. This document focusses on

@@ -1,26 +1,26 @@
-### Friction Pendulum<sup>TM</sup> Isolator
+### Friction Pendulum^TM^ Isolator
 
 `ComputeFPIsolatorElasticity` material simulates the behavior of a single concave Friction Pendulum<sup>TM</sup> bearing in MASTODON, and is used with a two-noded link type element. The material properties are defined by creating material blocks: [`ComputeIsolatorDeformation`](source/materials/ComputeIsolatorDeformation.md) and [`ComputeFPIsolatorElasticity`](source/materials/ComputeFPIsolatorElasticity.md),
 and the kernel block, [`StressDivergenceIsolator`](source/materials/StressDivergenceIsolator,md). A description of each of the input parameters is provided [here](source/materials/ComputeFPIsolatorElasticity.md). To model the co-efficient of sliding friction as a function of the axial pressure, sliding velocity, and the instantaneous temperature, the following switch parameters are used:
 
-`pressure_dependent = true` <br/>
-`velocity_dependent = true` <br/>
-`temperature_change = true` <br/>
+`pressure_dependent = true`,
+`velocity_dependent = true`, and
+`temperature_change = true`.
 
-The axial and rotational terms of the basic stiffness matrix of the bearing element can be specified using the optional parameters: `k_x, k_xx, k_yy, k_zz`. A default value `10e13` is assumed when SI units are used. The stiffness value should be sufficiently high to simulate rigid behavior in these degrees of freedom. In the pressure factor computation `kp`, the instantaneous pressure and reference pressure values are in MPa. The user is required to provide information on the current unit system used in the material parameter `unit`, so that corresponding conversion factors are computed.
+The axial and rotational terms of the basic stiffness matrix of the bearing element can be specified using the optional parameters: `k_x, k_xx, k_yy, k_zz`. A default value of 10e13 is assumed when SI units are used. The stiffness value should be sufficiently high to simulate rigid behavior in these degrees of freedom. In the pressure factor computation `kp`, the instantaneous pressure and reference pressure values are in MPa. The user is required to provide information on the current unit system used in the material parameter `unit`, so that corresponding conversion factors are computed.
 
-`unit =  1.0` for N, m, s; <br/>
-`unit =  2.0` for kN, m, s; <br/>
-`unit =  3.0` for N, mm, s; <br/>
-`unit =  4.0` for kN, mm, s; <br/>
-`unit =  5.0` for lb, in, s; <br/>
-`unit =  6.0` for kip, in, s; <br/>
-`unit =  7.0` for lb, ft, s; <br/>
-`unit =  8.0` for kip, ft, s; <br/>
+`unit =  1.0` for N-m-s;
+`unit =  2.0` for kN-m-s);
+`unit =  3.0` for N-mm-s;  
+`unit =  4.0` for kN-mm-s;  
+`unit =  5.0` for lb-in-s;  
+`unit =  6.0` for kip-in-s;  
+`unit =  7.0` for lb-ft-s;  
+`unit =  8.0` for kip-ft-s;  
 
 The behavior of the FP bearing element in the shear direction is demonstrated using the examples described below. Analysis results are compared with verified and validated numerical models implemented in the open-source finite element package OpenSees [citep:opensees2009].
 
-#### Example: Response to the cyclic loading in shear
+#### Example: Response to cyclic loading in shear
 
 The input file below demonstrates the response of the FP bearing subjected to cyclic loading in the shear direction. Three test cases: where co-efficient of friction as a function of the axial pressure only, co-efficient of friction as a function of the sliding velocity only, and coefficient of friction as a function of the instantaneous temperature only, are defined. A sinusoidal displacement history of [fig:FP_Staticload] is applied to the top node and the bottom node is restrained in the six degrees-of-freedom for all the three test cases. A constant axial load of 6285710 N is applied to the top node to simulate the weight of the superstructure.
 
@@ -38,7 +38,7 @@ The response of the FP bearing to cyclic loading in the shear direction is shown
        id=fig:FP_Shearresponse
        caption=Response of the FP bearing to the prescribed cyclic loading in shear.
 
-#### Example: Response to the seismic loading
+#### Example: Response to seismic loading
 
 The input file below describes the response of the FP bearing to seismic excitation. A superstructure
 mass of 640745 kg is assumed for the purpose of this example, and is assigned to the top node of the bearing using a NodalKernel of type, [`NodalTranslationInertia`](source/nodalkernels/NodalTranslationalInertia.md). Three components of ground motion are applied at the bottom node as input accelerations, using the [`PresetAcceleration`](source/bcs/PresetAcceleration.md) BC. An axial load is applied on the bearing to account for the weight of superstructure. For the initial few time steps, where gravity load is being applied, inertia objects are disabled using `control` block to avoid any dynamic effects.
