@@ -1,0 +1,33 @@
+[Tests]
+  [./axial]
+    type = CSVDiff
+    input = fv_damper_axial.i
+    csvdiff = fv_damper_axial_out.csv
+  [../]
+  [./axial2]
+    type = CSVDiff
+    input = fv_damper_axial.i
+    csvdiff = fv_damper_axial2_out.csv
+    cli_args = 'Materials/elasticity/cd=4605988 Materials/elasticity/alpha=0.6 Outputs/file_base=fv_damper_axial2_out'
+    prereq = axial
+  [../]
+  [./axial3]
+    type = CSVDiff
+    input = fv_damper_axial.i
+    csvdiff = fv_damper_axial3_out.csv
+    cli_args = 'Materials/elasticity/cd=1090485 Materials/elasticity/alpha=0.01 Outputs/file_base=fv_damper_axial3_out'
+    prereq = axial
+  [../]
+  [./axial4]
+    type = CSVDiff
+    input = fv_damper_axial.i
+    csvdiff = fv_damper_axial4_out.csv
+    cli_args = 'Materials/elasticity/cd=37947331 Materials/elasticity/alpha=1.5 Outputs/file_base=fv_damper_axial4_out'
+    prereq = axial
+  [../]
+  [./seismic]
+    type = CSVDiff
+    input = fv_damper_seismic_frame.i
+    csvdiff = fv_damper_seismic_frame_out.csv
+  [../]
+[]
