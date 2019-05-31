@@ -1,0 +1,23 @@
+[Tests]
+  [./beam_mesh_generator_test]
+    type = 'Exodiff'
+    input = 'beam_mesh_generator.i'
+    cli_args = '--mesh-only'
+    exodiff = 'beam_mesh_generator_in.e'
+    requirement = 'MASTODON shall generate a 1D mesh based on node and element information provided through a file.'
+    design = 'meshgenerators/BeamMeshGenerator.md'
+    issues = '#209'
+    mesh_mode = 'REPLICATED'
+    recover = false
+  [../]
+  [./mesh_gen_test]
+    type = 'Exodiff'
+    input = 'mesh_gen_cantilever.i'
+    exodiff = 'mesh_gen_cantilever_out.e'
+
+    requirement = "The BeamMeshGenerator shall accurately create the mesh from node and element"
+                " information provided through a text file."
+    issues = "#209"
+    design = "meshgenerators/BeamMeshGenerator.md"
+  [../]
+[]
