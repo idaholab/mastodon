@@ -60,7 +60,9 @@ BeamMeshGenerator::generate()
 
     if (line.find("#") == 0 && line.find("Nodes") == std::string::npos &&
         line.find("Element Linear") == std::string::npos)
-      mooseError("BeamMeshGenerator: Only sections starting with Nodes or Element Linear are "
+      mooseError("BeamMeshGenerator: Found a section in the mesh_file that starts with options "
+                 "other than 'Nodes' or 'Element Linear'. Only sections starting with Nodes or "
+                 "Element Linear are "
                  "currently read by BeamMeshGenerator.");
 
     // Store data from file into file_lines
