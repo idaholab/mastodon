@@ -1,10 +1,14 @@
 [tests]
+  design = "BCs/SeismicForce/index.md"
+  issues = "#11"
   [./seismic_force_test_x_y]
     type = 'Exodiff'
     input = 'seismic_force_test_x_y.i'
     exodiff = 'seismic_force_test_x_y_out.e'
     max_parallel = 1
     method = 'opt'
+
+    requirement = "The SeismicForce class shall accurately convert the user-provided input velocities to shear tractions at the boundary."
   [../]
   [./seismic_force_test_z]
     # A minimum time step size of 0.01 is required for this problem.
@@ -15,46 +19,62 @@
     method = 'opt'
     rel_err = 1e-5
     abs_zero = 1e-9
+
+    requirement = "The SeismicForce class shall accurately convert the user-provided input velocity to normal traction at the boundary."
   [../]
   [./seismic_force_compenent_mesh_error]
     type = RunException
     input = seismic_force_error.i
     cli_args = 'BCs/front/component=1980 BCs/front/vel_component=1'
     expect_err = "Invalid value for 'component' \(1980\) given in \"front\" block, it must be a value from 0 to 1."
+
+    requirement = "The SeismicForce class shall produce an error if the value provided for 'component' is greater than mesh dimension - 1."
   [../]
   [./seismic_force_vel_compenent_mesh_error]
     type = RunException
     input = seismic_force_error.i
     cli_args = 'BCs/front/component=1 BCs/front/vel_component=1980'
     expect_err = "Invalid value for 'vel_component' \(1980\) given in \"front\" block, it must be a value from 0 to 1."
+
+    requirement = "The SeismicForce class shall produce an error if the value provided for 'vel_component' is greater than mesh dimension - 1."
   [../]
   [./seismic_force_no_velocity_error]
     type = RunException
     input = seismic_force_error.i
     cli_args = 'BCs/front/component=1 BCs/front/vel_component=1'
     expect_err = "A function \('velocity_function'\) or variable \('velocity'\) describing the input velocity must be supplied in the \"front\" block."
+
+    requirement = "The SeismicForce class shall produce an error if a function or variable describing the input velocity is not supplied as input by the user."
   [../]
   [./action_no_velocity_error]
     type = RunException
     input = seismic_force_action_error.i
     expect_err = "A list of functions \('velocity_functions'\) or variables \('velocities'\) describing the input velocity must be supplied in the \"front\" block."
+
+    requirement = "The SeismicForce action shall produce an error if a list of functions or variables describing the input velocity are not supplied as input by the user."
   [../]
   [./action_var_velocity_size_error]
     type = RunException
     input = seismic_force_action_error.i
     cli_args = "BCs/SeismicForce/front/velocities=vel_x"
     expect_err = "The number of components listed in 'input_components' must equal the number of variables in 'velocities' in the \"front\" block."
+
+    requirement = "The SeismicForce action shall produce an error if the length of the 'input_components' vector is not the same as that of the 'velocities' vector."
   [../]
   [./action_func_velocity_size_error]
     type = RunException
     input = seismic_force_action_error.i
     cli_args = "BCs/SeismicForce/front/velocity_functions=func_x"
     expect_err = "The number of components listed in 'input_components' must equal the number of functions in 'velocity_functions' in the \"front\" block."
+
+    requirement = "The SeismicForce action shall produce an error if the length of the 'input_components' vector is not the same as that of the 'velocity_functions' vector."
   [../]
   [./action_displacement_size_error]
     type = RunException
     input = seismic_force_action_error.i
     cli_args = "BCs/SeismicForce/front/velocities='vel_x vel_y' BCs/SeismicForce/front/displacements='disp_x'"
     expect_err = "The number of supplied 'displacements' must equal the mesh dimension in the \"front\" block."
+
+    requirement = "The SeismicForce action shall produce an error if the length of the displacements vector is different from the mesh dimension."
   [../]
 []

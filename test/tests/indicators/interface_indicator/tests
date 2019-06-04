@@ -5,5 +5,9 @@
     input = interface_indicator.i
     exodiff = interface_indicator_out.e
     vtk = true
+
+    design = "LayerInterfaceIndicator.md"
+    issues = "#2"
+    requirement = "The LayerInterfaceIndicator class shall accurately mesh the soil domain taking into account the location soil layer interfaces."
   [../]
 []
