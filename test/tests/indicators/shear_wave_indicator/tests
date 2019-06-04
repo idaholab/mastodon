@@ -5,5 +5,9 @@
     input = shear_wave_indicator.i
     exodiff = shear_wave_indicator_out.e
     vtk = true
+
+    design = "ShearWaveIndicator.md"
+    issues = "#2"
+    requirement = "The ShearWaveIndicator class shall accurately mesh the soil domain taking into account the variation in shear wave velocity across soil layers."
   [../]
 []

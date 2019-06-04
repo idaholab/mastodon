@@ -1,8 +1,12 @@
 [Tests]
+  design = "fp_isolator-theory.md fp_isolator-user.md"
+  issues = "#128"
   [./shear_PTV]
     type = CSVDiff
     input = fp_isolator_shear_PTV.i
     csvdiff = fp_isolator_shear_PTV_out.csv
+
+    requirement = "The ComputeFPIsolatorElasticity class shall accurately model the pressure, temperature and velocity dependent behavior of the isolator under sinusoidal shear loading."
   [../]
   [./shear_V]
     type = CSVDiff
@@ -10,6 +14,8 @@
     csvdiff = fp_isolator_shear_V_out.csv
     cli_args = 'Materials/elasticity/pressure_dependent=false Materials/elasticity/temperature_dependent=false Outputs/file_base=fp_isolator_shear_V_out'
     prereq = shear_PTV
+
+    requirement = "The ComputeFPIsolatorElasticity class shall accurately model the velocity dependent behavior of the isolator under sinusoidal shear loading."
   [../]
   [./shear_T]
     type = CSVDiff
@@ -17,6 +23,8 @@
     csvdiff = fp_isolator_shear_T_out.csv
     cli_args = 'Materials/elasticity/pressure_dependent=false Materials/elasticity/velocity_dependent=false Outputs/file_base=fp_isolator_shear_T_out'
     prereq = shear_PTV
+
+    requirement = "The ComputeFPIsolatorElasticity class shall accurately model the temperature dependent behavior of the isolator under sinusoidal shear loading."
   [../]
   [./shear_P]
     type = CSVDiff
@@ -24,10 +32,14 @@
     csvdiff = fp_isolator_shear_P_out.csv
     cli_args = 'Materials/elasticity/velocity_dependent=false Materials/elasticity/temperature_dependent=false Outputs/file_base=fp_isolator_shear_P_out'
     prereq = shear_PTV
+
+    requirement = "The ComputeFPIsolatorElasticity class shall accurately model the pressure dependent behavior of the isolator under sinusoidal shear loading."
   [../]
   [./seismic_PTV]
     type = CSVDiff
     input = fp_isolator_seismic_PTV.i
     csvdiff = fp_isolator_seismic_PTV_out.csv
+
+    requirement = "The ComputeFPIsolatorElasticity class shall accurately model the pressure, temperature and velocity dependent behavior of the isolator under seismic loading."
   [../]
 []

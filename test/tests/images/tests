@@ -5,5 +5,9 @@
     input = three_layer.i
     exodiff = three_layer_out.e
     vtk = true
+
+    design = "ImageFunction.md"
+    issues = "#2"
+    requirement = "The ImageFunction class shall accurately read the layer variable values from the 2D soil layer profile presented in the image."
   [../]
 []

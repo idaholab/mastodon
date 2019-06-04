@@ -1,9 +1,13 @@
 [Tests]
+  design = "ComputeIsotropicElasticityTensorSoil.md"
+  issues = "#10"
   [./linear_isotropic_shear_input]
     type = Exodiff
     input = layered_soil_test_shear.i
     exodiff = layered_soil_test_out.e
     cli_args = Outputs/file_base=layered_soil_test_out
+
+    requirement = "The ComputeIsotropicElasticityTensorSoil shall accurately set up elasticity tensor for different soil layers using the user provided shear modulus and Poisson's ratio for each layer."
   [../]
   [./linear_isotropic_elastic_input]
     type = Exodiff
@@ -11,17 +15,23 @@
     exodiff = layered_soil_test_out.e
     cli_args = Outputs/file_base=layered_soil_test_out
     prereq = linear_isotropic_shear_input
+
+    requirement = "The ComputeIsotropicElasticityTensorSoil shall accurately set up elasticity tensor for different soil layers using the user provided Young's modulus and Poisson's ratio for each layer."
   [../]
   [./linear_isotropic_size_error]
     type = RunException
     input = layered_soil_test_shear.i
     cli_args = "Materials/Elasticity_tensor_1/layer_ids='10 20 30 1980' Outputs/exodus=false"
     expect_err = 'The parameter "shear_modulus" in the "Elasticity_tensor_1" block must be the same length as the "layer_ids" parameter.'
+
+    requirement = "The ComputeIsotropicElasticityTensorSoil class shall produce an error if the 'shear_modulus' vector is not the same length as the 'layer_ids' vector."
   [../]
   [./linear_isotropic_layer_id_error]
     type = RunException
     input = layered_soil_test_shear.i
     cli_args = "Materials/Elasticity_tensor_1/layer_ids='10 20 1980' Outputs/exodus=false"
     expect_err = "The current layer id variable value \(30\) was not provided in the 'layer_ids' parameter of the \"Elasticity_tensor_1\" block."
+
+    requirement = "The ComputeIsotropicElasticityTensorSoil class shall produce an error if the layer id variable takes a value that is not provided as part of the 'layer_ids' vector."
   [../]
 []

@@ -1,14 +1,20 @@
 [Tests]
+  design = "LayeredMaterialInterface.md"
+  issues = "#13"
   [./doc_string_error]
     type = RunException
     input = doc_string_error.i
     expect_err = "The documentation for the 'layer_ids' parameter must be modified using InputParameters::setDocString in the validParams function to include information on the parameters which the layer ids correspond."
     allow_test_objects = True
+
+    requirement = "The LayeredMaterialInterface class shall produce an error if the parent class does not set the documentation for the 'layer_ids' parameter."
   [../]
   [./type_error]
     type = RunException
     input = type_error.i
     expect_err = "The LayeredMaterialInterface requires that the template class be a Material object."
     allow_test_objects = True
+
+    requirement = "The LayeredMaterialInterface class shall produce an error if the template class is not a Material object."
   [../]
 []

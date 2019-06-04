@@ -3,5 +3,9 @@
     type = CSVDiff
     input = 'spring_static.i'
     csvdiff = 'spring_static_out.csv'
+
+    design = "LinearSpring.md"
+    issues = "#148"
+    requirement = "The LinearSpring class shall accurately model the static response of spring in the three translational and the three rotational directions."
   [../]
 []
