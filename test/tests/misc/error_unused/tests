@@ -1,7 +1,10 @@
 [Tests]
+issues = '#37'
+design  = 'MastodonModelAction.md'  # Not sure what to put here for this one...
   [./unused]
     type = RunException
     input = error_unused.i
     expect_err = 'unused parameter'
+    requirement = 'Mastodon shall error out if an unused parameter is supplied to the input file'
   [../]
 []

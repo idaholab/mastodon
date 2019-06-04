@@ -1,45 +1,55 @@
 [Tests]
+issues = '#2'
+design = 'UniformLayerAuxKernel.md'
   [./1d]
     type = Exodiff
     input = uniform_layer_1d.i
     exodiff = uniform_layer_1d_out.e
+    requirement = 'Mastodon shall create uniform layers of material for a one dimensional model'
   [../]
   [./2d]
     type = Exodiff
     input = uniform_layer_2d.i
     exodiff = uniform_layer_2d_out.e
+    requirement = 'Mastodon shall create uniform layers of material for a two dimensional model'
   [../]
   [./3d]
     type = Exodiff
     input = uniform_layer_3d.i
     exodiff = uniform_layer_3d_out.e
+    requirement = 'Mastodon shall create uniform layers of material for a three dimensional model'
   [../]
   [./3d_default_layers]
     type = Exodiff
     input = uniform_layer_3d_default_layers.i
     exodiff = uniform_layer_3d_default_layers_out.e
+    requirement = 'Mastodon shall create uniform layers of material for a three dimensional model and automatically name each layer using the default indexing scheme'
   [../]
   [./2d_nodal]
     type = Exodiff
     input = uniform_layer_2d_nodal.i
     exodiff = uniform_layer_2d_nodal_out.e
+    requirement = 'Mastodon shall create uniform layers of material for a two dimensional model - Amdrew, finish this one up. I dont know what is different between this and the other 2D model'
   [../]
   [./error_bad_direction]
     type = RunException
     input = uniform_layer_1d.i
     cli_args = "AuxKernels/layers/direction='0 0 0'"
     expect_err = "The supplied direction vector is not valid, it has a zero norm\."
+    requirement = 'Mastodon shall produce an error message if the supplied direction vetor is not valid for the corresponding mesh'
   [../]
   [./error_vector_mismatch]
     type = RunException
     input = uniform_layer_1d.i
     cli_args = "AuxKernels/layers/layer_ids='1 2 3 4 5 6 7'"
     expect_err = "The number of 'interfaces' must match the number of 'layer\_ids'\."
+    requirement = 'Mastodon shall produce an error if the number of interfaces supplied does not match the number of layer ids supplied'
   [../]
   [./error_bad_interfaces]
     type = RunException
     input = uniform_layer_1d.i
     cli_args = "AuxKernels/layers/interfaces='-100 -10' AuxKernels/layers/layer_ids='1 2'"
     expect_err = "Failed to locate an interface within the domain\."
+    requirement = 'Mastodon shall produce an error if an interface value is supplied that is not contained within the model domain'
   [../]
 []
