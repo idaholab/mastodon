@@ -9,15 +9,16 @@
     issues = '#209'
     mesh_mode = 'REPLICATED'
     recover = false
+    verification = meshgenerators/BeamMeshGenerator.md
   [../]
   [./mesh_gen_test]
     type = 'Exodiff'
     input = 'mesh_gen_cantilever.i'
     exodiff = 'mesh_gen_cantilever_out.e'
-
     requirement = "The BeamMeshGenerator shall accurately create the mesh from node and element"
                 " information provided through a text file."
     issues = "#209"
     design = "meshgenerators/BeamMeshGenerator.md"
+    verification = meshgenerators/BeamMeshGenerator.md
   [../]
 []
