@@ -168,6 +168,9 @@ validParams<ISoilAction>()
       "density",
       "Vector of density values that map one-to-one with the number "
       "'layer_ids' parameter.");
+  params.addParam<bool>("use_automatic_differentiation",
+                        false,
+                        "Flag to use automatic differentiation (AD) objects when possible");
   return params;
 }
 
@@ -176,6 +179,15 @@ ISoilAction::ISoilAction(const InputParameters & params) : Action(params) {}
 void
 ISoilAction::act()
 {
+  const bool use_ad = getParam<bool>("use_automatic_differentiation");
+  std::string ad_prepend = "";
+  std::string ad_append = "";
+  if (use_ad)
+  {
+    ad_prepend = "AD";
+    ad_append = "<RESIDUAL>";
+  }
+
   std::vector<SubdomainName> block = getParam<std::vector<SubdomainName>>("block");
   std::vector<VariableName> layer_variable = getParam<std::vector<VariableName>>("layer_variable");
   std::vector<unsigned int> layer_ids = getParam<std::vector<unsigned int>>("layer_ids");
@@ -187,7 +199,7 @@ ISoilAction::act()
     mooseError("Error in" + name() + ". Density should be of the same size as layer_ids.");
   MooseEnum soil_type = getParam<MooseEnum>("soil_type");
   // Stress calculation
-  InputParameters params = _factory.getValidParams("ComputeISoilStress");
+  auto params = _factory.getValidParams(ad_prepend + "ComputeISoilStress" + ad_append);
   params.set<std::vector<unsigned int>>("layer_ids") = layer_ids;
   params.set<std::vector<VariableName>>("layer_variable") = layer_variable;
   params.set<std::vector<SubdomainName>>("block") = block;
@@ -238,7 +250,18 @@ ISoilAction::act()
     params.set<std::vector<Real>>("hardening_ratio") =
         getParam<std::vector<Real>>("hardening_ratio");
   }
-  _problem->addMaterial("ComputeISoilStress", "stress_" + block[0], params);
+  if (use_ad)
+  {
+    _problem->addADResidualMaterial(ad_prepend + "ComputeISoilStress" + "<RESIDUAL>",
+                                    name() + "_stress" + "_residual" + block[0],
+                                    params);
+    _problem->addADJacobianMaterial(ad_prepend + "ComputeISoilStress" + "<JACOBIAN>",
+                                    name() + "_stress" + "_jacobian" + block[0],
+                                    params);
+    _problem->haveADObjects(true);
+  }
+  else
+    _problem->addMaterial("ComputeISoilStress", "stress_" + block[0], params);
 
   // strain calculation
   std::vector<VariableName> displacements = getParam<std::vector<VariableName>>("displacements");
@@ -246,23 +269,45 @@ ISoilAction::act()
   if (!finite_strain && soil_type != "thin_layer")
   {
     // create small incremental strain block
-    params = _factory.getValidParams("ComputeIncrementalSmallStrain");
+    params = _factory.getValidParams(ad_prepend + "ComputeIncrementalSmallStrain" + ad_append);
     std::string unique_strain_name = "strain_" + block[0];
     params.set<std::vector<SubdomainName>>("block") = block;
     params.set<std::vector<VariableName>>("displacements") = displacements;
     // params.set<bool>("stateful_displacements") = true; // deprecated
-    _problem->addMaterial("ComputeIncrementalSmallStrain", unique_strain_name, params);
+    if (use_ad)
+    {
+      _problem->addADResidualMaterial(ad_prepend + "ComputeIncrementalSmallStrain" + "<RESIDUAL>",
+                                      name() + "_strain" + "_residual" + block[0],
+                                      params);
+      _problem->addADJacobianMaterial(ad_prepend + "ComputeIncrementalSmallStrain" + "<JACOBIAN>",
+                                      name() + "_strain" + "_jacobian" + block[0],
+                                      params);
+      _problem->haveADObjects(true);
+    }
+    else
+      _problem->addMaterial("ComputeIncrementalSmallStrain", unique_strain_name, params);
   }
   else
   {
     if (soil_type == "thin_layer")
       // create finite strain block
-      params = _factory.getValidParams("ComputeFiniteStrain");
+      params = _factory.getValidParams(ad_prepend + "ComputeFiniteStrain" + ad_append);
     std::string unique_strain_name = "strain_" + block[0];
     params.set<std::vector<SubdomainName>>("block") = block;
     params.set<std::vector<VariableName>>("displacements") = displacements;
     // params.set<bool>("stateful_displacements") = true; // deprecated
-    _problem->addMaterial("ComputeFiniteStrain", unique_strain_name, params);
+    if (use_ad)
+    {
+      _problem->addADResidualMaterial(ad_prepend + "ComputeFiniteStrain" + "<RESIDUAL>",
+                                      name() + "_strain" + "_residual" + block[0],
+                                      params);
+      _problem->addADJacobianMaterial(ad_prepend + "ComputeFiniteStrain" + "<JACOBIAN>",
+                                      name() + "_strain" + "_jacobian" + block[0],
+                                      params);
+      _problem->haveADObjects(true);
+    }
+    else
+      _problem->addMaterial("ComputeFiniteStrain", unique_strain_name, params);
   }
 
   // create Elasticty tensor with E = 1 and actual poissons ratio as input
