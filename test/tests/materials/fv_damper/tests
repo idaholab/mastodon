@@ -1,5 +1,5 @@
 [Tests]
-  design = "fv_damper_theory.md fv_damper_user.md"
+  design = "fv_damper-theory.md fv_damper-user.md"
   issues = "#208"
   [./axial]
     type = CSVDiff
