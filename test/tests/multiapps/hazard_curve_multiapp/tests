@@ -25,6 +25,6 @@
                    hazard_curve_master_out_run_hazard18.e
                    hazard_curve_master_out_run_hazard19.e"
 
-    requirements = "The HazardCurveMultiApp shall execute the sub file for each ground motion in the GroundMotionReader UserObject for each bin of the HazardCurve UserObject."
+    requirement = "The HazardCurveMultiApp shall execute the sub file for each ground motion in the GroundMotionReader UserObject for each bin of the HazardCurve UserObject."
   [../]
 []

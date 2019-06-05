@@ -6,7 +6,7 @@
     type = RunApp
     input = ground_motion_reader.i
 
-    requirements = "The GroundMotionReader object shall run without errors."
+    requirement = "The GroundMotionReader object shall run without errors."
   [../]
 
   [./bad_pattern]
@@ -15,6 +15,6 @@
     cli_args = UserObjects/motions/pattern=this/is/wrong*.csv
     expect_err = "Unable to locate files with the given pattern \(this/is/wrong\*\.csv\) in the GroundMotionReader object 'motions'."
 
-    requirements = "The GroundMotionReader object shall throw an error when the ground motion files with the provided pattern are not found."
+    requirement = "The GroundMotionReader object shall throw an error when the ground motion files with the provided pattern are not found."
   [../]
 []

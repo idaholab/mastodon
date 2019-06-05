@@ -7,7 +7,7 @@
     input = housner_spectrum_intensity.i
     csvdiff = housner_spectrum_intensity_out_accel_hsi.csv
 
-    requirements = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a serial execution."
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a serial execution."
   [../]
 
   [./hsi_parallel]
@@ -18,7 +18,7 @@
     min_parallel = 3
     max_parallel = 3
 
-    requirements = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
   [../]
 
   [./hsi_threads]
@@ -28,7 +28,7 @@
     prereq = hsi_parallel
     min_threads = 3
 
-    requirements = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
   [../]
 
   [./hsi_threads_parallel]
@@ -39,6 +39,6 @@
     min_threads = 3
     min_parallel = 2
 
-    requirements = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
   [../]
 []

@@ -6,7 +6,7 @@
     type = RunApp
     input = hazard_curve.i
 
-    requirements = "The HazardCurve userobject shall run without errors."
+    requirement = "The HazardCurve userobject shall run without errors."
   [../]
 
   [./ref_size_error]
@@ -15,6 +15,6 @@
     cli_args = "UserObjects/hazard/reference_acceleration='1 2 3 4 5 6 7'"
     expect_err = "The 'reference_acceleration' input must \(size: 7\) in the 'hazard' block should be a scalar or a vector equal to the length of the prescribed number of bins \(5\)."
 
-    requirements = "The HazardCurve userobject shall throw an error when the `reference_acceleration` input is not a scalar, or a vector of the size equal to the number of bins."
+    requirement = "The HazardCurve userobject shall throw an error when the `reference_acceleration` input is not a scalar, or a vector of the size equal to the number of bins."
   [../]
 []

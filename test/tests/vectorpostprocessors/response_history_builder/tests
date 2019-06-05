@@ -7,7 +7,7 @@
     input = response_history_builder.i
     csvdiff = 'response_history_builder_out_accel_nodes.csv response_history_builder_out_accel_bnd.csv'
 
-    requirements = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a serial execution."
+    requirement = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a serial execution."
   [../]
 
   [./builder_parallel]
@@ -18,7 +18,7 @@
     min_parallel = 3
     max_parallel = 3
 
-    requirements = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a parallel execution."
+    requirement = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a parallel execution."
   [../]
 
   [./builder_threads]
@@ -28,7 +28,7 @@
     prereq = builder_parallel
     min_threads = 6
 
-    requirements = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a parallel execution."
+    requirement = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a parallel execution."
   [../]
 
   [./builder_threads_parallel]
@@ -39,6 +39,6 @@
     min_threads = 4
     min_parallel = 2
 
-    requirements = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a parallel execution."
+    requirement = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a parallel execution."
   [../]
 []

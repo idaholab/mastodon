@@ -8,7 +8,7 @@
     input = noaction_static.i
     exodiff = noaction_static_out.e
 
-    requirements = "MASTODON shall correctly perform a 1 element 3D static analysis without MastodonModel action."
+    requirement = "MASTODON shall correctly perform a 1 element 3D static analysis without MastodonModel action."
   [../]
 
   [./model_static]
@@ -19,7 +19,7 @@
     cli_args = "Outputs/file_base=noaction_static_out"
     prereq = noaction_static
 
-    requirements = "Using the MastodonModel action for a 1 element 3D static analysis should produce results that are identical to those calculated without using the MastodonModel action."
+    requirement = "Using the MastodonModel action for a 1 element 3D static analysis should produce results that are identical to those calculated without using the MastodonModel action."
   [../]
 
   [./noaction_dynamic]
@@ -28,7 +28,7 @@
     input = noaction_dynamic.i
     exodiff = noaction_dynamic_out.e
 
-    requirements = "MASTODON shall correctly perform a 1 element 3D dynamic analysis without MastodonModel action."
+    requirement = "MASTODON shall correctly perform a 1 element 3D dynamic analysis without MastodonModel action."
   [../]
 
   [./noaction_dynamic_2D]
@@ -37,7 +37,7 @@
     input = noaction_dynamic_2D.i
     exodiff = noaction_dynamic_2D_out.e
 
-    requirements = "MASTODON shall correctly perform a 1 element 2D dynamic analysis without MastodonModel action."
+    requirement = "MASTODON shall correctly perform a 1 element 2D dynamic analysis without MastodonModel action."
   [../]
 
   [./model_dynamic]
@@ -48,7 +48,7 @@
     cli_args = "Outputs/file_base=noaction_dynamic_out"
     prereq = noaction_dynamic
 
-    requirements = "Using the MastodonModel action for a 1 element 3D dynamic analysis should produce results that are identical to those calculated without using the MastodonModel action."
+    requirement = "Using the MastodonModel action for a 1 element 3D dynamic analysis should produce results that are identical to those calculated without using the MastodonModel action."
   [../]
 
   [./model_dynamic_2D]
@@ -59,7 +59,7 @@
     cli_args = "Outputs/file_base=noaction_dynamic_2D_out"
     prereq = noaction_dynamic_2D
 
-    requirements = "Using the MastodonModel action for a 1 element 2D dynamic analysis should produce results that are identical to those calculated without using the MastodonModel action."
+    requirement = "Using the MastodonModel action for a 1 element 2D dynamic analysis should produce results that are identical to those calculated without using the MastodonModel action."
   [../]
 
   [./model_dynamic_2D_dim_error]
@@ -69,7 +69,7 @@
     cli_args = "Mastodon/Model/dim=3"
     expect_err = "Error in MastodonModelAction block, Model. dim is not equal to the mesh dimension, which is 2."
 
-    requirements = "MASTODON shall throw an error when the `dim` parameter in MastodonModel action is not consistent with the dimension of the mesh in the mesh block."
+    requirement = "MASTODON shall throw an error when the `dim` parameter in MastodonModel action is not consistent with the dimension of the mesh in the mesh block."
   [../]
 
 []

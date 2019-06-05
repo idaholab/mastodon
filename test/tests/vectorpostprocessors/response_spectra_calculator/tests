@@ -7,7 +7,7 @@
     input = response_spectra_calculator.i
     csvdiff = response_spectra_calculator_out_accel_spec.csv
 
-    requirements = "The ResponseSpectraCalculator vectorpostprocessor shall accurately calculate the response spectra during a serial execution."
+    requirement = "The ResponseSpectraCalculator vectorpostprocessor shall accurately calculate the response spectra during a serial execution."
   [../]
   [./spectrum_parallel]
     type = CSVDiff
@@ -17,7 +17,7 @@
     min_parallel = 3
     max_parallel = 3
 
-    requirements = "The ResponseSpectraCalculator vectorpostprocessor shall accurately calculate the response spectra during a parallel execution."
+    requirement = "The ResponseSpectraCalculator vectorpostprocessor shall accurately calculate the response spectra during a parallel execution."
   [../]
   [./spectrum_threads]
     type = CSVDiff
@@ -26,7 +26,7 @@
     prereq = spectrum_parallel
     min_threads = 3
 
-    requirements = "The ResponseSpectraCalculator vectorpostprocessor shall accurately calculate the response spectra during a parallel execution."
+    requirement = "The ResponseSpectraCalculator vectorpostprocessor shall accurately calculate the response spectra during a parallel execution."
   [../]
   [./spectrum_threads_parallel]
     type = CSVDiff
@@ -36,6 +36,6 @@
     min_threads = 3
     min_parallel = 2
 
-    requirements = "The ResponseSpectraCalculator vectorpostprocessor shall accurately calculate the response spectra during a parallel execution."
+    requirement = "The ResponseSpectraCalculator vectorpostprocessor shall accurately calculate the response spectra during a parallel execution."
   [../]
 []
