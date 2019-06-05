@@ -74,6 +74,7 @@ Extensions:
         acronyms: !include ${MOOSE_DIR}/framework/doc/acronyms.yml
 
     MooseDocs.extensions.sqa:
+        repo: idaholab/mastodon
         requirement-groups:
             dgkernels: DGKernel Objects
             interfacekernels: InterfaceKernel Objects
