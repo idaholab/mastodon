@@ -1,4 +1,4 @@
-# Example 5'a': Dynamic Analysis of a Simplified Model of a Nuclear Power Plant Structure
+# Example 5a: Dynamic Analysis of a Simplified Model of a Nuclear Power Plant Structure
 
 ## Model Description
 
