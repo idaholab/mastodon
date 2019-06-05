@@ -4,6 +4,6 @@
 - [Example 2](examples/example2.md): Single element direct simple shear test with auto-generated backbone curve using the GQ/H formulation of [!citet](groholski2016simplified).
 - [Example 3](examples/example3.md): Nonlinear site-response analysis.
 - [Example 4](examples/example4.md): Frictional contact using a user-defined backbone curve in I-Soil.
-- [Example 5](examples/example5.md): Dynamic Analysis of a Simplified Model of a Nuclear Power Plant Structure
+- [Example 5 'a'](examples/example5a.md): Dynamic Analysis of a Simplified Model of a Nuclear Power Plant Structure
 
 !bibtex bibliography
