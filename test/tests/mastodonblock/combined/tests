@@ -1,14 +1,14 @@
 [Tests]
   design = 'syntax/Mastodon/index.md'
   issues = '#50'
-  
+
   [./noaction]
     # 1 element problem with no Mastodon block actions
     type = Exodiff
     input = noaction.i
     exodiff = noaction_out.e
 
-    requirement = "MASTODON shall accurately evaluate a single 3D element dynamics problem when the MastodonBlock action is not used."
+    requirement = "MASTODON shall accurately evaluate a single 3D element dynamics problem when the MastodonBlock actions are not used."
   [../]
 
   [./noaction_2D]
@@ -17,7 +17,7 @@
     input = noaction_2D.i
     exodiff = noaction_2D_out.e
 
-    requirement = "MASTODON shall accurately evaluate a single 2D element dynamics problem when the MastodonBlock action is not used."
+    requirement = "MASTODON shall accurately evaluate a single 2D element dynamics problem when the MastodonBlock actions are not used."
   [../]
 
   [./mastodon_block_actions]

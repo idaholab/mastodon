@@ -22,7 +22,7 @@
     abs_zero = 5e-9
     rel_err = 2e-5
 
-    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve from a user provided data file."
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve from a user provided data file without the use of the ISoilAction."
   [../]
 
   [./darendeli]
@@ -42,7 +42,7 @@
     cli_args = Outputs/file_base=HYS_darendeli_out
     prereq = darendeli
 
-    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the Darendeli formulation."
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the Darendeli formulation without the use of the ISoilAction."
   [../]
 
   [./GQH]
@@ -64,7 +64,7 @@
     prereq = GQH
     abs_zero = 1e-9
 
-    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the GQ/H formulation."
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the GQ/H formulation without the use of the ISoilAction."
   [../]
 
   [./thin_layer]
@@ -73,7 +73,7 @@
     input = HYS_thin_layer.i
     exodiff = HYS_thin_layer_out.e
 
-    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer contact element."
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer formulation."
   [../]
 
   [./thin_layer_noaction]
@@ -84,7 +84,7 @@
     cli_args = Outputs/file_base=HYS_thin_layer_out
     prereq = thin_layer
 
-    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer contact element."
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer formulation without the use of the ISoilAction."
   [../]
 
   [./pressure_dependent_stiffness]
@@ -103,7 +103,7 @@
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
     abs_zero = 5e-9
 
-    requirement = "The ISoil action and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil."
+    requirement = "The ISoilAction and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil."
   [../]
 
   [./stiffness_and_strength_pressure_dependency_noaction]
@@ -115,6 +115,6 @@
     prereq = stiffness_and_strength_pressure_dependency
     abs_zero = 5e-9
 
-    requirement = "The ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil."
+    requirement = "The ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil without the use of the ISoilAction."
   [../]
 []

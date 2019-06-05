@@ -1,7 +1,11 @@
 [Tests]
+  design = "manuals/user/index.md"
+  issues = '#173'
   [./test]
     type = 'Exodiff'
     input = 'simple_diffusion.i'
     exodiff = 'simple_diffusion_out.e'
+
+    requirement = "MASTODON shall correctly analyze the simple diffusion problem."
   [../]
 []

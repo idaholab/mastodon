@@ -4,7 +4,7 @@
     input = 'beam_mesh_generator.i'
     cli_args = '--mesh-only'
     exodiff = 'beam_mesh_generator_in.e'
-    requirement = 'MASTODON shall generate a 1D mesh based on node and element information provided through a file.'
+    requirement = 'MASTODON shall generate a 1D mesh based on the node and element information provided through a text file.'
     design = 'meshgenerators/BeamMeshGenerator.md'
     issues = '#209'
     mesh_mode = 'REPLICATED'

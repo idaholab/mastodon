@@ -12,6 +12,6 @@
 
     design = "LayerInterfaceIndicator.md ShearWaveIndicator.md"
     issues = "#2"
-    requirement = "The LayerInterfaceIndicator and ShearWaveIndicator classes shall accurately mesh the soil domain taking into account the variation in shear wave velocity across soil layers, as well as the location soil layer interfaces."
+    requirement = "The LayerInterfaceIndicator and ShearWaveIndicator classes shall accurately mesh the soil domain taking into account the variation in shear wave velocity across soil layers, as well as the locations of the soil layer interfaces."
   [../]
 []

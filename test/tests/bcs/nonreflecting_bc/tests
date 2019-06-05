@@ -9,7 +9,7 @@
     max_parallel = 1
     skip = "regold after moose PR"
 
-    requirement = "The NonReflectingBC class shall accurately model absorption of shear and compressive waves that incident on the boundary."
+    requirement = "The NonReflectingBC class shall accurately model absorption of shear and compressive waves that are incident on the boundary."
   [../]
   [./displacements_error]
     type = RunException

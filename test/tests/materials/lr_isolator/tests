@@ -27,7 +27,7 @@
     input = 'lr_isolator_PDelta.i'
     csvdiff = 'lr_isolator_PDelta_out.csv'
 
-    requirement = "The ComputeLRIsolatorElasticity class shall accurately model the buckling response of the isolator."
+    requirement = "The ComputeLRIsolatorElasticity class shall accurately model the P-Delta effects in the isolator."
   [../]
   [./lr_isolator_seismic]
     type = Exodiff

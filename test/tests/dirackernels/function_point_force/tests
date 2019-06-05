@@ -40,7 +40,7 @@
     cli_args = "DiracKernels/src/x_position='x' DiracKernels/src/number=1"
     expect_err = "The number of position functions should be equal to mesh dimension in the \"src\" block."
 
-    requirement = "The FunctionPointForce class shall produce an error x and y position functions are not provided as input for a 2D mesh."
+    requirement = "The FunctionPointForce class shall produce an error if both x and y position functions are not provided as input for a 2D mesh."
   [../]
   [./function_point_no_z_position_error]
     type = RunException
@@ -48,6 +48,6 @@
     cli_args = "DiracKernels/src/x_position='x' DiracKernels/src/y_position='y' DiracKernels/src/number=1"
     expect_err = "The number of position functions should be equal to mesh dimension in the \"src\" block."
 
-    requirement = "The FunctionPointForce class shall produce an error x, y and z position functions are not provided as input for a 3D mesh."
+    requirement = "The FunctionPointForce class shall produce an error if not all x, y and z position functions are provided as input for a 3D mesh."
   [../]
 []

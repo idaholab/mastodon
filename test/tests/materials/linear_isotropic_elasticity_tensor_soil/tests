@@ -7,7 +7,7 @@
     exodiff = layered_soil_test_out.e
     cli_args = Outputs/file_base=layered_soil_test_out
 
-    requirement = "The ComputeIsotropicElasticityTensorSoil shall accurately set up elasticity tensor for different soil layers using the user provided shear modulus and Poisson's ratio for each layer."
+    requirement = "The ComputeIsotropicElasticityTensorSoil shall accurately set up elasticity tensors for different soil layers using the user provided shear modulus and Poisson's ratio for each layer."
   [../]
   [./linear_isotropic_elastic_input]
     type = Exodiff
@@ -16,7 +16,7 @@
     cli_args = Outputs/file_base=layered_soil_test_out
     prereq = linear_isotropic_shear_input
 
-    requirement = "The ComputeIsotropicElasticityTensorSoil shall accurately set up elasticity tensor for different soil layers using the user provided Young's modulus and Poisson's ratio for each layer."
+    requirement = "The ComputeIsotropicElasticityTensorSoil shall accurately set up elasticity tensors for different soil layers using the user provided Young's modulus and Poisson's ratio for each layer."
   [../]
   [./linear_isotropic_size_error]
     type = RunException

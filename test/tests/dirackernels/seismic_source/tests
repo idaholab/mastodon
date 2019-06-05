@@ -15,7 +15,7 @@
     input = 'synchronous_rupture.i'
     exodiff = 'synchronous_rupture_out.e'
 
-    requirement = "The SeismicSource action and the SeismicSource class shall accurately apply multiple point source at the user-provided points within the computational domain, and also trigger all these point sources to rupture at the same time instant."
+    requirement = "The SeismicSource action and the SeismicSource class shall accurately apply multiple point sources at the user-provided points within the computational domain, and also trigger all these point sources to rupture at the same time."
   [../]
   [./asynchronous_rupture]
     type = 'Exodiff'
@@ -37,7 +37,7 @@
     input = 'seismic_source_error.i'
     expect_err = "Error in mastodon_seismic_source0. Either a point of a set of points should be given as input."
 
-    requirement = "The SeismicSource class shall produce an error if neither the point nor the set of points at which the source is located is not supplied as input.."
+    requirement = "The SeismicSource class shall produce an error if neither the point nor the set of points at which the source is located is not supplied as input."
   [../]
   [./number_error]
     type = 'RunException'

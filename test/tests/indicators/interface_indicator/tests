@@ -8,6 +8,6 @@
 
     design = "LayerInterfaceIndicator.md"
     issues = "#2"
-    requirement = "The LayerInterfaceIndicator class shall accurately mesh the soil domain taking into account the location soil layer interfaces."
+    requirement = "The LayerInterfaceIndicator class shall accurately mesh the soil domain taking into account the locations of the soil layer interfaces."
   [../]
 []

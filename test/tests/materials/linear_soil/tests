@@ -7,7 +7,7 @@
     input = linear_soil.i
     exodiff = linear_soil_out.e
 
-    requirement = "The LinearSoilMaterial class accurately set the shear modulus and density values for different soil layers."
+    requirement = "The LinearSoilMaterial class accurately sets the shear modulus and density values for different soil layers."
   [../]
 
   [./error_size_mismatch]
