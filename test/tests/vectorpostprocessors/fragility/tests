@@ -1,9 +1,14 @@
 # Test for Fragility VectorPostprocessor
 [Tests]
+  design = "source/vectorpostprocessors/Fragility.md"
+  issues = '#44'
+
   [./fragility]
     type = CSVDiff
     input = fragility.i
     csvdiff = fragility_out_fragility_pump_0002.csv
     boost = true
+
+    requirements = "The Fragility vectorpostprocessor shall accurately evaluate the median demands, beta, and the conditional probability of failure of the SSC at each intensity, and the median and beta of the enhanced fragility fit for the SSC."
   [../]
 []

@@ -1,9 +1,14 @@
 [Tests]
+  design = 'syntax/Mastodon/index.md'
+  issues = '#50'
+  
   [./noaction]
     # 1 element problem with no Mastodon block actions
     type = Exodiff
     input = noaction.i
     exodiff = noaction_out.e
+
+    requirement = "MASTODON shall accurately evaluate a single 3D element dynamics problem when the MastodonBlock action is not used."
   [../]
 
   [./noaction_2D]
@@ -11,6 +16,8 @@
     type = Exodiff
     input = noaction_2D.i
     exodiff = noaction_2D_out.e
+
+    requirement = "MASTODON shall accurately evaluate a single 2D element dynamics problem when the MastodonBlock action is not used."
   [../]
 
   [./mastodon_block_actions]
@@ -20,6 +27,8 @@
     exodiff = noaction_out.e
     cli_args = "Outputs/file_base=noaction_out"
     prereq = noaction
+
+    requirement = "Using the MastodonBlock action should produce results that are identical to those calculated without the action for a single 3D element dynamic problem."
   [../]
 
   [./mastodon_block_actions_2D]
@@ -29,5 +38,7 @@
     exodiff = noaction_2D_out.e
     cli_args = "Outputs/file_base=noaction_2D_out"
     prereq = noaction_2D
+
+    requirement = "Using the MastodonBlock action should produce results that are identical to those calculated without the action for a single 2D element dynamic problem."
   [../]
 []

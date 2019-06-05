@@ -1,12 +1,20 @@
 [Tests]
+  design = "source/userobjects/GroundMotionReader.md"
+  issues = '#61'
+
   [./run]
     type = RunApp
     input = ground_motion_reader.i
+
+    requirements = "The GroundMotionReader object shall run without errors."
   [../]
+
   [./bad_pattern]
     type = RunException
     input = ground_motion_reader.i
     cli_args = UserObjects/motions/pattern=this/is/wrong*.csv
     expect_err = "Unable to locate files with the given pattern \(this/is/wrong\*\.csv\) in the GroundMotionReader object 'motions'."
+
+    requirements = "The GroundMotionReader object shall throw an error when the ground motion files with the provided pattern are not found."
   [../]
 []

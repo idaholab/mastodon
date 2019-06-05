@@ -1,9 +1,14 @@
 [Tests]
+  design = 'source/actions/MastodonOutputsAction.md'
+  issues = '#50'
+
   [./noaction_stress_strain_output]
     # 1 element problem with no Mastodon/Outputs actions
     type = Exodiff
     input = noaction_stress_strain_output.i
     exodiff = noaction_stress_strain_output_out.e
+
+    requirements = "MASTODON shall correctly evaluate the outputs of a 1 element analysis when the MastodonOutputs action is not used."
   [../]
 
   [./variable_action]
@@ -13,5 +18,7 @@
     exodiff = noaction_stress_strain_output_out.e
     cli_args = "Outputs/file_base=noaction_stress_strain_output_out"
     prereq = noaction_stress_strain_output
+
+    requirements = "Using the MastodonOutputs action for a 1 element analysis should produce results that are identical to those calculated when the MastodonOutputs action is not used."
   [../]
 []
