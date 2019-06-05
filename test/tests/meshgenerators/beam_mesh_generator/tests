@@ -9,7 +9,6 @@
     issues = '#209'
     mesh_mode = 'REPLICATED'
     recover = false
-    verification = meshgenerators/BeamMeshGenerator.md
   [../]
   [./mesh_gen_test]
     type = 'Exodiff'
@@ -19,6 +18,5 @@
                 " information provided through a text file."
     issues = "#209"
     design = "meshgenerators/BeamMeshGenerator.md"
-    verification = meshgenerators/BeamMeshGenerator.md
   [../]
 []
