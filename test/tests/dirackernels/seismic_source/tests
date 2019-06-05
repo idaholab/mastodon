@@ -1,6 +1,6 @@
 [Tests]
   design = "SeismicSource.md"
-  issues = "19"
+  issues = "#19"
   [./one_seismic_source]
     type = 'Exodiff'
     input = 'one_seismic_source.i'
