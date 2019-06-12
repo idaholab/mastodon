@@ -5,4 +5,8 @@
     exodiff = minimum_element_size_out.e
     vtk = true
   [../]
+
+  design = "MinimumElementSizeMarker.md"
+  issues = "#2"
+  requirement = "The MinimumElementSizeMarker shall accurately mark an element for mesh refinement if the minimum element size is greater than that recommended by the ShearWaveIndicator."
 []

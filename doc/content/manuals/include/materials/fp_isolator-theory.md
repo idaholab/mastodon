@@ -1,4 +1,4 @@
-### Friction Pendulum<sup>TM</sup> Isolator
+### Friction Pendulum^TM^ Isolator
 
 Friction Pendulum<sup>TM</sup> (FP) bearings are used to seismically isolate structures, including critical facilities such as nuclear power plants. The single concave FP bearing consists of a spherical sliding surface, a slider coated with PTFE-type composite material, and a housing plate. [fig:fp_components] and [fig:fp_sectionalview] shows components and part sectional view of a single concave Friction Pendulum<sup>TM</sup> bearing, respectively.
 
@@ -43,11 +43,11 @@ K=\frac{N}{r_{eff}}
 \end{aligned}
 \end{equation}
 
-where,<br/>
-$Q$ is the yield strength <br/>
-$K$ is the post elastic stiffness <br/>
-$N$ is the instantaneous axial load <br/>
-$r_{eff}$ is the effective radius of curvature of the sliding surface<br/>
+where, \\
+$Q$ is the yield strength \\
+$K$ is the post elastic stiffness \\
+$N$ is the instantaneous axial load, and \\
+$r_{eff}$ is the effective radius of curvature of the sliding surface.
 
 Parameters $Q$ and $K$ depends on the coefficient of sliding friction and the axial load on the bearing. For detailed information on the numerical implementation of the nonlinear hysteretic behavior of the FP bearing in shear, refer to [citet:manishkumarmceer2015a] (page:106-107). Additionally, the FP bearing exhibits very large stiffness in axial, torsional and rotational directions and is therefore modeled as a linear elastic material with large stiffness in these degrees-of-freedom.
 
@@ -62,11 +62,11 @@ The lateral force-displacement relationship of the FP bearing is governed by the
 \end{aligned}
 \end{equation}
 
-where,<br>
-$\mu(t)$ is the coefficient of sliding friction at given time $t$<br/>
-$v$ is the instantaneous sliding velocity<br/>
-$p$ is the instantaneous axial pressure <br/>
-$T$ is the instantaneous temperature of the sliding surface<br/>
+where, \\
+$\mu(t)$ is the coefficient of sliding friction at given time $t$\\
+$v$ is the instantaneous sliding velocity\\
+$p$ is the instantaneous axial pressure, and \\
+$T$ is the instantaneous temperature of the sliding surface.
 
 [citet:manishkumarmceer2015b] developed a framework to account for the variation in $\mu$ due to the combined effect of velocity, pressure, and temperature and it is adopted here. The sliding velocity and the axial pressure on the bearing are governed by the response of the superstructure. The temperature at the sliding surface is a function of the coefficient of friction, sliding velocity, instantaneous axial pressure and, thermal and heat flux parameters of the material (typically stainless steel):
 
@@ -77,9 +77,9 @@ T(t)=f(\mu,v,p,D,k)
 \end{aligned}
 \end{equation}
 
-where, <br/>
-k is the thermal conductivity of the sliding interface material <br/>
-D is the thermal diffusivity of the sliding interface material <br/>
+where, \\
+k is the thermal conductivity of the sliding interface material, and \\
+D is the thermal diffusivity of the sliding interface material.
 
 It is evident from [fp_eqn3] and [fp_eqn4], that $T$ and $\mu$ are interdependent. This complex interdependence of the coefficient of sliding friction, sliding velocity, instantaneous axial pressure, and the temperature at the sliding surface is described using the flowchart of [fig:fp_interdependence].
 
@@ -99,10 +99,10 @@ It is evident from [fp_eqn3] and [fp_eqn4], that $T$ and $\mu$ are interdependen
 \end{aligned}
 \end{equation}
 
-where,<br/>
-$\mu_{min}$ is the friction coefficient at a very small sliding velocity<br/>
-$\mu_{max}$ is the friction coefficient at a very high sliding velocity <br/>
-$a$ is a rate parameter<br/>
+where,\\
+$\mu_{min}$ is the friction coefficient at a very small sliding velocity\\
+$\mu_{max}$ is the friction coefficient at a very high sliding velocity, and \\
+$a$ is a rate parameter.
 
 Based on the experimental data, the ratio $\frac{\mu_{min}}{\mu_{max}}$ is assumed to be a constant value of 0.5 [citep:manishkumarmceer2015b]. The modified expression for coefficient of friction as a function of instantaneous sliding velocity, at constant axial load and temperature, can be written as:
 
@@ -124,10 +124,10 @@ Based on the experimental data, the ratio $\frac{\mu_{min}}{\mu_{max}}$ is assum
 \end{aligned}
 \end{equation}
 
-where,<br/>
-$p_o$ is the reference axial pressure <br/>
-$\mu_{p=p_o}$ is the co-efficent of sliding friction when the axial pressure on the bearing ($p$) is equal to the reference pressure ($p_o$)<br/>
-$\alpha$ and $\beta$ are constants<br/>
+where,\\
+$p_o$ is the reference axial pressure \\
+$\mu_{p=p_o}$ is the co-efficent of sliding friction when the axial pressure on the bearing ($p$) is equal to the reference pressure ($p_o$), and \\
+$\alpha$ and $\beta$ are constants.
 
 The assumption of $\mu_{min} =0.5 \mu_{max}$ for all values of axial pressure allows the coefficient of sliding friction to be expressed as the product of the coefficient of friction measured at a reference pressure and a term that depends on the instantaneous axial pressure. Based on the experiments, $\alpha$ and $\beta$ can be set equal to 0.7 and 0.02 respectively [citep:manishkumarmceer2015b]. Rewriting the expression for $\mu$ as a function of $p$:
 
@@ -149,10 +149,10 @@ The coefficient of sliding friction decreases as the number of cycles of loading
 \end{aligned}
 \end{equation}
 
-where,<br/>
-$\mu(T)$ is the coefficient of friction at a temperature $T$<br/>
-$\mu_{T=T_o}$ is the coefficient of friction measured at the reference temperature $T_o$<br/>
-$T$ is the instantaneous temperature<br/>
+where,\\
+$\mu(T)$ is the coefficient of friction at a temperature $T$\\
+$\mu_{T=T_o}$ is the coefficient of friction measured at the reference temperature $T_o$, and \\
+$T$ is the instantaneous temperature.
 
 During the analysis, it is difficult to monitor the temperature over the entire sliding surface. To address the heating, [citet:manishkumarmceer2015b] proposed an alternate approach namely, to monitor the temperature at the center of sliding surface only. When the slider is above the center of sliding surface, the temperature increases, and drops as the slider moves away. This increase in temperature at the monitoring location is governed by the heat flux parameters and the path of the slider, and is given by [fp_eqn10]
 
@@ -163,12 +163,12 @@ During the analysis, it is difficult to monitor the temperature over the entire 
 \end{aligned}
 \end{equation}
 
-where,<br/>
-$\Delta{T}(x,t)$ is the increase in temperature<br/>
-$x$ is the depth measured from the sliding surface,<br/>
-$D$ is the thermal diffusivity of the sliding interface material,<br/>
-$k$ is the thermal conductivity of the sliding interface material, <br/>
-$q$ is the heat flux
+where,\\
+$\Delta{T}(x,t)$ is the increase in temperature\\
+$x$ is the depth measured from the sliding surface,\\
+$D$ is the thermal diffusivity of the sliding interface material,\\
+$k$ is the thermal conductivity of the sliding interface material, and \\
+$q$ is the heat flux.
 
 At a given instant of time, the instantaneous heat flux, at the monitoring location can be expressed as
 
@@ -213,8 +213,8 @@ The coefficient of sliding friction as a function of the instantaneous sliding v
 \end{aligned}
 \end{equation}
 
-where,<br/>
-$k_v$ is the factor accounting for friction dependence on the sliding velocity<br/>
-$k_p$ is the factor accounting for friction dependence on the axial pressure on the bearing<br/>
-$k_T$ is the factor accounting for friction dependence on the temperature at center of the sliding surface<br/>
+where,\\
+$k_v$ is the factor accounting for friction dependence on the sliding velocity\\
+$k_p$ is the factor accounting for friction dependence on the axial pressure on the bearing\\
+$k_T$ is the factor accounting for friction dependence on the temperature at center of the sliding surface, and \\
 $\mu_{ref}$ is the coefficient of sliding friction at refernce pressure $p_o$, measured at high velocity of sliding with the temperature at the center of the sliding surface being $T_o$.

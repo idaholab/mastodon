@@ -1,8 +1,12 @@
 [Tests]
+  design = "fv_damper-theory.md fv_damper-user.md"
+  issues = "#208"
   [./axial]
     type = CSVDiff
     input = fv_damper_axial.i
     csvdiff = fv_damper_axial_out.csv
+
+    requirement = "The ComputeFVDamperElasticity class shall accurately damp the response of the system in the axial direction."
   [../]
   [./axial2]
     type = CSVDiff
@@ -10,6 +14,8 @@
     csvdiff = fv_damper_axial2_out.csv
     cli_args = 'Materials/elasticity/cd=4605988 Materials/elasticity/alpha=0.6 Outputs/file_base=fv_damper_axial2_out'
     prereq = axial
+
+    requirement = "The ComputeFVDamperElasticity class shall accurately damp the response of the system in the axial direction for a cd of 4605988 and an alpha of 0.6."
   [../]
   [./axial3]
     type = CSVDiff
@@ -17,6 +23,8 @@
     csvdiff = fv_damper_axial3_out.csv
     cli_args = 'Materials/elasticity/cd=1090485 Materials/elasticity/alpha=0.01 Outputs/file_base=fv_damper_axial3_out'
     prereq = axial
+
+    requirement = "The ComputeFVDamperElasticity class shall accurately damp the response of the system in the axial direction for a cd of 1090485 and an alpha of 0.01."
   [../]
   [./axial4]
     type = CSVDiff
@@ -24,10 +32,14 @@
     csvdiff = fv_damper_axial4_out.csv
     cli_args = 'Materials/elasticity/cd=37947331 Materials/elasticity/alpha=1.5 Outputs/file_base=fv_damper_axial4_out'
     prereq = axial
+
+    requirement = "The ComputeFVDamperElasticity class shall accurately damp the response of the system in the axial direction for a cd of 37947331 and an alpha of 1.5."
   [../]
   [./seismic]
     type = CSVDiff
     input = fv_damper_seismic_frame.i
     csvdiff = fv_damper_seismic_frame_out.csv
+
+    requirement = "The ComputeFVDamperElasticity class shall accurately damp the response of the portal frame under seismic loading."
   [../]
 []
