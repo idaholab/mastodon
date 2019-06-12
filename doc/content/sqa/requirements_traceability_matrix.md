@@ -1,7 +1,6 @@
-!SQA-load requirements_traceability_matrix.md
+!template load file=system_requirements_traceability_matrix.template.md
+               project=MASTODON
 
-!SQA-template-item requirements_matrix
-
-!SQA-requirement-matrix sqa/system_requirement_specification.md
-
-!END-template-item
+!template! item key=requirements-traceability-matrix
+!sqa requirements
+!template-end!

@@ -1,4 +1,6 @@
 [Tests]
+  design = 'source/multiapps/HazardCurveMultiApp.md'
+  issues = '#61'
   [./run]
     type = CheckFiles
     input = hazard_curve_master.i
@@ -22,5 +24,7 @@
                    hazard_curve_master_out_run_hazard17.e
                    hazard_curve_master_out_run_hazard18.e
                    hazard_curve_master_out_run_hazard19.e"
+
+    requirement = "The HazardCurveMultiApp shall execute the sub file for each ground motion in the GroundMotionReader UserObject for each bin of the HazardCurve UserObject."
   [../]
 []

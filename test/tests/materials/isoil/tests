@@ -1,4 +1,6 @@
 [Tests]
+  design = "Materials/I_Soil/index.md"
+  issues = "#26"
   [./data_file]
     # 1 element problem with ISoilAction to check stress-strain curve given using data_file
     type = Exodiff
@@ -6,6 +8,8 @@
     exodiff = HYS_data_file_out.e
     abs_zero = 5e-9
     rel_err = 2e-5
+
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve from a user provided data file."
   [../]
 
   [./data_file_noaction]
@@ -17,6 +21,8 @@
     prereq = data_file
     abs_zero = 5e-9
     rel_err = 2e-5
+
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve from a user provided data file without the use of the ISoilAction."
   [../]
 
   [./darendeli]
@@ -24,6 +30,8 @@
     type = Exodiff
     input = HYS_darendeli.i
     exodiff = HYS_darendeli_out.e
+
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve using the Darendeli formulation."
   [../]
 
   [./darendeli_noaction]
@@ -33,6 +41,8 @@
     exodiff = HYS_darendeli_out.e
     cli_args = Outputs/file_base=HYS_darendeli_out
     prereq = darendeli
+
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the Darendeli formulation without the use of the ISoilAction."
   [../]
 
   [./GQH]
@@ -41,6 +51,8 @@
     input = HYS_GQH.i
     exodiff = HYS_GQH_out.e
     abs_zero = 1e-9
+
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve using the GQ/H formulation."
   [../]
 
   [./GQH_noaction]
@@ -51,6 +63,8 @@
     cli_args = Outputs/file_base=HYS_GQH_out
     prereq = GQH
     abs_zero = 1e-9
+
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the GQ/H formulation without the use of the ISoilAction."
   [../]
 
   [./thin_layer]
@@ -58,6 +72,8 @@
     type = Exodiff
     input = HYS_thin_layer.i
     exodiff = HYS_thin_layer_out.e
+
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer formulation."
   [../]
 
   [./thin_layer_noaction]
@@ -67,6 +83,8 @@
     exodiff = HYS_thin_layer_out.e
     cli_args = Outputs/file_base=HYS_thin_layer_out
     prereq = thin_layer
+
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer formulation without the use of the ISoilAction."
   [../]
 
   [./pressure_dependent_stiffness]
@@ -74,6 +92,8 @@
     type = RunException
     input = HYS_pressure_dependent_stiffness.i
     expect_err = "Pressure dependency is set to true but b\_exp is set to 0\.0\. Stiffness pressure dependency is NOT turned on\."
+
+    requirement = "The ComputeISoilStress class shall generate a warning if pressure dependency is set to true but b\_exp is set to 0.0."
   [../]
 
   [./stiffness_and_strength_pressure_dependency]
@@ -82,6 +102,8 @@
     input = HYS_stiffness_and_strength_pressure_dependency.i
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
     abs_zero = 5e-9
+
+    requirement = "The ISoilAction and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil."
   [../]
 
   [./stiffness_and_strength_pressure_dependency_noaction]
@@ -92,5 +114,7 @@
     cli_args = Outputs/file_base=HYS_stiffness_and_strength_pressure_dependency_out
     prereq = stiffness_and_strength_pressure_dependency
     abs_zero = 5e-9
+
+    requirement = "The ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil without the use of the ISoilAction."
   [../]
 []

@@ -1,8 +1,11 @@
 [Tests]
+issues = '#2'
+design = 'LayerInterfaceIndicator.md'
   [./test]
     type = Exodiff
     input = interface.i
     exodiff = interface_out.e
     vtk = true
+    requirement = 'Mastodon shall create a mesh using the shear wave indicator and minimum element size marker'
   [../]
 []

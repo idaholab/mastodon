@@ -3,10 +3,18 @@
     type = 'Exodiff'
     input = 'newmark.i'
     exodiff = 'newmark_out.e'
+    verification = 'V1-01.md'
+    requirement = 'The Newmark time integration scheme in MASTODON shall calculate results that are equal to analytical calculations.'
+    design = 'timeintegrators/NewmarkBeta.md'
+    issues = '#12185'
   [../]
   [./hht]
     type = 'Exodiff'
     input = 'hht.i'
     exodiff = 'hht_out.e'
+    verification = 'V1-02.md'
+    requirement = 'The HHT time integration scheme in MASTODON shall calculate results that are equal to analytical calculations.'
+    design = 'tensor_mechanics/Dynamics.md'
+    issues = '#5537'
   [../]
 []

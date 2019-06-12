@@ -1,7 +1,10 @@
 [Tests]
+issues = '#37'
+design  = 'manuals/user/index.md'
   [./unused]
     type = RunException
     input = error_unused.i
     expect_err = 'unused parameter'
+    requirement = 'Mastodon shall throw an error if an unused parameter is supplied to the input file.'
   [../]
 []

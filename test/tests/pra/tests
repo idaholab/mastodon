@@ -1,5 +1,9 @@
 # test for the PRA infrastructure in MASTODON
 [Tests]
+  design = 'source/multiapps/HazardCurveMultiApp.md'
+  # Change design to SPRA documentation when written
+  issues = '#101'
+
   [./pra]
     type = CSVDiff
     input = master.i
@@ -40,5 +44,7 @@
                master_out_run_hazard11_sub0.csv
                master_out_run_hazard11_sub1.csv
                master_out_run_hazard11_sub2.csv"
+
+    requirement = "MASTODON shall perform probabilistic simulations for seismic probabilistic risk assessment for a given hazard curve, number of bins, ground motions and a finite element model."
   [../]
 []

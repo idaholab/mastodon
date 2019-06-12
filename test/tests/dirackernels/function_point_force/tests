@@ -1,10 +1,14 @@
 [tests]
+  design = "FunctionPointForce.md"
+  issues = "#6"
   [./function_point_force_1]
     type = 'Exodiff'
     input = 'force_one_point.i'
     exodiff = 'force_one_point_out.e'
     abs_zero = 1e-06
     compiler = 'GCC CLANG'
+
+    requirement = "The FunctionPointForce class shall accurately apply the force at any point within an element."
   [../]
   [./function_point_force_multi]
     type = 'Exodiff'
@@ -12,28 +16,38 @@
     exodiff = 'force_multi_point_out.e'
     abs_zero = 1e-06
     compiler = 'GCC CLANG'
+
+    requirement = "The FunctionPointForce class shall accurately apply a force at multiple points within the computational domain."
   [../]
   [./function_point_no_point_error]
     type = RunException
     input = force_error.i
     expect_err = "Either the 'point' or a set of points \('x_position'\) should be given as input in the \"src\" block."
+
+    requirement = "The FunctionPointForce class shall produce an error if neither a point nor a set of points, supplied through the x, y and z position functions, are provided as input."
   [../]
   [./function_point_no_number_error]
     type = RunException
     input = force_error.i
     cli_args = "DiracKernels/src/x_position='x'"
     expect_err = "The 'number' parameter is required in the \"src\" block when 'x_position' function is provided."
+
+    requirement = "The FunctionPointForce class shall produce an error if the 'number' parameter is not supplied by the user when providing a set of points through the position functions."
   [../]
   [./function_point_no_y_position_error]
     type = RunException
     input = force_error.i
     cli_args = "DiracKernels/src/x_position='x' DiracKernels/src/number=1"
     expect_err = "The number of position functions should be equal to mesh dimension in the \"src\" block."
+
+    requirement = "The FunctionPointForce class shall produce an error if both x and y position functions are not provided as input for a 2D mesh."
   [../]
   [./function_point_no_z_position_error]
     type = RunException
     input = force_error.i
     cli_args = "DiracKernels/src/x_position='x' DiracKernels/src/y_position='y' DiracKernels/src/number=1"
     expect_err = "The number of position functions should be equal to mesh dimension in the \"src\" block."
+
+    requirement = "The FunctionPointForce class shall produce an error if not all x, y and z position functions are provided as input for a 3D mesh."
   [../]
 []

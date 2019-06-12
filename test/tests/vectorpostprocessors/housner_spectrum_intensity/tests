@@ -1,9 +1,15 @@
 [Tests]
+  design = "source/vectorpostprocessors/HousnerSpectrumIntensity.md"
+  issues = '#39'
+
   [./hsi]
     type = CSVDiff
     input = housner_spectrum_intensity.i
     csvdiff = housner_spectrum_intensity_out_accel_hsi.csv
+
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a serial execution."
   [../]
+
   [./hsi_parallel]
     type = CSVDiff
     input = housner_spectrum_intensity.i
@@ -11,14 +17,20 @@
     prereq = hsi
     min_parallel = 3
     max_parallel = 3
+
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
   [../]
+
   [./hsi_threads]
     type = CSVDiff
     input = housner_spectrum_intensity.i
     csvdiff = housner_spectrum_intensity_out_accel_hsi.csv
     prereq = hsi_parallel
     min_threads = 3
+
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
   [../]
+
   [./hsi_threads_parallel]
     type = CSVDiff
     input = housner_spectrum_intensity.i
@@ -26,5 +38,7 @@
     prereq = hsi_threads
     min_threads = 3
     min_parallel = 2
+
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
   [../]
 []

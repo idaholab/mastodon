@@ -1,9 +1,13 @@
 [Tests]
+  design = "LinearSoilMaterial.md"
+  issues = "#2"
   [./math]
     # 1D problem with 2 elements for checking math
     type = Exodiff
     input = linear_soil.i
     exodiff = linear_soil_out.e
+
+    requirement = "The LinearSoilMaterial class accurately sets the shear modulus and density values for different soil layers."
   [../]
 
   [./error_size_mismatch]
@@ -12,6 +16,8 @@
     input = linear_soil.i
     cli_args = "Materials/linear/layer_ids='1980 1981 1982'"
     expect_err = "The parameter \"shear_modulus\" in the \"linear\" block must be the same length as the \"layer_ids\" parameter."
+
+    requirement = "The LinearSoilMaterial class shall produce an error if the 'shear_modulus' vector is not the same length as the 'layer_ids' vector."
   [../]
 
   [./error_missing_id]
@@ -20,5 +26,7 @@
     input = linear_soil.i
     cli_args = "Materials/linear/layer_ids='1980 1981'"
     expect_err = "The current layer id variable value \(1949\) was not provided in the 'layer_ids' parameter of the \"linear\" block."
+
+    requirement = "The LinearSoilMaterial class shall produce an error if the layer id variable takes a value that is not provided as part of the 'layer_ids' vector."
   [../]
 []
