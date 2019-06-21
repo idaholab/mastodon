@@ -3,16 +3,16 @@
 Lead-rubber (LR) seismic isolators are composed of alternating layers of natural rubber and steel shims with
 steel flange plates at top and bottom, and a central cylindrical lead core. Continuum modeling of LR
 bearings is computationally expensive and impractical for applications involving large structures
-with tens to hundreds of isolators. Hence, the two-node model developed by [citet:manishkumarmceer2015a] is adopted here.
+with tens to hundreds of isolators. Hence, the two-node model developed by [!citet](manishkumarmceer2015a) is adopted here.
 The isolator model has six degrees of freedom (3 translations and 3 rotations) at each node and is capable of
 simulating nonlinear behavior in both axial and shear directions. The physical model of the
-two-node isolator element is shown in [fig:physicalmodelofbearing]. For a detailed description on the implementation of numerical model, refer to [citet:manishkumarmceer2015a].
+two-node isolator element is shown in [fig:physicalmodelofbearing]. For a detailed description on the implementation of numerical model, refer to [!citet](manishkumarmceer2015a).
 
 !media media/materials/lr_isolator/physicalmodel.png
        style=width:70%;margin-left:150px;float:center;
        id=fig:physicalmodelofbearing
        caption=Discrete, two-noded model of an LR bearing: (a) degrees of freedom, and (b) discrete
-       spring representation [citep:manishkumarEESD2014].
+       spring representation [!citep](manishkumarEESD2014).
 
 This model captures the following physical behaviors:
 
@@ -39,7 +39,7 @@ This model captures the following physical behaviors:
 
 ##### Compression
 
-The composite action of the rubber and the steel shims result in high axial stiffness of a bearing. The expression for the critical buckling load in compression is derived from the two-spring model proposed by [citet:kohandkelly1987] as shown in [lr_eq_1].
+The composite action of the rubber and the steel shims result in high axial stiffness of a bearing. The expression for the critical buckling load in compression is derived from the two-spring model proposed by [!citet](kohandkelly1987) as shown in [lr_eq_1].
 
 \begin{equation}
 \label{lr_eq_1}
@@ -54,7 +54,7 @@ $A_s=A\frac{h}{T_r}$ <br/>
 $I_s=I\frac{h}{T_r}$ <br/>
 
 [lr_eq_1] provides the critical buckling load at zero shear displacement. Experimental investigations have
-shown that the critical buckling load is a function of the shear deformation. [citet:warnandwhittaker2006] proposed a simplified expression for the critical buckling load as a function of the overlap bonded rubber area. The critical buckling load is updated at every analysis step based on the current shear deformation in the bearing.
+shown that the critical buckling load is a function of the shear deformation. [!citet](warnandwhittaker2006) proposed a simplified expression for the critical buckling load as a function of the overlap bonded rubber area. The critical buckling load is updated at every analysis step based on the current shear deformation in the bearing.
 
 \begin{equation}
 \label{lr_eq_2}
@@ -79,7 +79,7 @@ a very small value of axial stiffness is assigned to the post-buckling region.
 
 ##### Tension
 
-Beyond a certain tensile stress, rubber undergoes cavitation, which is an expansion of existing voids or defects in the material. Cavitation results in an inelastic deformation due to the onset of permanent damage. The LR isolator exhibits linear elastic behavior, till the point of cavitation ($u_{cn}$,$F_{cn}$), where, $u_{cn}$ and $F_{cn}$ are the  deformation and force, respectively, at the onset of cavitation. Due to the breakage of rubber-filler bonds, the post-cavitation stiffness is reduced. [citet:constantinouwhittaker2007] suggested an expression for post-cavitation stiffness as:
+Beyond a certain tensile stress, rubber undergoes cavitation, which is an expansion of existing voids or defects in the material. Cavitation results in an inelastic deformation due to the onset of permanent damage. The LR isolator exhibits linear elastic behavior, till the point of cavitation ($u_{cn}$,$F_{cn}$), where, $u_{cn}$ and $F_{cn}$ are the  deformation and force, respectively, at the onset of cavitation. Due to the breakage of rubber-filler bonds, the post-cavitation stiffness is reduced. [!citet](constantinouwhittaker2007) suggested an expression for post-cavitation stiffness as:
 
 \begin{equation}
 \label{lr_eq_3}
@@ -126,7 +126,7 @@ F_{cn}=F_c(1-\phi)
 !media media/materials/lr_isolator/axialformulation.png
        style=width:70%;margin-left:150px;float:center;
        id=fig:axialformulation
-       caption=Axial response of an elastomeric isolator [citep:manishkumarEESD2014].
+       caption=Axial response of an elastomeric isolator [!citep](manishkumarEESD2014).
 
 where, <br/>
 $K_v$ is the axial stiffness of the isolator<br/>
@@ -135,7 +135,7 @@ $r$ is the radius of gyration of the isolator <br/>
 
 #### Shear behavior (local Y and Z directions)
 
-The smoothed hysteric model proposed by [citet:park1986] and extended by [citet:nagarajaiah1989] is used to model the
+The smoothed hysteric model proposed by [!citet](park1986) and extended by [!citet](nagarajaiah1989) is used to model the
 behavior of a lead-rubber bearing in shear. The shear resistance of the LR bearing is a combination of the
 viscoelastic behavior of the rubber layers and the hysteretic behavior of the lead core, as shown in
 [fig:shearformulation]. The behavior of rubber is characterized by elastic stiffness, viscous damping terms and the nonlinear hysteretic contribution of the lead core is modeled using a Bouc-Wen formulation.
@@ -143,7 +143,7 @@ viscoelastic behavior of the rubber layers and the hysteretic behavior of the le
 !media media/materials/lr_isolator/shearformulation.png
        style=width:60%;margin-left:150px;float:center;
        id=fig:shearformulation
-       caption=Shear behavior of the LR isolator [citep:manishkumarmceer2015a].
+       caption=Shear behavior of the LR isolator [!citep](manishkumarmceer2015a).
 
 \begin{equation}
 \label{lr_eq_7}
@@ -209,7 +209,7 @@ where,
 When the LR isolator is subjected to cyclic loads in shear, the temperature of the lead core increases.
 The effective yield stress of the lead core used in [lr_eq_7] varies with the temperature of the lead core, which is a function of time. Therefore, at every time step, the temperature of lead core is calculated and the
 dynamic yield strength of the lead is adjusted. The relationship between the dynamic yield
-strength of the lead core and the instantaneous temperature was proposed by [citet:kalpakidiandconstantinou2009a] as
+strength of the lead core and the instantaneous temperature was proposed by [!citet](kalpakidiandconstantinou2009a) as
 
 \begin{equation}
 \label{lr_eq_10}
@@ -225,7 +225,7 @@ $T_L$ is the instantaneous temperature of the lead core <br/>
 
 When the axial load on the bearing is close to the critical buckling load, the shear stiffness of the rubber is reduced
 substantially. This reduction in shear stiffness as a function of axial load is approximated using the equation from
-[citet:kelly1993].
+[!citet](kelly1993).
 
 \begin{equation}
 \label{lr_eq_11}
@@ -236,8 +236,8 @@ where, <br/>
 P is the current axial load on the isolator
 
 The axial stiffness of the LR isolator is also a function of the overlap bonded rubber area, which is
-a function of the shear deformation. A simplified expression formulated by [citet:kohandkelly1987] and
-[citet:warnwhittaker2007] is adopted here
+a function of the shear deformation. A simplified expression formulated by [!citet](kohandkelly1987) and
+[!citet](warnwhittaker2007) is adopted here
 \begin{equation}
 \label{lr_eq_12}
 K_V = \frac{AE_c}{T_r}\left[1+\frac{3}{\pi^{2}}\left(\frac{u_h}{r}\right)^{2}\right]

@@ -11,7 +11,7 @@ A sample definition of the kernel and material block is shown in the input file 
 A description of each of the input parameters is provided in the syntax description below.
 Additionally, the behavior of the LR isolator element in the axial and shear directions is demonstrated
 using the three examples described below. Analysis results are compared with verified
-and validated numerical models implemented in the commercial software code, ABAQUS [citet:abaqus2016].
+and validated numerical models implemented in the commercial software code, ABAQUS [!citet](abaqus2016).
 
 #### Example 1: Response to axial loading id=axial_example
 

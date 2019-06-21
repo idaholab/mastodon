@@ -18,7 +18,7 @@ The axial and rotational terms of the basic stiffness matrix of the bearing elem
 `unit =  7.0` for lb-ft-s;  
 `unit =  8.0` for kip-ft-s;  
 
-The behavior of the FP bearing element in the shear direction is demonstrated using the examples described below. Analysis results are compared with verified and validated numerical models implemented in the open-source finite element package OpenSees [citep:opensees2009].
+The behavior of the FP bearing element in the shear direction is demonstrated using the examples described below. Analysis results are compared with verified and validated numerical models implemented in the open-source finite element package OpenSees [!citep](opensees2009).
 
 #### Example: Response to cyclic loading in shear
 

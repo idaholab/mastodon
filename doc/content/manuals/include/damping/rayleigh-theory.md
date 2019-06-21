@@ -1,6 +1,6 @@
 ### Rayleigh damping
 
-Rayleigh damping is the most common form of classical damping used in modeling structural dynamic problems. The more generalized form of classical damping, Caughey Damping [citep:caughey1960classical], is currently not implemented in MASTODON. Rayleigh damping is a specific form of Caughey damping that uses only the first two terms of the series. In this method, the viscous damping is proportional to the inertial contribution and contribution from the stiffness. This implies that in the matrix form of the governing equation, the damping matrix ($\mathbf{C}$) is assumed to be a linear combination of the mass ($\mathbf{M}$) and stiffness ($\mathbf{K}$) matrices, i.e., $\mathbf{C} = \eta \mathbf{M} +\zeta\mathbf{K}$. Here, $\eta$ and $\zeta$ are the mass and stiffness dependent Rayleigh damping parameters, respectively.
+Rayleigh damping is the most common form of classical damping used in modeling structural dynamic problems. The more generalized form of classical damping, Caughey Damping [!citep](caughey1960classical), is currently not implemented in MASTODON. Rayleigh damping is a specific form of Caughey damping that uses only the first two terms of the series. In this method, the viscous damping is proportional to the inertial contribution and contribution from the stiffness. This implies that in the matrix form of the governing equation, the damping matrix ($\mathbf{C}$) is assumed to be a linear combination of the mass ($\mathbf{M}$) and stiffness ($\mathbf{K}$) matrices, i.e., $\mathbf{C} = \eta \mathbf{M} +\zeta\mathbf{K}$. Here, $\eta$ and $\zeta$ are the mass and stiffness dependent Rayleigh damping parameters, respectively.
 
 The equation of motion (in the matrix form) in the presence of Rayleigh damping becomes:
 \begin{equation}
@@ -44,7 +44,7 @@ Then, $\frac{dI}{d \eta} = 0$ and $\frac{dI}{d \zeta}=0$ results in two equation
 
 ### Rayleigh damping for soils
 
-Small-strain material damping of soils is independent of loading frequency in frequency band of 0.01 Hz - 10 Hz ([cite:menq2003], [cite:shibuya2000damp],[cite:lopresti1997damp], and [cite:marmureanu2000damp]). The two mode Rayleigh damping is frequency dependent and can only achieve the specified damping at two frequencies while underestimating within and overestimating outside of these frequencies. The parameters $\eta$ and $\zeta$ for a given damping ratio can be calculated as follows:
+Small-strain material damping of soils is independent of loading frequency in frequency band of 0.01 Hz - 10 Hz ([!cite](menq2003), [!cite](shibuya2000damp),[!cite](lopresti1997damp), and [!cite](marmureanu2000damp)). The two mode Rayleigh damping is frequency dependent and can only achieve the specified damping at two frequencies while underestimating within and overestimating outside of these frequencies. The parameters $\eta$ and $\zeta$ for a given damping ratio can be calculated as follows:
 
 \begin{equation}
   \begin{bmatrix}
@@ -63,9 +63,9 @@ Small-strain material damping of soils is independent of loading frequency in fr
   \end{bmatrix}
 \end{equation}
 
-In case of two mode Rayleigh damping, [cite:kwok2007damp] suggests to use natural frequency and five times of it for the soil column of interest. In addition, selecting first mode frequency of soil column and higher frequency that corresponds to predominant period of the input ground motion is a common practice.
+In case of two mode Rayleigh damping, [!cite](kwok2007damp) suggests to use natural frequency and five times of it for the soil column of interest. In addition, selecting first mode frequency of soil column and higher frequency that corresponds to predominant period of the input ground motion is a common practice.
 
-Heterogeneities of the wave travel path may introduce scattering effect which leads to frequency dependent damping ([cite:campbell2009damp]). This type of damping is of the form ([cite:withers2015memory]):
+Heterogeneities of the wave travel path may introduce scattering effect which leads to frequency dependent damping ([!cite](campbell2009damp)). This type of damping is of the form ([!cite](withers2015memory)):
 
 \begin{equation}\label{eqn:non_constant_damping}
 \xi (f) = \begin{cases}

@@ -14,7 +14,7 @@ The orientation of an earthquake fault is described using three directions - str
                slip direction $\lambda$. The slip direction is measured clockwise around from north,
                with the fault dipping down to the right of the strike direction. Strike direction is
                also measured from the north. $\delta$ is measured down from the horizontal
-               (image courtesy [citet:aki2012quantitative]).
+               (image courtesy [!citet](aki2012quantitative)).
 
 The seismic moment ($M_o$) of the earthquake point source in the fault specific coordinate system is:
 
@@ -45,7 +45,7 @@ direction and the second index representing the direction in which the forces ar
        id=fig:source-direction
        style=width:40%;float:right;margin:20px;padding:20px;
        caption=The nine different force couples required to model an earthquake source
-               (image courtesy [citet:aki2012quantitative]).
+               (image courtesy [!citet](aki2012quantitative)).
 
 The total force in global coordinate direction $i$ resulting from an earthquake source applied at
 point $\vec{\zeta}$ in space is then:
