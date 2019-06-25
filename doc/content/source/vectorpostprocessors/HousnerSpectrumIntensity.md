@@ -1,6 +1,6 @@
 # HousnerSpectrumIntensity
 
-The `HousnerSpectrumIntensity` calculates the Housner Spectrum Intensity (HSI) for a set of response histories calculated by the `ResponseHistoryBuilder` VectorPostprocessor. Housner Spectrum Intensity is defined as the area under the velocity spectrum curve, when plotted with period on the X axis [citep:housner1952hsi]. [citet:housner1952hsi] recommends that the area be calculated between the periods 0.25sec and 2.5sec, which are the default values for the `start_period` and `end_period` parameters in MASTODON (see parameter definitions below). The HSI values will be output into a csv file in the same order as the acceleration variables are entered in the input file.
+The `HousnerSpectrumIntensity` calculates the Housner Spectrum Intensity (HSI) for a set of response histories calculated by the `ResponseHistoryBuilder` VectorPostprocessor. Housner Spectrum Intensity is defined as the area under the velocity spectrum curve, when plotted with period on the X axis [!citep](housner1952hsi). [!citet](housner1952hsi) recommends that the area be calculated between the periods 0.25sec and 2.5sec, which are the default values for the `start_period` and `end_period` parameters in MASTODON (see parameter definitions below). The HSI values will be output into a csv file in the same order as the acceleration variables are entered in the input file.
 
 ## Usage
 

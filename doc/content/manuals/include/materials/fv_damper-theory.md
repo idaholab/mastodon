@@ -1,6 +1,6 @@
 ### Nonlinear Fluid Viscous Damper
 
-[`ComputeFVDamperElasticity`](source/materials/ComputeFVDamperElasticity.md) material is used to simulate the hysteretic response of a nonlinear FVD element in MASTODON. Nonlinear fluid viscous dampers (FVDs) are seismic protective devices used to mitigate the effects of intense earthquake shaking on engineered structures such as nuclear power plants. Fluid viscous dampers operate on the principle of fluid flow through the orifice creating a differential pressure across the piston head and develops an internal resisting force in the damper. [citet:constantinou1995] proposed a simplified expression for the force in the damper as a function of the fractional power of relative velocity as shown in [fv_eqn1]
+[`ComputeFVDamperElasticity`](source/materials/ComputeFVDamperElasticity.md) material is used to simulate the hysteretic response of a nonlinear FVD element in MASTODON. Nonlinear fluid viscous dampers (FVDs) are seismic protective devices used to mitigate the effects of intense earthquake shaking on engineered structures such as nuclear power plants. Fluid viscous dampers operate on the principle of fluid flow through the orifice creating a differential pressure across the piston head and develops an internal resisting force in the damper. [!citet](constantinou1995) proposed a simplified expression for the force in the damper as a function of the fractional power of relative velocity as shown in [fv_eqn1]
 
 \begin{equation}
 \label{fv_eqn1}
@@ -12,12 +12,12 @@ $C_d$ is the damping coefficient,
 $\alpha$ is the velocity exponent, and
 $u\dot(t)$ is the instantaneous relative velocity in the damper.
 
-The response of the FVD is characterized by two parameters, $C_d$, and $\alpha$. For $\alpha$ = 1, [fv_eqn1] models a linear damper and the typical range for $\alpha$ is between 0.3 and 1.0 for seismic applications. Fluid viscous dampers are typically installed in the structure with an in-line brace, which provides stiffness to the damper assembly. [citet:constantinou1995] observed that such stiffness had to be addressed for response calculations and therefore modeled explicitly. The  brace can be modeled as a spring in series with the nonlinear dashpot, and the combined behavior of spring and dashpot is best represented using the Maxwell formulation, as shown in [fig:fv_maxwellmodel].
+The response of the FVD is characterized by two parameters, $C_d$, and $\alpha$. For $\alpha$ = 1, [fv_eqn1] models a linear damper and the typical range for $\alpha$ is between 0.3 and 1.0 for seismic applications. Fluid viscous dampers are typically installed in the structure with an in-line brace, which provides stiffness to the damper assembly. [!citet](constantinou1995) observed that such stiffness had to be addressed for response calculations and therefore modeled explicitly. The  brace can be modeled as a spring in series with the nonlinear dashpot, and the combined behavior of spring and dashpot is best represented using the Maxwell formulation, as shown in [fig:fv_maxwellmodel].
 
 !media media/materials/fv_damper/fv_maxwellmodel.png
        style=width:85%;margin-left:7.5%;float:center;
        id=fig:fv_maxwellmodel
-       caption=Mathematical model for a nonlinear FVD element [citep:akcelyan].
+       caption=Mathematical model for a nonlinear FVD element [!citep](akcelyan).
 
 The Maxwell model of [fig:fv_maxwellmodel] also includes the flexibility of the gussets, brackets and clevises. The overall stiffness of the damper assembly is calculated as  
 
@@ -70,4 +70,4 @@ Using [fv_eqn4] & [fv_eqn5], and rewriting the expression for the rate of change
 y^{\prime}=f(t_n,y_n) \; and \;  y(t_o)=y_o
 \end{equation}.
 
-[citet:dormandprince] proposed an iterative integration scheme known as Dormand Prince (DP54), to solve a generalized initial value problem of the form shown in [fv_eqn8]. Iterative algorithms such as DP54 are computationally more efficient than traditional integration schemes for numerical solution of initial value problems. [citet:akcelyan] proposed a framework to obtain the numerical solution of nonlinear FVD based on DP54 algorithm and that has been adopted here. For detailed information on the numerical implementation, specific to the FVD element, refer to [citet:akcelyan].
+[!citet](dormandprince) proposed an iterative integration scheme known as Dormand Prince (DP54), to solve a generalized initial value problem of the form shown in [fv_eqn8]. Iterative algorithms such as DP54 are computationally more efficient than traditional integration schemes for numerical solution of initial value problems. [!citet](akcelyan) proposed a framework to obtain the numerical solution of nonlinear FVD based on DP54 algorithm and that has been adopted here. For detailed information on the numerical implementation, specific to the FVD element, refer to [!citet](akcelyan).

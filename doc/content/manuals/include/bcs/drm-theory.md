@@ -10,7 +10,7 @@ into two parts: (i) a free-field 'source-to-site' simulation is run on the huge 
 simulation at one element layer, which is the element layer separating the bigger and smaller soil
 domain, can be transferred to a much smaller domain containing the localized feature (
 [fig:DRM](b)). This method of reducing the domain is called the domain reduction method (DRM)
-[citep:bielak2003domain]. [fig:DRM] is reproduced from [citet:bielak2003domain].
+[!citep](bielak2003domain). [fig:DRM] is reproduced from [!citet](bielak2003domain).
 
 !media media/theory/DRM.png
        style=width:100%;float:center;
