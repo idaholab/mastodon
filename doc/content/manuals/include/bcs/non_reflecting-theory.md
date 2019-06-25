@@ -1,6 +1,6 @@
 ### Non-reflecting boundary
 
-This boundary condition applies a Lysmer damper [citep:lysmer1969finite] on a given boundary to
+This boundary condition applies a Lysmer damper [!citep](lysmer1969finite) on a given boundary to
 absorb the waves hitting the boundary. To understand Lysmer dampers, let us consider an uniform
 linear elastic soil column and say a 1D vertically propagating P wave is traveling through this soil
 column. Then the normal stress at any location in the soil column is given by:

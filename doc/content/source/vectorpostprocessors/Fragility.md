@@ -47,7 +47,7 @@ are the final results, namely, the median and lognormal standard deviation of th
 seismic fragility distribution calculated for this SSC. This fragility distribution
 is calculated by fitting a lognormal distribution into the 'intensity' and 'conditional_pf'
 data using the Maximum Likelihood Estimate (MLE) fitting procedure described in
-[citet:bakermle2014].
+[!citet](bakermle2014).
 
 !listing test/tests/vectorpostprocessors/fragility/gold/fragility_out_fragility_pump_0002.csv
 

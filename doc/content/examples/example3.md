@@ -9,7 +9,7 @@ the bottom. [fig:1dsoilcolumn] demonstrates the geometry of the problem.
        style=width:60%;margin-left:150px;float:center;
        id=fig:1dsoilcolumn
        caption=Schematic of the non-uniform shear beam model (reprinted from
-               [cite:baltaji2017nonlinear]).
+               [!cite](baltaji2017nonlinear)).
 
 Below is the full input file provided to run this analysis.
 
@@ -82,9 +82,9 @@ DEEPSOIL and presented in
        style=width:60%;margin-left:150px;float:center;
        id=fig:shearbeam
        caption=Comparison of spectral accelerations from MASTODON and DEEPSOIL (modified from
-               [cite:baltaji2017nonlinear]).
+               [!cite](baltaji2017nonlinear)).
 
 Further details regarding to application of MASTODON to simulate seismic site response and soil
-structure interaction analysis can be found in [citet:baltaji2017nonlinear].
+structure interaction analysis can be found in [!citet](baltaji2017nonlinear).
 
 !bibtex bibliography

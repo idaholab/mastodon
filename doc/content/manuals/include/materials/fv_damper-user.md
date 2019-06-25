@@ -4,7 +4,7 @@
 
 !listing test/tests/materials/fv_damper/fv_damper_axial.i start=[Kernels] end=[Postprocessors]
 
-A description of each of the input parameters is provided in the [syntax description](source/materials/ComputeFVDamperElasticity.md). Additionally, the response of the nonlinear FVD to static and seismic loading is demonstrated in the examples described below. Analysis results are compared with verified and validated numerical models implemented in the open source finite element package, OpenSees ([citet:opensees2009]).
+A description of each of the input parameters is provided in the [syntax description](source/materials/ComputeFVDamperElasticity.md). Additionally, the response of the nonlinear FVD to static and seismic loading is demonstrated in the examples described below. Analysis results are compared with verified and validated numerical models implemented in the open source finite element package, OpenSees ([!citet](opensees2009)).
 
 #### Response to static loading
 
