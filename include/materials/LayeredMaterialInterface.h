@@ -111,7 +111,7 @@ template <class T>
 LayeredMaterialInterface<T>::LayeredMaterialInterface(const InputParameters & parameters)
   : T(parameters),
     _layer_variable(T::coupledValue("layer_variable")),
-    _input_layer_ids(T::template getParam<std::vector<unsigned int>>("layer_ids")),
+    _input_layer_ids(T::template getParamTempl<std::vector<unsigned int>>("layer_ids")),
     _layer_id(getLayerParam<unsigned int>("layer_ids"))
 {
   if (!dynamic_cast<Material *>(this))
@@ -169,7 +169,7 @@ const MooseArray<P> &
 LayeredMaterialInterface<T>::getLayerParam(const std::string & param_name)
 {
   // Get the parameter data and check that it is the same size as "layer_ids"
-  const std::vector<P> & data = T::template getParam<std::vector<P>>(param_name);
+  const std::vector<P> & data = T::template getParamTempl<std::vector<P>>(param_name);
   if (data.size() != _input_layer_ids.size())
     mooseError("The parameter \"",
                param_name,
