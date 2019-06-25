@@ -7,7 +7,8 @@ total stress then is the sum of the stresses from the individual elastic-perfect
 
 The three dimensional generalization of this model is achieved using von-Mises failure criteria for
 each elastic-perfectly plastic curve resulting in an invariant yield surfaces in three-dimensional
-stress space like in [fig:yieldsurface] (after [!citet](chiang1994anew)).
+stress space like in [fig:yieldsurface]
+(after [!citet](chiang1994anew)).
 
 !media media/yield_surface.png
        style=width:40%;float:right;margin:20px;padding:20px;
