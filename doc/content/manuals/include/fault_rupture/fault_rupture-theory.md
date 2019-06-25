@@ -39,7 +39,8 @@ M_{zz}(t) &= M_o(t) \sin 2\delta \sin \lambda
 
 Each component of the above matrix is a force couple with the first index representing the force
 direction and the second index representing the direction in which the forces are separated (see
-[fig:source_direction]; [!citet](aki2012quantitative)).
+[fig:source_direction]; 
+[!citet](aki2012quantitative)).
 
 !media media/source_direction.png
        style=width:60%;margin-left:150px;
