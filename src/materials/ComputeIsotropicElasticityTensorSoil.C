@@ -56,8 +56,9 @@ getShearModulus(ComputeIsotropicElasticityTensorSoil * object,
                 std::string name)
 {
   if (object->isParamValid("shear_modulus") && object->isParamValid("elastic_modulus"))
-    mooseError("In block " + name + ". Please provide ONE of the parameters, 'shear_modulus' and "
-                                    "'elastic_modulus', but not both.");
+    mooseError("In block " + name +
+               ". Please provide ONE of the parameters, 'shear_modulus' and "
+               "'elastic_modulus', but not both.");
   if (!object->isParamValid("shear_modulus") && !object->isParamValid("elastic_modulus"))
     mooseError("In block " + name +
                ". Please provide ONE of the parameters, 'shear_modulus' or 'elastic_modulus'.");
@@ -66,9 +67,9 @@ getShearModulus(ComputeIsotropicElasticityTensorSoil * object,
   else
   {
     const std::vector<Real> & elastic_modulus =
-        object->getParam<std::vector<Real>>("elastic_modulus");
+        object->getParamTempl<std::vector<Real>>("elastic_modulus");
     const std::vector<Real> & poissons_ratio =
-        object->getParam<std::vector<Real>>("poissons_ratio");
+        object->getParamTempl<std::vector<Real>>("poissons_ratio");
     shear_modulus.resize(elastic_modulus.size());
     for (std::size_t i = 0; i < shear_modulus.size(); ++i)
       shear_modulus[i] = elastic_modulus[i] / (2 * (1 + poissons_ratio[i]));

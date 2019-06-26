@@ -46,7 +46,7 @@ HazardCurveTransfer::execute()
         "The HazardCurveTransfer '", name(), "' will only work with a HazardCurveMultiApp object.");
 
   // Get input required for transfer
-  const HazardCurve & hazard_curve = ptr->getUserObject<HazardCurve>("hazard");
+  const HazardCurve & hazard_curve = ptr->getUserObjectTempl<HazardCurve>("hazard");
   const std::string & function_name = getParam<std::string>("function");
   GroundMotionReader::Component comp =
       getParam<MooseEnum>("component").getEnum<GroundMotionReader::Component>();
