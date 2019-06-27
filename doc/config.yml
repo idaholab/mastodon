@@ -75,6 +75,9 @@ Extensions:
 
     MooseDocs.extensions.sqa:
         repo: idaholab/mastodon
+        #categories:
+        #    Mastodon:
+        #        directories: .
         requirement-groups:
             dgkernels: DGKernel Objects
             interfacekernels: InterfaceKernel Objects
