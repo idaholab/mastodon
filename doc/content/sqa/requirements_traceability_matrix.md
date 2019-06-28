@@ -2,5 +2,5 @@
                project=MASTODON
 
 !template! item key=requirements-traceability-matrix
-!sqa requirements
+!!sqa requirements category=Mastodon
 !template-end!
