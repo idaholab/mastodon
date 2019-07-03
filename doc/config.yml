@@ -35,7 +35,7 @@ Extensions:
                 Example 4: examples/example4.md
             Manuals:
                 Theory: manuals/theory/index.md
-                Software Quality: sqa/index.md
+                #Software Quality: sqa/index.md
                 User: manuals/user/index.md
                 Developer: manuals/developer/index.md
             News: news/index.md
@@ -74,6 +74,7 @@ Extensions:
         acronyms: !include ${MOOSE_DIR}/framework/doc/acronyms.yml
 
     MooseDocs.extensions.sqa:
+        active: False
         repo: idaholab/mastodon
         #categories:
         #    Mastodon:
