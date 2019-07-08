@@ -231,13 +231,13 @@
 [Executioner]
   type = Transient
   solve_type = PJFNK
-  nl_abs_tol = 1e-4
-  nl_rel_tol = 1e-4
-  l_tol = 1e-4
+  nl_abs_tol = 1e-3
+  nl_rel_tol = 1e-3
+  l_tol = 1e-3
   l_max_its = 20
   start_time = 0
   end_time = 85.4
-  dt = 0.03
+  dt = 0.05
   timestep_tolerance = 1e-4
   petsc_options = '-snes_ksp_ew'
   petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
