@@ -65,6 +65,9 @@ bool isNegativeOrZero(const std::vector<Real> & vector);
  */
 Real mean(const std::vector<Real> & vector);
 
+std::vector<std::vector<Real>> VectorMean(const std::vector<std::vector<Real> *> & history_acc,
+  const std::vector<Real> & history_time);
+
 /**
  * Function to calculate the median of the elements in a vector
  */
