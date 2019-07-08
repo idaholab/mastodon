@@ -35,7 +35,7 @@ public:
   ResponseHistoryMean(const InputParameters & parameters);
   virtual void initialize() override;
   virtual void initialSetup() override;
-  virtual void finalize() override;
+  // virtual void finalize() override;
   virtual void execute() override;
   // const std::vector<VectorPostprocessorValue *> & getHistories() const;
   // const std::vector<std::string> & getHistoryNames() const;

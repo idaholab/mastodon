@@ -237,7 +237,7 @@
   l_max_its = 20
   start_time = 0
   end_time = 85.4
-  dt = 0.05
+  dt = 0.2
   timestep_tolerance = 1e-4
   petsc_options = '-snes_ksp_ew'
   petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
@@ -274,6 +274,11 @@
     variables = 'accel_x'
     nodes = '51 83'
   [../]
+  [./accel_mean]
+    type = ResponseHistoryMean
+    vectorpostprocessor = accel_nodes
+    outputs = Test
+  [../]
 []
 
 [Outputs]
@@ -282,6 +287,10 @@
   perf_graph = true
   print_linear_residuals = false
   execute_on = 'final'
+[./Test]
+  type = CSV
+  execute_on = 'final'
+[../]
   [./screen]
     type = Console
     max_rows = 1

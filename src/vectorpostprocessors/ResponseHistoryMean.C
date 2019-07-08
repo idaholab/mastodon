@@ -19,6 +19,7 @@ validParams<ResponseHistoryMean>()
   /* params.addRequiredParam<std::vector<Real>>(
           "mean_acc_history",
           "Mean of acceleration time histories of multiple nodes."); */
+
   // Make sure that csv files are created only at the final timestep
   params.set<bool>("contains_complete_history") = true;
   params.suppressParameter<bool>("contains_complete_history");
@@ -26,7 +27,7 @@ validParams<ResponseHistoryMean>()
   params.set<ExecFlagEnum>("execute_on") = {EXEC_FINAL};
   params.suppressParameter<ExecFlagEnum>("execute_on");
 
-  params.addClassDescription("Calculate the response spectrum at the requested nodes or points.");
+  params.addClassDescription("Calculate the mean acceleration time series given a set of nodes.");
   return params;
 }
 
@@ -81,17 +82,4 @@ ResponseHistoryMean::execute()
   *_mean_acc[0] = vec_mean_acc[0];
   *_mean_acc[1] = vec_mean_acc[1];
 
-
-/*  for (std::size_t i = 0; i < _history_acc.size(); ++i)
-  {
-
-    // Calculation of the response spectrum. All three spectra: displacmeent,
-    // velocity and acceleration, are calculated and output into a csv file.
-    std::vector<std::vector<Real>> var_spectrum = MastodonUtils::responseSpectrum(
-        _freq_start, _freq_end, _freq_num, reg_vector[1], _xi, _reg_dt);
-    _frequency = var_spectrum[0];
-    *_spectrum[3 * i] = var_spectrum[1];
-    *_spectrum[3 * i + 1] = var_spectrum[2];
-    *_spectrum[3 * i + 2] = var_spectrum[3];
-  }*/
 }
