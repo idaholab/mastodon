@@ -10,6 +10,10 @@
 #include "tinydir.h"
 #include "MooseUtils.h"
 
+#include <iostream>
+#include <fstream>
+using namespace std;
+
 // MASTODON includes
 #include "MastodonUtils.h"
 
@@ -125,6 +129,26 @@ MastodonUtils::mean(const std::vector<Real> & vector)
 }
 
 std::vector<std::vector<Real>>
+MastodonUtils::mean(const std::vector<std::vector<Real> *> & history_acc,
+  const std::vector<Real> & history_time)
+{
+  std::vector<Real> mean_acc;
+  Real req_size = history_time.size();
+  mean_acc.resize(req_size);
+  Real tmp_var = 0;
+for (std::size_t i = 0; i < req_size; i++)
+{
+  for (std::size_t j = 0; j < history_acc.size(); j++)
+  {
+    tmp_var = tmp_var + (*history_acc[j])[i];
+  }
+  mean_acc[i] = tmp_var/history_acc.size();
+  tmp_var = 0;
+}
+  return {history_time, mean_acc};
+}
+
+/* std::vector<std::vector<Real>>
 MastodonUtils::VectorMean(const std::vector<std::vector<Real> *> & history_acc,
   const std::vector<Real> & history_time)
 {
@@ -136,13 +160,14 @@ for (std::size_t i = 0; i < req_size; i++)
 {
   for (std::size_t j = 0; j < history_acc.size(); j++)
   {
-    tmp_var = tmp_var + (*history_acc[i])[j];
+    tmp_var = tmp_var + (*history_acc[j])[i];
   }
   mean_acc[i] = tmp_var/history_acc.size();
+  cout << mean_acc[i] << endl;
   tmp_var = 0;
 }
   return {history_time, mean_acc};
-}
+}*/
 
 Real
 MastodonUtils::median(const std::vector<Real> & vector, const std::string & interpolation)

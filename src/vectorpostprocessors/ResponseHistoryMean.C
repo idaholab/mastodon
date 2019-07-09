@@ -4,6 +4,9 @@
 #include "VectorPostprocessorInterface.h"
 #include "MastodonUtils.h"
 #include "ResponseHistoryBuilder.h"
+#include <iostream>
+#include <fstream>
+using namespace std;
 
 registerMooseObject("MastodonApp", ResponseHistoryMean);
 
@@ -16,9 +19,6 @@ validParams<ResponseHistoryMean>()
       "vectorpostprocessor",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "
       "response spectra are calculated.");
-  /* params.addRequiredParam<std::vector<Real>>(
-          "mean_acc_history",
-          "Mean of acceleration time histories of multiple nodes."); */
 
   // Make sure that csv files are created only at the final timestep
   params.set<bool>("contains_complete_history") = true;
@@ -33,9 +33,6 @@ validParams<ResponseHistoryMean>()
 
 ResponseHistoryMean::ResponseHistoryMean(const InputParameters & parameters)
   : GeneralVectorPostprocessor(parameters),
-  // _mean_acc(declareVector("mean_acc_history")),
-    //_frequency(declareVector("frequency")),
-    // Time vector from the response history builder vector postprocessor
     _history_time(getVectorPostprocessorValue("vectorpostprocessor", "time"))
 
 {
@@ -50,13 +47,14 @@ ResponseHistoryMean::initialSetup()
       history_vpp.getHistoryNames(); // names of the vectors in responsehistorybuilder
   _history_acc.resize(history_names.size());
 
-  // Declaring three spectrum vectors: displacement, velocity and acceleration
-  // for each vector in history VPP.
-  // for (const std::string & name : _varnames)
+
   for (std::size_t i = 0; i < history_names.size(); i++)
   {
     _history_acc[i] = history_vpp.getHistories()[i];
   }
+
+// Declaring a vector of pointers for storing the addresses of the time vector
+// and the mean response history vector.
 
   _mean_acc.push_back(&declareVector("_time"));
   _mean_acc.push_back(&declareVector("_mean"));
@@ -73,11 +71,11 @@ void
 ResponseHistoryMean::execute()
 {
 
-  /*std::vector<std::vector<Real>> vec_mean_acc = MastodonUtils::responseSpectrum(
-      _freq_start, _freq_end, _freq_num, reg_vector[1], _xi, _reg_dt);*/
+// Calling the "mean" (overloaded) function to compute the mean of response
+// histories.
 
   std::vector<std::vector<Real>> vec_mean_acc =
-  MastodonUtils::VectorMean(_history_acc, _history_time);
+  MastodonUtils::mean(_history_acc, _history_time);
 
   *_mean_acc[0] = vec_mean_acc[0];
   *_mean_acc[1] = vec_mean_acc[1];
