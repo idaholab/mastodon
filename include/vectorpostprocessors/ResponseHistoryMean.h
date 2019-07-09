@@ -38,18 +38,16 @@ public:
   virtual void execute() override;
 
 protected:
-
   /// Vector containing the time values in the simulation.
   std::vector<VectorPostprocessorValue *> _mean_acc;
 
   /// Vector containing the time values in the simulation.
   const VectorPostprocessorValue & _history_time;
 
-
-std::vector<VectorPostprocessorValue *> _history_acc;
+  std::vector<VectorPostprocessorValue *> _history_acc;
 
   /// Vector of pointers to the response histories of different variables at the node.
-std::vector<VectorPostprocessorValue *> _history;
+  std::vector<VectorPostprocessorValue *> _history;
 
   /// Vector of names of VPPs output to the csv file in the same order as in _history
   std::vector<std::string> _history_names;
@@ -59,9 +57,6 @@ std::vector<VectorPostprocessorValue *> _history;
 
   /// Stores the data for each VPP on the current timestep
   std::vector<Real> _current_data;
-
-
-
 };
 
 #endif

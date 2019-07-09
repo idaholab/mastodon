@@ -47,15 +47,14 @@ ResponseHistoryMean::initialSetup()
       history_vpp.getHistoryNames(); // names of the vectors in responsehistorybuilder
   _history_acc.resize(history_names.size());
 
-
   for (std::size_t i = 0; i < history_names.size(); i++)
   {
     // cout << history_names[i] << endl;
     _history_acc[i] = history_vpp.getHistories()[i];
   }
 
-// Declaring a vector of pointers for storing the addresses of the time vector
-// and the mean response history vector.
+  // Declaring a vector of pointers for storing the addresses of the time vector
+  // and the mean response history vector.
 
   _mean_acc.push_back(&declareVector("_time"));
   _mean_acc.push_back(&declareVector("_mean"));
@@ -72,13 +71,11 @@ void
 ResponseHistoryMean::execute()
 {
 
-// Calling the "mean" (overloaded) function to compute the mean of response
-// histories.
+  // Calling the "mean" (overloaded) function to compute the mean of response
+  // histories.
 
-  std::vector<std::vector<Real>> vec_mean_acc =
-  MastodonUtils::mean(_history_acc, _history_time);
+  std::vector<std::vector<Real>> vec_mean_acc = MastodonUtils::mean(_history_acc, _history_time);
 
   *_mean_acc[0] = vec_mean_acc[0];
   *_mean_acc[1] = vec_mean_acc[1];
-
 }
