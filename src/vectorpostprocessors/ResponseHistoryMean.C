@@ -4,9 +4,9 @@
 #include "VectorPostprocessorInterface.h"
 #include "MastodonUtils.h"
 #include "ResponseHistoryBuilder.h"
-#include <iostream>
+/* #include <iostream>
 #include <fstream>
-using namespace std;
+using namespace std;*/
 
 registerMooseObject("MastodonApp", ResponseHistoryMean);
 
@@ -50,6 +50,7 @@ ResponseHistoryMean::initialSetup()
 
   for (std::size_t i = 0; i < history_names.size(); i++)
   {
+    // cout << history_names[i] << endl;
     _history_acc[i] = history_vpp.getHistories()[i];
   }
 

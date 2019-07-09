@@ -1,0 +1,41 @@
+[Tests]
+  design = 'source/vectorpostprocessors/ResponseHistoryMean.md'
+  issues = '#219'
+
+  [./meanhist]
+    type = CSVDiff
+    input = response_history_mean.i
+    csvdiff = response_history_mean_out_disp_mean.csv
+
+    requirement = "The ResponseHistoryMean vectorpostprocessor shall accurately calculate the mean response history during a serial execution."
+  [../]
+  [./meanhist_parallel]
+    type = CSVDiff
+    input = response_history_mean.i
+    csvdiff = response_history_mean_out_disp_mean.csv
+    prereq = meanhist
+    min_parallel = 3
+    max_parallel = 3
+
+    requirement = "The ResponseHistoryMean vectorpostprocessor shall accurately calculate the mean response history during a parallel execution."
+  [../]
+  [./meanhist_threads]
+    type = CSVDiff
+    input = response_history_mean.i
+    csvdiff = response_history_mean_out_disp_mean.csv
+    prereq = meanhist_parallel
+    min_threads = 3
+
+    requirement = "The ResponseHistoryMean vectorpostprocessor shall accurately calculate the mean response history during a parallel execution."
+  [../]
+  [./meanhist_threads_parallel]
+    type = CSVDiff
+    input = response_history_mean.i
+    csvdiff = response_history_mean_out_disp_mean.csv
+    prereq = meanhist_threads
+    min_threads = 3
+    min_parallel = 2
+
+    requirement = "The ResponseHistoryMean vectorpostprocessor shall accurately calculate the mean response history during a parallel execution."
+  [../]
+[]
