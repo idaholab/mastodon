@@ -24,8 +24,8 @@ Extensions:
         home: https://www.mooseframework.org/mastodon
         menu:
             Getting Started:
-                Installation (MacOS): getting_started/macos.md
-                Installation (Ubuntu): getting_started/ubuntu.md
+                MacOS (Mojave): installation/macos.md
+                Ubuntu: installation/ubuntu.md
                 Running MASTODON: getting_started/running_mastodon.md
             Examples:
                 Overview: examples/index.md
@@ -75,9 +75,9 @@ Extensions:
 
     MooseDocs.extensions.sqa:
         repo: idaholab/mastodon
-        #categories:
-        #    Mastodon:
-        #        directories: .
+        categories:
+            Mastodon:
+                directories: .
         requirement-groups:
             dgkernels: DGKernel Objects
             interfacekernels: InterfaceKernel Objects

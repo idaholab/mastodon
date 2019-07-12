@@ -1,9 +1,3 @@
-# Ubuntu Installation
-
-!include /minimum_requirements.md
-
-!include /ubuntu_pre_req.md
-
-!include /post_package_install.md
+!include /installation/ubuntu.md end=install_moos
 
 !include getting_started/mastodon.md

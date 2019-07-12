@@ -1,9 +1,5 @@
-# Mac OS Installation
+# MacOS Installation
 
-!include /minimum_requirements.md
+!include installation/macos_mojave.md end=install_moose.md
 
-!include /mac_pre_req.md
-
-!include /post_package_install.md
-
-!include getting_started/mastodon.md 
+!include getting_started/mastodon.md
