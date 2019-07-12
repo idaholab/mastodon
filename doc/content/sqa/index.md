@@ -12,17 +12,17 @@
 
 ## Requirements
 
-- [System Requirement Specification (SRS)](sqa/system_requirement_specification.md)
+- [System Requirement Specification (SRS)](sqa/mastodon_srs.md)
 
 ## Design
 
-- [System Design Description (SDD)](sqa/software_design_description.md)
+- [System Design Description (SDD)](sqa/mastodon_sdd.md)
 
 ## Testing
 
-- [Software Test Plan (STP)](sqa/software_test_plan.md)
-- [Requirements Traceability Matrix (RTM)](sqa/requirements_traceability_matrix.md)
-- [Verification and Validation Results Report](sqa/verification_and_validation_results_report.md)
+- [Software Test Plan (STP)](sqa/mastodon_stp.md)
+- [Requirements Traceability Matrix (RTM)](sqa/mastodon_rtm.md)
+- [Verification and Validation Results Report](sqa/mastodon_vvr.md)
 
 ## Other Documentation
 
