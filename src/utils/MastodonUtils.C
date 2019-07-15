@@ -142,6 +142,7 @@ MastodonUtils::mean(const std::vector<Real> & vector)
 std::vector<Real>
 MastodonUtils::mean(const std::vector<std::vector<Real> *> & history_acc)
 {
+  
   // bool check = ;
   if (MastodonUtils::checkEqualSize(history_acc) < 1)
      mooseError("Input vectors are all not of equal size.");
