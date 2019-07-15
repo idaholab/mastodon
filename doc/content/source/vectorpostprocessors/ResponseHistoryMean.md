@@ -11,7 +11,7 @@ For example, the input file below contains a `ResponseHistoryBuilder` VectorPost
 !alert note
 `ResponseHistoryMean` assumes that the response histories calculated in the vectorpostprocessor, provided in the `vectorpostprocessor` parameter in the input, are quantities of the same type (i.e., accelerations, velocities, or displacements). No checks will be performed to ensure that the input response histories are of the same type. The user should ensure this by defining the corresponding `ResponseHistoryBuilder` appropriately.
 
-Special care must be taken to ensure that the mean response history calculations are performed only at the end of the simulation (last time step) and not at every time step. In order to accomplish this, an 'Outputs' block must be created as shown below. This block (named 'out') ensures that the CSV output is only calculated at the final timestep.
+Because mean response history calculations are performed only at the end of the simulation (last time step) and not at every time step, an 'Outputs' block must be created as shown below. This block (named 'out') ensures that the CSV output is only calculated at the final timestep.
 
 !listing test/tests/vectorpostprocessors/response_history_mean/response_history_mean.i block=Outputs
 

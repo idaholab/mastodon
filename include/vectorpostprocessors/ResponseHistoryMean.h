@@ -17,6 +17,7 @@
 
 // MOOSE includes
 #include "GeneralVectorPostprocessor.h"
+#include "ResponseHistoryBuilder.h"
 
 // Forward Declarations
 class ResponseHistoryMean;
@@ -35,28 +36,23 @@ public:
   ResponseHistoryMean(const InputParameters & parameters);
   virtual void initialize() override;
   virtual void initialSetup() override;
+
   virtual void execute() override;
 
 protected:
-  /// Vector containing the time values in the simulation.
-  std::vector<VectorPostprocessorValue *> _mean_acc;
 
   /// Vector containing the time values in the simulation.
-  const VectorPostprocessorValue & _history_time;
+  const VectorPostprocessorValue & _tmp; // This is a temporary variable.
+  VectorPostprocessorValue & _history_time;
 
-  std::vector<VectorPostprocessorValue *> _history_acc;
+  /// Vector containing the time values in the simulation.
+  VectorPostprocessorValue & _history_mean;
+  //std::vector<VectorPostprocessorValue *> _history_mean
+
 
   /// Vector of pointers to the response histories of different variables at the node.
-  std::vector<VectorPostprocessorValue *> _history;
+  const ResponseHistoryBuilder & _builder;
 
-  /// Vector of names of VPPs output to the csv file in the same order as in _history
-  std::vector<std::string> _history_names;
-
-  /// Vector of pointers to the values of the variables at each time step.
-  std::vector<const VariableValue *> _variables;
-
-  /// Stores the data for each VPP on the current timestep
-  std::vector<Real> _current_data;
 };
 
 #endif

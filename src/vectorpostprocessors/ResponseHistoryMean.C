@@ -4,9 +4,7 @@
 #include "VectorPostprocessorInterface.h"
 #include "MastodonUtils.h"
 #include "ResponseHistoryBuilder.h"
-/* #include <iostream>
-#include <fstream>
-using namespace std;*/
+
 
 registerMooseObject("MastodonApp", ResponseHistoryMean);
 
@@ -33,7 +31,11 @@ validParams<ResponseHistoryMean>()
 
 ResponseHistoryMean::ResponseHistoryMean(const InputParameters & parameters)
   : GeneralVectorPostprocessor(parameters),
-    _history_time(getVectorPostprocessorValue("vectorpostprocessor", "time"))
+  _tmp(getVectorPostprocessorValue("vectorpostprocessor", "time")),
+  _history_time(declareVector("time")),
+    _history_mean(declareVector("mean")),
+    _builder(getUserObjectByName<ResponseHistoryBuilder>(
+        getParam<VectorPostprocessorName>("vectorpostprocessor")))
 
 {
 }
@@ -41,41 +43,22 @@ ResponseHistoryMean::ResponseHistoryMean(const InputParameters & parameters)
 void
 ResponseHistoryMean::initialSetup()
 {
-  const ResponseHistoryBuilder & history_vpp = getUserObjectByName<ResponseHistoryBuilder>(
-      getParam<VectorPostprocessorName>("vectorpostprocessor"));
-  std::vector<std::string> history_names =
-      history_vpp.getHistoryNames(); // names of the vectors in responsehistorybuilder
-  _history_acc.resize(history_names.size());
-
-  for (std::size_t i = 0; i < history_names.size(); i++)
-  {
-    // cout << history_names[i] << endl;
-    _history_acc[i] = history_vpp.getHistories()[i];
-  }
-
-  // Declaring a vector of pointers for storing the addresses of the time vector
-  // and the mean response history vector.
-
-  _mean_acc.push_back(&declareVector("_time"));
-  _mean_acc.push_back(&declareVector("_mean"));
 }
 
 void
 ResponseHistoryMean::initialize()
 {
-  for (VectorPostprocessorValue * ptr : _mean_acc)
-    ptr->clear();
 }
 
 void
 ResponseHistoryMean::execute()
 {
 
+  // Returning the times when response is recorded as an output.
+  _history_time = _tmp;
+
   // Calling the "mean" (overloaded) function to compute the mean of response
   // histories.
+  _history_mean = MastodonUtils::mean(_builder.getHistories());
 
-  std::vector<std::vector<Real>> vec_mean_acc = MastodonUtils::mean(_history_acc, _history_time);
-
-  *_mean_acc[0] = vec_mean_acc[0];
-  *_mean_acc[1] = vec_mean_acc[1];
 }

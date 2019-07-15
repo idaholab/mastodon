@@ -48,6 +48,8 @@ std::vector<std::vector<Real>> regularize(const std::vector<Real> & history_acc,
  */
 bool checkEqualSize(const std::vector<std::vector<Real>> & vectors);
 
+bool checkEqualSize(const std::vector<std::vector<Real> *> & vectors);
+
 /**
  * Function to check if two vectors are equal
  */
@@ -69,8 +71,7 @@ Real mean(const std::vector<Real> & vector);
  * Function to calculate the mean vector of the elements in a vector of pointers
  */
 
-std::vector<std::vector<Real>> mean(const std::vector<std::vector<Real> *> & history_acc,
-                                    const std::vector<Real> & history_time);
+std::vector<Real> mean(const std::vector<std::vector<Real> *> & history_acc);
 
 /**
  * Function to calculate the median of the elements in a vector
