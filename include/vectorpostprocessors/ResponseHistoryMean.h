@@ -40,19 +40,16 @@ public:
   virtual void execute() override;
 
 protected:
-
   /// Vector containing the time values in the simulation.
   const VectorPostprocessorValue & _tmp; // This is a temporary variable.
   VectorPostprocessorValue & _history_time;
 
   /// Vector containing the time values in the simulation.
   VectorPostprocessorValue & _history_mean;
-  //std::vector<VectorPostprocessorValue *> _history_mean
-
+  // std::vector<VectorPostprocessorValue *> _history_mean
 
   /// Vector of pointers to the response histories of different variables at the node.
   const ResponseHistoryBuilder & _builder;
-
 };
 
 #endif

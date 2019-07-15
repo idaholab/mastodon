@@ -10,10 +10,6 @@
 #include "tinydir.h"
 #include "MooseUtils.h"
 
-#include <iostream>
-#include <fstream>
-
-
 // MASTODON includes
 #include "MastodonUtils.h"
 
@@ -142,27 +138,26 @@ MastodonUtils::mean(const std::vector<Real> & vector)
 std::vector<Real>
 MastodonUtils::mean(const std::vector<std::vector<Real> *> & history_acc)
 {
-  
   // bool check = ;
   if (MastodonUtils::checkEqualSize(history_acc) < 1)
-     mooseError("Input vectors are all not of equal size.");
-  else {
+    mooseError("Input vectors are all not of equal size.");
+  else
+  {
     std::vector<Real> mean_acc;
     mean_acc.resize((*history_acc[0]).size());
     Real tmp_var = 0;
-     for (std::size_t i = 0; i < (*history_acc[0]).size(); i++)
-       {
-        for (std::size_t j = 0; j < history_acc.size(); j++)
-         {
-          tmp_var = tmp_var + (*history_acc[j])[i];
-         }
-         mean_acc[i] = tmp_var / history_acc.size();
-         tmp_var = 0;
-       }
-      return {mean_acc};
+    for (std::size_t i = 0; i < (*history_acc[0]).size(); i++)
+    {
+      for (std::size_t j = 0; j < history_acc.size(); j++)
+      {
+        tmp_var = tmp_var + (*history_acc[j])[i];
+      }
+      mean_acc[i] = tmp_var / history_acc.size();
+      tmp_var = 0;
     }
+    return mean_acc;
+  }
 }
-
 
 Real
 MastodonUtils::median(const std::vector<Real> & vector, const std::string & interpolation)

@@ -133,14 +133,12 @@ TEST(MastodonUtils, mean)
   std::vector<Real> vec1 = {0.5, 1.7, 1.7, 0.6, 4};
   std::vector<Real> vec2 = {0.75, 1, 0.6, 2, 2.58};
   std::vector<Real> vec3 = {1, 3, 4.2, 2.6, 3.68};
-  // std::cout << &vec1 << std::endl;
+
   std::vector<std::vector<Real> *> vecs = {&vec1, &vec2, &vec3};
   // Outputs for testing
   std::vector<Real> meanvec_of_vecs = {0.75, 1.9, 2.3, 1.5, 3.42};
   // Value check
-  EXPECT_EQ(MastodonUtils::checkEqual(MastodonUtils::mean(vecs),
-                            meanvec_of_vecs,
-                            100),1);
+  EXPECT_EQ(MastodonUtils::checkEqual(MastodonUtils::mean(vecs), meanvec_of_vecs, 100), 1);
 }
 
 // Test for median function in MastodonUtils

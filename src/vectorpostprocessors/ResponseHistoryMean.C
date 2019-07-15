@@ -5,7 +5,6 @@
 #include "MastodonUtils.h"
 #include "ResponseHistoryBuilder.h"
 
-
 registerMooseObject("MastodonApp", ResponseHistoryMean);
 
 template <>
@@ -31,8 +30,8 @@ validParams<ResponseHistoryMean>()
 
 ResponseHistoryMean::ResponseHistoryMean(const InputParameters & parameters)
   : GeneralVectorPostprocessor(parameters),
-  _tmp(getVectorPostprocessorValue("vectorpostprocessor", "time")),
-  _history_time(declareVector("time")),
+    _tmp(getVectorPostprocessorValue("vectorpostprocessor", "time")),
+    _history_time(declareVector("time")),
     _history_mean(declareVector("mean")),
     _builder(getUserObjectByName<ResponseHistoryBuilder>(
         getParam<VectorPostprocessorName>("vectorpostprocessor")))
@@ -60,5 +59,4 @@ ResponseHistoryMean::execute()
   // Calling the "mean" (overloaded) function to compute the mean of response
   // histories.
   _history_mean = MastodonUtils::mean(_builder.getHistories());
-
 }
