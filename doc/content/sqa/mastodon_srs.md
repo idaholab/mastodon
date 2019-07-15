@@ -1,3 +1,6 @@
+!!template load file=app_srs.md.template app=MASTODON category=mastodon
+
+!!!
 !SQA-load system_requirements_specification.md
 
 !SQA-template-item project_description
@@ -120,3 +123,4 @@ Detailed installation instructions, including the following installation conside
     IC1.5 Verification Testing:  Once the system has been compiled successfully, it is required to run the tests to make sure the version of the code installed is running correctly.
 
 !END-template-item
+!!!
