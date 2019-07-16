@@ -1,8 +1,8 @@
-# Example 5b: Dynamic response of a simplified 1D model of Nuclear Power Plant  with mesh generated using BeamMeshGenerator.
+# Example 5b: Dynamic response of a simplified 1D model of a nuclear power plant  with mesh generated using BeamMeshGenerator.
 
 ## Model
 
-This example demonstrates the use of [BeamMeshGenerator](source/index.md) to create a 1D line model of the simplified stick model of a nuclear power plant taken from the SASSI2000 user manual [citet:sassiuser2006], described in [Example 5a](examples/example5a). The rotations of the stick model is restrained at the base and the same input acceleration time history as shown in [Example 5a](examples/example5a) is applied at the base of the structure. The  dynamic responses thus obtained are compared with the dynamic responses obtained from input file which imports a mesh file generated using [Cubit](https://cubit.sandia.gov/).
+This example demonstrates the use of [BeamMeshGenerator](source/index.md) to create a 1D line model of the simplified stick model of a nuclear power plant taken from the SASSI2000 user manual [!citet](sassiuser2006), described in [Example 5a](examples/example5a). The base-mat is not modeled and the rotations of the stick model are restrained at the base and the same input acceleration time history as shown in [Example 5a](examples/example5a) is applied at the base of the structure. The dynamic responses thus obtained are compared with the dynamic responses obtained from input file which imports a mesh file generated using [Cubit](https://cubit.sandia.gov/).
 
 
 !listing examples/ex05b/beam_constraint.i
@@ -54,6 +54,8 @@ The response spectra at the top of the internal and containment structures thus 
 
 !row-end!
 
+!row!
+
 !col! small=12 medium=6 large=6
 !media media/examples/5b/containmenty.png
        style=width:400px id=fig:containmenty
@@ -65,5 +67,10 @@ The response spectra at the top of the internal and containment structures thus 
        style=width:400px id=fig:containmentz
        caption=Comparison of the Response Spectra at at an elevation of 61 ft at internal structure in Z-direction
 !col-end!
+
+!row-end!
+
+
+
 
 !bibtex bibliography
