@@ -13,7 +13,7 @@ validParams<ResponseHistoryMean>()
 {
   InputParameters params = validParams<GeneralVectorPostprocessor>();
   params.addRequiredParam<VectorPostprocessorName>(
-      "vectorpostprocessor",
+      "response_history",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "
       "response spectra are calculated.");
 
@@ -24,23 +24,16 @@ validParams<ResponseHistoryMean>()
   params.set<ExecFlagEnum>("execute_on") = {EXEC_FINAL};
   params.suppressParameter<ExecFlagEnum>("execute_on");
 
-  params.addClassDescription("Calculate the mean acceleration time series given a set of nodes.");
+  params.addClassDescription("Calculate the mean acceleration time series given a response history.");
   return params;
 }
 
 ResponseHistoryMean::ResponseHistoryMean(const InputParameters & parameters)
   : GeneralVectorPostprocessor(parameters),
-    _tmp(getVectorPostprocessorValue("vectorpostprocessor", "time")),
+    _builder_time(getVectorPostprocessorValue("response_history", "time")),
     _history_time(declareVector("time")),
     _history_mean(declareVector("mean")),
-    _builder(getUserObjectByName<ResponseHistoryBuilder>(
-        getParam<VectorPostprocessorName>("vectorpostprocessor")))
-
-{
-}
-
-void
-ResponseHistoryMean::initialSetup()
+    _builder(getUserObject<ResponseHistoryBuilder>("response_history"))
 {
 }
 
@@ -52,11 +45,9 @@ ResponseHistoryMean::initialize()
 void
 ResponseHistoryMean::execute()
 {
-
   // Returning the times when response is recorded as an output.
-  _history_time = _tmp;
+  _history_time = _builder_time;
 
-  // Calling the "mean" (overloaded) function to compute the mean of response
-  // histories.
+  // Calling the "mean" (overloaded) function to compute the mean of response  histories.
   _history_mean = MastodonUtils::mean(_builder.getHistories());
 }

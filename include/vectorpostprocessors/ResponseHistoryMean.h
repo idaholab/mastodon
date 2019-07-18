@@ -12,11 +12,12 @@
 /*     See COPYRIGHT for full restrictions       */
 /*************************************************/
 
-#ifndef RESPONSEHISTORYMEAN_H
-#define RESPONSEHISTORYMEAN_H
+#pragma once
 
 // MOOSE includes
 #include "GeneralVectorPostprocessor.h"
+
+// MASTODON includes
 #include "ResponseHistoryBuilder.h"
 
 // Forward Declarations
@@ -35,21 +36,19 @@ class ResponseHistoryMean : public GeneralVectorPostprocessor
 public:
   ResponseHistoryMean(const InputParameters & parameters);
   virtual void initialize() override;
-  virtual void initialSetup() override;
-
   virtual void execute() override;
 
 protected:
-  /// Vector containing the time values in the simulation.
-  const VectorPostprocessorValue & _tmp; // This is a temporary variable.
+
+  /// Times from ResponseHistoryBuilder, used to set the times for this VPP
+  const VectorPostprocessorValue & _builder_time;
+
+  /// Storage for the times of response history mean
   VectorPostprocessorValue & _history_time;
 
   /// Vector containing the time values in the simulation.
   VectorPostprocessorValue & _history_mean;
-  // std::vector<VectorPostprocessorValue *> _history_mean
 
   /// Vector of pointers to the response histories of different variables at the node.
   const ResponseHistoryBuilder & _builder;
 };
-
-#endif
