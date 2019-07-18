@@ -24,7 +24,8 @@ validParams<ResponseHistoryMean>()
   params.set<ExecFlagEnum>("execute_on") = {EXEC_FINAL};
   params.suppressParameter<ExecFlagEnum>("execute_on");
 
-  params.addClassDescription("Calculate the mean acceleration time series given a response history.");
+  params.addClassDescription(
+      "Calculate the mean acceleration time series given a response history.");
   return params;
 }
 

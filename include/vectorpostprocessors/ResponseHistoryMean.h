@@ -39,7 +39,6 @@ public:
   virtual void execute() override;
 
 protected:
-
   /// Times from ResponseHistoryBuilder, used to set the times for this VPP
   const VectorPostprocessorValue & _builder_time;
 
