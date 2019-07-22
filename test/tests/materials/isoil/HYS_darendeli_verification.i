@@ -1,14 +1,13 @@
-# One element test to check pressure dependent stiffness calcualtion.
+# One element test to test the auto-generated Darendeli backbone curve.
+# The back surface of the element (z=0) is fixed and the front surface (z=1)
+# is moved by applying a cyclic preset displacement.
 
-# The element is first intialized with stresses corresponding to acceleration due to gravity (g).
-# Then a body force equal to 3 * g is applied to the element thereby increasing the pressure experienced
-# by the element. The element is then sheared by moving the front surface (z = 0) in the x direction.
+# This test is identical to HYS_darendeli.i except that the element was assumed
+# to have zero initial stresses, no self-weight (i.e., zero gravity), and
+# undamped vibration. Also, the backbone curve was generated using 100 points
+# instead of 10 to increase smoothness.
 
-# The resulting stress-strain curve is stiffer due to the increase in pressure but the maximum/ultimate shear
-# stress at which the material completely fails still remains the same.
-
-# Three different values of the parameter b_exp were tested using this input file, but only one case
-# case can be used at a time.
+# The resulting backbone curve was verified against the analytical solution.
 
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
@@ -23,7 +22,6 @@
   zmin = 0.0
   zmax = 1
 []
-
 
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
@@ -109,7 +107,6 @@
 [Kernels]
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
-    zeta = 0.00006366
   [../]
   [./inertia_x]
     type = InertialForce
@@ -118,7 +115,6 @@
     acceleration = accel_x
     beta = 0.25
     gamma = 0.5
-    eta = 7.854
   [../]
   [./inertia_y]
     type = InertialForce
@@ -127,7 +123,6 @@
     acceleration = accel_y
     beta = 0.25
     gamma = 0.5
-    eta = 7.854
   [../]
   [./inertia_z]
     type = InertialForce
@@ -136,12 +131,6 @@
     acceleration = accel_z
     beta = 0.25
     gamma = 0.5
-    eta = 7.854
-  [../]
-  [./gravity]
-    type = Gravity
-    variable = disp_z
-    value = -29.43
   [../]
 []
 
@@ -339,23 +328,17 @@
 [Materials]
   [./I_Soil]
     [./soil_1]
-      soil_type = 'user_defined'
+      soil_type = 'darendeli'
       layer_variable = layer_id
       layer_ids = '0'
-      backbone_curve_files = 'stress_strain20.csv'
+      over_consolidation_ratio = '1'
+      plasticity_index = '0'
+      initial_shear_modulus = '20000'
+      number_of_points = 100
       poissons_ratio = '0.3'
       block = 0
-      initial_soil_stress = '-12613 0 0  0 -12613 0  0 0 -29430'
-      pressure_dependency = true
-      #b_exp = 1.0 # Case 1
-      b_exp = 0.5 # Case 2
-      #b_exp = 0.0 # Case 3
-      p_ref = 6072.86
-      tension_pressure_cut_off = -1
-      a0 = 1
-      a1 = 0
-      a2 = 0
-      density = '2000'
+      density = '2'
+      p_ref = '6.07286'
     [../]
   [../]
 []
@@ -373,10 +356,9 @@
   nl_abs_tol = 1e-11
   nl_rel_tol = 1e-11
   start_time = 0
-  end_time = 8.0
+  end_time = 8
   dt = 0.01
   timestep_tolerance = 1e-6
-  petsc_options = '-snes_ksp_ew'
   petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
   petsc_options_value = '201                hypre    boomeramg      4'
   line_search = 'none'
@@ -461,7 +443,7 @@
     variable = strain_zx
     elementid = 0
   [../]
-  [./gamma_zx_el]
+  [./gamma_zx_el] # engineering shear strain
     type = ScalePostprocessor
     value = strain_zx_el
     scaling_factor = 2
@@ -496,15 +478,9 @@
     variable = strain_zz
     elementid = 0
   [../]
-  [./mean_stress]
-    type = LinearCombinationPostprocessor
-    pp_names = 'stress_xx_el stress_yy_el stress_zz_el'
-    pp_coefs = '-0.3333 -0.3333 -0.3333'
-  [../]
 []
 
 [Outputs]
   exodus = true
   csv = true
-  perf_graph = false
 []

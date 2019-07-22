@@ -1,14 +1,14 @@
-# One element test to check pressure dependent stiffness calcualtion.
+# One element test to check pressure dependent strength calcualtion.
 
 # The element is first intialized with stresses corresponding to acceleration due to gravity (g).
 # Then a body force equal to 3 * g is applied to the element thereby increasing the pressure experienced
 # by the element. The element is then sheared by moving the front surface (z = 0) in the x direction.
 
-# The resulting stress-strain curve is stiffer due to the increase in pressure but the maximum/ultimate shear
-# stress at which the material completely fails still remains the same.
+# The stength of the resulting stress-strain can be varied with a0, a1, a2, and p_ref, but its stiffness
+# for a particular strain interval should remain the same so long as b_exp = 0.
 
-# Three different values of the parameter b_exp were tested using this input file, but only one case
-# case can be used at a time.
+# Five combinations of the parameters a_0, a_1, a_2, and p_ref were tested using this input file,
+# but only one case can be used at a time.
 
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
@@ -347,15 +347,39 @@
       block = 0
       initial_soil_stress = '-12613 0 0  0 -12613 0  0 0 -29430'
       pressure_dependency = true
-      #b_exp = 1.0 # Case 1
-      b_exp = 0.5 # Case 2
-      #b_exp = 0.0 # Case 3
-      p_ref = 6072.86
+      b_exp = 0.0
       tension_pressure_cut_off = -1
-      a0 = 1
-      a1 = 0
-      a2 = 0
       density = '2000'
+
+      ## Case 1
+      a0 = 0
+      a1 = 0
+      a2 = 1
+      p_ref = 6072.86
+
+      ## Case 2
+      #a0 = 0
+      #a1 = 1
+      #a2 = 0
+      #p_ref = 6072.86
+
+      ## Case 3
+      #a0 = 1
+      #a1 = 0
+      #a2 = 0
+      #p_ref = 6072.86
+
+      ## Case 4
+      #a0 = 0
+      #a1 = 1
+      #a2 = 0
+      #p_ref = 29430
+
+      ## Case 5
+      #a0 = 0
+      #a1 = 1
+      #a2 = 0
+      #p_ref = 42043
     [../]
   [../]
 []

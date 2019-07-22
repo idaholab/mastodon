@@ -12,6 +12,18 @@
     requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve from a user provided data file."
   [../]
 
+  [./data_file_verification]
+    # 1 element problem with ISoilAction to verify backbone curve given using data_file
+    type = Exodiff
+    input = HYS_data_file_verification.i
+    exodiff = HYS_data_file_verification_out.e
+    verification = 'isoil_verification.md'
+    abs_zero = 5e-9
+    rel_err = 2e-5
+
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the backbone curve from a user provided data file."
+  [../]
+
   [./data_file_noaction]
     # 1 element problem without ISoilAction to check stress-strain curve given using data_file
     type = Exodiff
@@ -60,6 +72,16 @@
     requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve using the Darendeli formulation."
   [../]
 
+  [./darendeli_verification]
+    # 1 element problem with ISoilAction to verify auto-generated darendeli backbone curves
+    type = Exodiff
+    input = HYS_darendeli_verification.i
+    exodiff = HYS_darendeli_verification_out.e
+    verification = 'isoil_verification.md'
+
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the backbone curve using the Darendeli formulation."
+  [../]
+
   [./darendeli_noaction]
     # 1 element problem without ISoilAction to check stress-strain curve given using data_file
     type = Exodiff
@@ -101,6 +123,17 @@
     abs_zero = 1e-9
 
     requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve using the GQ/H formulation."
+  [../]
+
+  [./GQH_verification]
+    # 1 element problem with ISoilAction to verify auto-generated GQH backbone curves
+    type = Exodiff
+    input = HYS_GQH_verification.i
+    exodiff = HYS_GQH_verification_out.e
+    abs_zero = 1e-9
+    verification = 'isoil_verification.md'
+
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the backbone curve using the GQ/H formulation."
   [../]
 
   [./GQH_noaction]
@@ -232,9 +265,20 @@
     # 1 element problem to check stiffness pressure dependency
     type = RunException
     input = HYS_pressure_dependent_stiffness.i
+    verification = 'isoil_verification.md'
+    expect_err = "Pressure dependency is set to true but a0, a1 and a2 are set to 1\.0, 0\.0 and 0\.0, respectively\. Strength pressure dependency is NOT turned on\."
+
+    requirement = "The ISoilAction and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness of the soil, but not changes in strength."
+  [../]
+
+  [./pressure_dependent_strength]
+    # 1 element problem to check strength pressure dependency
+    type = RunException
+    input = HYS_pressure_dependent_strength.i
+    verification = 'isoil_verification.md'
     expect_err = "Pressure dependency is set to true but b\_exp is set to 0\.0\. Stiffness pressure dependency is NOT turned on\."
 
-    requirement = "The ComputeISoilStress class shall generate a warning if pressure dependency is set to true but b\_exp is set to 0.0."
+    requirement = "The ISoilAction and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in strength of the soil, but not changes in stiffness."
   [../]
 
   [./stiffness_and_strength_pressure_dependency]
@@ -242,6 +286,7 @@
     type = Exodiff
     input = HYS_stiffness_and_strength_pressure_dependency.i
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
+    verification = 'isoil_verification.md'
     abs_zero = 5e-9
 
     requirement = "The ISoilAction and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil."
