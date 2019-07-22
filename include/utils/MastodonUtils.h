@@ -145,11 +145,29 @@ Real calcLogLikelihood(const std::vector<Real> & im,
  * Function to calculate location and scale parameters of a lognormal
  * distribution that maximizes the loglikelihood of fitting the data im and pf
  */
-std::vector<Real> maximizeLogLikelihood(const std::vector<Real> & im,
+
+ std::vector<Real> maximizeLogLikelihood(const std::vector<Real> & im,
+                                         const std::vector<Real> & pf,
+                                         const std::vector<Real> & loc_space,
+                                         const std::vector<Real> & sca_space,
+                                         const unsigned int & n,
+                                         const std::string & method
+                                         const Real tolerance,
+                                         const Real gamma,
+                                         const int num_rnd);
+
+/*std::vector<Real> maximizeLogLikelihood_Crude(const std::vector<Real> & im,
                                         const std::vector<Real> & pf,
                                         const std::vector<Real> & loc_space,
                                         const std::vector<Real> & sca_space,
                                         const unsigned int & n);
+
+std::vector<Real> maximizeLogLikelihood_SGD(const std::vector<Real> & im,
+                                            const std::vector<Real> & pf,
+                                            const std::vector<Real> & loc_space,
+                                            const std::vector<Real> & sca_space,
+                                            const unsigned int & n);*/
+
 #endif // LIBMESH_HAVE_EXTERNAL_BOOST
 
 /**

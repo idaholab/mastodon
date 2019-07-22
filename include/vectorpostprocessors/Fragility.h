@@ -110,6 +110,18 @@ protected:
 
   /// Beta of the fitted fragility
   VectorPostprocessorValue & _beta_fragility;
+
+  ///
+  const std::string & _method;
+
+  ///
+  const Real _sgd_tolerance;
+
+  ///
+  const Real _sgd_gamma;
+
+  ///
+  const int _sgd_numrnd;
 };
 
 #endif
