@@ -151,7 +151,7 @@ Real calcLogLikelihood(const std::vector<Real> & im,
                                          const std::vector<Real> & loc_space,
                                          const std::vector<Real> & sca_space,
                                          const unsigned int & n,
-                                         const std::string & method
+                                         const std::string & method,
                                          const Real tolerance,
                                          const Real gamma,
                                          const int num_rnd);

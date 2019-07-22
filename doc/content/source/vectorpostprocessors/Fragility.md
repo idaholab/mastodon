@@ -12,6 +12,14 @@ demand distribution and capacity distribution and calculate the conditional prob
 in each bin, and 3) fit a lognormal distribution in the conditional probabilities to calculate a
 fragility. This kind of fragility is also referred to as 'enhanced fragility'.
 
+Fitting a Log-Normal fragility function given analysis results requires optimization to find
+the parameters location and scale. Two optimization methods are currently available: Brute Force
+and Stochastic Gradient Descent (SGD). Brute Force finds that combination of parameters
+ which maximizes the likelihood by looping over all alternative combinations. SGD finds the parameter
+ combination by running a Newton-Raphson type algorithm with random seeds. Of course, both algorithms
+ have their pros and cons. For example, Brute Force takes orders of magnitude more time to run. SGD
+ does not always guarantee precise results.
+
 ### Assumptions and current limitations
 
 The `Fragility` VectorPostprocessor is currently limited to calculating the seismic fragilities
@@ -21,13 +29,15 @@ that are sensitive to floor spectral acceleration demands at a particular freque
 
 ### Usage
 
-An example usage of the `Fragility` VectorPostprocessor is below. Apart from the input file,
-`fragility.i` the this VectorPostprocessor requires the csv files containing the output data from
-the probabilistic or stochastic simulations. An example output data file, `master_out_run_hazard03_sub1.csv`,
-is also shown below. Note that the inputs to the parameters `master_file`, `hazard_multiapp`, and
-`probabilistic_multiapp` are used to build the filename of the csv files that contain the results of
-probabilistic simulations. Additionally, the `demand_variable` input parameter (accel_2x) in this case
-is identical to the column name in the output data file.
+An example usage of the `Fragility` VectorPostprocessor is below. For the `optimization_method`
+optimization_method option, either BRUTE FORCE or SGD (i.e., Stochastic Gradient Descent) can
+be chosen. Apart from the input file, `fragility.i` the this VectorPostprocessor requires the
+csv files containing the output data from the probabilistic or stochastic simulations. An
+example output data file, `master_out_run_hazard03_sub1.csv`, is also shown below. Note that
+the inputs to the parameters `master_file`, `hazard_multiapp`, and `probabilistic_multiapp` are
+used to build the filename of the csv files that contain the results of probabilistic simulations.
+Additionally, the `demand_variable` input parameter (accel_2x) in this case is identical to the
+column name in the output data file.
 
 !listing test/tests/vectorpostprocessors/fragility/fragility.i block=VectorPostprocessors
 
