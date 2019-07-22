@@ -357,81 +357,84 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
                                      const int num_rnd,
                                      const int seed)
 {
- std::vector<Real> params_return = {0, 0};
- if (method.compare("BRUTE FORCE") == 0)
- {
-   Real loglikelihoodmax = MastodonUtils::calcLogLikelihood(im, pf, loc_space[0], sca_space[0], n);
-   // std::vector<Real> params_return = {0.0, 0.0};
-   for (Real loc = loc_space[0]; loc < loc_space[1]; loc += 0.01)
-   {
-     for (Real sca = sca_space[0]; sca < sca_space[1]; sca += 0.01)
-     {
-       if (MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n) >= loglikelihoodmax)
-       {
-         loglikelihoodmax = MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n);
-         params_return = {loc, sca};
-       }
-     }
-   }
- }
- else if(method.compare("SGD") == 0)
- {
-   Real loc_rand;
-   Real sca_rand;
-   std::vector<Real> params_now = {0, 0}; // Initilizing new parameter vector here.
-   std::vector<Real> params_before = {0, 0}; // Initilizing old parameter vector here.
-   std::vector<Real> gradient_now = {-1, -2}; // Initilizing the gradient vector here.
-//This variable will get updated within each iteration of the Gradient Descent algorithm.
-   // Real gamma = 0.01;
-   // Real tolerance = 1e-5;
-   Real dparam = 0.01; // Initilizing an arbitrarily small deviation to the random seed parameter vector.
-//Note that Gradient Descent algorithm requires two likelihood values from two seeds.
-   std::srand(seed); // Setting up the random number generator.
-   Real likelihood_now; // Initilizing a variable.
-   Real likelihood_before; // Initilizing a variable.
-   Real likelihood_base = -50000; // Initilizing to an arbitrarily low value here.
-//This variable will get updated if a parameter vector has greater likelihood.
-  // int num_rnd = 100;
-   for (int index = 0; index < num_rnd; index++)
-   {
-     loc_rand = loc_space[0] + (loc_space[1]-loc_space[0])*((Real) std::rand() / (RAND_MAX));
-     sca_rand = sca_space[0] + (sca_space[1]-sca_space[0])*((Real) std::rand() / (RAND_MAX));
-     likelihood_now = -MastodonUtils::calcLogLikelihood(im, pf, loc_rand, sca_rand, n);
-     likelihood_before = -MastodonUtils::calcLogLikelihood(im, pf, loc_rand+dparam, sca_rand+dparam, n);
-     params_now = {loc_rand, sca_rand};
-     params_before = {loc_rand+dparam, sca_rand+dparam};
-     if (likelihood_now > likelihood_before)
-     {
-       likelihood_now = -MastodonUtils::calcLogLikelihood(im, pf, loc_rand+dparam, sca_rand+dparam, n);
-       likelihood_before = -MastodonUtils::calcLogLikelihood(im, pf, loc_rand, sca_rand, n);
-       params_now = {loc_rand+dparam, sca_rand+dparam};
-       params_before = {loc_rand, sca_rand};
-     }
-     while (std::abs(likelihood_now-likelihood_before)>tolerance)
-     {
-       gradient_now[0] = (likelihood_now-likelihood_before)/(params_now[0]-params_before[0]);
-       gradient_now[1] = (likelihood_now-likelihood_before)/(params_now[1]-params_before[1]);
-       likelihood_before = likelihood_now;
-       params_now[0] = (params_now[0]-gamma*gradient_now[0]);
-       params_now[1] = (params_now[1]-gamma*gradient_now[1]);
-       if ((params_now[0] < loc_space[0]) || (params_now[0] > loc_space[1]) || (params_now[1] < sca_space[0]) || (params_now[1] > sca_space[1]))
-       {
-         index = index - 1;
-         break;
-       } else
-       {
-        likelihood_now = -MastodonUtils::calcLogLikelihood(im, pf, params_now[0], params_now[1], n);
-        if ((-likelihood_now) > (likelihood_base))
+  std::vector<Real> params_return = {0, 0};
+  if (method.compare("BRUTE FORCE") == 0)
+  {
+    Real loglikelihoodmax = MastodonUtils::calcLogLikelihood(im, pf, loc_space[0], sca_space[0], n);
+    // std::vector<Real> params_return = {0.0, 0.0};
+    for (Real loc = loc_space[0]; loc < loc_space[1]; loc += 0.01)
+    {
+      for (Real sca = sca_space[0]; sca < sca_space[1]; sca += 0.01)
+      {
+        if (MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n) >= loglikelihoodmax)
         {
-          likelihood_base = -likelihood_now;
-          params_return = params_now;
+          loglikelihoodmax = MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n);
+          params_return = {loc, sca};
         }
-       }
-     }
-   }
-}
+      }
+    }
+  }
+  else if (method.compare("SGD") == 0)
+  {
+    Real loc_rand;
+    Real sca_rand;
+    std::vector<Real> params_now = {0, 0};     // Initilizing new parameter vector here.
+    std::vector<Real> params_before = {0, 0};  // Initilizing old parameter vector here.
+    std::vector<Real> gradient_now = {-1, -2}; // Initilizing the gradient vector here.
+    // This variable will get updated within each iteration of the Gradient Descent algorithm.
+    Real dparam =
+        0.01; // Initilizing an arbitrarily small deviation to the random seed parameter vector.
+              // Note that Gradient Descent algorithm requires two likelihood values from two seeds.
+    std::srand(seed);              // Setting up the random number generator.
+    Real likelihood_now;           // Initilizing a variable.
+    Real likelihood_before;        // Initilizing a variable.
+    Real likelihood_base = -50000; // Initilizing to an arbitrarily low value here.
+    // This variable will get updated if a parameter vector has greater likelihood.
+    for (int index = 0; index < num_rnd; index++)
+    {
+      loc_rand = loc_space[0] + (loc_space[1] - loc_space[0]) * ((Real)std::rand() / (RAND_MAX));
+      sca_rand = sca_space[0] + (sca_space[1] - sca_space[0]) * ((Real)std::rand() / (RAND_MAX));
+      likelihood_now = -MastodonUtils::calcLogLikelihood(im, pf, loc_rand, sca_rand, n);
+      likelihood_before =
+          -MastodonUtils::calcLogLikelihood(im, pf, loc_rand + dparam, sca_rand + dparam, n);
+      params_now = {loc_rand, sca_rand};
+      params_before = {loc_rand + dparam, sca_rand + dparam};
+      if (likelihood_now > likelihood_before)
+      {
+        likelihood_now =
+            -MastodonUtils::calcLogLikelihood(im, pf, loc_rand + dparam, sca_rand + dparam, n);
+        likelihood_before = -MastodonUtils::calcLogLikelihood(im, pf, loc_rand, sca_rand, n);
+        params_now = {loc_rand + dparam, sca_rand + dparam};
+        params_before = {loc_rand, sca_rand};
+      }
+      while (std::abs(likelihood_now - likelihood_before) > tolerance)
+      {
+        gradient_now[0] = (likelihood_now - likelihood_before) / (params_now[0] - params_before[0]);
+        gradient_now[1] = (likelihood_now - likelihood_before) / (params_now[1] - params_before[1]);
+        likelihood_before = likelihood_now;
+        params_now[0] = (params_now[0] - gamma * gradient_now[0]);
+        params_now[1] = (params_now[1] - gamma * gradient_now[1]);
+        if ((params_now[0] < loc_space[0]) || (params_now[0] > loc_space[1]) ||
+            (params_now[1] < sca_space[0]) || (params_now[1] > sca_space[1]))
+        {
+          index = index - 1;
+          break;
+        }
+        else
+        {
+          likelihood_now =
+              -MastodonUtils::calcLogLikelihood(im, pf, params_now[0], params_now[1], n);
+          if ((-likelihood_now) > (likelihood_base))
+          {
+            likelihood_base = -likelihood_now;
+            params_return = params_now;
+          }
+        }
+      }
+    }
+  }
 
- return params_return;
+  return params_return;
 }
 
 #endif // LIBMESH_HAVE_EXTERNAL_BOOST

@@ -146,15 +146,16 @@ Real calcLogLikelihood(const std::vector<Real> & im,
  * distribution that maximizes the loglikelihood of fitting the data im and pf
  */
 
- std::vector<Real> maximizeLogLikelihood(const std::vector<Real> & im,
-                                         const std::vector<Real> & pf,
-                                         const std::vector<Real> & loc_space,
-                                         const std::vector<Real> & sca_space,
-                                         const unsigned int & n,
-                                         const std::string & method,
-                                         const Real tolerance,
-                                         const Real gamma,
-                                         const int num_rnd, const int seed);
+std::vector<Real> maximizeLogLikelihood(const std::vector<Real> & im,
+                                        const std::vector<Real> & pf,
+                                        const std::vector<Real> & loc_space,
+                                        const std::vector<Real> & sca_space,
+                                        const unsigned int & n,
+                                        const std::string & method,
+                                        const Real tolerance,
+                                        const Real gamma,
+                                        const int num_rnd,
+                                        const int seed);
 
 /*std::vector<Real> maximizeLogLikelihood_Crude(const std::vector<Real> & im,
                                         const std::vector<Real> & pf,

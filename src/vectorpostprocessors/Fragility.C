@@ -53,18 +53,27 @@ validParams<Fragility>()
   params.addRequiredParam<std::vector<Real>>(
       "beta_fragility_limits",
       "Limits for the lognormal standard deviation of the component fragility.");
-  params.addRequiredParam<std::string>("optimization_method", "Name of the optimization "
+  params.addRequiredParam<std::string>("optimization_method",
+                                       "Name of the optimization "
                                        "method for fragility fitting. The following "
                                        "methods are available: Crude (input 'BRUTE FORCE') "
                                        "or Stochastic Gradient Descent (input 'SGD').");
-  params.addParam<Real>("sgd_tolerance",1e-05,
-       "Tolerance for declaring convergence of the Stochastic Gradient Descent algorithm. Default is 1e-05.");
-  params.addParam<Real>("sgd_gamma",0.0001,
-       "Parameter controlling the step size of the Stochastic Gradient Descent algorithm. Default is 0.0001.");
-  params.addParam<Real>("sgd_numrnd",100,
-       "Number of random initializations in the Stochastic Gradient Descent algorithm. Default is 100.");
-  params.addParam<Real>("sgd_seed",1028,
-       "Seed for random number generator in the Stochastic Gradient Descent algorithm. Default is 1028.");
+  params.addParam<Real>("sgd_tolerance",
+                        1e-05,
+                        "Tolerance for declaring convergence of the Stochastic Gradient Descent "
+                        "algorithm. Default is 1e-05.");
+  params.addParam<Real>("sgd_gamma",
+                        0.0001,
+                        "Parameter controlling the step size of the Stochastic Gradient Descent "
+                        "algorithm. Default is 0.0001.");
+  params.addParam<Real>("sgd_numrnd",
+                        100,
+                        "Number of random initializations in the Stochastic Gradient Descent "
+                        "algorithm. Default is 100.");
+  params.addParam<Real>("sgd_seed",
+                        1028,
+                        "Seed for random number generator in the Stochastic Gradient Descent "
+                        "algorithm. Default is 1028.");
   params.addClassDescription("Calculate the seismic fragility of an SSC by postprocessing the "
                              "results of a probabilistic or stochastic simulation.");
   return params;
@@ -138,7 +147,8 @@ Fragility::Fragility(const InputParameters & parameters)
     mooseError("Error in block '" + name() +
                "'. Number of IM values should be the same as the number of bins.");
   if (_method.compare("BRUTE FORCE") != 0 && _method.compare("SGD") != 0)
-    mooseError("Optimization method requested does not match any exisiting methods. Request either BRUTE FORCE or SGD.");
+    mooseError("Optimization method requested does not match any exisiting methods. Request either "
+               "BRUTE FORCE or SGD.");
 }
 
 void
@@ -181,9 +191,16 @@ Fragility::execute()
              << " \n Conditional probability of failure: " << _conditional_pf[bin]
              << "\n**********\n";
   }
-  std::vector<Real> fitted_vals = MastodonUtils::maximizeLogLikelihood(
-      _im, _conditional_pf, _median_fragility_limits, _beta_fragility_limits, 500,
-      _method, _sgd_tolerance, _sgd_gamma, _sgd_numrnd, _sgd_seed);
+  std::vector<Real> fitted_vals = MastodonUtils::maximizeLogLikelihood(_im,
+                                                                       _conditional_pf,
+                                                                       _median_fragility_limits,
+                                                                       _beta_fragility_limits,
+                                                                       500,
+                                                                       _method,
+                                                                       _sgd_tolerance,
+                                                                       _sgd_gamma,
+                                                                       _sgd_numrnd,
+                                                                       _sgd_seed);
   _median_fragility[0] = fitted_vals[0];
   _beta_fragility[0] = fitted_vals[1];
 #endif // LIBMESH_HAVE_EXTERNAL_BOOST
