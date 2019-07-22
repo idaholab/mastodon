@@ -34,7 +34,8 @@ ResponseHistoryMean::ResponseHistoryMean(const InputParameters & parameters)
     _builder_time(getVectorPostprocessorValue("response_history", "time")),
     _history_time(declareVector("time")),
     _history_mean(declareVector("mean")),
-    _builder(getUserObjectByName<ResponseHistoryBuilder>(getParam<VectorPostprocessorName>("response_history")))
+    _builder(getUserObjectByName<ResponseHistoryBuilder>(
+        getParam<VectorPostprocessorName>("response_history")))
 {
 }
 
