@@ -316,11 +316,19 @@ TEST(MastodonUtils, maximizeLogLikelihood)
   std::vector<Real> loc_space = {0.2, 0.6};
   std::vector<Real> sca_space = {0.1, 0.4};
   unsigned int n = 1000;
+  std::string method1 = "BRUTE FORCE";
+  std::string method2 = "SGD";
   // Outputs for testing
-  std::vector<Real> max_values =
-      MastodonUtils::maximizeLogLikelihood(im, pf, loc_space, sca_space, n);
+  std::vector<Real> max_values1 =
+      MastodonUtils::maximizeLogLikelihood(im, pf, loc_space, sca_space, n, method1,
+                                          1e-05, 0.0001, 100, 1028);
+  std::vector<Real> max_values2 =
+      MastodonUtils::maximizeLogLikelihood(im, pf, loc_space, sca_space, n, method2,
+                                          1e-05, 0.0001, 100, 1028);
   // Value check
-  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values[0], 0.4));
-  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values[1], 0.24));
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values1[0], 0.4));
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values1[1], 0.24));
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual((int)(max_values2[0]*10000.0)/10000.0, 0.4041));
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual((int)(max_values2[1]*10000.0)/10000.0, 0.2443));
 }
 #endif // LIBMESH_HAVE_EXTERNAL_BOOST

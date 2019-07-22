@@ -111,17 +111,20 @@ protected:
   /// Beta of the fitted fragility
   VectorPostprocessorValue & _beta_fragility;
 
-  ///
+  /// Method for optimization
   const std::string & _method;
 
-  ///
+  /// Tolerance for Stochastic Gradient Descent
   const Real _sgd_tolerance;
 
-  ///
+  /// Parameter controlling step size for Stochastic Gradient Descent
   const Real _sgd_gamma;
 
-  ///
+  /// Number of random initializations for Stochastic Gradient Descent
   const int _sgd_numrnd;
+
+  /// Number of random seeds for Stochastic Gradient Descent
+  const int _sgd_seed;
 };
 
 #endif

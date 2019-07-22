@@ -59,10 +59,12 @@ validParams<Fragility>()
                                        "or Stochastic Gradient Descent (input 'SGD').");
   params.addParam<Real>("sgd_tolerance",1e-05,
        "Tolerance for declaring convergence of the Stochastic Gradient Descent algorithm. Default is 1e-05.");
-  params.addParam<Real>("sgd_gamma",0.01,
-       "Parameter controlling the step size of the Stochastic Gradient Descent algorithm. Default is 0.01.");
+  params.addParam<Real>("sgd_gamma",0.0001,
+       "Parameter controlling the step size of the Stochastic Gradient Descent algorithm. Default is 0.0001.");
   params.addParam<Real>("sgd_numrnd",100,
-       "Number of random seeds in the Stochastic Gradient Descent algorithm. Default is 100.");
+       "Number of random initializations in the Stochastic Gradient Descent algorithm. Default is 100.");
+  params.addParam<Real>("sgd_seed",1028,
+       "Seed for random number generator in the Stochastic Gradient Descent algorithm. Default is 1028.");
   params.addClassDescription("Calculate the seismic fragility of an SSC by postprocessing the "
                              "results of a probabilistic or stochastic simulation.");
   return params;
@@ -94,7 +96,8 @@ Fragility::Fragility(const InputParameters & parameters)
     _method(getParam<std::string>("optimization_method")),
     _sgd_tolerance(getParam<Real>("sgd_tolerance")),
     _sgd_gamma(getParam<Real>("sgd_gamma")),
-    _sgd_numrnd(getParam<Real>("sgd_numrnd"))
+    _sgd_numrnd(getParam<Real>("sgd_numrnd")),
+    _sgd_seed(getParam<Real>("sgd_seed"))
 {
 #ifndef LIBMESH_HAVE_EXTERNAL_BOOST
   mooseError("In Fragility block '",
@@ -179,7 +182,8 @@ Fragility::execute()
              << "\n**********\n";
   }
   std::vector<Real> fitted_vals = MastodonUtils::maximizeLogLikelihood(
-      _im, _conditional_pf, _median_fragility_limits, _beta_fragility_limits, 500, _method, _sgd_tolerance, _sgd_gamma, _sgd_numrnd);
+      _im, _conditional_pf, _median_fragility_limits, _beta_fragility_limits, 500,
+      _method, _sgd_tolerance, _sgd_gamma, _sgd_numrnd, _sgd_seed);
   _median_fragility[0] = fitted_vals[0];
   _beta_fragility[0] = fitted_vals[1];
 #endif // LIBMESH_HAVE_EXTERNAL_BOOST
