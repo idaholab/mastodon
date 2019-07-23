@@ -87,7 +87,7 @@
   [../]
   [./disp_mean]
     type = ResponseHistoryMean
-    vectorpostprocessor = disp_nodes
+    response_history = disp_nodes
     outputs = out
   [../]
 []
