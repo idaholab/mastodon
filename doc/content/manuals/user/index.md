@@ -26,4 +26,6 @@
 
 !include include/outputs/intro_outputs-user.md
 
+!include include/outputs/responsehistorymean-user.md
+
 !bibtex bibliography

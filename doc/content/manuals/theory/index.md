@@ -52,4 +52,6 @@
 
 !include manuals/include/outputs/hsi-theory.md
 
+!include manuals/include/outputs/responsehistorymean-theory.md
+
 !bibtex bibliography
