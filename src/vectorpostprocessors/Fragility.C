@@ -45,6 +45,10 @@ validParams<Fragility>()
       "num_bins", "Number of bins in the hazard curve where the risk calculation is performed.");
   params.addRequiredParam<unsigned int>("num_samples",
                                         "Number of probabilistic simulations for each bin.");
+  params.addParam<unsigned int>(
+      "num_collapses",
+      500,
+      "Number of collapses required to calculate likelihood when using Baker's MLE.");
   params.addRequiredParam<std::vector<Real>>(
       "im_values", "IM values used in the bins."); // TODO: remove this later by transferring IM
                                                    // values from hazard curve UO
@@ -53,27 +57,28 @@ validParams<Fragility>()
   params.addRequiredParam<std::vector<Real>>(
       "beta_fragility_limits",
       "Limits for the lognormal standard deviation of the component fragility.");
-  params.addRequiredParam<std::string>("optimization_method",
-                                       "Name of the optimization "
-                                       "method for fragility fitting. The following "
-                                       "methods are available: Crude (input 'BRUTE FORCE') "
-                                       "or Stochastic Gradient Descent (input 'SGD').");
+  params.addParam<bool>("brute_force",
+                        false,
+                        "Optimization "
+                        "method for fragility fitting. The following "
+                        "methods are available: brute force "
+                        "or Stochastic Gradient Descent.");
   params.addParam<Real>("sgd_tolerance",
-                        1e-05,
+                        1e-03,
                         "Tolerance for declaring convergence of the Stochastic Gradient Descent "
-                        "algorithm. Default is 1e-05.");
+                        "algorithm.");
   params.addParam<Real>("sgd_gamma",
-                        0.0001,
+                        0.001,
                         "Parameter controlling the step size of the Stochastic Gradient Descent "
-                        "algorithm. Default is 0.0001.");
+                        "algorithm.");
   params.addParam<Real>("sgd_numrnd",
-                        100,
+                        1000,
                         "Number of random initializations in the Stochastic Gradient Descent "
-                        "algorithm. Default is 100.");
+                        "algorithm.");
   params.addParam<Real>("sgd_seed",
                         1028,
                         "Seed for random number generator in the Stochastic Gradient Descent "
-                        "algorithm. Default is 1028.");
+                        "algorithm.");
   params.addClassDescription("Calculate the seismic fragility of an SSC by postprocessing the "
                              "results of a probabilistic or stochastic simulation.");
   return params;
@@ -93,6 +98,7 @@ Fragility::Fragility(const InputParameters & parameters)
     _beta_ssc_cap(getParam<Real>("beta_capacity")),
     _num_bins(getParam<unsigned int>("num_bins")),
     _num_samples(getParam<unsigned int>("num_samples")),
+    _num_collapses(getParam<unsigned int>("num_collapses")),
     _im_values(getParam<std::vector<Real>>("im_values")),
     _median_fragility_limits(getParam<std::vector<Real>>("median_fragility_limits")),
     _beta_fragility_limits(getParam<std::vector<Real>>("beta_fragility_limits")),
@@ -102,7 +108,7 @@ Fragility::Fragility(const InputParameters & parameters)
     _conditional_pf(declareVector("conditional_pf")),
     _median_fragility(declareVector("fragility_median")),
     _beta_fragility(declareVector("fragility_beta")),
-    _method(getParam<std::string>("optimization_method")),
+    _brute_force(getParam<bool>("brute_force")),
     _sgd_tolerance(getParam<Real>("sgd_tolerance")),
     _sgd_gamma(getParam<Real>("sgd_gamma")),
     _sgd_numrnd(getParam<Real>("sgd_numrnd")),
@@ -146,9 +152,6 @@ Fragility::Fragility(const InputParameters & parameters)
   if (_im_values.size() != _num_bins)
     mooseError("Error in block '" + name() +
                "'. Number of IM values should be the same as the number of bins.");
-  if (_method.compare("BRUTE FORCE") != 0 && _method.compare("SGD") != 0)
-    mooseError("Optimization method requested does not match any exisiting methods. Request either "
-               "BRUTE FORCE or SGD.");
 }
 
 void
@@ -195,8 +198,8 @@ Fragility::execute()
                                                                        _conditional_pf,
                                                                        _median_fragility_limits,
                                                                        _beta_fragility_limits,
-                                                                       500,
-                                                                       _method,
+                                                                       _num_collapses,
+                                                                       _brute_force,
                                                                        _sgd_tolerance,
                                                                        _sgd_gamma,
                                                                        _sgd_numrnd,
@@ -223,9 +226,7 @@ Fragility::calcDemandsFromFile(unsigned int bin)
     {
       demand_sample_filename = _master_file + "_out_" + _hazard_multiapp +
                                MastodonUtils::zeropad(bin * _num_gms + i, _num_bins * _num_gms) +
-                               "_" + _probabilistic_multiapp +
-                               MastodonUtils::zeropad(j, _num_samples) + ".csv";
-
+                               "_" + _probabilistic_multiapp + std::to_string(j) + ".csv";
       _console << "In block '" + name() + "'. Reading file: " << demand_sample_filename
                << std::endl;
       MooseUtils::DelimitedFileReader demand_sample_file(demand_sample_filename);

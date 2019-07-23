@@ -9,7 +9,6 @@
 #include "pcrecpp.h"
 #include "tinydir.h"
 #include "MooseUtils.h"
-// #include "RandomInterface.h"
 #include "MooseRandom.h"
 
 // MASTODON includes
@@ -345,38 +344,31 @@ MastodonUtils::calcLogLikelihood(const std::vector<Real> & im,
   return loglikelihood;
 }
 
-// TODO: Use a better algorithm to maximize loglikelihood.
-
 std::vector<Real>
 MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
                                      const std::vector<Real> & pf,
                                      const std::vector<Real> & loc_space,
                                      const std::vector<Real> & sca_space,
                                      const unsigned int & n,
-                                     const std::string & method,
+                                     const bool & brute_force,
                                      const Real tolerance,
                                      const Real gamma,
                                      const int num_rnd,
                                      const int seed)
 {
   std::vector<Real> params_return = {0, 0};
-  if (method.compare("BRUTE FORCE") == 0)
+  if (brute_force)
   {
     Real loglikelihoodmax = MastodonUtils::calcLogLikelihood(im, pf, loc_space[0], sca_space[0], n);
-    // std::vector<Real> params_return = {0.0, 0.0};
     for (Real loc = loc_space[0]; loc < loc_space[1]; loc += 0.01)
-    {
       for (Real sca = sca_space[0]; sca < sca_space[1]; sca += 0.01)
-      {
         if (MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n) >= loglikelihoodmax)
         {
           loglikelihoodmax = MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n);
           params_return = {loc, sca};
         }
-      }
-    }
   }
-  else if (method.compare("SGD") == 0)
+  else
   {
     Real loc_rand;
     Real sca_rand;
@@ -387,21 +379,15 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
     Real dparam =
         0.01; // Initilizing an arbitrarily small deviation to the random seed parameter vector.
               // Note that Gradient Descent algorithm requires two likelihood values from two seeds.
-    // std::srand(seed);              // Setting up the random number generator.
     Real likelihood_now;           // Initilizing a variable.
     Real likelihood_before;        // Initilizing a variable.
-    Real likelihood_base = -50000; // Initilizing to an arbitrarily low value here.
+    Real likelihood_base = -50001; // Initilizing to an arbitrarily low value here.
     // This variable will get updated if a parameter vector has greater likelihood.
-    // MooseRandom obj1;
-    Real u = MooseRandom::rand();
-    std::cout << "Random is " << u << std::endl;
-    //RandomInterface obj1;
-    //obj1.setRandomResetFrequency();
-    for (int index = 0; index < num_rnd; index++)
+    MooseRandom::seed(seed); // Setting up the random number generator.
+    for (unsigned int index = 0; index < num_rnd; index++)
     {
-      loc_rand = loc_space[0] + (loc_space[1] - loc_space[0]) * MooseRandom::rand();// ((Real)std::rand() / (RAND_MAX))
-      // std::cout << MooseRandom::getRandomReal() << std::endl;
-      sca_rand = sca_space[0] + (sca_space[1] - sca_space[0]) * MooseRandom::rand();// ((Real)std::rand() / (RAND_MAX))
+      loc_rand = loc_space[0] + (loc_space[1] - loc_space[0]) * MooseRandom::rand();
+      sca_rand = sca_space[0] + (sca_space[1] - sca_space[0]) * MooseRandom::rand();
       likelihood_now = -MastodonUtils::calcLogLikelihood(im, pf, loc_rand, sca_rand, n);
       likelihood_before =
           -MastodonUtils::calcLogLikelihood(im, pf, loc_rand + dparam, sca_rand + dparam, n);
@@ -441,7 +427,6 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
       }
     }
   }
-
   return params_return;
 }
 

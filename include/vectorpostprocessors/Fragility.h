@@ -84,6 +84,9 @@ protected:
   /// Number of samples of simulations for each ground motion in each bin
   const unsigned int & _num_samples;
 
+  /// Number of collapses required to calculate likelihood when using Baker's MLE.
+  const unsigned int & _num_collapses;
+
   /// IM values that are used in the hazard curve
   const std::vector<Real> & _im_values;
 
@@ -112,7 +115,7 @@ protected:
   VectorPostprocessorValue & _beta_fragility;
 
   /// Method for optimization
-  const std::string & _method;
+  const bool & _brute_force;
 
   /// Tolerance for Stochastic Gradient Descent
   const Real _sgd_tolerance;
@@ -123,7 +126,7 @@ protected:
   /// Number of random initializations for Stochastic Gradient Descent
   const int _sgd_numrnd;
 
-  /// Number of random seeds for Stochastic Gradient Descent
+  /// Seed for the random number generator
   const int _sgd_seed;
 };
 

@@ -40,8 +40,6 @@
     im_values = '0.3 0.5 0.7 0.9'
     median_fragility_limits = '3.0 8.0'
     beta_fragility_limits = '1.0 3.0'
-    optimization_method = 'SGD'
-    sgd_numrnd = 1000
     execute_on = TIMESTEP_END
   [../]
 []
