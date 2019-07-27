@@ -24,7 +24,8 @@ Extensions:
         home: https://www.mooseframework.org/mastodon
         menu:
             Getting Started:
-                MacOS (Mojave): getting_started/macos.md
+                MacOS (Mojave): getting_started/macos_mojave.md
+                MacOS (Other): getting_started/macos_other.md
                 Ubuntu: installation/ubuntu.md
                 Running MASTODON: getting_started/running_mastodon.md
             Examples: examples/index.md
