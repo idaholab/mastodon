@@ -27,14 +27,7 @@ Extensions:
                 MacOS (Mojave): getting_started/macos.md
                 Ubuntu: installation/ubuntu.md
                 Running MASTODON: getting_started/running_mastodon.md
-            Examples:
-                Overview: examples/index.md
-                Example 1: examples/example1.md
-                Example 2: examples/example2.md
-                Example 3: examples/example3.md
-                Example 4: examples/example4.md
-                Example 5a: examples/example5a.md
-                Example 5b: examples/example5b.md
+            Examples: examples/index.md
             Manuals:
                 Theory: manuals/theory/index.md
                 Software Quality: /sqa/index.md
