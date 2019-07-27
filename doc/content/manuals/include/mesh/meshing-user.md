@@ -1,4 +1,4 @@
-## Creating a mesh
+## Creating a mesh id=meshing
 
 The first thing necessary to run a finite element analysis is a mesh. Generating a mesh of interest in MASTODON can be achieved using the inbuilt [mesh generator](source/mesh/GeneratedMesh.md) or by importing an existing mesh. Imported meshes should be of the exodus format and can be generated using the meshing software, [Cubit](https://cubit.sandia.gov/). Cubit is freely available for users in the U.S. federal government and national labs. For other users, the commercial version of Cutbit called [Trelis](https://www.csimsoft.com/trelis.jsp) is recommended. Usage of the inbuilt mesh generator for a simple problem is demonstrated below.
 

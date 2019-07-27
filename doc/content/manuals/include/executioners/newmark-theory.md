@@ -1,4 +1,4 @@
-### Newmark time integration
+### Newmark time integration id=newmark-beta
 
 In Newmark time integration [!citep](newmark1959amethod), the acceleration and velocity at $t+\Delta t$ are written in terms of the displacement ($\mathbf{u}$), velocity ($\mathbf{\dot{u}}$) and acceleration ($\mathbf{\ddot{u}}$) at time $t$ and the displacement at $t+\Delta t$.
 
