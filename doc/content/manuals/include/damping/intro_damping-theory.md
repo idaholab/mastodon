@@ -1,4 +1,4 @@
-## Damping
+## Damping id=damping
 
 When the soil-structure system (including both soil and concrete)
 responds to an earthquake excitation, energy is dissipated in two primary
