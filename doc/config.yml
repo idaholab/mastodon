@@ -21,7 +21,7 @@ Extensions:
     MooseDocs.extensions.navigation:
         name: MASTODON
         repo: https://github.com/idaholab/mastodon
-        home: https://www.mooseframework.org/mastodon
+        home: https://www.mooseframework.inl.gov/mastodon
         menu:
             Getting Started:
                 MacOS (Mojave): getting_started/macos_mojave.md
@@ -35,7 +35,7 @@ Extensions:
                 User: manuals/user/index.md
                 Developer: manuals/developer/index.md
             News: news/index.md
-            Documentation:
+            Docs:
                 Syntax: syntax/index.md
             Help:
                 FAQ: help/faq.md
