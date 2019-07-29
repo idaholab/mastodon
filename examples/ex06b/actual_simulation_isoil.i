@@ -1,6 +1,6 @@
 [Mesh]
   type = FileMesh
-  file = ../ex06b/stabilize_isoil_out1_cp/LATEST
+  file = ../ex06b/stabilize_isoil_out1_cp/LATEST #end file of previous simulation
   patch_update_strategy = iteration
   patch_size = 40
   partitioner = centroid
@@ -26,38 +26,6 @@
 []
 
 [AuxVariables]
-  [./stress_xy]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./stress_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./stress_yy]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./stress_zz]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./stress_yz]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./stress_zx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./strain_yz]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
-  [./strain_zx]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
   [./vel_x]
   [../]
   [./accel_x]
@@ -71,14 +39,6 @@
   [./accel_z]
   [../]
   [./nor_forc]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./nor_forc_z]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./tang_forc]
     order = FIRST
     family = LAGRANGE
   [../]
@@ -97,48 +57,41 @@
     use_displaced_mesh = true
     displacements = 'disp_x disp_y disp_z'
   [../]
-    [./gravity]
-      type = Gravity
-      variable = disp_z
-      value = -386.09   #in/s2
-    [../]
+  [./gravity]
+    type = Gravity
+    variable = disp_z
+    value = -386.09   #in/s2
+  [../]
   [./inertia_x]
-   type = InertialForce
-   variable = disp_x
-   velocity = vel_x
-   acceleration = accel_x
-   beta = 0.25
-   gamma = 0.5
-   eta=0.0
+    type = InertialForce
+    variable = disp_x
+    velocity = vel_x
+    acceleration = accel_x
+    beta = 0.25
+    gamma = 0.5
+    eta=0.0
   [../]
   [./inertia_y]
-   type = InertialForce
-   variable = disp_y
-   velocity = vel_y
-   acceleration = accel_y
-   beta = 0.25
-   gamma = 0.5
-   eta=0.0
+    type = InertialForce
+    variable = disp_y
+    velocity = vel_y
+    acceleration = accel_y
+    beta = 0.25
+    gamma = 0.5
+    eta=0.0
   [../]
   [./inertia_z]
-   type = InertialForce
-   variable = disp_z
-   velocity = vel_z
-   acceleration = accel_z
-   beta = 0.25
-   gamma = 0.5
-   eta = 0.0
+    type = InertialForce
+    variable = disp_z
+    velocity = vel_z
+    acceleration = accel_z
+    beta = 0.25
+    gamma = 0.5
+    eta = 0.0
   [../]
 []
 
 [AuxKernels]
-  [./nor_forc_z]
-    type = PenetrationAux
-    variable = nor_forc_z
-    quantity = normal_force_z
-    boundary = 102
-    paired_boundary = 103
-  [../]
   [./nor_forc]
     type = PenetrationAux
     variable = nor_forc
@@ -152,62 +105,6 @@
     quantity = tangential_force_x
     boundary = 102
     paired_boundary = 103
-  [../]
-  [./tang_forc]
-    type = PenetrationAux
-    variable = tang_forc
-    quantity = tangential_force_magnitude
-    boundary = 102
-    paired_boundary = 103
-  [../]
-  [./stress_zx]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_zx
-    index_i = 2
-    index_j = 0
-  [../]
-  [./strain_zx]
-    type = RankTwoAux
-    rank_two_tensor = total_strain
-    variable = strain_zx
-    index_i = 2
-    index_j = 0
-  [../]
-  [./stress_xx]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_xx
-    index_i = 0
-    index_j = 0
-  [../]
-  [./stress_yy]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_yy
-    index_i = 1
-    index_j = 1
-  [../]
-  [./stress_zz]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_zz
-    index_i = 2
-    index_j = 2
-  [../]
-  [./stress_xy]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_xy
-    index_i = 0
-    index_j = 1
-  [../]
-  [./stress_yz]
-    type = RankTwoAux
-    rank_two_tensor = stress
-    variable = stress_yz
-    index_i = 1
-    index_j = 2
   [../]
   [./accel_x]
     type = NewmarkAccelAux
@@ -255,43 +152,42 @@
     execute_on = timestep_end
   [../]
   [./layer_1]
-     type = UniformLayerAuxKernel
-     variable = layer_id
-     interfaces = '48'
-     direction = '0.0 0.0 1.0'
-     block = 1
-     execute_on = initial
+    type = UniformLayerAuxKernel
+    variable = layer_id
+    interfaces = '48'
+    direction = '0.0 0.0 1.0'
+    block = 1
+    execute_on = initial
   [../]
 []
 
 [BCs]
-[./fix_x_soil]
-  type = PresetBC
-  variable = disp_x
-  boundary = 100
-  value = 0.0
-[../]
-[./fix_y_soil]
-   type = PresetBC
-   variable = disp_y
-   boundary = 100
-   value = 0.0
-[../]
-[./fix_z_soil]
-   type = PresetBC
-   variable = disp_z
-   boundary = 100
-   value = 0.0
-[../]
-
- [./concrete_pressure]
-     type = Pressure
-     boundary = 101
-     variable = disp_z
-     component = 2
-     factor = 5 #psi
+  [./fix_x_soil]
+    type = PresetBC
+    variable = disp_x
+    boundary = 100
+    value = 0.0
   [../]
-[./top_x]
+  [./fix_y_soil]
+    type = PresetBC
+    variable = disp_y
+    boundary = 100
+    value = 0.0
+  [../]
+  [./fix_z_soil]
+    type = PresetBC
+    variable = disp_z
+    boundary = 100
+    value = 0.0
+  [../]
+  [./concrete_pressure]
+    type = Pressure
+    boundary = 101
+    variable = disp_z
+    component = 2
+    factor = 5 #psi
+  [../]
+  [./top_x]
     type = PresetDisplacement
     boundary = 1000
     variable = disp_x
@@ -299,15 +195,15 @@
     velocity = vel_x
     acceleration = accel_x
     function = loading_bc
-[../]
+  [../]
 []
 
 [Functions]
-    [./loading_bc]
-     type = PiecewiseLinear
-     data_file = 'input_motion.csv'
-     format = columns
-    [../]
+  [./loading_bc]
+    type = PiecewiseLinear
+    data_file = 'input_motion.csv'
+    format = columns
+  [../]
 []
 
 [Materials]
@@ -378,40 +274,10 @@
     variable = nor_forc
     boundary = 102
   [../]
-  [./nor_forc_z]
-    type = NodalSum
-    variable = nor_forc_z
-    boundary = 102
-  [../]
   [./tang_forc_x]
     type = NodalSum
     variable = tang_forc_x
     boundary = 102
-  [../]
-  [./stres_xx_interface]
-    type = SideAverageValue
-  boundary = 102
-  variable = stress_xx
-  [../]
-  [./stres_yy_interface]
-  type = SideAverageValue
-  boundary = 102
-  variable = stress_yy
-  [../]
-  [./stres_zz_interface]
-  type = SideAverageValue
-  boundary = 102
-  variable = stress_zz
-  [../]
-  [./strain_zx_interface]
-  type = SideAverageValue
-  boundary = 102
-  variable = strain_zx
-  [../]
-  [./stress_zx_interface]
-  type = SideAverageValue
-  boundary = 102
-  variable = stress_zx
   [../]
   [./dispx]
     type = NodalMaxValue
@@ -423,9 +289,8 @@
 [Executioner]
   type = Transient
   solve_type = 'PJFNK'
-   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
-   petsc_options_value = 'lu     superlu_dist'
-
+  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
+  petsc_options_value = 'lu     superlu_dist'
   line_search = 'none'
   start_time = 0
   end_time = 2.5

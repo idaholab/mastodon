@@ -1,4 +1,4 @@
-# Example 6c: Force controlled frictional contact problem.
+# Example 6c: Force-controlled frictional contact problem.
 
 ## Model Description
 

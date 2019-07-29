@@ -1,4 +1,4 @@
-# Example 6b: Displacement controlled frictional contact problem with  I-soil and using restart option for static initialization.
+# Example 6b: Displacement-controlled frictional contact problem with  I-soil and using restart option for static initialization.
 
 ## Model Description
 

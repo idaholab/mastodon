@@ -1,4 +1,4 @@
-# Example 6a: Displacement controlled contact problem with elastic soil.
+# Example 6a: Displacement-controlled contact problem with elastic soil
 
 ## Model Description
 
@@ -9,16 +9,16 @@ This example demonstrates frictional contact between a solid block and elastic s
 
 !listing examples/ex06a/psf_grav.i
 
-The mesh [ex06input] used in this model was generated externally using the mesh generation software, [Cubit](https://cubit.sandia.gov/). MASTODON imports the mesh shown in [fig:ex06_input] using the `FileMesh` type specified in the `Mesh` block. Details regarding supported mesh file types can be found at [GettingStarted](manuals/user/index.md).
+The mesh used in this model was generated externally using the mesh generation software, [Cubit](https://cubit.sandia.gov/). MASTODON imports the mesh shown in [fig:ex06input] using the `FileMesh` type specified in the `Mesh` block. Details regarding supported mesh file types can be found at [GettingStarted](manuals/user/index.md).
 
 !media media/examples/ex06/ex06_input.png
        style=width:50%;margin-left:150px;float:center;
-       id=fig:ex06_input
+       id=fig:ex06input
        caption=Input model in MASTODON.
 
 The displacement variables are defined in the `Variables` block. The accelerations, velocities, normal and tangential (frictional) forces are defined as auxiliary variables in the `AuxVariables` block.
 
-[TensorMechanics](syntax/index.md) and [InertialForce](syntax/index.md) kernels are used to model the dynamics of the 3D solid elements. [Gravity](syntax/index.md) kernels is used to apply the gravitational force. The [Newmark time integration](manuals/theory/index.md) parameters used in this problem correspond to the Newmark's average acceleration method, i.e. `beta = 0.25` and `gamma = 0.5` and damping is ignored.
+[TensorMechanics](syntax/index.md) and [InertialForce](syntax/index.md) kernels are used to model the dynamics of the 3D solid elements. The `Gravity` block is specified in `Kernels` in order to apply gravitational force to the entire model. The [Newmark time integration](manuals/theory/index.md) parameters used in this problem correspond to the Newmark's average acceleration method, i.e. `beta = 0.25` and `gamma = 0.5` and damping is ignored.
 
 The [ComputeIsotropicElasticityTensorBeam](syntax/index.md) block is used to create the elasticity tensor of the solid block and the elastic soil, using Young's Modulus and Poisson's ratio. The stresses and strain are calculated using [ComputeFiniteStrainElasticStress](syntax/index.md) and [ComputeFiniteStrain](syntax/index.md). The densities are assigned to the solid block and the soil using [GenericConstantMaterial](syntax/index.md).
 
