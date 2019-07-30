@@ -68,6 +68,6 @@ Using [fv_eqn4] & [fv_eqn5], and rewriting the expression for the rate of change
 \begin{equation}
 \label{fv_eqn8}
 y^{\prime}=f(t_n,y_n) \; and \;  y(t_o)=y_o
-\end{equation}.
+\end{equation}
 
-[!citet](dormandprince) proposed an iterative integration scheme known as Dormand Prince (DP54), to solve a generalized initial value problem of the form shown in [fv_eqn8]. Iterative algorithms such as DP54 are computationally more efficient than traditional integration schemes for numerical solution of initial value problems. [!citet](akcelyan) proposed a framework to obtain the numerical solution of nonlinear FVD based on DP54 algorithm and that has been adopted here. For detailed information on the numerical implementation, specific to the FVD element, refer to [!citet](akcelyan).
+[!citet](dormandprince) proposed an iterative integration scheme known as Dormand Prince (DP54), to solve a generalized initial value problem of the form shown in [fv_eqn8] above. Iterative algorithms such as DP54 are computationally more efficient than traditional integration schemes for numerical solution of initial value problems. [!citet](akcelyan) proposed a framework to obtain the numerical solution of nonlinear FVD based on DP54 algorithm and that has been adopted here. For detailed information on the numerical implementation, specific to the FVD element, refer to [!citet](akcelyan).

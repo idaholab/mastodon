@@ -6,7 +6,7 @@ bearings is computationally expensive and impractical for applications involving
 with tens to hundreds of isolators. Hence, the two-node model developed by [!citet](manishkumarmceer2015a) is adopted here.
 The isolator model has six degrees of freedom (3 translations and 3 rotations) at each node and is capable of
 simulating nonlinear behavior in both axial and shear directions. The physical model of the
-two-node isolator element is shown in [fig:physicalmodelofbearing]. For a detailed description on the implementation of numerical model, refer to [!citet](manishkumarmceer2015a).
+two-node isolator element is shown in [fig:physicalmodelofbearing] below. For a detailed description on the implementation of numerical model, refer to [!citep](manishkumarmceer2015a).
 
 !media media/materials/lr_isolator/physicalmodel.png
        style=width:70%;margin-left:150px;float:center;
@@ -49,9 +49,9 @@ P_E=\frac{{\pi}^2EI_s}{h}^2 \; \;\;\; \text{and}\;\;\;\; P_S=GA_S
 \end{aligned}
 \end{equation}
 
-where, <br/>
-$A_s=A\frac{h}{T_r}$ <br/>
-$I_s=I\frac{h}{T_r}$ <br/>
+where, \\
+$A_s=A\frac{h}{T_r}$ \\
+$I_s=I\frac{h}{T_r}$
 
 [lr_eq_1] provides the critical buckling load at zero shear displacement. Experimental investigations have
 shown that the critical buckling load is a function of the shear deformation. [!citet](warnandwhittaker2006) proposed a simplified expression for the critical buckling load as a function of the overlap bonded rubber area. The critical buckling load is updated at every analysis step based on the current shear deformation in the bearing.
@@ -64,15 +64,15 @@ P_{cr} = \begin{cases}
            \end{cases}
 \end{equation}
 
-where,<br/>
-$E_r$ is the rotational modulus <br/>
-$h$ is the height of isolator excluding the end plates <br/>
-$T_r$ is the total rubber thickness <br>
-$G$ is the shear modulus of the rubber <br/>
-$A$ is the initial bonded rubber area<br/>
-$P_{cr}$ is the current value of the critical buckling load <br/>
-$P_{cro}$ is the critical buckling load at zero shear displacement<br/>
-$A_r$ is the current overlap area of bonded rubber<br/>
+where, \\
+$E_r$ is the rotational modulus  \\
+$h$ is the height of isolator excluding the end plates  \\
+$T_r$ is the total rubber thickness \\
+$G$ is the shear modulus of the rubber  \\
+$A$ is the initial bonded rubber area \\
+$P_{cr}$ is the current value of the critical buckling load  \\
+$P_{cro}$ is the critical buckling load at zero shear displacement \\
+$A_r$ is the current overlap area of bonded rubber
 
 Once the bearing buckles, the axial stiffness is reduced to zero. However, to avoid numerical problems,
 a very small value of axial stiffness is assigned to the post-buckling region.
@@ -93,12 +93,12 @@ Integrating the [lr_eq_3], the expression for the post-cavitation tensile force 
 F=F_c\left[1+\frac{1}{kT_r}\left(1-e^{-k(u-u_c)}\right)\right]
 \end{equation}
 
-where, <br/>
-$F_c$ is the initial cavitation force<br/>
-$k$ is a cavitation parameter<br/>
-$u_c$ is the initial cavitation deformation<br/>
-$u$ is the tensile deformation<br/>
-$E$ is Young's modulus of the rubber<br/>
+where,  \\
+$F_c$ is the initial cavitation force \\
+$k$ is a cavitation parameter \\
+$u_c$ is the initial cavitation deformation \\
+$u$ is the tensile deformation \\
+$E$ is Young's modulus of the rubber
 
 When the bearing is loaded beyond the point of cavitation and unloaded, it does not unload with the initial elastic
 stiffness. The unloading stiffness is smaller than the elastic stiffness because of formation of cavities in the rubber.
@@ -109,10 +109,10 @@ The cavitation strength is a function of a damage parameter $\phi$ which varies 
 \phi=\phi_{max}\left[1-e^{-a\left(\frac{u-u_c}{u_c}\right)}\right]
 \end{equation}
 
-where, <br/>
-$a$ is the damage constant <br/>
-$\phi$ is the current value of the damage parameter <br/>
-$\phi_{max}$ is the upper bound on the damage parameter <br/>
+where,  \\
+$a$ is the damage constant  \\
+$\phi$ is the current value of the damage parameter  \\
+$\phi_{max}$ is the upper bound on the damage parameter
 
 For $u=u_c$ (namely, at the cavitation point), $\phi$ is equal to 0 implying no damage. As the tensile deformation increases, the damage parameter converges to $\phi_{max}$. The reduced cavitation strength as a function of damage parameter $\phi$ is calculated as
 
@@ -128,10 +128,10 @@ F_{cn}=F_c(1-\phi)
        id=fig:axialformulation
        caption=Axial response of an elastomeric isolator [!citep](manishkumarEESD2014).
 
-where, <br/>
-$K_v$ is the axial stiffness of the isolator<br/>
-$u_h$ is the current shear deformation<br/>
-$r$ is the radius of gyration of the isolator <br/>
+where,  \\
+$K_v$ is the axial stiffness of the isolator \\
+$u_h$ is the current shear deformation \\
+$r$ is the radius of gyration of the isolator
 
 #### Shear behavior (local Y and Z directions)
 
@@ -168,12 +168,12 @@ viscoelastic behavior of the rubber layers and the hysteretic behavior of the le
   \end{Bmatrix}
 \end{equation}
 
-where,<br/>
-subscripts $y$ and $z$ correspond to shear 1 (local Y) and shear 2 (local Z) directions respectively, as shown in [fig:physicalmodelofbearing]<br/>
+where, \\
+subscripts $y$ and $z$ correspond to shear 1 (local Y) and shear 2 (local Z) directions respectively, as shown in [fig:physicalmodelofbearing] \\
 $C_d$ is the viscous damping co-efficient of the rubber</br>
 $k_d$ is the shear stiffness of the rubber material </br>
 $\sigma_{yl}$ is the dynamic yield strength of the lead core </br>
-$A_l$ is the cross sectional area of the lead core<br/>
+$A_l$ is the cross sectional area of the lead core
 
 The Bouc-Wen formulation introduces two hysteresis evolution parameters, $Z_y$ and $Z_z$, which are functions of the shear displacements $U_y$ and $U_z$, in the local Y and Z directions respectively.
 
@@ -216,10 +216,10 @@ strength of the lead core and the instantaneous temperature was proposed by [!ci
 \sigma_{yl}(T_L)=\sigma_{yl0}e^{-0.0069T_L}
 \end{equation}
 
-where, <br>
-$\sigma_{yl}(T_L)$ is the dynamic strength of lead core at the current temperature<br/>
-$\sigma_{yl0}$ is the dynamic yield strength of lead core at a reference temperature <br/>
-$T_L$ is the instantaneous temperature of the lead core <br/>
+where,  \\
+$\sigma_{yl}(T_L)$ is the dynamic strength of lead core at the current temperature \\
+$\sigma_{yl0}$ is the dynamic yield strength of lead core at a reference temperature  \\
+$T_L$ is the instantaneous temperature of the lead core
 
 #### Coupled shear and axial response
 
@@ -232,7 +232,7 @@ substantially. This reduction in shear stiffness as a function of axial load is 
 K_H = \frac{GA}{T_r}\left[1-\left(\frac{P}{P_{cr}}\right)^{2}\right]
 \end{equation}
 
-where, <br/>
+where,  \\
 P is the current axial load on the isolator
 
 The axial stiffness of the LR isolator is also a function of the overlap bonded rubber area, which is
@@ -243,7 +243,7 @@ a function of the shear deformation. A simplified expression formulated by [!cit
 K_V = \frac{AE_c}{T_r}\left[1+\frac{3}{\pi^{2}}\left(\frac{u_h}{r}\right)^{2}\right]
 \end{equation}
 
-where, <br/>
+where,  \\
 $u_h$ is the current shear deformation
 
 #### Limitations
