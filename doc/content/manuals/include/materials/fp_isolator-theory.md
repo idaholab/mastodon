@@ -1,18 +1,18 @@
 ### Friction Pendulum^TM^ Isolator
 
-Friction Pendulum<sup>TM</sup> (FP) bearings are used to seismically isolate structures, including critical facilities such as nuclear power plants. The single concave FP bearing consists of a spherical sliding surface, a slider coated with PTFE-type composite material, and a housing plate. [fig:fp_components] and [fig:fp_sectionalview] shows components and part sectional view of a single concave Friction Pendulum<sup>TM</sup> bearing, respectively.
+Friction Pendulum^TM^ (FP) bearings are used to seismically isolate structures, including critical facilities such as nuclear power plants. The single concave FP bearing consists of a spherical sliding surface, a slider coated with PTFE-type composite material, and a housing plate. [fig:fp_components] and [fig:fp_sectionalview] shows components and part sectional view of a single concave Friction Pendulum^TM^ bearing, respectively.
 
 !row!
 
 !media media/materials/fp_isolator/fp_components.png
       style=width:34%;margin-left:4%;margin-right:0%;float:left;
       id=fig:fp_components
-      caption=Components of a single Friction Pendulum<sup>TM</sup> bearing [!citep](EPS)
+      caption=Components of a single Friction Pendulum^TM^ bearing [!citep](EPS)
 
 !media media/materials/fp_isolator/fp_sectionalview.png
       style=width:50.39%;margin-left:1%;margin-right:4%;float:right;
       id=fig:fp_sectionalview
-      caption=Sectional view of a single concave Friction Pendulum<sup>TM</sup> bearing [!citep](manishkumarmceer2015b)
+      caption=Sectional view of a single concave Friction Pendulum^TM^ bearing [!citep](manishkumarmceer2015b)
 
 !row-end!
 
@@ -20,7 +20,7 @@ Continuum modeling of FP bearings is computationally expensive and impractical f
 
 #### Force-displacement relationship
 
-Friction Pendulum<sup>TM</sup> bearings dissipate the energy induced during an earthquake through nonlinear hysteretic behavior in shear. The lateral force-displacement relationship of a single concave FP bearing is characterized by two parameters: yield strength and post elastic stiffness, and can be represented by the bi-linear curve of [fig:fp_forcedisplacement].
+Friction Pendulum^TM^ bearings dissipate the energy induced during an earthquake through nonlinear hysteretic behavior in shear. The lateral force-displacement relationship of a single concave FP bearing is characterized by two parameters: yield strength and post elastic stiffness, and can be represented by the bi-linear curve of [fig:fp_forcedisplacement].
 
 !media media/materials/fp_isolator/fp_forcedisplacement.png
         style=width:40%;margin-left:2%;float:right;

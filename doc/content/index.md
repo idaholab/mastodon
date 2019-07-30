@@ -4,7 +4,7 @@
 
 # Multi-hazard Analysis for STOchastic time-DOmaiN phenomena class=center light style=font-size:300%
 
-# A MOOSE-based application for seismic analysis class=center style=font-weight:200;font-size:200%
+# A MOOSE-based application for seismic analysis and risk assessment class=center style=font-weight:200;font-size:200%
 
 
 !row!
