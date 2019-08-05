@@ -5,10 +5,18 @@
 
   [./fragility]
     type = CSVDiff
-    input = fragility.i
-    csvdiff = fragility_out_fragility_pump_0002.csv
+    input = fragility_brute_force.i
+    csvdiff = fragility_brute_force_out_fragility_pump_0002.csv
     boost = true
 
-    requirement = "The Fragility vectorpostprocessor shall accurately evaluate the median demands, beta, and the conditional probability of failure of the SSC at each intensity, and the median and beta of the enhanced fragility fit for the SSC."
+    requirement = "The Fragility vectorpostprocessor shall accurately evaluate the median demands, beta, and the conditional probability of failure of the SSC at each intensity, and the median and beta of the enhanced fragility fit for the SSC using a brute force approach."
+  [../]
+  [./fragility_sgd]
+    type = CSVDiff
+    input = fragility_sgd.i
+    csvdiff = fragility_sgd_out_fragility_pump_0002.csv
+    boost = true
+
+    requirement = "The Fragility vectorpostprocessor shall accurately evaluate the median demands, beta, and the conditional probability of failure of the SSC at each intensity, and the median and beta of the enhanced fragility fit for the SSC using the stochastic gradient descent algorithm."
   [../]
 []
