@@ -4,12 +4,11 @@
 
 This example demonstrates frictional contact between a solid block and I-soil in MASTODON. A 6 inch cubic block is centered on top of a 4 foot cubic block of soil. The top surface of the soil is free and the remaining surfaces are fixed in all directions. A uniform normal pressure of 5 psi is applied to the top of the smaller solid block and it is given a prescribed displacement in a direction parallel to the contact surface. The resulting normal and frictional forces at the interface of the two materials are then obtained and compared with analytical results.
 
-
 ## Modeling in MASTODON
 
 The simulation is carried out in two steps.
 
-## Step 1: Stabilize the system under the gravity and pressure forces
+## Step 1: Stabilizing the system under the gravity and pressure forces
 
 !listing examples/ex06b/stabilize_isoil.i
 
@@ -20,7 +19,7 @@ The displacement variables are defined in the `Variables` block. The acceleratio
 !media media/examples/ex06/ex06_input.png
        style=width:50%;margin-left:150px;float:center;
        id=fig:ex06_input
-       caption=Input model in MASTODON.
+       caption=Input model in MASTODON
 
 
 [TensorMechanics](syntax/index.md) kernel is used to set up the stress divergence kernels and [Gravity](syntax/index.md) kernel is used to apply the gravitational force. The [ComputeIsotropicElasticityTensorBeam](syntax/index.md) block is used to create the elasticity tensor of the elastic solid block, using Young's Modulus and Poisson's ratio. The stresses and strain are calculated using [ComputeFiniteStrainElasticStress](syntax/index.md) and [ComputeFiniteStrain](syntax/index.md). The densities are assigned to the solid block and the soil using [GenericConstantMaterial](syntax/index.md).
@@ -37,7 +36,7 @@ The use of restart in the MOOSE framework requires to specify `checkpoints` in t
 
 !listing examples/ex06b/stabilize_isoil.i start=Outputs
 
-## Step 2: Perform the dynamic simulation using the stabilized system
+## Step 2: Performing the dynamic simulation using the stabilized system
 
 !listing examples/ex06b/actual_simulation_isoil.i
 
@@ -61,16 +60,14 @@ The graph for the frictional force as a function of displacement obtained from M
 !plot scatter filename=examples/ex06b/finalresult.csv
               data=[{'x':'dispx', 'y':'tang_forc_x'}]
               layout={'xaxis':{'title':'Displacement (in)'},'yaxis':{'title':'Frictional Force (lbf)'}}
-              caption=Graph showing the frictional force as a function of displacement for Columb Friction Model
+              caption=Frictional force as a function of displacement for Coulomb friction model
               id=frictional_force
 
 
-## Theoretical Calculation
+## Theoretical Solution
 
 Normal Force = density x volume x gravity + pressure x area = 198.7473 lbf
 
 Frictional Force = coefficient of friction x Normal Force = 39.749 lbf
 
 The results from MASTODON are in agreement with the theoretical calculations.
-
-!bibtex bibliography

@@ -4,7 +4,6 @@
 
 This example demonstrates frictional contact between a solid block and elastic soil in MASTODON. A 6 inch cubic block is centered on top of a 4 foot cubic block of soil. The top surface of the soil is free and the remaining surfaces are fixed in all directions. A uniform normal pressure of 5 psi is applied to the top of the smaller solid block and it is given a prescribed displacement in a direction parallel to the contact surface. The resulting normal and frictional forces at the interface of the two materials are then obtained and compared with analytical results.
 
-
 ## Modeling in MASTODON
 
 !listing examples/ex06a/psf_grav.i
@@ -55,12 +54,10 @@ The graph for the normal force as a function of time obtained from MASTODON is s
               caption=Graph showing the normal force as a function of time for Columb Friction Model
               id=normal_force
 
-## Theoretical Calculation
+## Theoretical Solution
 
 Normal Force = density x volume x gravity + pressure x area = 198.7473 lbf
 
 Frictional Force = coefficient of friction x Normal Force = 139.123 lbf
 
 The results from MASTODON are in agreement with the theoretical calculations.
-
-!bibtex bibliography
