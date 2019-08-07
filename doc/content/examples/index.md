@@ -7,7 +7,10 @@ A list of example simulations using MASTODON is provided below. These examples i
 - [Example 3](examples/example3.md): Nonlinear site-response analysis.
 - [Example 4](examples/example4.md): Frictional contact using a user-defined backbone curve in I-Soil.
 - [Example 5a](examples/example5a.md): Dynamic analysis of a simplified model of a nuclear power plant structure.
-- [Example 5b](examples/example5b.md): Dynamic response of a simplified 1D model of nuclear power plant  with mesh generated using BeamMeshGenerator.
+- [Example 5b](examples/example5b.md): Dynamic response of a simplified 1D model of nuclear power plant with a mesh generated using BeamMeshGenerator.
+- [Example 6a](examples/example6a.md): Displacement-controlled frictional contact problem with elastic soil.
+- [Example 6b](examples/example6b.md): Displacement-controlled frictional contact problem with I-soil and using the restart option for static initialization.
+- [Example 6c](examples/example6c.md): Force-controlled contact problem.
 - [Example 7](examples/example7.md): Demonstration of domain reduction method.
 
 

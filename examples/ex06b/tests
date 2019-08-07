@@ -1,0 +1,8 @@
+[Tests]
+  [./ex06b]
+    type = RunApp
+    input = stabilize_isoil.i
+    method = opt
+    check_input = True
+  [../]
+[../]

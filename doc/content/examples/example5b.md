@@ -1,4 +1,4 @@
-# Example 5b: Dynamic response of a stick model of a nuclear power plant the with mesh generated using text input
+# Example 5b: Dynamic analysis of a stick model of a nuclear power plant with mesh generated using text input
 
 ## Model
 
