@@ -1,0 +1,8 @@
+[Tests]
+  [./ex06c]
+    type = RunApp
+    input = stabilize_lc.i
+    method = opt
+    check_input = True
+  [../]
+[../]
