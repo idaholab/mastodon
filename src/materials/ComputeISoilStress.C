@@ -205,6 +205,12 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
                  ". Pressure dependency is set to true but a0, a1 and a2 are "
                  "set to 1.0, 0.0 and 0.0, respectively. Strength "
                  "pressure dependency is NOT turned on.");
+  if (_pressure_dependency && (_a0 == 0.0 && _a1 == 0.0 && _a2 == 0.0))
+    mooseError("Error in " + name() +
+               ". When pressure dependency is turned on, "
+               "all three strength coefficients, a0, a1, and a2, "
+               "cannot simultaneously be set to 0.0. This "
+               "combination results in division by 0.");
   if (_pressure_dependency && _p_ref.size() != _layer_ids.size())
     mooseError("Error in " + name() + ". When pressure dependency is turned on, "
                                       "a positive reference pressure "
