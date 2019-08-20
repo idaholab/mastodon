@@ -174,7 +174,7 @@ ADComputeISoilStress<compute_stage>::ADComputeISoilStress(const InputParameters 
     _layer_ids(getParam<std::vector<unsigned int>>("layer_ids")),
     _wave_speed_calculation(getParam<bool>("wave_speed_calculation")),
     _poissons_ratio(getParam<std::vector<Real>>("poissons_ratio")),
-    _density(_wave_speed_calculation ? &getMaterialProperty<Real>("density") : NULL),
+    _density(_wave_speed_calculation ? &getMaterialProperty<Real>("density") : nullptr),
     _b_exp(getParam<Real>("b_exp")),
     _p_ref(getParam<std::vector<Real>>("p_ref")),
     _a0(getParam<Real>("a0")),
@@ -184,8 +184,9 @@ ADComputeISoilStress<compute_stage>::ADComputeISoilStress(const InputParameters 
     _pressure_dependency(getParam<bool>("pressure_dependency")),
     _strength_pressure_correction(1.0),
     _stiffness_pressure_correction(1.0),
-    _shear_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("shear_wave_speed") : NULL),
-    _P_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("P_wave_speed") : NULL),
+    _shear_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("shear_wave_speed")
+                                              : nullptr),
+    _P_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("P_wave_speed") : nullptr),
     _pos(0),
     _initial_soil_stress_provided(
         getParam<std::vector<FunctionName>>("initial_soil_stress").size() ==
@@ -501,7 +502,7 @@ ADComputeISoilStress<compute_stage>::computeStress()
   // current pressure calculation
   ADReal mean_stress = _stress_old[_qp].trace() / (-3.0);
   if (mean_stress < _p0)
-    mean_stress = _p0;
+    mean_stress = 0.0;
 
   if (_pressure_dependency)
   {

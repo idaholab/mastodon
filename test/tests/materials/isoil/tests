@@ -150,6 +150,38 @@
     requirement = "The ADComputeISoilStress class shall accurately compute the jacobian for a quasi-static nonlinear response of a soil column subjected to pure shear."
   [../]
 
+  [./data_file_pressure_jac_check]
+    type = PetscJacobianTester
+    input = HYS_data_file_pressure_contact_AD.i
+    ratio_tol = 3e-7
+    difference_tol = 1e-1
+    cli_args = '-snes_test_err 1e-9 -mat_fd_type ds Executioner/num_steps=1'
+
+    requirement = "The ADComputeISoilStress class shall accurately compute the jacobian for the dynamic pressure-dependent nonlinear response of a soil column subjected to vertical displacement as well as pure shear."
+  [../]
+
+  [./data_file_pressure_contact]
+    type = CSVDiff
+    input = HYS_data_file_pressure_contact.i
+    csvdiff = HYS_data_file_pressure_contact_out.csv
+    abs_zero = 5e-5
+    rel_err = 5e-5
+
+    requirement = "The ComputeISoilStress class shall fail under tension and regain strength under compression."
+  [../]
+
+  [./data_file_pressure_contact_AD]
+    type = CSVDiff
+    input = HYS_data_file_pressure_contact_AD.i
+    csvdiff = HYS_data_file_pressure_contact_out.csv
+    cli_args = 'Outputs/file_base=HYS_data_file_pressure_contact_out'
+    abs_zero = 5e-5
+    rel_err = 5e-5
+
+    requirement = "The ADComputeISoilStress class shall fail under tension and regain strength under compression."
+    prereq = data_file_pressure_contact
+  [../]
+
   [./thin_layer]
     # 1 element problem with ISoilAction to check auto-generated thin_layer stress-strain curves
     type = Exodiff
