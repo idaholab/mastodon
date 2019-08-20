@@ -25,6 +25,32 @@
     requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve from a user provided data file without the use of the ISoilAction."
   [../]
 
+  [./data_file_AD]
+    # 1 element problem with ISoilAction to check stress-strain curve given using data_file
+    type = Exodiff
+    input = HYS_data_file_AD.i
+    exodiff = HYS_data_file_out.e
+    cli_args = 'Outputs/file_base=HYS_data_file_out'
+    prereq = data_file_noaction
+    abs_zero = 5e-8
+    rel_err = 2e-5
+
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve from a user provided data file and shall also auto construct the Jacobian matrix."
+  [../]
+
+  [./data_file_noaction_AD]
+    # 1 element problem without ISoilAction to check stress-strain curve given using data_file
+    type = Exodiff
+    input = HYS_data_file_noaction_AD.i
+    exodiff = HYS_data_file_out.e
+    cli_args = Outputs/file_base=HYS_data_file_out
+    prereq = data_file_AD
+    abs_zero = 5e-8
+    rel_err = 2e-5
+
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve from a user provided data file without the use of the ISoilAction and shall also auto construct the Jacobian matrix."
+  [../]
+
   [./darendeli]
     # 1 element problem with ISoilAction to check auto-generated darendeli stress-strain curves
     type = Exodiff
@@ -43,6 +69,28 @@
     prereq = darendeli
 
     requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the Darendeli formulation without the use of the ISoilAction."
+  [../]
+
+  [./darendeli_AD]
+    # 1 element problem with ISoilAction to check auto-generated darendeli stress-strain curves
+    type = Exodiff
+    input = HYS_darendeli.i
+    exodiff = HYS_darendeli_out.e
+    prereq = darendeli_noaction
+    cli_args = 'Kernels/DynamicTensorMechanics/use_automatic_differentiation=true Materials/I_Soil/soil_1/use_automatic_differentiation=true Executioner/solve_type=NEWTON Outputs/file_base=HYS_darendeli_out'
+
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve using the Darendeli formulation and shall also automatically compute the Jacobian matrix."
+  [../]
+
+  [./darendeli_noaction_AD]
+    # 1 element problem without ISoilAction to check stress-strain curve given using data_file
+    type = Exodiff
+    input = HYS_darendeli_noaction_AD.i
+    exodiff = HYS_darendeli_out.e
+    cli_args = Outputs/file_base=HYS_darendeli_out
+    prereq = darendeli_AD
+
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the Darendeli formulation without the use of the ISoilAction and shall also automatically compute the Jacobian matrix."
   [../]
 
   [./GQH]
@@ -67,6 +115,73 @@
     requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the GQ/H formulation without the use of the ISoilAction."
   [../]
 
+  [./GQH_AD]
+    # 1 element problem with ISoilAction and automatic differentiation to check auto-generated GQH stress-strain curves
+    type = Exodiff
+    input = HYS_GQH_AD.i
+    exodiff = HYS_GQH_out.e
+    cli_args = Outputs/file_base=HYS_GQH_out
+    abs_zero = 1e-9
+    prereq = GQH_noaction
+
+    requirement = "The ISoil action and ADComputeISoilStress class shall accurately model the nonlinear dynamic response of the system when automatic differentiation is used along with the auto-generated GQH stress-strain curves."
+  [../]
+
+  [./GQH_noaction_AD]
+    # 1 element problem without ISoilAction and automatic differentiation to check auto-generated GQH stress-strain curves
+    type = Exodiff
+    input = HYS_GQH_noaction_AD.i
+    exodiff = HYS_GQH_out.e
+    cli_args = Outputs/file_base=HYS_GQH_out
+    abs_zero = 1e-9
+    prereq = GQH_AD
+
+    requirement = "The ADComputeISoilStress class shall accurately model the nonlinear dynamic response of the system when automatic differentiation is used along with the auto-generated GQH stress-strain curves."
+  [../]
+
+  [./data_file_jac_check]
+    # 1 element problem with ISoilAction and automatic differentiation to check auto-generated GQH stress-strain curves
+    type = PetscJacobianTester
+    input = HYS_data_file_AD_jac.i
+    ratio_tol = 6e-8
+    difference_tol = 1e-2
+    cli_args = '-snes_test_err 1e-9 -mat_fd_type ds'
+
+    requirement = "The ADComputeISoilStress class shall accurately compute the jacobian for a quasi-static nonlinear response of a soil column subjected to pure shear."
+  [../]
+
+  [./data_file_pressure_jac_check]
+    type = PetscJacobianTester
+    input = HYS_data_file_pressure_contact_AD.i
+    ratio_tol = 3e-7
+    difference_tol = 1e-1
+    cli_args = '-snes_test_err 1e-9 -mat_fd_type ds Executioner/num_steps=1'
+
+    requirement = "The ADComputeISoilStress class shall accurately compute the jacobian for the dynamic pressure-dependent nonlinear response of a soil column subjected to vertical displacement as well as pure shear."
+  [../]
+
+  [./data_file_pressure_contact]
+    type = CSVDiff
+    input = HYS_data_file_pressure_contact.i
+    csvdiff = HYS_data_file_pressure_contact_out.csv
+    abs_zero = 5e-5
+    rel_err = 5e-5
+
+    requirement = "The ComputeISoilStress class shall fail under tension and regain strength under compression."
+  [../]
+
+  [./data_file_pressure_contact_AD]
+    type = CSVDiff
+    input = HYS_data_file_pressure_contact_AD.i
+    csvdiff = HYS_data_file_pressure_contact_out.csv
+    cli_args = 'Outputs/file_base=HYS_data_file_pressure_contact_out'
+    abs_zero = 5e-5
+    rel_err = 5e-5
+
+    requirement = "The ADComputeISoilStress class shall fail under tension and regain strength under compression."
+    prereq = data_file_pressure_contact
+  [../]
+
   [./thin_layer]
     # 1 element problem with ISoilAction to check auto-generated thin_layer stress-strain curves
     type = Exodiff
@@ -85,6 +200,32 @@
     prereq = thin_layer
 
     requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer formulation without the use of the ISoilAction."
+  [../]
+
+  [./thin_layer_AD]
+    # 1 element problem with ISoilAction to check auto-generated thin_layer stress-strain curves
+    type = Exodiff
+    input = HYS_thin_layer.i
+    exodiff = HYS_thin_layer_out.e
+    prereq = thin_layer_noaction
+    cli_args = 'Kernels/DynamicTensorMechanics/use_automatic_differentiation=true Materials/I_Soil/soil_thin_layer/use_automatic_differentiation=true Executioner/solve_type=PJFNK Outputs/file_base=HYS_thin_layer_out'
+    abs_zero = 3e-6
+    rel_err = 5e-5
+
+    requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer formulation and shall also automatically construct the Jacobian matrix."
+  [../]
+
+  [./thin_layer_noaction_AD]
+    # 1 element problem without ISoilAction to check auto-generated thin_layer stress-strain curves
+    type = Exodiff
+    input = HYS_thin_layer_noaction_AD.i
+    exodiff = HYS_thin_layer_out.e
+    cli_args = Outputs/file_base=HYS_thin_layer_out
+    prereq = thin_layer_AD
+    abs_zero = 3e-6
+    rel_err = 5e-5
+
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer formulation without the use of the ISoilAction and shall also automatically construct the Jacobian matrix."
   [../]
 
   [./pressure_dependent_stiffness]
@@ -116,5 +257,29 @@
     abs_zero = 5e-9
 
     requirement = "The ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil without the use of the ISoilAction."
+  [../]
+
+  [./stiffness_and_strength_pressure_dependency_AD]
+    # 1 element problem with ISoilAction to check stiffness and strength pressure dependency
+    type = Exodiff
+    input = HYS_stiffness_and_strength_pressure_dependency.i
+    exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
+    prereq = stiffness_and_strength_pressure_dependency_noaction
+    abs_zero = 5e-8
+    cli_args = 'Kernels/DynamicTensorMechanics/use_automatic_differentiation=true Materials/I_Soil/soil_1/use_automatic_differentiation=true Executioner/solve_type=NEWTON Outputs/file_base=HYS_stiffness_and_strength_pressure_dependency_out'
+
+    requirement = "The ISoilAction and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil and shall automatically construct the Jacobian matrix."
+  [../]
+
+  [./stiffness_and_strength_pressure_dependency_noaction_AD]
+    # 1 element problem without ISoilAction to check stiffness and strength pressure dependency
+    type = Exodiff
+    input = HYS_stiffness_and_strength_pressure_dependency_noaction_AD.i
+    exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
+    cli_args = Outputs/file_base=HYS_stiffness_and_strength_pressure_dependency_out
+    prereq = stiffness_and_strength_pressure_dependency_AD
+    abs_zero = 5e-8
+
+    requirement = "The ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil without the use of the ISoilAction and shall also automatically construct the Jacobian matrix."
   [../]
 []
