@@ -372,19 +372,19 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
   {
     Real loc_rand;
     Real sca_rand;
-    std::vector<Real> params_now = {0, 0};     // Initilizing new parameter vector here.
-    std::vector<Real> params_before = {0, 0};  // Initilizing old parameter vector here.
-    std::vector<Real> gradient_now = {-1, -2}; // Initilizing the gradient vector here.
+    std::vector<Real> params_now = {0, 0};     // Initializing new parameter vector here.
+    std::vector<Real> params_before = {0, 0};  // Initializing old parameter vector here.
+    std::vector<Real> gradient_now = {-1, -2}; // Initializing the gradient vector here.
     // This variable will get updated within each iteration of the Gradient Descent algorithm.
     Real dparam =
         0.01; // Initilizing an arbitrarily small deviation to the random seed parameter vector.
               // Note that Gradient Descent algorithm requires two likelihood values from two seeds.
-    Real likelihood_now;           // Initilizing a variable.
-    Real likelihood_before;        // Initilizing a variable.
-    Real likelihood_base = -50001; // Initilizing to an arbitrarily low value here.
+    Real likelihood_now;           // Initializing a variable.
+    Real likelihood_before;        // Initializing a variable.
+    Real likelihood_base = -50001; // Initializing to an arbitrarily low value here.
     // This variable will get updated if a parameter vector has greater likelihood.
     MooseRandom::seed(seed); // Setting up the random number generator.
-    for (unsigned int index = 0; index < num_rnd; index++)
+    for (int index = 0; index < num_rnd; index++)
     {
       loc_rand = loc_space[0] + (loc_space[1] - loc_space[0]) * MooseRandom::rand();
       sca_rand = sca_space[0] + (sca_space[1] - sca_space[0]) * MooseRandom::rand();
