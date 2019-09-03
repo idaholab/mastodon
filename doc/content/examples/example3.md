@@ -87,4 +87,15 @@ DEEPSOIL and presented in
 Further details regarding to application of MASTODON to simulate seismic site response and soil
 structure interaction analysis can be found in [!citet](baltaji2017nonlinear).
 
+This example can also be run using the Automatic Differentiation (AD). Automatic Differentiation
+computes the "exact" empirical Jacobian of the stiffness matrix as opposed to the standard
+theoretical Jacobian.  More information can be found in
+[ISoil material](doc/content/source/materials/ADComputeISoilStress.md). The plot below
+ presents the accelerations at the top soil computed using AD and no-AD.
+
+!media media/examples/AD_noAD_Comp.png
+       style=width:60%;margin-left:150px;float:center;
+       id=fig:shearbeam
+       caption=Comparison of top soil accelerations generated using AD and no-AD.
+
 !bibtex bibliography

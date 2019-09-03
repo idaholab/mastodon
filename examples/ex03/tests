@@ -5,4 +5,10 @@
     cli_args = Executioner/num_steps=2
     method = opt
   [../]
+  [./ex03_AD]
+    type = RunApp
+    input = 'shear_beam_Isoil_free_field_AD.i'
+    cli_args = Executioner/num_steps=2
+    method = opt
+  [../]
 [../]
