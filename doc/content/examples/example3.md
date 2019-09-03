@@ -87,15 +87,34 @@ DEEPSOIL and presented in
 Further details regarding to application of MASTODON to simulate seismic site response and soil
 structure interaction analysis can be found in [!citet](baltaji2017nonlinear).
 
-This example can also be run using the Automatic Differentiation (AD). Automatic Differentiation
-computes the "exact" empirical Jacobian of the stiffness matrix as opposed to the standard
-theoretical Jacobian.  More information can be found in
-[ISoil material](doc/content/source/materials/ADComputeISoilStress.md). The plot below
- presents the accelerations at the top soil computed using AD and no-AD.
+This example can also be run using Automatic Differentiation (AD). Automatic Differentiation
+computes the numerical Jacobian that is very close to the theoretical Jacobian.  
+More information can be found in [ISoil material](source/materials/ADComputeISoilStress.md).
+
+The following two additions to the input file should be made to run this example using AD.
+Add 'use_automatic_differentiation = true' in 'Kernels/DynamicTensorMechanics':
+
+!listing examples/ex03/shear_beam_Isoil_free_field_AD.i
+         start=Kernels/DynamicTensorMechanics
+         end=Kernels/inertia_x
+
+Also add 'use_automatic_differentiation = true' in 'Materials/I_Soil/soil_all':
+
+!listing examples/ex03/shear_beam_Isoil_free_field_AD.i
+         start=Materials/I_Soil/soil_all
+         end=Preconditioning
+
+The plots below present the accelerations and response spectra at the top soil computed
+using AD and no-AD. The AD and the no-AD results match quite closely.
 
 !media media/examples/AD_noAD_Comp.png
-       style=width:60%;margin-left:150px;float:center;
+       style=width:90%;margin-left:150px;float:center;
        id=fig:shearbeam
        caption=Comparison of top soil accelerations generated using AD and no-AD.
+
+       !media media/examples/AD_noAD_Comp_RS.png
+              style=width:90%;margin-left:150px;float:center;
+              id=fig:shearbeam
+              caption=Comparison of top soil response spectra generated using AD and no-AD.
 
 !bibtex bibliography

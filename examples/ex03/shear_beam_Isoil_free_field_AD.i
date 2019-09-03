@@ -266,11 +266,30 @@
   [../]
 []
 
+[VectorPostprocessors]
+  [./accel_hist]
+    type = ResponseHistoryBuilder
+    variables = 'accel_x'
+    nodes = '80'
+  [../]
+  [./accel_spec]
+    type = ResponseSpectraCalculator
+    vectorpostprocessor = accel_hist
+    regularize_dt = 0.005
+    outputs = out
+  [../]
+[]
+
 [Outputs]
   csv = true
   exodus = true
   perf_graph = true
   print_linear_residuals = true
+  [./out]
+   type = CSV
+   execute_on = 'final'
+   file_base = topsoil_response_AD
+  [../]
  [./screen]
    type = Console
    max_rows = 1
