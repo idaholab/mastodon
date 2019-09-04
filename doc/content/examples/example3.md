@@ -87,4 +87,36 @@ DEEPSOIL and presented in
 Further details regarding to application of MASTODON to simulate seismic site response and soil
 structure interaction analysis can be found in [!citet](baltaji2017nonlinear).
 
+## Implementation using Automatic Differentiation
+
+This example can also be run using Automatic Differentiation (AD). Automatic Differentiation
+computes the numerical Jacobian that is very close to the theoretical Jacobian.  
+More information can be found in [ISoil material](source/materials/ADComputeISoilStress.md).
+
+The following two additions to the input file should be made to run this example using AD.
+Add 'use_automatic_differentiation = true' in 'Kernels/DynamicTensorMechanics':
+
+!listing examples/ex03/shear_beam_Isoil_free_field_AD.i
+         start=Kernels
+         end=AuxKernels
+
+Also add 'use_automatic_differentiation = true' in 'Materials/I_Soil/soil_all':
+
+!listing examples/ex03/shear_beam_Isoil_free_field_AD.i
+         start=Materials
+         end=Preconditioning
+
+The plots below present the accelerations and response spectra at the top soil computed
+using AD and no-AD. The AD and the no-AD results quite closely match.
+
+!media media/examples/AD_noAD_Comp.png
+       style=width:90%;float:center;
+       id=fig:ad_acc_comp
+       caption=Comparison of top soil accelerations generated using AD and no-AD.
+
+!media media/examples/AD_noAD_Comp_RS.png
+       style=width:90%;float:center;
+       id=fig:ad_rs_comp
+       caption=Comparison of top soil response spectra generated using AD and no-AD.
+
 !bibtex bibliography
