@@ -240,7 +240,6 @@
   dt = 0.001
   l_max_its = 50
   timestep_tolerance = 1e-6
-  # petsc_options = '-snes_check_jacobian'
 []
 
 [Postprocessors]
