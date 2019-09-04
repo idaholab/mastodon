@@ -48,6 +48,7 @@
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
     zeta = 0.000781
+    use_automatic_differentiation = true
   [../]
   [./inertia_x]
     type = InertialForce
@@ -217,6 +218,7 @@
        a1 = 0.0
        a2 = 0.0
        b_exp = 0.0
+       use_automatic_differentiation = true
     [../]
   [../]
 []
@@ -230,19 +232,15 @@
 
 [Executioner]
   type = Transient
-  solve_type = PJFNK
+  solve_type = NEWTON
   nl_abs_tol = 1e-6
   nl_rel_tol = 1e-6
-  l_tol = 1e-6
-  l_max_its = 50
   start_time = 0
   end_time = 85.4
   dt = 0.001
+  l_max_its = 50
   timestep_tolerance = 1e-6
-  petsc_options = '-snes_ksp_ew'
-  petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
-  petsc_options_value = '201                hypre    boomeramg      4'
-  line_search = 'none'
+  # petsc_options = '-snes_check_jacobian'
 []
 
 [Postprocessors]
@@ -290,11 +288,11 @@
   [./out]
    type = CSV
    execute_on = 'final'
-   file_base = topsoil_response
+   file_base = topsoil_response_AD
   [../]
-  [./screen]
+ [./screen]
    type = Console
    max_rows = 1
    interval = 1000
-  [../]
+ [../]
 []
