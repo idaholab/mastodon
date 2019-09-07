@@ -31,7 +31,7 @@ Since the engineering strain in the ZX plane, $\gamma_{zx}$, is equal to two tim
        caption=The user-defined backbone curve and the engineering shear stress-strain curve in the ZX plane output by MASTODON during the initial loading cycle (from 3 seconds to 4 seconds).
        style=width:100%
 
-Since the maximum stress in the user-defined backbone curve of 3805.243092 Pa was exceeded during the solve, it can be seen in [user-defined-backbone-curve] that the soil continues to deform without any additional shear stress.
+Since the maximum stress in the user-defined backbone curve of 3805 Pa was exceeded during the solve, it can be seen in [user-defined-backbone-curve] that the soil continues to deform without any additional shear stress.
 
 ### Complete Input File
 
