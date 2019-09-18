@@ -32,13 +32,13 @@
   [./motions]
     # Reads ground motion files for input
     type = GroundMotionReader
-    pattern = 'GM_00.csv'
+    pattern = 'GM_*.csv'
   [../]
   [./hazard]
     # Bins hazard curves into number_of_bins and scales ground motions
     type = HazardCurve
     filename = 'hazard.csv'
-    number_of_bins = 1
+    number_of_bins = 4
     ground_motions = motions
     reference_acceleration = 0.6
   [../]
