@@ -4,8 +4,9 @@
 # Then a body force equal to 3 * g is applied to the element thereby increasing the pressure experienced
 # by the element. The element is then sheared by moving the front surface (z = 0) in the x direction.
 
-# The stength of the resulting stress-strain can be varied with a0, a1, a2, and p_ref, but its stiffness
-# for a particular strain interval should remain the same so long as b_exp = 0.
+# The stength of the resulting stress-strain can be varied with pressure dependent stength parameters,
+# a0, a1, and a2, and with p_ref. Setting b_exp = 0 assures that MASTODON does not directly modify the
+# backbone stiffness. Although, a change in strength naturally leads to one in stiffness.
 
 # Five combinations of the parameters a_0, a_1, a_2, and p_ref were tested using this input file,
 # but only one case can be used at a time.

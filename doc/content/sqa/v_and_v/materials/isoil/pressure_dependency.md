@@ -20,7 +20,7 @@ The backbone curve was defined as shown in [p-ref-backbone-input].
               id=p-ref-backbone-input
               caption=The user-defined backbone curve input into MASTODON to control the stress-strain behavior of the soil using I-Soil.
 
-The element was first initialized with the following state of stress, which corresponds to three times the acceleration of gravity, i.e., $g = -29.43 m/s^{2}$ (see [Initial Stresses](manuals/user/index.md#initial_stresses-user) for more information on stress initialization):
+To conserve dynamic equilibrium in the first time-step, the element was initialized with the following state of stress, which corresponds to three times the acceleration of gravity, i.e., $g = -29.43 m/s^{2}$ (see [Initial Stresses](manuals/user/index.md#initial_stresses-user) for more information on stress initialization):
 
 \begin{equation}
 \sigma_{initial}=[-12613\,\,\,\,0\,\,\,\,0\,\,\,\,0\,\,\,\,-12613\,\,\,\,0\,\,\,\,0\,\,\,\,0\,\,\,\,-29430]^{\mathrm{T}}\,\,\,\text{Pa}
@@ -52,7 +52,7 @@ where $G_{0}$ is the unmodified shear modulus determined from the backbone curve
 
 ### Pressure Dependent Strength id=strength
 
-The five cases described in [strength-cases] were used to investigate the behavior of [p-ref-strength] with varying parameters, $a_{0}$, $a_{1}$, $a_{2}$, and $p_{ref}$. In all cases, the pressure dependent stiffness parameter, $b$, was set to zero, and therefore, the stiffness was not modified.
+The five cases described in [strength-cases] were used to investigate the behavior of [p-ref-strength] with varying parameters, $a_{0}$, $a_{1}$, $a_{2}$, and $p_{ref}$. In all cases, the pressure dependent stiffness parameter, $b$, was set to zero. Therefore, [p-ref-modulus] was anomalously canceled in these models.
 
 !table id=strength-cases caption=Five combinations of $a_{0}$, $a_{1}$, $a_{2}$, and $p_{ref}$ used to investigate their effect on [p-ref-strength].
 | Case No. | $a_{0}$ | $a_{1}$ | $a_{2}$ | $p_{ref}$ |
@@ -65,7 +65,7 @@ The five cases described in [strength-cases] were used to investigate the behavi
 
 #### Results
 
-The engineering shear stress-strain backbone curve results for Cases 1, 2, and 3 are presented in [strength-comparison1], and those for Cases 2, 4, and 5 are presented in [strength-comparison2]. Both figures show their results along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [#problem-statement]). It can be seen in [strength-comparison1] and [strength-comparison2] that MASTODON effectively modifies the shear strength while holding the shear modulus for a particular strain increment equal to that defined by the original backbone curve.
+The engineering shear stress-strain backbone curve results for Cases 1, 2, and 3 are presented in [strength-comparison1], and those for Cases 2, 4, and 5 are presented in [strength-comparison2]. Both figures show their results along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [#problem-statement]). It can be seen in [strength-comparison1] and [strength-comparison2] that MASTODON effectively modifies the shear strength. In some cases, stiffness changes on those strain increments for which the mean effective stress exceeds $\tau_{y}(p,\gamma)$ can also be observed in these two figures, even though $b=0$. This is reasoned by the fact that, at a constant rate of strain, a change in strength of a material naturally (and numerically) leads to one in stiffness.
 
 !media media/materials/isoil/pressure_dependent_strength1.png
        id=strength-comparison1
@@ -75,7 +75,7 @@ The engineering shear stress-strain backbone curve results for Cases 1, 2, and 3
        id=strength-comparison2
        caption=The user-defined backbone curve and the engineering shear stress-strain curve in the ZX plane output by MASTODON during the initial loading cycle (from 3 seconds to 4 seconds) for pressure dependent strength Cases 2, 4, and 5.
 
-Since setting $a_{2}=1$ and $a_{1}=0$ causes the shear strength to increase in proportion to $(p-p_{0})/p_{ref}$, while setting $a_{2}=0$ and $a_{1}=1$ causes it to increase in proportion to $\sqrt{(p-p_{0})/p_{ref}}$, [strength-comparison1] shows that Case 1 is significantly stronger than Case 2. Also, since setting $a_{0}=1$ while setting the others to zero causes the right-hand-side of [p-ref-strength] to be equal to unity, [strength-comparison1] shows that Case 3 is practically equivalent to the original backbone curve (the slight discrepancy arises from the presence of initial stresses, the tensile cutoff value, $p_{0}=-1$, and the application of the body force). Cases 4 and 5 are essentially Case 2 except with different $p_{ref}$ values, hence, Case 2 was included in [strength-comparison2] for comparison. This plot shows that setting the reference pressure equal to the applied vertical pressure (Case 4) causes the shear strength to remain virtually unmodified, while setting it lower (Case 2) causes the shear strength to increase and setting it higher (Case 5) causes the shear strength to decrease. These observations made from each of the five cases are arithmetically consistent with [p-ref-strength].
++Qualitative Analysis:+ Since setting $a_{2}=1$ and $a_{1}=0$ causes the shear strength to increase in proportion to $(p-p_{0})/p_{ref}$, while setting $a_{2}=0$ and $a_{1}=1$ causes it to increase in proportion to $\sqrt{(p-p_{0})/p_{ref}}$, [strength-comparison1] shows that Case 1 is significantly stronger than Case 2. Also, since setting $a_{0}=1$ while setting the others to zero causes the right-hand-side of [p-ref-strength] to be equal to unity, [strength-comparison1] shows that Case 3 is practically equivalent to the original backbone curve (the slight discrepancy arises from the presence of initial stresses, the tensile cutoff value, $p_{0}=-1$, and the application of the body force). Cases 4 and 5 are essentially Case 2 except with different $p_{ref}$ values, hence, Case 2 was included in [strength-comparison2] for comparison. This plot shows that setting the reference pressure equal to the applied vertical pressure (Case 4) causes the shear strength to remain virtually unmodified, while setting it lower (Case 2) causes the shear strength to increase and setting it higher (Case 5) causes the shear strength to decrease. These observations made from each of the five cases are arithmetically consistent with [p-ref-strength].
 
 #### Complete Input File
 
@@ -83,7 +83,7 @@ Since setting $a_{2}=1$ and $a_{1}=0$ causes the shear strength to increase in p
 
 ### Pressure Dependent Stiffness id=stiffness
 
-The three cases described in [stiffness-cases] were used to investigate the behavior of [p-ref-modulus] with different values for the parameter $b$. In all cases, the pressure dependent strength parameters were set to the following: $a_{0}=1$, $a_{1}=0$, and $a_{2}=0$, therefore, the yield strength was not modified, and $p_{ref}$ was set to 6072.86 Pa.
+The three cases described in [stiffness-cases] were used to investigate the behavior of [p-ref-modulus] with different values for the parameter $b$. In all cases, $p_{ref}$ was set to 6072.86 Pa. and the pressure dependent strength parameters were set to the following: $a_{0}=1$, $a_{1}=0$, and $a_{2}=0$. Therefore, [p-ref-strength] was anomalously canceled in these models.
 
 !table id=stiffness-cases caption=Three different values of $b$ used to investigate its effect on [p-ref-modulus].
 | Case No. | $b$ |
@@ -94,13 +94,13 @@ The three cases described in [stiffness-cases] were used to investigate the beha
 
 #### Results
 
-The engineering shear stress-strain backbone curve results for all cases are presented in [stiffness-comparison]. The results are shown along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [#problem-statement]). It can be seen in [stiffness-comparison] that MASTODON effectively modifies the shear modulus while holding the shear strength for a particular strain increment equal to that defined by the original backbone curve.
+The engineering shear stress-strain backbone curve results for all cases are presented in [stiffness-comparison]. The results are shown along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [#problem-statement]). It can be seen in [stiffness-comparison] that MASTODON effectively modifies the shear modulus. For reasons similar to why the curves shown in [strength-comparison1] and [strength-comparison2] exhibit stiffness changes, strength changes, particularly at the lower strains of Case 1 and Case 2, can also be observed in this figure, even though $a_{0}=1$, $a_{1}=0$, and $a_{2}=0$. However, the ultimate shear strength at which the material completely fails, which corresponds to the maximum stress value defined by the backbone curve ([p-ref-backbone-input]), remains the same.
 
 !media media/materials/isoil/pressure_dependent_stiffness.png
        id=stiffness-comparison
        caption=The user-defined backbone curve and the engineering shear stress-strain curve in the ZX plane output by MASTODON during the initial loading cycle (from 3 seconds to 4 seconds) for the pressure dependent stiffness cases.
 
-[stiffness-comparison] shows that Case 1 results in a greater stiffness increase than Case 2. Also, since [p-ref-modulus] results in $G=G_{0}$ when $b=0$, Case 3 is practically equivalent to the original backbone curve (the slight discrepancy arises from the presence of initial stresses, the tensile cutoff value, $p_{0}=-1$, and the application of the body force). These observations made from each of the three cases are arithmetically consistent with [p-ref-modulus].
++Qualitative Analysis:+ [stiffness-comparison] shows that Case 1 results in a greater stiffness increase than Case 2. Also, since [p-ref-modulus] results in $G=G_{0}$ when $b=0$, Case 3 is practically equivalent to the original backbone curve (the slight discrepancy arises from the presence of initial stresses, the tensile cutoff value, $p_{0}=-1$, and the application of the body force). These observations made from each of the three cases are arithmetically consistent with [p-ref-modulus].
 
 #### Complete Input File
 
@@ -118,13 +118,13 @@ The two cases described in [strength-stiffness-cases] were used to simultaneousl
 
 #### Results
 
-The engineering shear stress-strain backbone curve results for both cases are presented in [strength-stiffness-comparison]. The results are shown along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [#problem-statement]). It can be seen in [strength-stiffness-comparison] that MASTODON effectively modifies both the strength and stiffness for a particular strain increment.
+The engineering shear stress-strain backbone curve results for both cases are presented in [strength-stiffness-comparison]. The results are shown along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [#problem-statement]). It can be seen in [strength-stiffness-comparison] that MASTODON effectively modifies both the strength and stiffness for a particular strain increment. Specifically, one should compare the curve shown in this figure to those in [strength-comparison1], [strength-comparison2], and [stiffness-comparison].
 
 !media media/materials/isoil/stiffness_and_strength_pressure_dependency.png
        id=strength-stiffness-comparison
        caption=The user-defined backbone curve and the engineering shear stress-strain curve in the ZX plane output by MASTODON during the initial loading cycle (from 3 seconds to 4 seconds) for the simultaneous strength and stiffness pressure dependency cases.
 
-[strength-stiffness-comparison] shows that Case 1 results in a greater shear strength increase than Case 2, but their shear modulus increases are equivalent since both used $b=0.5$. Note that Case 1 and Case 2 shown in [strength-stiffness-comparison] have equal shear strengths to Case 1 and Case 2 shown in [strength-comparison1], but the former cases are stiffer than the latter. These observations made from each of the two cases are arithmetically consistent with [p-ref-strength] and [p-ref-modulus].
++Qualitative Analysis:+ [strength-stiffness-comparison] shows that Case 1 results in a greater shear strength increase than Case 2, but their shear modulus increases are equivalent since both used $b=0.5$. Note that Case 1 and Case 2 shown in [strength-stiffness-comparison] have equal shear strengths to Case 1 and Case 2 shown in [strength-comparison1], but the former cases are stiffer than the latter. These observations made from each of the two cases are arithmetically consistent with [p-ref-strength] and [p-ref-modulus].
 
 #### Complete Input File
 
