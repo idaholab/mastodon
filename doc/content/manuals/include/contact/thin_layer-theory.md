@@ -49,8 +49,8 @@ soil layer as follows:
    pressure on the interface, thereby also increasing the shear strength in the above equation
    linearly with the normal pressure, similar to Coulomb friction.
 
-5. Use a large value for the Poisson’s ratio, in order to avoid sudden changes in the volume of the
-   thin-layer elements after the yield point is reached. A suitable value for the Poisson’s ratio can
+5. Use a large value for the Poisson's ratio, in order to avoid sudden changes in the volume of the
+   thin-layer elements after the yield point is reached. A suitable value for the Poisson's ratio can
    be calculated by trial and error.
 
 Following the above steps should enable the user to reasonably simulate geometric

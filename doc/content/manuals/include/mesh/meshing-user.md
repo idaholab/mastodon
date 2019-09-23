@@ -30,7 +30,7 @@ value across the input file. The global parameters are activated providing the f
          end=Variables
 
 By providing the above commands, the user specifies that if any object in the input file has a
-parameter called “displacements”, that parameter would be set to “disp_x disp_y disp_z”, which are
+parameter called "displacements", that parameter would be set to "disp_x disp_y disp_z", which are
 the global displacement degrees of freedoms at the nodal points in x, y, and z directions,
 respectively.
 
