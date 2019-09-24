@@ -26,7 +26,7 @@ Extensions:
             Getting Started:
                 MacOS (Mojave): getting_started/macos_mojave.md
                 MacOS (Other): getting_started/macos_other.md
-                Ubuntu: installation/ubuntu.md
+                Ubuntu: getting_started/ubuntu.md
                 Running MASTODON: getting_started/running_mastodon.md
             Examples: examples/index.md
             Manuals:
