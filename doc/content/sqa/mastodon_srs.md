@@ -17,22 +17,22 @@ MASTODON is a nonlinear, three-dimensional seismic soil-structure interaction an
 
 !SQA-template-item system_scope
 
-Multi-hazard Analysis for STOchastic time-DOmaiN phenomena (MASTODON) is a ﬁnite element application
+Multi-hazard Analysis for STOchastic time-DOmaiN phenomena (MASTODON) is a finite element application
 that analyzes the response of 3-D soil-structure systems to earthquakes. MASTODON currently focuses
-on the simulation of seismic events and has the capability to perform extensive ‘source-to-site’
+on the simulation of seismic events and has the capability to perform extensive 'source-to-site'
 simulations including earthquake fault rupture, nonlinear wave propagation and nonlinear
 soil-structure interaction (NLSSI) analysis. MASTODON is being developed to be a dynamic
 probabilistic risk assessment framework that enables analysts to not only perform deterministic
 analyses, but also easily perform probabilistic or stochastic simulations for the purpose of risk
 assessment.
 
-MASTODON is a MOOSE-based application and performs ﬁnite-element analysis of the dynamics of solids,
-mechanics of interfaces and porous media ﬂow. It is equipped with numerical material models of dry
+MASTODON is a MOOSE-based application and performs finite-element analysis of the dynamics of solids,
+mechanics of interfaces and porous media flow. It is equipped with numerical material models of dry
 and saturated soils including a nonlinear hysteretic soil model, and a uP-U model for saturated
 soil, as well as structural materials such as reinforced concrete. It is also equipped with
 interface models that simulate gapping, sliding and uplift at the interfaces of solid media such as
 the foundation-soil interface of structures. MASTODON also includes absorbing boundary models for
-the simulation of inﬁnite or semi-inﬁnite domains, fault rupture model for seismic source
+the simulation of infinite or semi-infinite domains, fault rupture model for seismic source
 simulation, and the domain reduction method for the input of complex, three dimensional wave fields.
 Since MASTODON is a MOOSE-based application, it can efficiently solve problems using either standard
 workstations or very large high-performance computers.
