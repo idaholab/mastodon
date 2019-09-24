@@ -17,6 +17,6 @@ interest. In order to bring the system to equilibrium, a transient analysis with
 is necessary. This approach causes fluctuations on the stress and strains at the beginning of the
 analysis because of the elements being initially at zero stress state. Viscous damping removes the
 fluctuations and brings the system to equilibrium. Once the system equilibrates, the gravity stresses
-are obtained along with the displacements due to the gravity loading. “Initial Stress” command is
+are obtained along with the displacements due to the gravity loading. "Initial Stress" command is
 available in MASTODON framework to eliminate the need for a separate transient analysis. In addition,
 no displacements, or strains due to gravity result.
