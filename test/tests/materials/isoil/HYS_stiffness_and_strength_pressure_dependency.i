@@ -6,6 +6,10 @@
 
 # The resulting stress-strain curve is stiffer due to the increase in pressure and also the maximum/ultimate shear
 # stress at which the material completely fails is also higher due to the yield strength pressure correction.
+
+# Two combinations of the parameters a_0, a_1, and a_2 were tested using this input file, but only
+# one case can be used at a time.
+
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
   dim = 3 # Dimension of the mesh
@@ -345,10 +349,17 @@
       b_exp = 0.5
       p_ref = 6072.86
       tension_pressure_cut_off = -1
+      density = '2000'
+
+      # Case 1
       a0 = 0
       a1 = 0
       a2 = 1
-      density = '2000'
+
+      # Case 2
+      #a0 = 0
+      #a1 = 1
+      #a2 = 0
     [../]
   [../]
 []

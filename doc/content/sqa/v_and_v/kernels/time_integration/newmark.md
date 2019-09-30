@@ -1,4 +1,4 @@
-# Newmark Time Integration Validation
+# Newmark Time Integration Verification
 
 ## Problem Statement and Results
 

@@ -53,7 +53,7 @@ displacement boundary condition. Syntax is the same as prescribing a displacemen
 but with type = PresetAcceleration and the function describing time vs acceleration data instead of
 time vs displacement.
 
-### Periodic Boundary Conditions
+### Periodic Boundary Conditions id=PeriodicBC
 
 Periodic boundary conditions are used to constrain the nodes to move together in the specified
 directions. The following input is an example applied on the single element problem above and should be embedded into the BCs block segment as:
