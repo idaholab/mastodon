@@ -54,7 +54,9 @@ defineADValidParams(
     params.addParam<std::vector<Real>>("p_ref",
                                        "The reference pressure at which "
                                        "the parameters are defined for "
-                                       "each soil layer.");
+                                       "each soil layer. If 'soil_type = "
+                                       "darendeli', then the reference "
+                                       "pressure must be input in kilopascals.");
     params.addParam<Real>("a0",
                           1.0,
                           "The first coefficient for pressure dependent yield strength "

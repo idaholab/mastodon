@@ -1,4 +1,4 @@
-# Hilber-Hughes-Taylor (HHT) Time Integration Validation
+# Hilber-Hughes-Taylor (HHT) Time Integration Verification
 
 ## Problem Statement and Results
 

@@ -1,4 +1,4 @@
-### Nonlinear hysteretic constitutive model for soils (I-soil)
+### Nonlinear hysteretic constitutive model for soils (I-soil) id=isoil-theory
 
 I-soil ([!citet](numanoglu2017phd)) is a three dimensional, physically motivated, piecewise linearized
 nonlinear hysteretic material model for soils. The model can be represented by shear type

@@ -1,4 +1,4 @@
-## Initial Stresses
+## Initial Stresses id=initial_stresses-user
 
 Initial stress command is available to apply the prescribed initial stresses to the finite element
 domain. If the user applies initial stress state that is equal to that of gravity loadings, upon
