@@ -88,9 +88,9 @@ class Event(object):
             raise AttributeError("'%s' is not a basic node (i.e., the operator attribute is "
                                  "set), therefore it can not have distribution." % (self.__name))
         if antype == 'Fragility':
-            if distribution not in ['LNORM']:
+            if distribution not in ['LNORM', 'PE']:
                 raise TypeError("The dist. of '%s' for fragility must be "
-                                "one of the following: LNORM" % (self.__name))
+                                "one of the following: LNORM, PE" % (self.__name))
         else:
             if distribution not in ['PE', 'NORM']:
                 raise TypeError("The dist. of '%s' for risk must be "
@@ -125,6 +125,13 @@ class Event(object):
                                      "Mean/Median and Standard_Deviaton" % (self.__name))
                 for i in range(0, len(im)):
                     self.__prob.append(scipy.stats.norm.cdf(numpy.log(im[i]/prob[0])/prob[1]))
+            if self.__dist == 'PE':
+                if len(prob) != 1:
+                    raise IndexError("Point Estimate of '%s' requires only one input: "
+                                     "Mean/Median probability" % (self.__name))
+                    if (prob[0] > 1) or (prob[0] < 0):
+                        raise ValueError("PE of '%s' should be between 0 & 1" % (self.__name))
+                self.__prob = prob*len(im)
             if uc:
                 raise IOError("Uncertainty option is not currently available for Fragility analysis. "
                               "Please change uncertainty to False or use Risk analysis option.")
@@ -385,17 +392,30 @@ class Quantification(object):
     Calculates the minimal cut set probabilities and system level probability
     by propagating basic event probabilities through the fault tree.
 
-    Two approaches, 1 and 2, are used for top event risk calculation, 1 being
-    convolving basic event fragilities with hazard first and propagating risks
-    through the fault tree. In approach 2, the fragilities are propagated first
-    using the Min-Max method and the top event fragility is convolved with the
-    hazard to calculate risk.
-        - Risk calculated using approach 1 is provided by toprisk_1
-        - Risk calculated using approach 2 is provided by toprisk_2
+    Two approaches, 1 and 2, are used for top event risk calculation. When the
+    input parameter, lite, is True only Approach 2 is performed. When lite is
+    False, both Approach 1 and 2 are performed.
 
-    10 inputs parameters: 1,2,3,4,5,6,10 are for Fragility inputs and seismic PRA.
-                          1,2,3,7,8,9,10 are for probabilistic risk inputs for uncertainty analysis.
-                          1,2,3,10 are for deterministic risk inputs.
+    Approach 1: This is a comprehensive calculation where basic event fragilities
+    are first convolved with the hazard to calculate the risks. The basic event
+    risks are then propagated through the fault tree as point estimates. This
+    allows for the calculation of importance measures and all the importance
+    measures are calculated and results are output into the corresponding folder.
+    The top event risk is calculated using three methods: Rare event approximation
+    Upper bound, and Min Max. Risk calculated using approach 1 is provided by
+    the toprisk_1 function. The results calculation using approach 1 are saved
+    in the approach_1 folder.
+
+    Approach 2: In approach 2, the fragilities are propagated through the fault
+    tree in each bin using the Min-Max method (exact calculation). This results
+    in the top event fragility. The top event fragility is then convolved with the
+    hazard to calculate risk. Risk calculated using approach 2 is provided by the
+    toprisk_2 function. The results calculated using approach 2 are saved in the
+    approach_2 folder.
+
+    10 input parameters: 1,2,3,4,5,6,10,11 are for Fragility inputs and seismic PRA.
+                         1,2,3,7,8,9,10,11 are for probabilistic risk inputs for uncertainty analysis.
+                         1,2,3,10,11 are for deterministic risk inputs.
 
     (0) name[str]: A string identifier for the instance of this class.
 
@@ -431,8 +451,17 @@ class Quantification(object):
                           hazard data in a similar fashion as the list above.
                           [[PGA, Prob. of exceedance], ...]
 
-    (5) IM[list]: Default is [0.1,4]. A list with lower & upper bounds of
-                  Intensity Measure.
+    (5) IM[list]: - If none is provided, a default range of [0.1,4] is assumed.
+                  - If a list of two elements is provided, it is assumed that this
+                  corresponds to the lower and upper bounds of the intensity
+                  measures. This range is then split into nbins according to the
+                  nbins input parameter.
+                  - If a list longer than 2 elements is provided, these elements
+                  are assumed to be the IM bin extents and the IM values for each
+                  bin are calculated as the geometric mean of the extents of each
+                  bin. The input parameter, nbins, is ignored in this case and the
+                  number of bins is assumed to be equal to the length of this list
+                  minus 1.
 
     (6) nbins[int]: Default is 15. Number of bins for Intensity Measure.
                     Can input any integer greater than 1.
@@ -447,16 +476,19 @@ class Quantification(object):
                    Can input any integer between 0 and (2**32 - 1).
 
     (10) lite[bool]: Default is False. When true, a 'lite' version of the
-                     calculation will be performed, in which the results files
-                     are not saved and only the top risk is calculated using
-                     approach 2 (see above) and stored in __top_risk_2. This
-                     approach is useful when only the top risk calculation is
-                     needed and the importance measures, fragility of the top
-                     event, etc. are not needed.
+                     calculation will be performed, in which the top risk is
+                     calculated only using Approach 2 (see above) and stored in
+                     __top_risk_2. This approach is useful when importance
+                     measures are not needed.
+
+    (11) write_output[bool]: Default is false. If true, will write csv output
+                             files. Approach 1 output files are written in the
+                             approach_1 folder and approach_2 output files are
+                             written in the approach_2 folder.
     """
 
     def __init__(self, name, logic, basic_events, analysis='default', hazard=None, IM=None,
-                 nbins=15, uncertainty=False, nsamp=1, seed=None, lite=False):
+                 nbins=15, uncertainty=False, nsamp=1, seed=None, lite=False, write_output=False):
 
         # name
         self.__name = name
@@ -480,15 +512,16 @@ class Quantification(object):
         # Uncertainty Analysis
         self.__uc = uncertainty
 
-        # set seed for the uncertainty Analysis
+        # set seed for the uncertainty analysis
         # TODO: throw error if seed is provided but uc is false
         self.__seed = self.__parValue(seed, 'seed')
 
-        # If true, a 'lite' version of quantification will be performed as follows:
-        # - top event risk calculation ONLY using approach 2, i.e., top event fragility
-        #   and hazard are convolved to calculate risk; csv results will not be
-        #   output, and importance measures are not calculated.
+        # If true, a 'lite' version of quantification will be performed as
+        # described above
         self.__lite = lite
+
+        # If true, outputs are written as csv files
+        self.__write_output = write_output
 
         if self.__antype.lower() == "fragility":
             # read Hazard curve
@@ -498,19 +531,32 @@ class Quantification(object):
             else:
                 self.__hazard = self.__readHazardFile(hazard)
 
-            # Intensity Measure range
+            # Intensity Measure calculations
+            # Intensity measure is not provided, default is assumed
             if IM is None:
                 self.__imrang = [0.1, 4]
-            else:
-                if not isinstance(IM, list):
-                    raise TypeError("The supplied items of IM range must be a list.")
+            # When provided, check that it is a list
+            if not isinstance(IM, list):
+                raise TypeError("The supplied items of IM range must be a list.")
+            # If 2 elements are provided, assume that it is a range and
+            # calculate the IMs and IMextents according to the number of bins
+            if len(IM) == 2:
                 self.__imrang = IM
-
-            # Number of bins for Intensity Measure
-            self.__nbins = self.__parValue(nbins, 'nbins')
-
-            # list of Intensity Measure bin values and the extents of the bins
-            self.__im, self.__imextents = self.__bins(self.__imrang, self.__nbins)
+                # Number of bins for Intensity Measure
+                self.__nbins = self.__parValue(nbins, 'nbins')
+                # list of Intensity Measure bin values and the extents of the bins
+                self.__im, self.__imextents = self.__bins(self.__imrang, self.__nbins)
+            # If a list is provided assume that the list is the bin extents and
+            # calculate bin IMs as the geometric means of the extents of each bin
+            # Also nbins is calculated as the number of extents minus 1 and the
+            # input nbins is ignored
+            if len(IM) > 2:
+                self.__imextents = IM
+                self.__im = range(len(IM)-1) # initializing im
+                self.__nbins = len(IM) - 1
+                from numpy import sqrt
+                for i in range(0, len(self.__im)):
+                    self.__im[i] = sqrt(IM[i] * IM[i+1]) # geomean
 
             # Interpolating/Exterpolating hazard curve based on Intensity Measure bin values
             self.__haz_freq, self.__haz_freq_deltas = self.__hazInterp(self.__hazard, self.__im, self.__imextents)
@@ -525,7 +571,15 @@ class Quantification(object):
                 self.__lnparameters, self.__im)
 
             # Calculating top event risk using approach 2
-            self.__top_risk_2 = [sum([x*y for x, y in zip(self.__topfragility, self.__haz_freq_deltas)])]
+            self.__bins_top_risk_2 = [x*y for x, y in zip(self.__topfragility, self.__haz_freq_deltas)]
+            self.__bins_top_risk_2_mod = [x*y for x, y in zip(self.__topfragility, self.__haz_freq)]
+            self.__top_risk_2 = [sum(self.__bins_top_risk_2)]
+
+            # Writing the results from approach 2
+            if self.__write_output:
+                self.__approach_2_results(self.__name, self.__im, self.__haz_freq,
+                                          self.__topfragility, self.__haz_freq_deltas,
+                                          self.__bins_top_risk_2)
 
             if not (self.__lite):
                 # dictionary of basic events risk (convolving fragility and hazard)
@@ -574,9 +628,12 @@ class Quantification(object):
                 self.__IMstat, self.__antype, self.__im)
 
             # Results to csv format
-            self.__results(
-                self.__name, self.__top_upper_bound, self.__mcsets, self.__mc_prob, self.__mc_im,
-                self.__top_cal, self.__bas_events, self.__count, self.__bnodes, self.__be_im)
+            self.__write_output = write_output
+            if self.__write_output:
+                self.__approach_1_results(self.__name, self.__top_upper_bound,
+                                          self.__mcsets, self.__mc_prob, self.__mc_im,
+                                          self.__top_cal, self.__bas_events,
+                                          self.__count, self.__bnodes, self.__be_im)
 
     @property
     def name(self):
@@ -639,17 +696,23 @@ class Quantification(object):
     @property
     def toprisk_1(self):
         """Return TOP event risk using approach 1"""
-        return (self.__top_upper_bound[0], self.__top_rare[0], self.__top_exact[0])
+        if self.__lite:
+            raise IOError("top_risk_1, which is the risk calculated from Approach 1 "
+                          "is only available for a full analysis. Currently, the parameter "
+                          "lite is set to True and only an Approach 2 analysis is performed.")
+        else:
+            return (self.__top_upper_bound[0], self.__top_rare[0], self.__top_exact[0])
 
     @property
     def toprisk_2_info(self):
-        """Return the bin IM, bin hazard, bin fragility and bin hazard delta
-           that was used to calculate the TOP event risk using approach 1"""
-        return (self.__im, self.__haz_freq, self.__topfragility, self.__haz_freq_deltas)
+        """Return the bin IM, bin hazard, bin fragility, bin hazard delta, and
+           the top risk for each bin (haz delta * fragility) that was used to
+           calculate the TOP event risk using approach 2"""
+        return (self.__im, self.__haz_freq, self.__topfragility, self.__haz_freq_deltas, self.__bins_top_risk_2, self.__bins_top_risk_2_mod)
 
     @property
     def toprisk_2(self):
-        """Return TOP event Risk using approach 1"""
+        """Return TOP event Risk using approach 2"""
         return self.__top_risk_2
 
     @property
@@ -947,12 +1010,14 @@ class Quantification(object):
 
         from scipy import interpolate
         import numpy as np
-        yinterp = interpolate.interp1d(haz_im, np.log10(haz_freq),
+        # Linear interpolation in the log-log scale interpretation of the
+        # hazard curve. This is in accordance with ASCE 43, where the hazard
+        # curve is assumed to be multi linear in the log-log scale
+        yinterp = interpolate.interp1d(np.log10(haz_im), np.log10(haz_freq),
                                        fill_value='extrapolate')
-        y_interp = 10**yinterp(im)
-
+        y_interp = 10**yinterp(np.log10(im))
         # Calculating hazard deltas that will be used in convolution
-        y_interp_ext = 10**yinterp(imext)
+        y_interp_ext = 10**yinterp(np.log10(imext))
         deltas = []
         for i in range(0, len(y_interp_ext)-1):
             deltas.append(y_interp_ext[i] - y_interp_ext[i+1])
@@ -1058,18 +1123,42 @@ class Quantification(object):
         return data
 
     @staticmethod
-    def __results(name, top_upper_bound, mcsets, mc_prob, mc_im, top_cal, bas_events, count,
-                  bnodes, be_im):
+    def __approach_2_results(name, im, haz_freq, topfragility, haz_freq_deltas, bins_top_risk_2):
         """
-        Function for writing results in csv format.
+        Function for writing approach 2 results in csv format
         """
         # Create a folder for results
-        if not os.path.exists(name+'_results/'):
-            os.mkdir(name+'_results/')
+        if not os.path.exists(name+'_results'):
+            os.mkdir(name+'_results')
+        if not os.path.exists(name+'_results/approach_2'):
+            os.mkdir(name+'_results/approach_2')
+        # Writing results into a csv file
+        import csv
+        dirname = name + '_results/approach_2/'
+        with open(dirname+'results.csv', 'w') as f1:
+            writer = csv.writer(f1, delimiter=',', lineterminator='\n',)
+            writer.writerow(['bin#', 'im', 'mafe', 'top_failure_prob',
+                              'delta_mafe', 'bin_risk'])
+            for i, a in enumerate(im):
+                writer.writerow([i+1, im[i], haz_freq[i], topfragility[i],
+                                 haz_freq_deltas[i], bins_top_risk_2[i]])
+
+
+    @staticmethod
+    def __approach_1_results(name, top_upper_bound, mcsets, mc_prob, mc_im, top_cal, bas_events, count,
+                  bnodes, be_im):
+        """
+        Function for writing approach 1 results in csv format.
+        """
+        # Create a folder for results
+        if not os.path.exists(name+'_results'):
+            os.mkdir(name+'_results')
+        if not os.path.exists(name+'_results/approach_1'):
+            os.mkdir(name+'_results/approach_1')
 
         # Writing results into separate csv files
         import csv
-        dirname = name + '_results/'
+        dirname = name + '_results/approach_1/'
         with open(dirname+'cutsets.csv', 'w') as f1:
             writer = csv.writer(f1, delimiter=',', lineterminator='\n',)
             writer.writerows([['Cut Sets', 'Prob/Freq', 'IM (%)'],
