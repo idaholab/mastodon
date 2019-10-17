@@ -35,7 +35,7 @@ ssh john@falcon1
 
 - Repeat the MASTODON installation process explained in [Getting Started/MacOS (Mojave)](https://mooseframework.inl.gov/mastodon/getting_started/macos_mojave.html) or similar. That is, modify your bash profile, install MASTODON, update and rebuild libmesh, and compile and test MASTODON. Note that you have to setup you [github](https://github.com) on the hpc.
 
-- Now you can run an example using a special file with a `.sh` extension. For example, if you want to run [Example 03](https://mooseframework.inl.gov/mastodon/examples/example3.html) on hpc, create a file named `Example03_hpc.sh`. This file should contain the following lines.
+- Now you can run an example using a special file with a `.sh` extension. For example, if you want to run [Example 03](https://mooseframework.inl.gov/mastodon/examples/example3.html) on hpc, create a file named `Example03_hpc.sh`. The filename can be anything but it should end with a `.sh` extension. This file should contain the following lines.
 
 ```
 #!/bin/bash
@@ -54,4 +54,18 @@ cd $PBS_O_WORKDIR
 date > out
 MV2_ENABLE_AFFINITY=0 mpiexec ~/projects/mastodon/mastodon-opt -i shear_beam_Isoil_free_field.i >> out
 date >> out
+```
+
+- You can re-use the above file with the following changes:    
+
+  - `FIRSTNAME.LASTNAME@inl.gov` is your INL email ID.
+  - `Example03_hpc` is the name of the job.
+  - `select=4:ncpus=36:mpiprocs=36` means you requested 4 nodes, 36 cpus, and 36 processors. You can increase or decrease these numbers depending on the hpc machine.
+  - `walltime=00:90:00` is the wall time above which the jobs gets terminated. The format is Days:Hours:Minutes. Larger the wall time, more the delay in getting the job started, in general.
+  - `MV2_ENABLE_AFFINITY=0 mpiexec ~/projects/mastodon/mastodon-opt -i shear_beam_Isoil_free_field.i >> out` has the name of the input file. Use the input file name you are interested in.
+
+- Finally, save this file `Example03_hpc.sh` in the folder in which the input file is located. Then, run the following.
+
+```
+qsub Example03_hpc.sh
 ```
