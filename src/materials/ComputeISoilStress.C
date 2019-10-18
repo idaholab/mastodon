@@ -51,9 +51,7 @@ validParams<ComputeISoilStress>()
   params.addParam<std::vector<Real>>("p_ref",
                                      "The reference pressure at which "
                                      "the parameters are defined for "
-                                     "each soil layer. If 'soil_type = "
-                                     "darendeli', then the reference "
-                                     "pressure must be input in kilopascals.");
+                                     "each soil layer.");
   params.addParam<Real>("a0",
                         1.0,
                         "The first coefficient for pressure dependent yield strength "
@@ -207,12 +205,6 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
                  ". Pressure dependency is set to true but a0, a1 and a2 are "
                  "set to 1.0, 0.0 and 0.0, respectively. Strength "
                  "pressure dependency is NOT turned on.");
-  if (_pressure_dependency && (_a0 == 0.0 && _a1 == 0.0 && _a2 == 0.0))
-    mooseError("Error in " + name() +
-               ". When pressure dependency is turned on, "
-               "all three strength coefficients, a0, a1, and a2, "
-               "cannot simultaneously be set to 0.0. This "
-               "combination results in division by 0.");
   if (_pressure_dependency && _p_ref.size() != _layer_ids.size())
     mooseError("Error in " + name() + ". When pressure dependency is turned on, "
                                       "a positive reference pressure "
@@ -494,11 +486,14 @@ ComputeISoilStress::computeStress()
   // converted to a unsigned int for lookup, so first
   // it is rounded to avoid Real values that are just below the desired value.
   _current_id = static_cast<unsigned int>(std::round(_soil_layer_variable[_qp]));
+
   // Get the position of the current id in the layer_ids array
   _pos = find(_layer_ids.begin(), _layer_ids.end(), _current_id) - _layer_ids.begin();
 
   _individual_stress_increment.zero();
+
   _deviatoric_trial_stress.zero();
+
   _tangent_modulus = 0.0;
 
   // current pressure calculation
@@ -516,29 +511,40 @@ ComputeISoilStress::computeStress()
   }
 
   Real mean_pressure = 0.0;
+
+  // compute trial stress increment - note that _elasticity_tensor here
+  // assumes youngs modulus = 1
+  _individual_stress_increment = _elasticity_tensor[_qp] * (_strain_increment[_qp]);
+
+  Real mean_pressure_tmp =
+      _individual_stress_increment.trace() / 3.0 * _stiffness_pressure_correction;
+
+  RankTwoTensor _deviatoric_trial_stress_tmp =
+      _individual_stress_increment.deviatoric() * _stiffness_pressure_correction;
+
+  Real dev_trial_stress_squared = 0.0;
+
+  Real effective_trial_stress = 0.0;
+
+  Real yield_condition = 0.0;
+
   for (std::size_t i = 0; i < _base_models.size(); i++)
   {
-    // compute trial stress increment - note that _elasticity_tensor here
-    // assumes youngs modulus = 1
-    _individual_stress_increment = _elasticity_tensor[_qp] * (_strain_increment[_qp]);
 
     // calculate pressure for each element
-    mean_pressure += _individual_stress_increment.trace() / 3.0 * _youngs[_pos][i] *
-                     _stiffness_pressure_correction;
+    mean_pressure += mean_pressure_tmp * _youngs[_pos][i];
 
     // compute the deviatoric trial stress normalized by non pressure dependent
     // youngs modulus.
     _deviatoric_trial_stress =
-        _individual_stress_increment.deviatoric() * _stiffness_pressure_correction +
-        (*_stress_model_old[i])[_qp] / (_youngs[_pos][i]);
+        _deviatoric_trial_stress_tmp + (*_stress_model_old[i])[_qp] / (_youngs[_pos][i]);
 
     // compute the effective trial stress
-    Real dev_trial_stress_squared =
-        _deviatoric_trial_stress.doubleContraction(_deviatoric_trial_stress);
-    Real effective_trial_stress = std::sqrt(3.0 / 2.0 * dev_trial_stress_squared);
+    dev_trial_stress_squared = _deviatoric_trial_stress.doubleContraction(_deviatoric_trial_stress);
+    effective_trial_stress = std::sqrt(3.0 / 2.0 * dev_trial_stress_squared);
 
     // check yield condition and calculate plastic strain
-    Real yield_condition =
+    yield_condition =
         effective_trial_stress - _yield_stress[_pos][i] * _strength_pressure_correction;
 
     if (yield_condition > 0.0)

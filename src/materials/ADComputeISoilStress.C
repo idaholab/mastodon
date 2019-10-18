@@ -54,9 +54,7 @@ defineADValidParams(
     params.addParam<std::vector<Real>>("p_ref",
                                        "The reference pressure at which "
                                        "the parameters are defined for "
-                                       "each soil layer. If 'soil_type = "
-                                       "darendeli', then the reference "
-                                       "pressure must be input in kilopascals.");
+                                       "each soil layer.");
     params.addParam<Real>("a0",
                           1.0,
                           "The first coefficient for pressure dependent yield strength "
@@ -485,6 +483,7 @@ ADComputeISoilStress<compute_stage>::computeQpStress()
   _stress[_qp] = _rotation_increment[_qp] * _stress_new * _rotation_increment[_qp].transpose();
 }
 
+
 template <ComputeStage compute_stage>
 void
 ADComputeISoilStress<compute_stage>::computeStress()
@@ -496,13 +495,17 @@ ADComputeISoilStress<compute_stage>::computeStress()
   // converted to a unsigned int for lookup, so first
   // it is rounded to avoid Real values that are just below the desired value.
   _current_id = static_cast<unsigned int>(std::round(_soil_layer_variable[_qp]));
+
   // Get the position of the current id in the layer_ids array
   _pos = find(_layer_ids.begin(), _layer_ids.end(), _current_id) - _layer_ids.begin();
 
   _individual_stress_increment.zero();
+
   _deviatoric_trial_stress.zero();
+
   // current pressure calculation
   ADReal mean_stress = _stress_old[_qp].trace() / (-3.0);
+
   if (mean_stress < _p0)
     mean_stress = 0.0;
 
@@ -524,31 +527,42 @@ ADComputeISoilStress<compute_stage>::computeStress()
   }
 
   ADReal mean_pressure = 0.0;
+
+  // compute trial stress increment - note that _elasticity_tensor here
+  // assumes youngs modulus = 1
+  _individual_stress_increment = _elasticity_tensor[_qp] * (_strain_increment[_qp]);
+
+  ADReal mean_pressure_tmp =
+      _individual_stress_increment.trace() / 3.0 * _stiffness_pressure_correction;
+
+  ADRankTwoTensor _deviatoric_trial_stress_tmp =
+      _individual_stress_increment.deviatoric() * _stiffness_pressure_correction;
+
+  ADReal dev_trial_stress_squared = 0.0;
+
+  ADReal effective_trial_stress = 0.0;
+
+  ADReal yield_condition = 0.0;
+
   for (std::size_t i = 0; i < _base_models.size(); i++)
   {
-    // compute trial stress increment - note that _elasticity_tensor here
-    // assumes youngs modulus = 1
-    _individual_stress_increment = _elasticity_tensor[_qp] * (_strain_increment[_qp]);
 
     // calculate pressure for each element
-    mean_pressure += _individual_stress_increment.trace() / 3.0 * _youngs[_pos][i] *
-                     _stiffness_pressure_correction;
+    mean_pressure += mean_pressure_tmp * _youngs[_pos][i];
 
     // compute the deviatoric trial stress normalized by non pressure dependent
     // youngs modulus.
     _deviatoric_trial_stress =
-        _individual_stress_increment.deviatoric() * _stiffness_pressure_correction +
-        (*_stress_model_old[i])[_qp] / (_youngs[_pos][i]);
+        _deviatoric_trial_stress_tmp + (*_stress_model_old[i])[_qp] / (_youngs[_pos][i]);
 
     // compute the effective trial stress
-    ADReal dev_trial_stress_squared =
-        _deviatoric_trial_stress.doubleContraction(_deviatoric_trial_stress);
-    ADReal effective_trial_stress = 0.0;
+    dev_trial_stress_squared = _deviatoric_trial_stress.doubleContraction(_deviatoric_trial_stress);
+
     if (!MooseUtils::absoluteFuzzyEqual(dev_trial_stress_squared, 0.0))
       effective_trial_stress = std::sqrt(3.0 / 2.0 * dev_trial_stress_squared);
 
     // check yield condition and calculate plastic strain
-    ADReal yield_condition =
+    yield_condition =
         effective_trial_stress - _yield_stress[_pos][i] * _strength_pressure_correction;
 
     if (yield_condition > 0.0)
