@@ -483,7 +483,6 @@ ADComputeISoilStress<compute_stage>::computeQpStress()
   _stress[_qp] = _rotation_increment[_qp] * _stress_new * _rotation_increment[_qp].transpose();
 }
 
-
 template <ComputeStage compute_stage>
 void
 ADComputeISoilStress<compute_stage>::computeStress()

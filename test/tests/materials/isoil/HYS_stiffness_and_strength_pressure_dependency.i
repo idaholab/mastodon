@@ -332,6 +332,7 @@
     type = PiecewiseLinear
     data_file = Displacement2.csv
     format = columns
+    scale_factor = 10000
   [../]
 []
 

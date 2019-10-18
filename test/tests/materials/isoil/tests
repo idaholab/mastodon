@@ -287,7 +287,7 @@
     input = HYS_stiffness_and_strength_pressure_dependency.i
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
     verification = 'isoil_verification.md'
-    abs_zero = 5e-9
+    abs_zero = 5e-4
 
     requirement = "The ISoilAction and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in both stiffness and strength of the soil."
   [../]
@@ -299,7 +299,7 @@
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
     cli_args = Outputs/file_base=HYS_stiffness_and_strength_pressure_dependency_out
     prereq = stiffness_and_strength_pressure_dependency
-    abs_zero = 5e-9
+    abs_zero = 5e-4
 
     requirement = "The ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil without the use of the ISoilAction."
   [../]
@@ -310,7 +310,7 @@
     input = HYS_stiffness_and_strength_pressure_dependency.i
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
     prereq = stiffness_and_strength_pressure_dependency_noaction
-    abs_zero = 5e-8
+    abs_zero = 5e-4
     cli_args = 'Kernels/DynamicTensorMechanics/use_automatic_differentiation=true Materials/I_Soil/soil_1/use_automatic_differentiation=true Executioner/solve_type=NEWTON Outputs/file_base=HYS_stiffness_and_strength_pressure_dependency_out'
 
     requirement = "The ISoilAction and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil and shall automatically construct the Jacobian matrix."
@@ -323,7 +323,7 @@
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
     cli_args = Outputs/file_base=HYS_stiffness_and_strength_pressure_dependency_out
     prereq = stiffness_and_strength_pressure_dependency_AD
-    abs_zero = 5e-8
+    abs_zero = 5e-4
 
     requirement = "The ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil without the use of the ISoilAction and shall also automatically construct the Jacobian matrix."
   [../]
