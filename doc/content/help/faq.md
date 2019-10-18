@@ -69,3 +69,22 @@ date >> out
 ```
 qsub Example03_hpc.sh
 ```
+
+#### Some or all my tests are failing, what should I do?
+
+There might be one of several reasons for this:
+
+- You did not compile MASTODON. Compile MASTODON using `make` command.
+
+
+- If the errors while running tests are related to libmesh, your libmesh is out of date. Update and rebuild libmesh using the following command in the MASTDON folder. Then compile MASTODON and try running the tests.
+
+```
+./moose/scripts/update_and_rebuild_libmesh.sh
+```
+
+- You might have accidentally made some changes to MASTODON source code. To undo these changes use the below command. Then update and rebuild libmesh, compile MASTODON, and run the tests as described in [Getting Started/MacOS (Mojave)](https://mooseframework.inl.gov/mastodon/getting_started/macos_mojave.html).  
+
+```
+git clean -dxf
+```
