@@ -6,9 +6,11 @@
   [./FaultTree]
     type = PythonUnitTest
     input = test_fault_tree.py
+    python = 2
   [../]
   [./Quantification]
     type = PythonUnitTest
     input = test_quantification.py
+    python = 2
   [../]
 []
