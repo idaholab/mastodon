@@ -1,7 +1,7 @@
 // MOOSE includes
 #include "FEProblemBase.h"
 #include "MultiApp.h"
-#include "Piecewise.h"
+#include "PiecewiseBase.h"
 #include "Conversion.h"
 
 // MASTODON includes
