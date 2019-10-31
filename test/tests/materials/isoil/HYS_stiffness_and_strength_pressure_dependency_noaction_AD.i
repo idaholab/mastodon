@@ -336,7 +336,6 @@
     type = PiecewiseLinear
     data_file = Displacement2.csv
     format = columns
-    scale_factor = 10000
   [../]
 []
 
@@ -508,7 +507,10 @@
 []
 
 [Outputs]
-  exodus = true
+  [./out]
+    type = Exodus
+    hide = 'vel_x vel_y vel_z accel_x accel_y accel_z'
+  [../]
   csv = true
   perf_graph = false
 []

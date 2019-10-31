@@ -155,6 +155,24 @@ protected:
   /// for effeciency.
   unsigned int _current_id;
 
+  /// The mean pressure of an element.
+  ADReal _mean_pressure;
+
+  /// This is a temporary variable declared to avoid repetitive calculations.
+  ADReal _mean_pressure_tmp;
+
+  /// This is a temporary variable declared to avoid repetitive calculations.
+  ADRankTwoTensor _deviatoric_trial_stress_tmp;
+
+  /// Square of the deviatoric trial stress.
+  ADReal _dev_trial_stress_squared;
+
+  /// The effective trial stress.
+  ADReal _effective_trial_stress;
+
+  /// The yield condition.
+  ADReal _yield_condition;
+
   /// initial stress components
   std::vector<const Function *> _initial_soil_stress;
 
