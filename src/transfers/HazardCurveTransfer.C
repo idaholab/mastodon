@@ -17,8 +17,8 @@ validParams<HazardCurveTransfer>()
   InputParameters params = validParams<MultiAppTransfer>();
   params.addClassDescription("Transfers scaled ground motion data from a HazardCurve object to "
                              "a Piecewise function on the sub application.");
-  params.set<MooseEnum>("direction") = "to_multiapp";
-  params.suppressParameter<MooseEnum>("direction");
+  params.set<MultiMooseEnum>("direction") = "to_multiapp";
+  params.suppressParameter<MultiMooseEnum>("direction");
   params.addRequiredParam<std::string>(
       "function",
       "The name of the function on the sub application to which data will be transferred");
