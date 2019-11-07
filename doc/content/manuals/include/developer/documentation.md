@@ -1,4 +1,4 @@
-## Instructions for documentation
+## Documenting new objects
 
 Prior to merging the code, MOOSE and MASTODON require adequate documentation
 describing the implemented feature, such as materials, post processors, etc.
