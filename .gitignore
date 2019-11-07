@@ -26,6 +26,7 @@ peacock_run_exe_tmp.i
 *.py
 *.pyc
 !python/**/*.py
+**/.ipynb_checkpoints
 
 # Allow certain files in gold directories
 !**/gold/*.e

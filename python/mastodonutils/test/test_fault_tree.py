@@ -48,7 +48,7 @@ class TestFaultTree(unittest.TestCase):
         """
         Test creating tree from list.
         """
-        tree = FaultTree('events.txt')
+        tree = FaultTree('logic2.txt')
         self.assertTree(tree)
         self.assertMocus(tree.mocus)
 
