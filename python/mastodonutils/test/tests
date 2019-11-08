@@ -2,6 +2,7 @@
   [./Event]
     type = PythonUnitTest
     input = test_event.py
+    python = 2
   [../]
   [./FaultTree]
     type = PythonUnitTest
