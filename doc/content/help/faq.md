@@ -1,7 +1,7 @@
 # Frequently Asked Questions
 
 
-#### What if the `git clone` command does nothing?
+#### 1. What if the `git clone` command does nothing?
 
 Depending on your network configuration the HTTP access to the repository may not work. In this case
 you must use [SSH](https://en.wikipedia.org/wiki/Secure_Shell) keys. First, follow the instructions
@@ -13,7 +13,7 @@ and then run the following clone command.
 git clone git@github.com:idaholab/mastodon.git
 ```
 
-#### How to `update_and_rebuild_libmesh.sh` in parallel?
+#### 2. How to `update_and_rebuild_libmesh.sh` in parallel?
 
 In the MASTODON folder, run the following command.
 
@@ -21,9 +21,9 @@ In the MASTODON folder, run the following command.
 JOBS=8 ./moose/scripts/update_and_rebuild_libmesh.sh
 ```
 
-The number `8` above is the number of processors.
+The number `8` above is the number of processors and can be changed to a different value.
 
-#### How to run MASTODON on an INL high performance computing account?
+#### 3. How to run MASTODON on an INL high performance computing account?
 
 There are several steps in this process:
 
@@ -70,7 +70,7 @@ date >> out
 qsub Example03_hpc.sh
 ```
 
-#### Some or all my tests are failing, what should I do?
+#### 4. Some or all my tests are failing, what should I do?
 
 There might be one of several reasons for this:
 
@@ -88,3 +88,49 @@ There might be one of several reasons for this:
 ```
 git clean -dxf
 ```
+
+#### 5. How to write an input file from scratch?
+
+Generally, we do not recommend doing this. On the [Examples](https://www.mooseframework.org/mastodon/examples/index.html) page, a variety of problems related to seismic soil structure interaction of nuclear structures are discussed. We recommend downloading the input file from one of those problems and modifying it to suit your own problem. In this process, the MASTODON [User Manual](https://www.mooseframework.org/mastodon/manuals/user/index.html) and [Syntax](https://www.mooseframework.org/mastodon/syntax/index.html) pages might also help.
+
+#### 6. How to input a mesh file from ABAQUS (i.e., a `.inp` file)?
+
+MASTODON is capable of accepting mesh files in many formats, one of them being an ABAQUS mesh file. Below is an example on how to input an ABAQUS mesh file. Please refer to [this](https://www.mooseframework.org/source/meshgenerators/FileMeshGenerator.html) MOOSE page for more information.
+
+```
+[Mesh]
+  [./file]
+    type = FileMeshGenerator
+    file = ABAQUS_input.inp
+  [../]
+[]
+```
+
+#### 7. How to specify a velocity or a displacement as the boundary condition? Most example problems use an acceleration boundary condition.
+
+Velocity and displacement can be specified as a boundary condition using `PresetVelocity` and `PresetDisplacement` commands, respectively. An example using `PresetVelocity` is presented below.
+
+```
+[BCs]
+[./bottom_vel]
+  type = PresetVelocity
+  boundary = 'negative_z'
+  function = vel_bottom
+  variable = 'disp_x'
+  beta = 0.25
+  acceleration = 'accel_x'
+  velocity = 'vel_x'
+[../]
+[]
+[Functions]
+  [./vel_bottom]
+     type = PiecewiseLinear
+     data_file = earthquake_velocity.csv
+     format = 'columns'
+  [../]
+[]
+```
+
+#### 8. What is a bash profile and how can I access it on my mac?
+
+Bash profile is a hidden file in your home directory. This file contains all the startup configuration and preferences for your command line. To access this file, open your terminal, go to your home directory, and run `nano .bash_profile`. `nano` is a text editor. You can also use other text editors such as `emacs` to access your bash profile.
