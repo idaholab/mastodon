@@ -33,7 +33,7 @@ There are several steps in this process:
 ssh john@falcon1
 ```
 
-- Repeat the MASTODON installation process explained in [Getting Started/Installation/Ubuntu](getting_started/ubuntu.md) or similar. That is, modify your bash profile, install MASTODON, update and rebuild libmesh, and compile and test MASTODON. Note that you have to setup you [github](https://github.com) on the hpc.
+- Repeat the MASTODON installation process explained in [Getting Started/Installation/Ubuntu](getting_started/ubuntu.md) or similar. That is, modify your bash profile, install MASTODON, update and rebuild libmesh, and compile and test MASTODON. Note that you have to setup you [Github](https://github.com) on the hpc.
 
 - Job scheduling is performed using the Portable Batch System (PBS). Batch script files should be created with a unique name using the `.sh` extension. For example, if you want to run [Example 03](examples/example3.md) on hpc, create a file named `Example03_hpc.sh`. The filename can be anything but it should end with a `.sh` extension. This file should contain the following lines.
 
@@ -85,7 +85,7 @@ There might be one of several reasons for this:
 ./moose/scripts/update_and_rebuild_libmesh.sh
 ```
 
-- You might have accidentally made some changes to MASTODON source code. To undo these changes use the below command. Then update and rebuild libmesh, compile MASTODON, and run the tests as described in [Getting Started/MacOS (Mojave)](getting_started/macos_mojave.md).  
+- You might have accidentally made some changes to MASTODON source code. To undo these changes use the below command. Then update and rebuild libmesh, compile MASTODON, and run the tests as described in the [Getting Started](getting_started/macos_mojave.md) page.  
 
 ```
 git clean -dxf
@@ -101,7 +101,7 @@ Generally, we do not recommend doing this. On the [Examples](examples/index.md) 
 
 ### How to input a mesh file from ABAQUS (i.e., a `.inp` file)?
 
-MASTODON is capable of accepting mesh files in many formats, one of them being an ABAQUS mesh file. Below is an example on how to input an ABAQUS mesh file. Please refer to [this](https://www.mooseframework.org/source/meshgenerators/FileMeshGenerator.html) MOOSE page for more information.
+MASTODON is capable of accepting mesh files in many formats, one of them being an ABAQUS mesh file. Below is an example on how to input an ABAQUS mesh file. Please refer to [`meshgenerators`](/meshgenerators/FileMeshGenerator.md) MOOSE page for more information.
 
 ```
 [Mesh]
@@ -112,12 +112,18 @@ MASTODON is capable of accepting mesh files in many formats, one of them being a
 []
 ```
 
-It is noted that the .inp reader is limited to only one mesh block. If the .inp file contains multiple parts, they will all be moved into one block in MOOSE/MASTODON. This limitation will be fixed soon.
+!alert! note
+The .inp reader is currently limited to only one mesh block. If the .inp file contains multiple parts, they will all be moved into one block in MOOSE/MASTODON.
+!alert-end!
 
 ### How to specify a velocity or a displacement as the boundary condition? Most example problems use an acceleration boundary condition.
 
-Velocity and displacement can be specified as a boundary condition using `PresetVelocity` and `PresetDisplacement` commands, respectively. Please refer to [PresetVelocity](https://mooseframework.inl.gov/mastodon/source/bcs/PresetVelocity.html) and [PresetDisplacement](https://mooseframework.inl.gov/mastodon/source/bcs/PresetDisplacement.html) for more information.
+Velocity and displacement can be specified as a boundary condition using [`PresetVelocity`](/bcs/PresetVelocity.md) and [`PresetDisplacement`](/bcs/PresetDisplacement.md), respectively.
 
 ### What is a bash profile and how can I access it?
 
 Bash profile is a hidden file in your home directory. This file is named `.bash_profile` on Macs and `.bashrc` on Linux. The dot in the beginning of the file designates it as a hidden file on Unix systems. The bash profile contains the startup configuration and preferences for your terminal. To view or edit this file, open your terminal, go to your home directory, and run `nano .bash_profile`, to open it using the text editor, `nano`. You can also use other text editors such as `emacs` or `vim` to view or edit your bash profile.
+
+### When I provide a displacement input at a boundary, the resulting displacement doesn't match the input. What's going on here?
+
+MASTODON only applies displacement inputs to the mesh. If a velocity or acceleration input is provided using `PresetVelocity` or `PresetAcceleration`, it is integrated to the corresponding displacement history and applied to the mesh. This conversion requires an initial velocity or acceleration value, which, by default, is assumed to be zero. If an initial velocity and acceleration corresponding to the displacement history is not provided, MASTODON will input a displacement history that results in a zero initial velocity/acceleration. A temporary fix for this is to include a few time steps of constant zero displacement history in the beginning of the simulation, so that the initial velocity and acceleration are also zero for this displacement history. Alternatively, an initial velocity or acceleration can be provided through the `initial_condition` parameter in the velocity or acceleration [auxvariable definitions](/variables/MooseVariable.md) in the input file.
