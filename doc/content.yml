@@ -19,6 +19,7 @@ moose:
         - docs/content/documentation/modules/stochastic_tools/**
 
         - docs/content/documentation/examples/**
+        - docs/content/documentation/tutorial/**
 
         - docs/content/media/**
         - docs/content/bib/**
