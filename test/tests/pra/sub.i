@@ -62,6 +62,7 @@
     # transfers monte carlo samples to multiapp
     type = SamplerTransfer
     multi_app = sub
+    sampler = monte_carlo
     parameters = 'Materials/Elasticity_tensor_1/scale_factor_density'
     to_control = 'stochastic'
     execute_on = INITIAL
