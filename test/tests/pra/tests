@@ -8,6 +8,7 @@
     type = CSVDiff
     input = master.i
     boost = true
+    allow_warngings = true # temporary to allow new API in MOOSE
     csvdiff = "master_out_run_hazard00_sub0.csv
                master_out_run_hazard00_sub1.csv
                master_out_run_hazard00_sub2.csv
