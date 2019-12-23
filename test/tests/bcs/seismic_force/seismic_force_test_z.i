@@ -240,9 +240,7 @@
 [Executioner]
   type = Transient
   solve_type = PJFNK
-  nl_abs_tol = 1e-12
-  nl_rel_tol = 1e-12
-  l_tol = 1e-12
+  nl_rel_tol = 1e-13
   start_time = 0
   end_time = 2.5625
   dt = 0.01
