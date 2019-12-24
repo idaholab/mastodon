@@ -12,6 +12,7 @@ A list of example simulations using MASTODON is provided below. These examples i
 - [Example 6b](examples/example6b.md): Displacement-controlled frictional contact problem with I-soil and using the restart option for static initialization.
 - [Example 6c](examples/example6c.md): Force-controlled contact problem.
 - [Example 7](examples/example7.md): Demonstration of domain reduction method.
+- [Example 8](examples/example8.md): Seismic risk assessment of a generic nuclear facility using the MASTODON FTA Python module.
 
 
 !bibtex bibliography
