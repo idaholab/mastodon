@@ -67,7 +67,8 @@ Extensions:
 
     MooseDocs.extensions.sqa:
         active: True
-        repo: idaholab/mastodon
+        repos: 
+             default: https://github.com/idaholab/mastodon
         categories:
             mastodon:
                 specs:
