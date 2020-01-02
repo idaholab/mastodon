@@ -1,7 +1,7 @@
 // MOOSE includes
 #include "FEProblemBase.h"
 #include "MultiApp.h"
-#include "Piecewise.h"
+#include "PiecewiseLinearBase.h"
 #include "Conversion.h"
 
 // MASTODON includes
@@ -16,7 +16,7 @@ validParams<HazardCurveTransfer>()
 {
   InputParameters params = validParams<MultiAppTransfer>();
   params.addClassDescription("Transfers scaled ground motion data from a HazardCurve object to "
-                             "a Piecewise function on the sub application.");
+                             "a PiecewiseLinear function on the sub application.");
   params.set<MultiMooseEnum>("direction") = "to_multiapp";
   params.suppressParameter<MultiMooseEnum>("direction");
   params.addRequiredParam<std::string>(
@@ -67,7 +67,8 @@ HazardCurveTransfer::execute()
         const std::vector<Real> & a = hazard_curve.getData(bin, index, comp);
 
         FEProblemBase & problem = getMultiApp()->appProblemBase(global_index);
-        Piecewise & function = dynamic_cast<Piecewise &>(problem.getFunction(function_name));
+        PiecewiseLinearBase & function =
+            dynamic_cast<PiecewiseLinearBase &>(problem.getFunction(function_name));
         function.setData(t, a);
       }
       global_index++;
