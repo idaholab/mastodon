@@ -144,6 +144,24 @@ protected:
   /// for effeciency.
   unsigned int _current_id;
 
+  /// The mean pressure of an element.
+  Real _mean_pressure;
+
+  /// This is a temporary variable declared to avoid repetitive calculations.
+  Real _mean_pressure_tmp;
+
+  /// This is a temporary variable declared to avoid repetitive calculations.
+  RankTwoTensor _deviatoric_trial_stress_tmp;
+
+  /// Square of the deviatoric trial stress.
+  Real _dev_trial_stress_squared;
+
+  /// The effective trial stress.
+  Real _effective_trial_stress;
+
+  /// The yield condition.
+  Real _yield_condition;
+
   /// initial stress components
   std::vector<const Function *> _initial_soil_stress;
 };

@@ -507,7 +507,10 @@
 []
 
 [Outputs]
-  exodus = true
+  [./out]
+    type = Exodus
+    hide = 'vel_x vel_y vel_z accel_x accel_y accel_z'
+  [../]
   csv = true
   perf_graph = false
 []

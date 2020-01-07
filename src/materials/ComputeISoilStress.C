@@ -438,7 +438,7 @@ ComputeISoilStress::initQpStatefulProperties()
   RankTwoTensor dev_model;
   for (std::size_t i = 0; i < _base_models.size(); i++)
   {
-    Real mean_pressure = 0.0;
+    Real _mean_pressure = 0.0;
     if (residual_vertical != 0.0)
     {
       Real sum_youngs = 0.0;
@@ -450,7 +450,7 @@ ComputeISoilStress::initQpStatefulProperties()
       (*_stress_model[i])[_qp](0, 0) = residual_xx * _youngs[_pos][i] / sum_youngs;
       (*_stress_model[i])[_qp](1, 1) = residual_yy * _youngs[_pos][i] / sum_youngs;
       dev_model = ((*_stress_model[i])[_qp]).deviatoric() / _youngs[_pos][i];
-      mean_pressure = (*_stress_model[i])[_qp].trace() / 3.0;
+      _mean_pressure = (*_stress_model[i])[_qp].trace() / 3.0;
       Real J2_model = dev_model.doubleContraction(dev_model);
       Real dev_stress_model = std::sqrt(3.0 / 2.0 * J2_model);
       if (dev_stress_model > _yield_stress[_pos][i] * _strength_pressure_correction)
@@ -459,9 +459,9 @@ ComputeISoilStress::initQpStatefulProperties()
       (*_stress_model[i])[_qp] = dev_model * _youngs[_pos][i]; // stress_model contains only the
                                                                // deviatoric part of the stress
     }
-    residual_vertical = residual_vertical - (*_stress_model[i])[_qp](2, 2) - mean_pressure;
-    residual_xx = residual_xx - (*_stress_model[i])[_qp](0, 0) - mean_pressure;
-    residual_yy = residual_yy - (*_stress_model[i])[_qp](1, 1) - mean_pressure;
+    residual_vertical = residual_vertical - (*_stress_model[i])[_qp](2, 2) - _mean_pressure;
+    residual_xx = residual_xx - (*_stress_model[i])[_qp](0, 0) - _mean_pressure;
+    residual_yy = residual_yy - (*_stress_model[i])[_qp](1, 1) - _mean_pressure;
   }
 }
 
@@ -494,11 +494,14 @@ ComputeISoilStress::computeStress()
   // converted to a unsigned int for lookup, so first
   // it is rounded to avoid Real values that are just below the desired value.
   _current_id = static_cast<unsigned int>(std::round(_soil_layer_variable[_qp]));
+
   // Get the position of the current id in the layer_ids array
   _pos = find(_layer_ids.begin(), _layer_ids.end(), _current_id) - _layer_ids.begin();
 
   _individual_stress_increment.zero();
+
   _deviatoric_trial_stress.zero();
+
   _tangent_modulus = 0.0;
 
   // current pressure calculation
@@ -515,35 +518,46 @@ ComputeISoilStress::computeStress()
         std::sqrt(_a0 + _a1 * (_p_ref[_pos]) + _a2 * (_p_ref[_pos]) * (_p_ref[_pos]));
   }
 
-  Real mean_pressure = 0.0;
+  _mean_pressure = 0.0;
+
+  // compute trial stress increment - note that _elasticity_tensor here
+  // assumes youngs modulus = 1
+  _individual_stress_increment = _elasticity_tensor[_qp] * (_strain_increment[_qp]);
+
+  _mean_pressure_tmp = _individual_stress_increment.trace() / 3.0 * _stiffness_pressure_correction;
+
+  _deviatoric_trial_stress_tmp =
+      _individual_stress_increment.deviatoric() * _stiffness_pressure_correction;
+
+  _dev_trial_stress_squared = 0.0;
+
+  _effective_trial_stress = 0.0;
+
+  _yield_condition = 0.0;
+
   for (std::size_t i = 0; i < _base_models.size(); i++)
   {
-    // compute trial stress increment - note that _elasticity_tensor here
-    // assumes youngs modulus = 1
-    _individual_stress_increment = _elasticity_tensor[_qp] * (_strain_increment[_qp]);
 
     // calculate pressure for each element
-    mean_pressure += _individual_stress_increment.trace() / 3.0 * _youngs[_pos][i] *
-                     _stiffness_pressure_correction;
+    _mean_pressure += _mean_pressure_tmp * _youngs[_pos][i];
 
     // compute the deviatoric trial stress normalized by non pressure dependent
     // youngs modulus.
     _deviatoric_trial_stress =
-        _individual_stress_increment.deviatoric() * _stiffness_pressure_correction +
-        (*_stress_model_old[i])[_qp] / (_youngs[_pos][i]);
+        _deviatoric_trial_stress_tmp + (*_stress_model_old[i])[_qp] / (_youngs[_pos][i]);
 
     // compute the effective trial stress
-    Real dev_trial_stress_squared =
+    _dev_trial_stress_squared =
         _deviatoric_trial_stress.doubleContraction(_deviatoric_trial_stress);
-    Real effective_trial_stress = std::sqrt(3.0 / 2.0 * dev_trial_stress_squared);
+    _effective_trial_stress = std::sqrt(3.0 / 2.0 * _dev_trial_stress_squared);
 
     // check yield condition and calculate plastic strain
-    Real yield_condition =
-        effective_trial_stress - _yield_stress[_pos][i] * _strength_pressure_correction;
+    _yield_condition =
+        _effective_trial_stress - _yield_stress[_pos][i] * _strength_pressure_correction;
 
-    if (yield_condition > 0.0)
+    if (_yield_condition > 0.0)
       _deviatoric_trial_stress *=
-          _yield_stress[_pos][i] * _strength_pressure_correction / effective_trial_stress;
+          _yield_stress[_pos][i] * _strength_pressure_correction / _effective_trial_stress;
     else
       _tangent_modulus += _youngs[_pos][i];
 
@@ -551,9 +565,9 @@ ComputeISoilStress::computeStress()
 
     _stress_new += (*_stress_model[i])[_qp];
   }
-  _stress_new(0, 0) += mean_pressure - mean_stress;
-  _stress_new(1, 1) += mean_pressure - mean_stress;
-  _stress_new(2, 2) += mean_pressure - mean_stress;
+  _stress_new(0, 0) += _mean_pressure - mean_stress;
+  _stress_new(1, 1) += _mean_pressure - mean_stress;
+  _stress_new(2, 2) += _mean_pressure - mean_stress;
 
   _tangent_modulus *= _stiffness_pressure_correction;
 }
