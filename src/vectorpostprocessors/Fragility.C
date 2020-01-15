@@ -237,7 +237,7 @@ Fragility::calcDemandsFromFile(unsigned int bin)
           demand_sample, demand_time, _dtsim)[1]; // regularize the demand sample
       demand_sample_spectrum =
           MastodonUtils::responseSpectrum(0.01, 100, 401, demand_sample, _ssc_xi, _dtsim);
-      LinearInterpolation spectraldemand(demand_sample_spectrum[0], demand_sample_spectrum[3]);
+      LinearInterpolation spectraldemand(demand_sample_spectrum[0], demand_sample_spectrum[4]);
       stoc_demands[k] = spectraldemand.sample(_ssc_freq);
       k++;
     }
