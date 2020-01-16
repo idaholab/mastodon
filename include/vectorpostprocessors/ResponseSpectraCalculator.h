@@ -61,6 +61,9 @@ protected:
   /// Reference to the frequency vector.
   VectorPostprocessorValue & _frequency;
 
+  /// Reference to the period vector.
+  VectorPostprocessorValue & _period;
+
   /// Vector of pointers to the vectors of spectral values.
   std::vector<VectorPostprocessorValue *> _spectrum;
 

@@ -47,13 +47,14 @@ TEST(MastodonUtils, ResponseSpectrum)
   Real reg_dt = 0.01;
   // Outputs for testing
   std::vector<Real> freq = {0.001, 0.01, 0.1, 1, 10};
+  std::vector<Real> per = {1000, 100, 10, 1, 0.1};
   std::vector<Real> dspec = {4.49993e-05, 4.49929e-05, 4.49222e-05, 4.35994e-05, 1.7664e-05};
   std::vector<Real> vspec = {2.82739e-07, 2.82699e-06, 2.82255e-05, 0.000273943, 0.00110986};
   std::vector<Real> aspec = {1.7765e-09, 1.77625e-07, 1.77346e-05, 0.00172124, 0.0697346};
   std::vector<std::vector<Real>> respspec =
       MastodonUtils::responseSpectrum(freq_start, freq_end, freq_num, acc, xi, reg_dt);
   // Size check
-  EXPECT_EQ(respspec.size(), 4)
+  EXPECT_EQ(respspec.size(), 5)
       << "Number of vectors returned by the function is different. Four vectors are expected.\n";
   // Value check
   for (unsigned int i = 0; i < respspec[0].size(); ++i)
@@ -61,15 +62,18 @@ TEST(MastodonUtils, ResponseSpectrum)
     EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(respspec[0][i], freq[i]))
         << "Frequency vector is different at index: " << i << ". Calculated: " << respspec[0][i]
         << ". Expected: " << freq[i] << ".\n";
-    EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(respspec[1][i], dspec[i], dspec[i] / 1000))
+    EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(respspec[1][i], per[i]))
+        << "Period vector is different at index: " << i << ". Calculated: " << respspec[1][i]
+        << ". Expected: " << per[i] << ".\n";
+    EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(respspec[2][i], dspec[i], dspec[i] / 1000))
         << "Spectral displacement vector is different at index: " << i
-        << ". Calculated: " << respspec[1][i] << ". Expected: " << dspec[i] << ".\n";
-    EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(respspec[2][i], vspec[i], vspec[i] / 1000))
+        << ". Calculated: " << respspec[2][i] << ". Expected: " << dspec[i] << ".\n";
+    EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(respspec[3][i], vspec[i], vspec[i] / 1000))
         << "Spectral displacement vector is different at index: " << i
-        << ". Calculated: " << respspec[2][i] << ". Expected: " << vspec[i] << ".\n";
-    EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(respspec[3][i], aspec[i], aspec[i] / 1000))
+        << ". Calculated: " << respspec[3][i] << ". Expected: " << vspec[i] << ".\n";
+    EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(respspec[4][i], aspec[i], aspec[i] / 1000))
         << "Spectral displacement vector is different at index: " << i
-        << ". Calculated: " << respspec[3][i] << ". Expected: " << aspec[i] << ".\n";
+        << ". Calculated: " << respspec[4][i] << ". Expected: " << aspec[i] << ".\n";
   }
 }
 

@@ -84,7 +84,6 @@ HousnerSpectrumIntensity::initialize()
 void
 HousnerSpectrumIntensity::execute()
 {
-  std::vector<Real> frequency;
   std::vector<Real> period;
   std::vector<Real> vel_spectrum;
   Real freq_start = 1 / _per_end;
@@ -99,11 +98,8 @@ HousnerSpectrumIntensity::execute()
     // Calculation of the response spectrum.
     std::vector<std::vector<Real>> var_spectrum = MastodonUtils::responseSpectrum(
         freq_start, freq_end, _per_num, reg_vector[1], _xi, _reg_dt);
-    frequency = var_spectrum[0];
-    vel_spectrum = var_spectrum[2];
-    period.resize(frequency.size());
-    for (unsigned int j = 0; j < frequency.size(); ++j)
-      period[j] = 1 / frequency[j];
+    period = var_spectrum[1];
+    vel_spectrum = var_spectrum[3];
     std::reverse(period.begin(), period.end());
     std::reverse(vel_spectrum.begin(), vel_spectrum.end());
     LinearInterpolation hsi_calc(period, vel_spectrum);
