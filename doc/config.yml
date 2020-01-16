@@ -27,6 +27,7 @@ Extensions:
             Getting Started:
                 Installation: getting_started/installation.md
                 Running MASTODON: getting_started/running_mastodon.md
+                Tutorial: tutorial/tutorial.md
             Documentation: documentation.menu.md
             SQA: /sqa/index.md
             News: news/index.md

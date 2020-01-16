@@ -1,0 +1,8 @@
+[Tests]
+  [./tutorial]
+    type = RunApp
+    input = site_response_1.i
+    method = opt
+    check_input = True
+  [../]
+[../]

@@ -60,7 +60,7 @@
 [Transfers]
   [./sub]
     # transfers monte carlo samples to multiapp
-    type = SamplerTransfer
+    type = SamplerParameterTransfer
     multi_app = sub
     sampler = monte_carlo
     parameters = 'Materials/Elasticity_tensor_1/scale_factor_density'
