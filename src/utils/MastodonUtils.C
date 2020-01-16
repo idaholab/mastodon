@@ -22,14 +22,16 @@ MastodonUtils::responseSpectrum(const Real & freq_start,
                                 const Real & xi,
                                 const Real & reg_dt)
 {
-  std::vector<Real> freq_vec, aspec_vec, vspec_vec, dspec_vec;
+  std::vector<Real> freq_vec, per_vec, aspec_vec, vspec_vec, dspec_vec;
   Real logdf, om_n, om_d, dt2, dis1, vel1, acc1, dis2, vel2, acc2, pdmax, kd;
   for (std::size_t n = 0; n < freq_num; ++n)
   {
-    // Building the frequency vector. Frequencies are distributed
-    // uniformly in the log scale.
+    // Building the frequency vector and the period vector.
+    // Frequencies are distributed uniformly in the log scale.
+    // Periods are calculated as inverse of frequency
     logdf = (std::log10(freq_end) - std::log10(freq_start)) / (freq_num - 1);
     freq_vec.push_back(pow(10.0, std::log10(freq_start) + n * logdf));
+    per_vec.push_back(1.0 / freq_vec[n]);
     om_n = 2.0 * 3.141593 * freq_vec[n]; // om_n = 2*pi*f
     om_d = om_n * xi;
     dis1 = 0.0;
@@ -55,7 +57,7 @@ MastodonUtils::responseSpectrum(const Real & freq_start,
     vspec_vec.push_back(pdmax * om_n);
     aspec_vec.push_back(pdmax * om_n * om_n);
   }
-  return {freq_vec, dspec_vec, vspec_vec, aspec_vec};
+  return {freq_vec, per_vec, dspec_vec, vspec_vec, aspec_vec};
 }
 
 std::vector<std::vector<Real>>

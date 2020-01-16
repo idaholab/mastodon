@@ -47,6 +47,7 @@ ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & par
     _freq_num(getParam<unsigned int>("num_frequencies")),
     _reg_dt(getParam<Real>("regularize_dt")),
     _frequency(declareVector("frequency")),
+    _period(declareVector("period")),
     // Time vector from the response history builder vector postprocessor
     _history_time(getVectorPostprocessorValue("vectorpostprocessor", "time"))
 
@@ -55,7 +56,9 @@ ResponseSpectraCalculator::ResponseSpectraCalculator(const InputParameters & par
   if (_freq_start >= _freq_end)
     mooseError("Error in " + name() +
                ". Starting frequency must be less than the ending frequency.");
-
+  // Check that frequencies are positive
+  if (_freq_start <= 0.0)
+    mooseError("Error in " + name() + ". Start and end frequencies must be positive.");
   // Check for damping
   if (_xi <= 0)
     mooseError("Error in " + name() + ". Damping ratio must be positive.");
@@ -86,6 +89,7 @@ void
 ResponseSpectraCalculator::initialize()
 {
   _frequency.clear();
+  _period.clear();
   for (VectorPostprocessorValue * ptr : _spectrum)
     ptr->clear();
 }
@@ -105,8 +109,9 @@ ResponseSpectraCalculator::execute()
     std::vector<std::vector<Real>> var_spectrum = MastodonUtils::responseSpectrum(
         _freq_start, _freq_end, _freq_num, reg_vector[1], _xi, _reg_dt);
     _frequency = var_spectrum[0];
-    *_spectrum[3 * i] = var_spectrum[1];
-    *_spectrum[3 * i + 1] = var_spectrum[2];
-    *_spectrum[3 * i + 2] = var_spectrum[3];
+    _period = var_spectrum[1];
+    *_spectrum[3 * i] = var_spectrum[2];
+    *_spectrum[3 * i + 1] = var_spectrum[3];
+    *_spectrum[3 * i + 2] = var_spectrum[4];
   }
 }
