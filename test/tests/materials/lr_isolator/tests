@@ -39,7 +39,7 @@
   [./deformation_error1]
     type = RunException
     input = lr_isolator_seismic.i
-    cli_args = "Outputs/exodus=false Materials/deformation/rotations='rot_x rot_y'"
+    cli_args = "Outputs/exodus=false Outputs/csv=false Materials/deformation/rotations='rot_x rot_y'"
     expect_err = "Error in ComputeIsolatorDeformation block, deformation. The number of variables supplied in 'displacements' and 'rotations' input parameters must be equal."
 
     requirement = "The ComputeLRIsolatorElasticity class shall produce an error if the lengths of the displacement and rotation vectors do not match."
@@ -47,7 +47,7 @@
   [./deformation_error2]
     type = RunException
     input = lr_isolator_seismic.i
-    cli_args = "Outputs/exodus=false Materials/deformation/y_orientation='1 0 0'"
+    cli_args = "Outputs/exodus=false Outputs/csv=false Materials/deformation/y_orientation='1 0 0'"
     expect_err = "Error in ComputeIsolatorDeformation block, deformation. 'y_orientation' should be perpendicular to the axis of the isolator."
 
     requirement = "The ComputeLRIsolatorElasticity class shall produce an error if the 'y_orientation' provided as input is not perpendicular to the axis of the isolator."
@@ -55,7 +55,7 @@
   [./elasticity_error1]
     type = RunException
     input = lr_isolator_seismic.i
-    cli_args = "Outputs/exodus=false Materials/elasticity/alpha=1.0"
+    cli_args = "Outputs/exodus=false Outputs/csv=false Materials/elasticity/alpha=1.0"
     expect_err = "In ComputeLRIsolatorElasticity block, elasticity. Parameter, '_alpha' should be >= 0.0 and < 1.0."
 
     requirement = "The ComputeLRIsolatorElasticity class shall produce an error if the parameter 'alpha' is either negative or greater than 1."
