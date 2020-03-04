@@ -5,7 +5,7 @@
  * NOTE: Default value of root is the first node in file
  */
 /*!public*/
-FaultTree::FaultTree(std::string file_name, std::string root)
+FTAUtils::FaultTree::FaultTree(std::string file_name, std::string root)
 /*!endpublic*/
 {
   MooseUtils::DelimitedFileReader demand_logic_file(file_name);
@@ -29,7 +29,7 @@ FaultTree::FaultTree(std::string file_name, std::string root)
  * Destructor
  */
 /*!public*/
-FaultTree::~FaultTree()
+FTAUtils::FaultTree::~FaultTree()
 /*!endpublic*/
 {}
 
@@ -37,7 +37,7 @@ FaultTree::~FaultTree()
  * Builds m-ary fault tree
  */
 /*!private*/
-void FaultTree::buildTree(std::vector<std::string> line)
+void FTAUtils::FaultTree::buildTree(std::vector<std::string> line)
 /*!endprivate*/
 {
   // Stash name, operator
@@ -61,7 +61,7 @@ void FaultTree::buildTree(std::vector<std::string> line)
  * Translates string to opeartor
  */
 /*!private*/
-FaultTree::_operator_t FaultTree::str2Operator(std::string op)
+FTAUtils::FaultTree::_operator_t FTAUtils::FaultTree::str2Operator(std::string op)
 /*!endprivate*/
 {
   std::string op_s = str2Upper(op, true);
@@ -74,7 +74,7 @@ FaultTree::_operator_t FaultTree::str2Operator(std::string op)
  * Computes minimum cut sets based on MOCUS Algorithm
  */
 /*!private*/
-void FaultTree::computeMinimumCutSets()
+void FTAUtils::FaultTree::computeMinimumCutSets()
 /*!endprivate*/
 {
   // Clearing up sets vector for safety
@@ -99,7 +99,7 @@ void FaultTree::computeMinimumCutSets()
 }
 
 /*!private*/
-void FaultTree::removeSubsets()
+void FTAUtils::FaultTree::removeSubsets()
 /*!endprivate*/
 {
   std::set<uint64_t> rm_its;
@@ -147,7 +147,7 @@ void FaultTree::removeSubsets()
  *          are implicit
  */
 /*!private*/
-void FaultTree::cutSetsExpand(_node *node)
+void FTAUtils::FaultTree::cutSetsExpand(_node *node)
 /*!endprivate*/
 {
   ASSERT(node, "NULL node encountered");
@@ -221,7 +221,7 @@ void FaultTree::cutSetsExpand(_node *node)
 }
 
 /*!private*/
-void FaultTree::rmSets()
+void FTAUtils::FaultTree::rmSets()
 /*!endprivate*/
 {
   for (std::set<std::set<std::string>>::iterator row_it = _sets.begin(); row_it != _sets.end();
@@ -231,21 +231,21 @@ void FaultTree::rmSets()
 }
 
 /*!private*/
-FaultTree::_node *FaultTree::getNode(std::string name)
+FTAUtils::FaultTree::_node *FTAUtils::FaultTree::getNode(std::string name)
 /*!endprivate*/
 {
   return (_node_d_b.count(name) != 0) ? _node_d_b[name] : NULL;
 }
 
 /*!public*/
-std::string FaultTree::getRoot()
+std::string FTAUtils::FaultTree::getRoot()
 /*!endpublic*/
 {
   return _root;
 }
 
 /*!public*/
-void FaultTree::printSets(std::set<std::set<std::string>> sets)
+void FTAUtils::FaultTree::printSets(std::set<std::set<std::string>> sets)
 /*!endpublic*/
 {
   std::cout << "------------- SETS BEGIN ----------------- " << std::endl;
@@ -258,14 +258,14 @@ void FaultTree::printSets(std::set<std::set<std::string>> sets)
 }
 
 /*!public*/
-void FaultTree::printSets()
+void FTAUtils::FaultTree::printSets()
 /*!endpublic*/
 {
   printSets(_sets);
 }
 
 /*!public*/
-void FaultTree::printRow(std::set<std::string> row)
+void FTAUtils::FaultTree::printRow(std::set<std::string> row)
 /*!endpublic*/
 {
   for (std::set<std::string>::iterator col = row.begin(); col != row.end(); ++col) {
@@ -278,7 +278,7 @@ void FaultTree::printRow(std::set<std::string> row)
  * NOTE: If MOCUS ran before this function call, min cut sets will be returned
  */
 /*!public*/
-std::set<std::set<std::string>> FaultTree::getCutSets()
+std::set<std::set<std::string>> FTAUtils::FaultTree::getCutSets()
 /*!endpublic*/
 {
   return _sets;
@@ -296,7 +296,7 @@ std::set<std::set<std::string>> FaultTree::getCutSets()
  * Constructor for qualifications class
  */
 /*!public*/
-Quantification::Quantification(std::string events_file, std::string events_prob_file,
+FTAUtils::Quantification::Quantification(std::string events_file, std::string events_prob_file,
                                _analysis_t analysis, std::string hazard_file,
                                double im_lower, double im_upper, int n_bins,
                                bool uncertainty, std::string root, int n_sample,
@@ -395,7 +395,7 @@ Quantification::Quantification(std::string events_file, std::string events_prob_
  * measures
  */
 /*!private*/
-std::vector<double> Quantification::hazInterp(std::vector<std::vector<double>> hazard, std::vector<double> im_bins)
+std::vector<double> FTAUtils::Quantification::hazInterp(std::vector<std::vector<double>> hazard, std::vector<double> im_bins)
 /*!endprivate*/
 {
   std::vector<double> data;
@@ -417,7 +417,7 @@ std::vector<double> Quantification::hazInterp(std::vector<std::vector<double>> h
  * Function for getting BIN mean values of intensity measure
  */
 /*!private*/
-std::vector<double> Quantification::getBinMeans(double im_lower, double im_upper, int n_bins)
+std::vector<double> FTAUtils::Quantification::getBinMeans(double im_lower, double im_upper, int n_bins)
 /*!endprivate*/
 {
   std::vector<double> bins;
@@ -434,7 +434,7 @@ std::vector<double> Quantification::getBinMeans(double im_lower, double im_upper
  */
 /*!private*/
 std::vector<std::vector<double>>
-Quantification::linesToDouble(std::vector<std::vector<std::string>> lines)
+FTAUtils::Quantification::linesToDouble(std::vector<std::vector<std::string>> lines)
 /*!endprivate*/
 {
   std::vector<std::vector<double>> lines_double;
@@ -453,7 +453,7 @@ Quantification::linesToDouble(std::vector<std::vector<std::string>> lines)
  * eg., a => mean, b => std for NORM
  */
 /*!private*/
-std::vector<double> Quantification::getProbVector(_dist_t dist, double a, double b,
+std::vector<double> FTAUtils::Quantification::getProbVector(_dist_t dist, double a, double b,
                                              int n, int seed, std::vector<double> im,
                                              _analysis_t analysis, bool uc)
 /*!endprivate*/
@@ -502,7 +502,7 @@ std::vector<double> Quantification::getProbVector(_dist_t dist, double a, double
  * Parses and floods probabilties of basic elements
  */
 /*!private*/
-void Quantification::beProb(std::vector<std::string> line, int n_sample, int seed,
+void FTAUtils::Quantification::beProb(std::vector<std::string> line, int n_sample, int seed,
                             _analysis_t analysis, std::vector<double> intmes,
                             bool uncert)
 /*!endprivate*/
@@ -522,7 +522,7 @@ void Quantification::beProb(std::vector<std::string> line, int n_sample, int see
  *       2. Sets the vector cutSetProb
  */
 /*!private*/
-std::vector<double> *Quantification::cutSetProbWDigest(std::set<std::set<std::string>> cut_sets,
+std::vector<double> *FTAUtils::Quantification::cutSetProbWDigest(std::set<std::set<std::string>> cut_sets,
                                                   int n, bool only_min_max)
 /*!endprivate*/
 {
@@ -585,7 +585,7 @@ std::vector<double> *Quantification::cutSetProbWDigest(std::set<std::set<std::st
  */
 /*!private*/
 std::vector<std::vector<double>>
-Quantification::computeCutSetProb(std::set<std::set<std::string>> cut_sets, int n, bool bypass,
+FTAUtils::Quantification::computeCutSetProb(std::set<std::set<std::string>> cut_sets, int n, bool bypass,
                                   std::string bypass_key, double bypass_value)
 /*!endprivate*/
 {
@@ -602,7 +602,7 @@ Quantification::computeCutSetProb(std::set<std::set<std::string>> cut_sets, int 
 }
 
 /*!private*/
-std::vector<double> Quantification::cutSetRowProb(std::set<std::string> row, int n,
+std::vector<double> FTAUtils::Quantification::cutSetRowProb(std::set<std::string> row, int n,
                                              bool sign_positive, bool bypass,
                                              std::string bypass_key,
                                              double bypass_value)
@@ -631,7 +631,7 @@ std::vector<double> Quantification::cutSetRowProb(std::set<std::string> row, int
  * OR  => (1 - a) * (1 - b)
  */
 /*!private*/
-double Quantification::getGateProb(double a, double b, bool is_and)
+double FTAUtils::Quantification::getGateProb(double a, double b, bool is_and)
 /*!endprivate*/
 {
   return is_and ? a * b : (1.0 - a) * (1.0 - b);
@@ -641,7 +641,7 @@ double Quantification::getGateProb(double a, double b, bool is_and)
  * Computes cut-set Fussel-Vesely Important measures
  */
 /*!private*/
-std::vector<std::vector<double>> Quantification::minCutIM(std::vector<double> upper_bound)
+std::vector<std::vector<double>> FTAUtils::Quantification::minCutIM(std::vector<double> upper_bound)
 /*!endprivate*/
 {
   std::vector<std::vector<double>> mc_i_m;
@@ -662,7 +662,7 @@ std::vector<std::vector<double>> Quantification::minCutIM(std::vector<double> up
  * WARNING: This consumes _b_nodes and then overwrites it
  */
 /*!private*/
-void Quantification::computeRisk(int n, std::vector<double> hazard)
+void FTAUtils::Quantification::computeRisk(int n, std::vector<double> hazard)
 /*!endprivate*/
 {
   for (std::map<std::string, std::vector<double>>::iterator bn_it = _b_nodes.begin();
@@ -680,7 +680,7 @@ void Quantification::computeRisk(int n, std::vector<double> hazard)
  * Function for top event fragility
  */
 /*!private*/
-std::vector<double> Quantification::fragility(std::set<std::set<std::string>> cut_sets, int n,
+std::vector<double> FTAUtils::Quantification::fragility(std::set<std::set<std::string>> cut_sets, int n,
                                          std::vector<double> im_bins, double &mu,
                                          double &sigma)
 /*!endprivate*/
@@ -701,7 +701,7 @@ std::vector<double> Quantification::fragility(std::set<std::set<std::string>> cu
  */
 /*!private*/
 std::map<std::string, std::vector<std::vector<double>>>
-Quantification::beIM(std::set<std::set<std::string>> cut_sets, int n,
+FTAUtils::Quantification::beIM(std::set<std::set<std::string>> cut_sets, int n,
                      std::vector<double> upper_bound, std::vector<int> &count_v)
 /*!endprivate*/
 {
