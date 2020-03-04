@@ -3,8 +3,8 @@
 
 #include <random>
 #include "MastodonUtils.h"
-#include "utils.h"
-#include "solver.h"
+#include "Utils.h"
+#include "Solver.h"
 
 #define CLIP(A, MIN, MAX) (((A) < MIN) ? MIN : ((A) > MAX ? MAX : (A)))
 
@@ -14,6 +14,8 @@
     rv.push_back(CLIP(dataPoint, 0.0, 1.0));                                   \
   }
 
+namespace FTAUtils
+{
 // Fault Tree class
 class FaultTree {
 public:
@@ -168,7 +170,7 @@ private:
   std::vector<double> getProbVector(_dist_t dist, double a, double b, int n,
                                int seed, std::vector<double> im,
                                _analysis_t analysis, bool uc);
-  void beProb(std::vector<std::string> line, int n_sample, int seed, _analysis_t analysis, 
+  void beProb(std::vector<std::string> line, int n_sample, int seed, _analysis_t analysis,
               std::vector<double> intmes, bool uncert);
 
 
@@ -195,5 +197,7 @@ private:
                            std::vector<double> im_bins, double &mu, double &sigma);
   void computeRisk(int n, std::vector<double> hazard);
 };
+
+} // namespace FTAUtils
 
 #endif // _QUANTIFICATION_H
