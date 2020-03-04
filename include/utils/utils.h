@@ -1,8 +1,6 @@
 #ifndef _UTILS_H
 #define _UTILS_H
 
-// #include "all.h"
-
 //-------------------------- MACRO UTILITIES BEGIN ---------------------
 // A custom assert block for assertions
 #define ASSERT( condition, statement, ... ) \
