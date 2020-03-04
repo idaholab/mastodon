@@ -2,7 +2,6 @@
 #define _QUANTIFICATION_H
 
 #include "faultTree.h"
-// #include "parser.h"
 #include <random>
 #include "MastodonUtils.h"
 
@@ -123,8 +122,6 @@ private:
   std::vector<double> getProbVector(_dist_t dist, double a, double b, int n,
                                int seed, std::vector<double> im,
                                _analysis_t analysis, bool uc);
-  // void beProb(ns::Parser parser, int n_sample, int seed, _analysis_t analysis, 
-  //              std::vector<double> intmes, bool uncert);
   void beProb(std::vector<std::string> line, int n_sample, int seed, _analysis_t analysis, 
               std::vector<double> intmes, bool uncert);
 

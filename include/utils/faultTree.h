@@ -1,9 +1,6 @@
 #ifndef _FAULT_TREE_H
 #define _FAULT_TREE_H
 
-// #include "all.h"
-// #include "parser.h"
-
 #include "utils.h"
 #include "solver.h"
 
@@ -45,7 +42,6 @@ private:
   std::set<std::set<std::string>> _sets;
 
   // Member functions
-  // void buildTree(ns::Parser parser);
   void buildTree(std::vector<std::string> line);
   void computeMinimumCutSets();
   _operator_t str2Operator(std::string op);
