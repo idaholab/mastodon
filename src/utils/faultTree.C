@@ -8,8 +8,10 @@
 FaultTree::FaultTree(std::string file_name, std::string root)
 /*!endpublic*/
 {
-  ns::Parser parser = ns::Parser(file_name, ns::Parser::FORMAT_CSV);
-  buildTree(parser);
+  MooseUtils::DelimitedFileReader demand_logic_file(file_name);
+  demand_logic_file.read();
+  std::vector<string> fault_tree_logic = demand_logic_file.getNames();
+  buildTree(fault_tree_logic);
 
   // Override root node if not default
   if (root != "") {
@@ -24,7 +26,7 @@ FaultTree::FaultTree(std::string file_name, std::string root)
 }
 
 /*
- * Destructor for parser class
+ * Destructor
  */
 /*!public*/
 FaultTree::~FaultTree()
@@ -32,68 +34,25 @@ FaultTree::~FaultTree()
 {}
 
 /*
- * Builds m-ary fault tree based on the set parser
+ * Builds m-ary fault tree
  */
 /*!private*/
-// void FaultTree::buildTree(ns::Parser parser)
-/*!endprivate*/
-{
-  /*
-  vector<string> line;
-  while (true) {
-    line = parser.yieldLine();
-
-    // Stop if no new line to process
-    if (line.size() == 0)
-      break;
-
-    // Stash name, operator
-    _node *node = new _node(line[0], str2Operator(line[1]));
-
-    // Add children
-    for (int i = 2; i < line.size(); i++)
-      node->_child.push_back(line[i]);
-
-    // Stash the first entry as ROOT of tree
-    if (_node_d_b.size() == 0)
-      _root = line[0];
-
-    // Add the newly created node to node lookup hashmap
-    _node_d_b[line[0]] = node;
-  }
-  */
-  // return;
-// }
-
-/*
- * Builds m-ary fault tree based on the set parser
- */
-/*!private*/
-void FaultTree::buildTree(ns::Parser parser)
+void FaultTree::buildTree(std::vector<std::string> line)
 /*!endprivate*/
 {  
-  vector<string> line;
-  while (true) {
-    line = parser.yieldLine();
+  // Stash name, operator
+  _node *node = new _node(line[0], str2Operator(line[1]));
 
-    // Stop if no new line to process
-    if (line.size() == 0)
-      break;
+  // Add children
+  for (int i = 2; i < line.size(); i++)
+    node->_child.push_back(line[i]);
 
-    // Stash name, operator
-    _node *node = new _node(line[0], str2Operator(line[1]));
+  // Stash the first entry as ROOT of tree
+  if (_node_d_b.size() == 0)
+    _root = line[0];
 
-    // Add children
-    for (int i = 2; i < line.size(); i++)
-      node->_child.push_back(line[i]);
-
-    // Stash the first entry as ROOT of tree
-    if (_node_d_b.size() == 0)
-      _root = line[0];
-
-    // Add the newly created node to node lookup hashmap
-    _node_d_b[line[0]] = node;
-  }
+  // Add the newly created node to node lookup hashmap
+  _node_d_b[line[0]] = node;
   
   return;
 }

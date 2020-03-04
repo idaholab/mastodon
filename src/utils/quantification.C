@@ -26,16 +26,12 @@ Quantification::Quantification(std::string events_file, std::string events_prob_
   // ft.printSets();
 
   // Read basic events file
-  // ns::Parser parser_event_prob = ns::Parser(events_prob_file, ns::Parser::FORMAT_CSV);
   MooseUtils::DelimitedFileReader demand_event_prob(events_prob_file);
   demand_event_prob.read();
-  std::vector<std::vector<double>> event_prob = demand_event_prob.getData();
+  std::vector<string> event_prob = demand_event_prob.getNames();
 
   if (analysis == FRAGILITY) {
     // Read and interpolate hazard curve
-    // ns::Parser parser_hazard = ns::Parser(hazard_file, ns::Parser::FORMAT_CSV);
-    // std::vector<std::vector<std::string>> lines = parser_hazard.yieldLines();
-    // std::vector<std::vector<double>> hazard = linesToDouble(lines);
     MooseUtils::DelimitedFileReader demand_hazard(hazard_file);
     demand_hazard.read(); // type: MooseUtils::DelimitedFileReader
     std::vector<std::vector<double>> hazard = demand_hazard.getData();
@@ -47,8 +43,7 @@ Quantification::Quantification(std::string events_file, std::string events_prob_
     std::vector<double> hazard_freq = hazInterp(hazard, im_bins);
 
     // Dictionary of basic events for fragility input
-    // beProb(parser_event_prob, n_sample, seed, analysis, im_bins, uncertainty);
-    // beProb(event_prob, n_sample, seed, analysis, im_bins, uncertainty);
+    beProb(event_prob, n_sample, seed, analysis, im_bins, uncertainty);
 
     // Top event fragility (lognormal parameters)
     double mu, sigma;
@@ -63,8 +58,7 @@ Quantification::Quantification(std::string events_file, std::string events_prob_
     computeRisk(n_bins, hazard_freq);
   } else {
     // Dictionary of basic events risk (risk inputs)
-    // beProb(parser_event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
-    // beProb(event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
+    beProb(event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
   }  
 
   // Calculate minimal cut sets probability
@@ -219,52 +213,18 @@ std::vector<double> Quantification::getProbVector(_dist_t dist, double a, double
   return rv;
 }
 
-/*
- * Parses and floods probabilties of basic elements
- */
-/*!private*/
-// void Quantification::beProb(ns::Parser parser, int n_sample, int seed,
-//                             _analysis_t analysis, std::vector<double> intmes,
-//                             bool uncert)
-/*!endprivate*/
-// {
-//   std::vector<std::string> line;
-//   while (true) {
-//     line = parser.yieldLine();
-
-//     // Stop if no new line to process
-//     if (line.size() == 0)
-//       break;
-
-    // Stash name, probability vector
-//     double b = line.size() > 3 ? stod(line[3]) : 0;
-//     _b_nodes[line[0]] = getProbVector(_str2dist[line[1]], stod(line[2]), b,
-//                                       n_sample, seed, intmes, analysis, uncert);
-//   }
-// }
 
 /*
  * Parses and floods probabilties of basic elements
  */
 /*!private*/
-void Quantification::beProb(ns::Parser parser, int n_sample, int seed,
+void Quantification::beProb(std::vector<std::string> line, int n_sample, int seed,
                             _analysis_t analysis, std::vector<double> intmes,
                             bool uncert)
 /*!endprivate*/
 {
-   std::vector<std::string> line;
-   while (true) {
-     line = parser.yieldLine();
-
-     // Stop if no new line to process
-     if (line.size() == 0)
-       break;
-
-     // Stash name, probability vector
-     double b = line.size() > 3 ? stod(line[3]) : 0;
-     _b_nodes[line[0]] = getProbVector(_str2dist[line[1]], stod(line[2]), b,
-                                       n_sample, seed, intmes, analysis, uncert);
-   }
+  double b = line.size() > 3 ? stod(line[3]) : 0;
+  _b_nodes[line[0]] = getProbVector(_str2dist[line[1]], stod(line[2]), b, n_sample, seed, intmes, analysis, uncert);
 }
 
 /*
