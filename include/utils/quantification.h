@@ -3,6 +3,7 @@
 
 #include "faultTree.h"
 // #include "parser.h"
+#include <random>
 #include "MastodonUtils.h"
 
 #define CLIP(A, MIN, MAX) (((A) < MIN) ? MIN : ((A) > MAX ? MAX : (A)))
@@ -123,9 +124,12 @@ private:
                                int seed, std::vector<double> im,
                                _analysis_t analysis, bool uc);
   // void beProb(ns::Parser parser, int n_sample, int seed, _analysis_t analysis, 
-  //             std::vector<double> intmes, bool uncert);
-  // void beProb(std::vector<std::vector<double>> line, int n_sample, int seed, _analysis_t analysis, 
-  //             std::vector<double> intmes, bool uncert);
+  //              std::vector<double> intmes, bool uncert);
+  void beProb(std::vector<std::string> line, int n_sample, int seed, _analysis_t analysis, 
+              std::vector<double> intmes, bool uncert);
+
+
+
   std::vector<std::vector<double>> computeCutSetProb(std::set<std::set<std::string>> cut_sets, int n,
                                            bool bypass = false,
                                            std::string bypass_key = "",
