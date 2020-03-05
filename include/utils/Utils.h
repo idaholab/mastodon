@@ -1,6 +1,9 @@
 #ifndef _UTILS_H
 #define _UTILS_H
 
+#include <string>
+#include <vector>
+
 //-------------------------- MACRO UTILITIES BEGIN ---------------------
 // A custom assert block for assertions
 #define ASSERT( condition, statement, ... ) \
