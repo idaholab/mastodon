@@ -47,7 +47,6 @@
 [Kernels]
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
-    # zeta = 0.00153
   [../]
   [./inertia_x]
     type = InertialForce
@@ -56,7 +55,6 @@
     acceleration = accel_x
     beta = 0.25
     gamma = 0.5
-    # eta = 0.038
   [../]
   [./inertia_y]
     type = InertialForce
@@ -65,7 +63,6 @@
     acceleration = accel_y
     beta = 0.25
     gamma = 0.5
-    # eta = 0.038
   [../]
   [./inertia_z]
     type = InertialForce
@@ -74,7 +71,6 @@
     acceleration = accel_z
     beta = 0.25
     gamma = 0.5
-    # eta = 0.038
   [../]
 []
 
@@ -125,11 +121,11 @@
     execute_on = timestep_end
   [../]
   [./layer_id]
-     type = UniformLayerAuxKernel
-     variable = layer_id
-     interfaces = '29.8'
-     direction = '0.0 0.0 1.0'
-     execute_on = initial
+    type = UniformLayerAuxKernel
+    variable = layer_id
+    interfaces = '29.8'
+    direction = '0.0 0.0 1.0'
+    execute_on = initial
   [../]
 []
 
@@ -173,10 +169,10 @@
 
 [Functions]
   [./accel_bottom]
-     type = PiecewiseLinear
-     data_file = Ormsby_USE1.csv
-     scale_factor = 1.0
-     format = 'columns'
+    type = PiecewiseLinear
+    data_file = Ormsby_USE1.csv
+    scale_factor = 1.0
+    format = 'columns'
   [../]
   [./initial_zz]
     type = ParsedFunction
@@ -192,10 +188,10 @@
   [./elastic_soil]
     type = ComputeIsotropicElasticityTensorSoil
     layer_variable = layer_id
-    layer_ids = '0'# 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19'
-    poissons_ratio = '0.3'# 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3'
-    density = '1.7'# 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0 2000.0'
-    shear_modulus = '46282.5'#'46282.5'#'3271179.28'#'125000000 118098000 111392000 103968000 96800000 89888000 83232000 76832000 70688000 64800000 59168000 53792000 48672000 43808000 39200000 34848000 30752000 26912000 23328000 20000000'
+    layer_ids = '0'
+    poissons_ratio = '0.3'
+    density = '1.7'
+    shear_modulus = '46282.5'
   [../]
   [./stress_beam2]
     type = ComputeFiniteStrainElasticStress
@@ -253,9 +249,9 @@
   perf_graph = true
   print_linear_residuals = true
   [./out]
-   execute_on = 'FINAL'
-   type = CSV
-   file_base = Soil_Final_NoDamp
+    execute_on = 'FINAL'
+    type = CSV
+    file_base = Soil_Final_NoDamp
   [../]
   [./out2]
     type = Exodus

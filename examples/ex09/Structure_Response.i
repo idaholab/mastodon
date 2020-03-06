@@ -1,5 +1,3 @@
-# Tons, KN, m, s
-
 [Mesh]
   type = FileMesh
   file = STR_2D_3.e
@@ -57,7 +55,6 @@
 []
 
 [Modules/TensorMechanics/LineElementMaster]
-#    add_variables = true
     displacements = 'disp_x disp_y disp_z'
     rotations = 'rot_x rot_y rot_z'
 
@@ -86,9 +83,9 @@
     block = 3
 
     nodal_mass = 166.0
-    area = 0.213
-    Iy = 1.06
-    Iz = 1.06
+    area = 500
+    Iy = 1e3
+    Iz = 1e3
     y_orientation = '1.0 0.0 0.0'
     density = 2.7
 
@@ -96,15 +93,10 @@
   [../]
 []
 
-# zeta = 0.0005438894818
-# eta = 3.26645357034
-
 [Kernels]
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y'
-
     block = '1'
-    # use_automatic_differentiation = true
   [../]
   [./inertia_x1]
     type = InertialForce
@@ -113,7 +105,6 @@
     acceleration = accel_x
     beta = 0.25
     gamma = 0.5
-    # eta = 0.038
     block = '1'
   [../]
   [./inertia_y1]
@@ -123,7 +114,6 @@
     acceleration = accel_y
     beta = 0.25
     gamma = 0.5
-    # eta = 0.038
     block = '1'
   [../]
   [./inertia_z1]
@@ -133,7 +123,6 @@
     acceleration = accel_z
     beta = 0.25
     gamma = 0.5
-    # eta = 0.038
     block = '1'
   [../]
   [./gravity]
@@ -222,17 +211,10 @@
   [../]
   [./elasticity_beam_rigid]
     type = ComputeElasticityBeam
-    youngs_modulus = 1e11
-    poissons_ratio = 0
-    shear_coefficient = 0.85
-    block = '2'
-  [../]
-  [./elasticity_beam_outer_1]
-    type = ComputeElasticityBeam
-    youngs_modulus = 69000000
+    youngs_modulus = 1e10
     poissons_ratio = 0.3
-    shear_coefficient = 0.535
-    block = '3'
+    shear_coefficient = 0.85
+    block = '2 3'
   [../]
   [./stress_beam]
     type = ComputeBeamResultants
@@ -266,10 +248,10 @@
 
 [Functions]
   [./accel_bottom]
-     type = PiecewiseLinear
-     data_file = Ormsby_USE1.csv
-     format = 'columns'
-     scale_factor = 1
+    type = PiecewiseLinear
+    data_file = Ormsby_USE1.csv
+    format = 'columns'
+    scale_factor = 1
   [../]
 []
 
@@ -291,7 +273,7 @@
   dt = 0.001
   dtmin = 0.0001
   nl_abs_tol = 1e-3
-    nl_rel_tol = 1e-9
+  nl_rel_tol = 1e-9
   l_tol = 1e-9
   l_max_its = 50
   timestep_tolerance = 1e-8
@@ -311,7 +293,6 @@
     damping_ratio = 0.01
     start_frequency = 0.1
     end_frequency = 1000
-    # num_frequencies = 200
     outputs = out
   [../]
 []
@@ -322,9 +303,9 @@
   perf_graph = true
   print_linear_residuals = true
   [./out]
-   execute_on = 'FINAL'
-   type = CSV
-   file_base = Str_Final_NoDamp
+  execute_on = 'FINAL'
+  type = CSV
+  file_base = Str_Final_NoDamp
   [../]
   [./out2]
     type = Exodus

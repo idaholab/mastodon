@@ -1,5 +1,3 @@
-# Tons, KN, m, s
-
 [Mesh]
   type = FileMesh
   file = Full_3D_Str_red.e
@@ -67,31 +65,30 @@
 []
 
 [Modules/TensorMechanics/LineElementMaster]
-#    add_variables = true
-    displacements = 'disp_x disp_y disp_z'
-    rotations = 'rot_x rot_y rot_z'
+  displacements = 'disp_x disp_y disp_z'
+  rotations = 'rot_x rot_y rot_z'
 
-    # dynamic simulation using consistent mass/inertia matrix
-    dynamic_nodal_translational_inertia = true
+  # dynamic simulation using consistent mass/inertia matrix
+  dynamic_nodal_translational_inertia = true
 
-    velocities = 'vel_x vel_y vel_z'
-    accelerations = 'accel_x accel_y accel_z'
-    rotational_velocities = 'rot_vel_x rot_vel_y rot_vel_z'
-    rotational_accelerations = 'rot_accel_x rot_accel_y rot_accel_z'
+  velocities = 'vel_x vel_y vel_z'
+  accelerations = 'accel_x accel_y accel_z'
+  rotational_velocities = 'rot_vel_x rot_vel_y rot_vel_z'
+  rotational_accelerations = 'rot_accel_x rot_accel_y rot_accel_z'
 
-    beta = 0.25 # Newmark time integration parameter
-    gamma = 0.5 # Newmark time integration parameter
+  beta = 0.25 # Newmark time integration parameter
+  gamma = 0.5 # Newmark time integration parameter
 
-    [./block_3]
-      block = 3
-      area = 500
-      Iy = 1e3
-      Iz = 1e3
-      y_orientation = '0.0 1.0 0.0'
-      nodal_mass = 0.1
-      boundary = 'B0'
-    [../]
-    [./block_4]
+  [./block_3]
+    block = 3
+    area = 500
+    Iy = 1e3
+    Iz = 1e3
+    y_orientation = '0.0 1.0 0.0'
+    nodal_mass = 0.1
+    boundary = 'B0'
+  [../]
+  [./block_4]
     block = 4
     area = 500
     Iy = 1e3
@@ -99,8 +96,8 @@
     y_orientation = '1.0 0.0 0.0'
     nodal_mass = 0.1
     boundary = 'B0'
-    [../]
-    [./block_6]
+  [../]
+  [./block_6]
     block = 6
     area = 500
     Iy = 1e3
@@ -109,7 +106,7 @@
     nodal_mass = 166.0
     density = 2.7
     boundary = 'B1'
-    [../]
+  [../]
 []
 
 [Kernels]
@@ -271,10 +268,10 @@
 
 [Functions]
   [./accel_bottom]
-     type = PiecewiseLinear
-     data_file = Ormsby_USE1.csv
-     format = 'columns'
-     scale_factor = 1
+    type = PiecewiseLinear
+    data_file = Ormsby_USE1.csv
+    format = 'columns'
+    scale_factor = 1
   [../]
 []
 
@@ -296,12 +293,8 @@
   end_time = 3.0
   dt = 0.001
   timestep_tolerance = 1e-6
-  # petsc_options = '-snes_ksp_ew'
-  # petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
-  # petsc_options_value = '201                hypre    boomeramg      4'
   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       superlu_dist'
-  # automatic_scaling = true
 []
 
 [VectorPostprocessors]
@@ -328,9 +321,9 @@
   perf_graph = true
   print_linear_residuals = true
   [./out]
-   execute_on = 'FINAL'
-   type = CSV
-   file_base = SSI_NoDamp_RigidStr
+    execute_on = 'FINAL'
+    type = CSV
+    file_base = SSI_NoDamp_RigidStr
   [../]
   [./out2]
     type = Exodus
