@@ -22,6 +22,7 @@
 #include "FEProblem.h"
 #include "Factory.h"
 #include "Parser.h"
+#include <iostream>
 
 registerMooseAction("MastodonApp", ISoilAction, "add_material");
 
@@ -85,6 +86,7 @@ validParams<ISoilAction>()
                         false,
                         "Set to true to turn on pressure dependent stiffness "
                         "and yield strength calculation.");
+  params.addParam<bool>("implicit", true, "Set to false to use the explicit solver.");
   params.addParam<std::vector<FunctionName>>(
       "initial_soil_stress",
       "The function values for the initial stress distribution. 9 function "
@@ -112,10 +114,8 @@ validParams<ISoilAction>()
       "and the second column corresponds to the stress values. Additionally, two "
       "segments of a backbone curve cannot have the same slope.");
   // params required for soil_type = 'darendeli' and 'GQ/H'
-  params.addParam<std::vector<Real>>(
-      "initial_shear_modulus",
-      "The initial shear modulus of the soil layers. "
-      "This is required if Darandeli or GQ/H type backbone curves are used.");
+  params.addRequiredParam<std::vector<Real>>("initial_shear_modulus",
+                                             "The initial shear modulus of the soil layers.");
   params.addParam<unsigned int>("number_of_points",
                                 "The total number of data points in which the "
                                 "backbone curve needs to be split for all soil "
@@ -213,6 +213,7 @@ ISoilAction::act()
   params.set<Real>("a2") = getParam<Real>("a2");
   params.set<Real>("tension_pressure_cut_off") = getParam<Real>("tension_pressure_cut_off");
   params.set<bool>("pressure_dependency") = getParam<bool>("pressure_dependency");
+  params.set<bool>("implicit") = getParam<bool>("implicit");
   params.set<bool>("wave_speed_calculation") = true;
   params.set<std::vector<FunctionName>>("initial_soil_stress") =
       getParam<std::vector<FunctionName>>("initial_soil_stress");
@@ -221,6 +222,8 @@ ISoilAction::act()
   if (soil_type == "user_defined")
     params.set<std::vector<FileName>>("backbone_curve_files") =
         getParam<std::vector<FileName>>("backbone_curve_files");
+  params.set<std::vector<Real>>("initial_shear_modulus") =
+      getParam<std::vector<Real>>("initial_shear_modulus");
   if (soil_type == "darendeli")
   {
     params.set<std::vector<Real>>("initial_shear_modulus") =
@@ -312,11 +315,11 @@ ISoilAction::act()
       _problem->addMaterial("ComputeFiniteStrain", unique_strain_name, params);
   }
 
-  // create Elasticty tensor with E = 1 and actual poissons ratio as input
   params = _factory.getValidParams("ComputeIsotropicElasticityTensorSoil");
   std::vector<Real> elastic_mod(layer_ids.size());
+  std::vector<Real> shear_mod = getParam<std::vector<Real>>("initial_shear_modulus");
   for (std::size_t i = 0; i < layer_ids.size(); i++)
-    elastic_mod[i] = 1.0;
+    elastic_mod[i] = 2 * shear_mod[i] * (1 + poissons_ratio[i]);
   std::string unique_elasticity_name = "elasticity_" + block[0];
   params.set<std::vector<SubdomainName>>("block") = block;
   params.set<std::vector<Real>>("elastic_modulus") = elastic_mod;

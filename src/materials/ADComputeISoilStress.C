@@ -531,7 +531,13 @@ ADComputeISoilStress<compute_stage>::computeStress()
 
   // compute trial stress increment - note that _elasticity_tensor here
   // assumes youngs modulus = 1
-  _individual_stress_increment = _elasticity_tensor[_qp] * (_strain_increment[_qp]);
+
+  ADReal lame_1 = _elasticity_tensor[_qp](0, 0, 1, 1);
+  ADReal lame_2 = (_elasticity_tensor[_qp](0, 0, 0, 0) - lame_1) / 2;
+  ADReal initial_youngs = (lame_2 * (3 * lame_1 + 2 * lame_2)) / (lame_1 + lame_2);
+
+  _individual_stress_increment =
+      _elasticity_tensor[_qp] * (_strain_increment[_qp]) / initial_youngs;
 
   _mean_pressure_tmp = _individual_stress_increment.trace() / 3.0 * _stiffness_pressure_correction;
 

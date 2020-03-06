@@ -336,6 +336,7 @@
       soil_type = 'user_defined'
       backbone_curve_files = 'stress_strain_darendeli.csv'
       poissons_ratio = '0.3'
+      initial_shear_modulus = '19571500'
       block = 0
       density = '2000'
     [../]
