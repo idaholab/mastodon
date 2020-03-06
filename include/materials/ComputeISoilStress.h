@@ -78,11 +78,7 @@ protected:
   bool _wave_speed_calculation;
 
   /// Poisson's ratio for each soil layer.
-  std::vector<Real>
-      _poissons_ratio; // std::vector<const MaterialProperty<RankTwoTensor> *> _extra_stresses;
-  // const std::vector<MaterialProperty> _poissons_ratio;
-  // std::vector<const MaterialProperty<Real> *> _poissons_ratio;
-  // const MooseArray<MaterialProperty<Real>> & _poissons_ratio;
+  std::vector<Real> _poissons_ratio;
 
   /// Density stored as a material property.
   const MaterialProperty<Real> * _density;

@@ -44,10 +44,6 @@ validParams<ComputeISoilStress>()
                                              "Poissons's ratio for the soil layers. The "
                                              "size of the vector should be same as the size of "
                                              "layer_ids.");
-  /*params.addParam<std::vector<MaterialProperty>>(
-       "poissons_ratio",
-       "Name of Material Property  or a constant real number defining the Poisson's ratios of the
-     layers.");*/
   params.addParam<Real>("b_exp",
                         0.0,
                         "The exponential factors for pressure "
@@ -179,7 +175,6 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
     _layer_ids(getParam<std::vector<unsigned int>>("layer_ids")),
     _wave_speed_calculation(getParam<bool>("wave_speed_calculation")),
     _poissons_ratio(getParam<std::vector<Real>>("poissons_ratio")),
-    // _poissons_ratio(getParam<std::vector<MaterialProperty>>("poissons_ratio")),
     _density(_wave_speed_calculation ? &getMaterialProperty<Real>("density") : nullptr),
     _b_exp(getParam<Real>("b_exp")),
     _p_ref(getParam<std::vector<Real>>("p_ref")),
@@ -393,7 +388,6 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
   std::vector<Real> initial_shear;
   initial_shear.resize(_poissons_ratio.size());
   Real tmp = 0.0;
-  // initial_shear.size() = _base_models.size();
   for (int j = 0; j < _poissons_ratio.size(); j++)
   {
     tmp = 0.0;

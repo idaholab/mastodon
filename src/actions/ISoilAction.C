@@ -22,7 +22,6 @@
 #include "FEProblem.h"
 #include "Factory.h"
 #include "Parser.h"
-#include <iostream>
 
 registerMooseAction("MastodonApp", ISoilAction, "add_material");
 

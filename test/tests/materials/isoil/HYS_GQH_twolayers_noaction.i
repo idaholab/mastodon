@@ -178,11 +178,11 @@
     execute_on = timestep_end
   [../]
   [./layer_id]
-     type = UniformLayerAuxKernel
-     variable = layer_id
-     interfaces = '1.0 2.02'
-     direction = '0.0 0.0 1.0'
-     execute_on = initial
+    type = UniformLayerAuxKernel
+    variable = layer_id
+    interfaces = '1.0 2.02'
+    direction = '0.0 0.0 1.0'
+    execute_on = initial
   [../]
 []
 
@@ -285,12 +285,12 @@
 [Executioner]
   type = Transient
   solve_type = PJFNK
-  nl_abs_tol = 1e-9
-  nl_rel_tol = 1e-9
+  nl_abs_tol = 1e-11
+  nl_rel_tol = 1e-11
   start_time = 0
   end_time = 8
-  dt = 0.01
-  timestep_tolerance = 1e-6
+  dt = 0.05
+  timestep_tolerance = 1e-8
   petsc_options = '-snes_ksp_ew'
   petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
   petsc_options_value = '201                hypre    boomeramg      4'
