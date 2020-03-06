@@ -312,6 +312,33 @@ TEST(MastodonUtils, calcLogLikelihood)
 }
 
 // Test for maximizeLogLikelihood function in MastodonUtils
+
+TEST(MastodonUtils, maximizeLogLikelihood)
+{
+  // Inputs for testing
+  std::vector<Real> im = {0.23, 0.49, 0.75, 1.01, 1.27, 1.53, 1.79, 2.05, 
+                          2.31, 2.57, 2.83, 3.09, 3.35, 3.61, 3.87};
+  std::vector<Real> pf = {0.00115658, 0.020125, 0.0687379, 0.141888, 0.233777,
+                          0.338322, 0.447494, 0.552872, 0.647907, 0.728978, 
+                          0.795157, 0.847367, 0.887496, 0.917738, 0.940197};
+  std::vector<Real> loc_space = {0, 100};
+  std::vector<Real> sca_space = {0, 10};
+  // Outputs for testing
+  std::vector<Real> max_values1 = MastodonUtils::maximizeLogLikelihood(
+      im, pf, loc_space, sca_space, 1000, false, 1e-05, 0.0001, 100, 1028);
+  // for (Real loc = loc_space[0]; loc < loc_space[1]; loc += 0.01)
+  //     for (Real sca = sca_space[0]; sca < sca_space[1]; sca += 0.01) {
+  //          {
+  //            } }
+  // Value check
+  // print mu, sigma
+  std::cout << "--------Optimization Results---------" << std::endl;
+  std::cout << "mu = " << max_values1[0] << ", sigma = " << max_values1[1] << std::endl;
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values1[0], 1.86995));
+  EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values1[1], 0.512805));
+}
+
+/*
 TEST(MastodonUtils, maximizeLogLikelihood)
 {
   // Inputs for testing
@@ -330,4 +357,7 @@ TEST(MastodonUtils, maximizeLogLikelihood)
   EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values2[0], 0.3981, 1e-3));
   EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values2[1], 0.2330, 1e-3));
 }
+*/
+
+
 #endif // LIBMESH_HAVE_EXTERNAL_BOOST
