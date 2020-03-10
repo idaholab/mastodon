@@ -4,6 +4,11 @@
 #include "MooseSyntax.h"
 #include "ModulesApp.h"
 
+// Optional dependence on BlackBear
+#ifdef BLACKBEAR_ENABLED
+#include "BlackBearApp.h"
+#endif
+
 template <>
 InputParameters
 validParams<MastodonApp>()
@@ -39,6 +44,9 @@ MastodonApp::registerAll(Factory & factory, ActionFactory & action_factory, Synt
   Registry::registerObjectsTo(factory, {"MastodonApp"});
   Registry::registerActionsTo(action_factory, {"MastodonApp"});
   ModulesApp::registerAll(factory, action_factory, syntax);
+#ifdef BLACKBEAR_ENABLED
+  BlackBearApp::registerAll(factory, action_factory, syntax);
+#endif
 
   syntax.registerActionSyntax("EmptyAction", "BCs/SeismicForce");
   syntax.registerActionSyntax("SeismicForceAction", "BCs/SeismicForce/*");
