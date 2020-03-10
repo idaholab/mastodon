@@ -43,6 +43,21 @@ include           $(MOOSE_DIR)/modules/modules.mk
 ADDITIONAL_INCLUDES	:= -I$(FRAMEWORK_DIR)/contrib/gtest
 ADDITIONAL_LIBS 	:= $(FRAMEWORK_DIR)/contrib/gtest/libgtest.la
 
+# BlackBear (optional)
+BLACKBEAR_SUBMODULE := $(CURDIR)/../blackbear
+ifneq ($(wildcard $(BLACKBEAR_SUBMODULE)/Makefile),)
+  BLACKBEAR_DIR    ?= $(BLACKBEAR_SUBMODULE)
+endif
+ifeq ($(wildcard $(BLACKBEAR_DIR)/Makefile),)
+  $(info Could not find BlackBear, so not compiling with it)
+else
+  APPLICATION_DIR    := $(BLACKBEAR_DIR)
+  APPLICATION_NAME   := blackbear
+  include            $(FRAMEWORK_DIR)/app.mk
+  ADDITIONAL_CPPFLAGS += -DBLACKBEAR_ENABLED
+  APP_HEADERS        := $(APP_HEADERS) $(app_HEADER)
+endif
+
 # dep apps
 CURRENT_DIR        := $(shell pwd)
 APPLICATION_DIR    := $(CURRENT_DIR)/..
