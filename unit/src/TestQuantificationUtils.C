@@ -12,8 +12,9 @@
 // QUANTIFICATIONUTILS includes
 #include "QuantificationUtils.h"
 
-TEST(Quantification, Quantification)
+TEST(FTAUtils, Quantification)
 {
+    std::cout << "**********run test QuantificationUtils.C**********" << std::endl;
     // from QuantificationUtils.C
     // Quantification(std::string events_file, std::string events_prob_file,
     //              _analysis_t analysis = FRAGILITY, std::string hazard_file = "",
@@ -41,7 +42,7 @@ TEST(Quantification, Quantification)
     // Inputs for Risk analysis (not fragility)
 
     // outputs for testing
-    Quantification FTAFragility, FTATopRisk;
+    // FTAUtils::Quantification FTATopRisk;
     // outputs for Fragility
     // FTAFragility  = Quantification(events_file = "../logic1.csv",
     //                         events_prob_file = "../logic1_bas_events_LNORM.txt",
@@ -53,13 +54,15 @@ TEST(Quantification, Quantification)
 
     // outputs for Risk analysis (not fragility)
     // for asserting FTA top event risk.
-    FTATopRisk  = Quantification("../logic2.csv",
-                            "../logic2_bas_events_PE.txt",
-                            analysis = Quantification::RISK,
-                            im_lower = 0.1,
-                            im_upper = 4,
-                            n_bins = 15);    
-    
+    // FTATopRisk  = FTAUtils::Quantification("../logic2.csv", "../logic2_bas_events_PE.csv", FTAUtils::Quantification::RISK, "../hazard.csv", 0.1, 4, 15);
+    std::vector<FileName> quantification_files = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
+    FTAUtils::Quantification(quantification_files[0],
+                             quantification_files[1],
+                             FTAUtils::Quantification::RISK,
+                             quantification_files[2],
+                             0.1,
+                             4,
+                             15);
 
     // Value check
     

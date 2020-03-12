@@ -321,11 +321,101 @@ TEST(MastodonUtils, maximizeLogLikelihood)
   std::vector<Real> pf = {0.00115658, 0.020125, 0.0687379, 0.141888, 0.233777,
                           0.338322, 0.447494, 0.552872, 0.647907, 0.728978, 
                           0.795157, 0.847367, 0.887496, 0.917738, 0.940197};
-  std::vector<Real> loc_space = {0, 100};
-  std::vector<Real> sca_space = {0, 10};
+  std::vector<Real> loc_space = {0.01, 2};
+  std::vector<Real> sca_space = {0.01, 1};
+  /*
+  *********************CASE ONE*****************
+  case 1:
+  brute_force = true
+  n = 1000
+  loc_space = [0.01, 2]
+  sca_space = [0.01, 1]
+  --------Optimization Results---------
+  mu = 1.83, sigma = 0.54
+
+  case 2:
+  brute_force = true
+  n = 1000
+  loc_space = [0.05, 2]
+  sca_space = [0.05, 1]
+  --------Optimization Results---------
+  mu = 1.83, sigma = 0.54
+
+  case 3:
+  brute_force = true
+  n = 1000
+  loc_space = [0.01, 100]
+  sca_space = [0.01, 10]
+  --------Optimization Results---------
+  mu = 1.83, sigma = 0.54
+
+  case 4:
+  brute_force = true
+  n = 1000
+  loc_space = [0, 100]
+  sca_space = [0, 10]
+  unknown file: Failure
+  C++ exception with description "
+  *** ERROR ***
+  While calculating loglikelihood, scale parameter should be positive.
+  " thrown in the test body.
+
+  case 5:
+  brute_force = true
+  n = 10000
+  loc_space = [0.01, 2]
+  sca_space = [0.01, 1]
+  --------Optimization Results---------
+  mu = 1.83, sigma = 0.54
+
+  case 6:
+  brute_force = true
+  n = 100000
+  loc_space = [0.01, 2]
+  sca_space = [0.01, 1]
+  --------Optimization Results---------
+  mu = 1.83, sigma = 0.54
+
+
+  *********************CASE TWO*****************
+
+  case 1:
+  brute_force = false
+  loc_space = [0, 100]
+  sca_space = [0, 10]
+  --------Optimization Results---------
+  mu = 2.46741, sigma = 2.51415
+
+  case 2:
+  brute_force = false
+  loc_space = [0.01, 100]
+  sca_space = [0.01, 10]
+  --------Optimization Results---------
+  mu = 2.47759, sigma = 2.52199
+
+  case 3:
+  brute_force = false
+  loc_space = [0.05, 100]
+  sca_space = [0.05, 10]
+  --------Optimization Results---------
+  mu = 2.5183, sigma = 2.55336
+
+  case 4:
+  brute_force = false
+  loc_space = [0.1, 100]
+  sca_space = [0.1, 10]
+  --------Optimization Results---------
+  mu = 2.56915, sigma = 2.59255
+  */
+  // print loc_space and sca_space
+  std::vector<Real>::iterator it_loc = loc_space.begin();
+  std::cout << "loc_space = [" << (*it_loc++) << ", " << *it_loc << "]" << std::endl;
+  std::vector<Real>::iterator it_sca = sca_space.begin();
+  std::cout << "sca_space = [" << (*it_sca++) << ", " << *it_sca << "]" << std::endl;
+
   // Outputs for testing
   std::vector<Real> max_values1 = MastodonUtils::maximizeLogLikelihood(
-      im, pf, loc_space, sca_space, 1000, false, 1e-05, 0.0001, 100, 1028);
+      im, pf, loc_space, sca_space, 10000, false, 1e-05, 0.0001, 100, 1028);
   // for (Real loc = loc_space[0]; loc < loc_space[1]; loc += 0.01)
   //     for (Real sca = sca_space[0]; sca < sca_space[1]; sca += 0.01) {
   //          {
