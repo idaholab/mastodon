@@ -3,11 +3,26 @@
 
 #include <set>
 #include <map>
+#include <string>
+#include <vector>
+
 #include "Utils.h"
-#include "Solver.h"
+
+namespace FTAUtils
+{
+  class Parser;
+  class Quantification;
+  class FaultTree;
+  std::string trim(const std::string& str);
+  std::string str2Upper(const std::string& str_in, bool trim_input=false);
+  double interpolate( std::vector <std::vector<double>> data, double x, bool extrapolate );
+  double normalCDF(double x); // Phi(-∞, x) aka N(x)
+  double normalCDF ( double x, double mu, double sigma );
+  double lnCDF ( double x, double mu, double sigma );
+}
 
 // Fault Tree class
-class FaultTree {
+class FTAUtils::FaultTree {
 public:
   enum _operator_t { AND, OR, UNDEF };
 
@@ -42,13 +57,32 @@ private:
   std::set<std::set<std::string>> _sets;
 
   // Member functions
-  void buildTree(std::vector<std::string> line);
+  // void buildTree(std::vector<std::string> line);
+  void buildTree(Parser parser);
   void computeMinimumCutSets();
   _operator_t str2Operator(std::string op);
   void rmSets();
   _node *getNode(std::string name);
   void cutSetsExpand(_node *node);
   void removeSubsets();
+};
+
+class FTAUtils::Parser {
+   public:
+      // Supported formats for parsing
+      enum parseFormatT {
+         FORMAT_CSV,
+         FORMAT_UNDEF
+      };
+
+      Parser( std::string fileName, parseFormatT format );
+      ~Parser();
+      std::vector <std::string> yieldLine();
+      std::vector <std::vector<std::string>> yieldLines();
+
+   private:
+      // Handle to file
+      std::ifstream*  fileP;
 };
 
 #endif // _FAULT_TREE_H
