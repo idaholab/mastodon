@@ -1,5 +1,5 @@
 #include "QuantificationUtils.h"
-#include "DelimitedFileReader.h"
+// #include "DelimitedFileReader.h"
 
 // A macro to reduce typing while printing stats
 #define QUANT_BE_STAT_PRINT_HELPER(index, i)                                   \
@@ -13,29 +13,62 @@
  * Constructor for qualifications class
  */
 /*!public*/
-Quantification::Quantification(std::string events_file, std::string events_prob_file,
+FTAUtils::Quantification::Quantification(std::string events_file, std::string events_prob_file,
                                _analysis_t analysis, std::string hazard_file,
                                double im_lower, double im_upper, int n_bins,
                                bool uncertainty, std::string root, int n_sample,
                                int seed)
 /*!endpublic*/
+/*
+FTAUtils::Quantification(quantification_files[1], // "logic2.csv"                // std::string events_file
+                         quantification_files[2], // "logic2_bas_events_PE.csv"  // std::string events_prob_file,
+                         FTAUtils::Quantification::RISK,
+                         quantification_files[3], // "hazard.csv"                // std::string hazard_file
+                         0.1,
+                         4,
+                         15);
+*/
 {
+  // std::cout << "-------Print Filename--------" << std::endl;
+  // std::cout << "events_file: " << events_file << std::endl;
+  // std::cout << "events_prob_file: " << events_prob_file << std::endl;
+  // std::cout << "hazard_file: " << hazard_file << std::endl;
+
   //---------------- COMPUTE --------------------------------------------------
   // Construct the fault tree with MOCUS algo for minimal cut sets
-  FaultTree ft = FaultTree(events_file, root);
+  // std::cout << "^^^^^^^^Begin FaultTree Construction^^^^^^^^^" << std::endl;
+  FTAUtils::FaultTree ft = FTAUtils::FaultTree(events_file, root);
   std::set<std::set<std::string>> cut_sets = ft.getCutSets();
   // ft.printSets();
+  // std::cout << "^^^^^^^^End FaultTree Construction^^^^^^^^^" << std::endl;
 
   // Read basic events file
+  FTAUtils::Parser parser_event_prob = FTAUtils::Parser(events_prob_file, FTAUtils::Parser::FORMAT_CSV);
+  /*
+  std::cout << "^^^^^^^^Begin Basic Events Construction^^^^^^^^^" << std::endl;
   MooseUtils::DelimitedFileReader demand_event_prob(events_prob_file);
   demand_event_prob.read();
-  std::vector<string> event_prob = demand_event_prob.getNames();
+  std::vector<std::string> event_prob = demand_event_prob.getNames();  
+
+  // print event_prob
+  std::vector<string>::iterator it_event_prob = event_prob.begin();
+  while( it_event_prob != event_prob.end() ){
+    std::cout << (*it_event_prob++) << " ";
+  }
+  std::cout << std::endl;
+  std::cout << "^^^^^^^^End Basic Events Construction^^^^^^^^^" << std::endl;
+  */
 
   if (analysis == FRAGILITY) {
     // Read and interpolate hazard curve
+    /*
     MooseUtils::DelimitedFileReader demand_hazard(hazard_file);
     demand_hazard.read(); // type: MooseUtils::DelimitedFileReader
     std::vector<std::vector<double>> hazard = demand_hazard.getData();
+    */
+    FTAUtils::Parser parser_hazard = FTAUtils::Parser(hazard_file, FTAUtils::Parser::FORMAT_CSV);
+    std::vector<std::vector<std::string>> lines = parser_hazard.yieldLines();
+    std::vector<std::vector<double>> hazard = FTAUtils::Quantification::linesToDouble(lines);
 
     // List of Intensity Measure bin values
     std::vector<double> im_bins = getBinMeans(im_lower, im_upper, n_bins);
@@ -44,7 +77,8 @@ Quantification::Quantification(std::string events_file, std::string events_prob_
     std::vector<double> hazard_freq = hazInterp(hazard, im_bins);
 
     // Dictionary of basic events for fragility input
-    beProb(event_prob, n_sample, seed, analysis, im_bins, uncertainty);
+    // beProb(event_prob, n_sample, seed, analysis, im_bins, uncertainty);
+    beProb(parser_event_prob, n_sample, seed, analysis, im_bins, uncertainty);
 
     // Top event fragility (lognormal parameters)
     double mu, sigma;
@@ -58,7 +92,9 @@ Quantification::Quantification(std::string events_file, std::string events_prob_
     computeRisk(n_bins, hazard_freq);
   } else {
     // Dictionary of basic events risk (risk inputs)
-    beProb(event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
+    // beProb(event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
+    beProb(parser_event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
+    std::cout << "------------ LN PARAMS END ---------------" << std::endl;
   }
 
   // Calculate minimal cut sets probability
@@ -111,7 +147,7 @@ Quantification::Quantification(std::string events_file, std::string events_prob_
  * measures
  */
 /*!private*/
-std::vector<double> Quantification::hazInterp(std::vector<std::vector<double>> hazard, std::vector<double> im_bins)
+std::vector<double> FTAUtils::Quantification::hazInterp(std::vector<std::vector<double>> hazard, std::vector<double> im_bins)
 /*!endprivate*/
 {
   std::vector<double> data;
@@ -133,7 +169,7 @@ std::vector<double> Quantification::hazInterp(std::vector<std::vector<double>> h
  * Function for getting BIN mean values of intensity measure
  */
 /*!private*/
-std::vector<double> Quantification::getBinMeans(double im_lower, double im_upper, int n_bins)
+std::vector<double> FTAUtils::Quantification::getBinMeans(double im_lower, double im_upper, int n_bins)
 /*!endprivate*/
 {
   std::vector<double> bins;
@@ -150,7 +186,7 @@ std::vector<double> Quantification::getBinMeans(double im_lower, double im_upper
  */
 /*!private*/
 std::vector<std::vector<double>>
-Quantification::linesToDouble(std::vector<std::vector<std::string>> lines)
+FTAUtils::Quantification::linesToDouble(std::vector<std::vector<std::string>> lines)
 /*!endprivate*/
 {
   std::vector<std::vector<double>> lines_double;
@@ -169,7 +205,7 @@ Quantification::linesToDouble(std::vector<std::vector<std::string>> lines)
  * eg., a => mean, b => std for NORM
  */
 /*!private*/
-std::vector<double> Quantification::getProbVector(_dist_t dist, double a, double b,
+std::vector<double> FTAUtils::Quantification::getProbVector(_dist_t dist, double a, double b,
                                              int n, int seed, std::vector<double> im,
                                              _analysis_t analysis, bool uc)
 /*!endprivate*/
@@ -181,7 +217,7 @@ std::vector<double> Quantification::getProbVector(_dist_t dist, double a, double
   if (analysis == FRAGILITY) {
     ASSERT(dist == LNORM, "unsupported distribution for fragility analysis");
     for (int index = 0; index < im.size(); index++) {
-      rv.push_back(normalCDF(log(im[index] / a) / b));
+      rv.push_back(FTAUtils::normalCDF(log(im[index] / a) / b));
     }
   } else {
     if (!uc) {
@@ -218,14 +254,39 @@ std::vector<double> Quantification::getProbVector(_dist_t dist, double a, double
  * Parses and floods probabilties of basic elements
  */
 /*!private*/
-void Quantification::beProb(std::vector<std::string> line, int n_sample, int seed,
+void FTAUtils::Quantification::beProb(FTAUtils::Parser parser, int n_sample, int seed,
                             _analysis_t analysis, std::vector<double> intmes,
                             bool uncert)
 /*!endprivate*/
 {
+  std::vector<std::string> line;
+  while (true) {
+    line = parser.yieldLine();
+
+    // Stop if no new line to process
+    if (line.size() == 0)
+      break;
+
+    // Stash name, probability vector
+    double b = line.size() > 3 ? stod(line[3]) : 0;
+    _b_nodes[line[0]] = getProbVector(_str2dist[line[1]], stod(line[2]), b,
+                                      n_sample, seed, intmes, analysis, uncert);
+  }
+}
+
+/*
+void FTAUtils::Quantification::beProb(std::vector<std::string> line, int n_sample, int seed,
+                            _analysis_t analysis, std::vector<double> intmes,
+                            bool uncert)
+                            */
+/*!endprivate*/
+/*
+{
   double b = line.size() > 3 ? stod(line[3]) : 0;
   _b_nodes[line[0]] = getProbVector(_str2dist[line[1]], stod(line[2]), b, n_sample, seed, intmes, analysis, uncert);
 }
+*/
+
 
 /*
  * Computes accumulated probability for the entire cut set
@@ -238,7 +299,7 @@ void Quantification::beProb(std::vector<std::string> line, int n_sample, int see
  *       2. Sets the vector cutSetProb
  */
 /*!private*/
-std::vector<double> *Quantification::cutSetProbWDigest(std::set<std::set<std::string>> cut_sets,
+std::vector<double> *FTAUtils::Quantification::cutSetProbWDigest(std::set<std::set<std::string>> cut_sets,
                                                   int n, bool only_min_max)
 /*!endprivate*/
 {
@@ -301,7 +362,7 @@ std::vector<double> *Quantification::cutSetProbWDigest(std::set<std::set<std::st
  */
 /*!private*/
 std::vector<std::vector<double>>
-Quantification::computeCutSetProb(std::set<std::set<std::string>> cut_sets, int n, bool bypass,
+FTAUtils::Quantification::computeCutSetProb(std::set<std::set<std::string>> cut_sets, int n, bool bypass,
                                   std::string bypass_key, double bypass_value)
 /*!endprivate*/
 {
@@ -318,7 +379,7 @@ Quantification::computeCutSetProb(std::set<std::set<std::string>> cut_sets, int 
 }
 
 /*!private*/
-std::vector<double> Quantification::cutSetRowProb(std::set<std::string> row, int n,
+std::vector<double> FTAUtils::Quantification::cutSetRowProb(std::set<std::string> row, int n,
                                              bool sign_positive, bool bypass,
                                              std::string bypass_key,
                                              double bypass_value)
@@ -347,7 +408,7 @@ std::vector<double> Quantification::cutSetRowProb(std::set<std::string> row, int
  * OR  => (1 - a) * (1 - b)
  */
 /*!private*/
-double Quantification::getGateProb(double a, double b, bool is_and)
+double FTAUtils::Quantification::getGateProb(double a, double b, bool is_and)
 /*!endprivate*/
 {
   return is_and ? a * b : (1.0 - a) * (1.0 - b);
@@ -357,7 +418,7 @@ double Quantification::getGateProb(double a, double b, bool is_and)
  * Computes cut-set Fussel-Vesely Important measures
  */
 /*!private*/
-std::vector<std::vector<double>> Quantification::minCutIM(std::vector<double> upper_bound)
+std::vector<std::vector<double>> FTAUtils::Quantification::minCutIM(std::vector<double> upper_bound)
 /*!endprivate*/
 {
   std::vector<std::vector<double>> mc_i_m;
@@ -378,7 +439,7 @@ std::vector<std::vector<double>> Quantification::minCutIM(std::vector<double> up
  * WARNING: This consumes _b_nodes and then overwrites it
  */
 /*!private*/
-void Quantification::computeRisk(int n, std::vector<double> hazard)
+void FTAUtils::Quantification::computeRisk(int n, std::vector<double> hazard)
 /*!endprivate*/
 {
   for (std::map<std::string, std::vector<double>>::iterator bn_it = _b_nodes.begin();
@@ -396,7 +457,7 @@ void Quantification::computeRisk(int n, std::vector<double> hazard)
  * Function for top event fragility
  */
 /*!private*/
-std::vector<double> Quantification::fragility(std::set<std::set<std::string>> cut_sets, int n,
+std::vector<double> FTAUtils::Quantification::fragility(std::set<std::set<std::string>> cut_sets, int n,
                                          std::vector<double> im_bins, double &mu,
                                          double &sigma)
 /*!endprivate*/
@@ -405,7 +466,15 @@ std::vector<double> Quantification::fragility(std::set<std::set<std::string>> cu
   std::vector<double> *digest = cutSetProbWDigest(cut_sets, n, true);
 
   // 2. lognormal parameters of TOP Event fragility
-  solveLnParams(im_bins, digest[0], mu, sigma);
+  // solveLnParams(im_bins, digest[0], mu, sigma);
+  // using the maximizelikehood function
+  std::vector<double> loc_space = {0.01, 2};
+  std::vector<double> sca_space = {0.01, 1};
+
+  std::vector<double> max_values1 = MastodonUtils::maximizeLogLikelihood(
+      im_bins, digest[0], loc_space, sca_space, 1000, true, 1e-05, 0.0001, 100, 1028);
+  mu = max_values1[0];
+  sigma = max_values1[1];
 
   // TODO: 3. TOP event Fragility plot
   return digest[0];
@@ -417,7 +486,7 @@ std::vector<double> Quantification::fragility(std::set<std::set<std::string>> cu
  */
 /*!private*/
 std::map<std::string, std::vector<std::vector<double>>>
-Quantification::beIM(std::set<std::set<std::string>> cut_sets, int n,
+FTAUtils::Quantification::beIM(std::set<std::set<std::string>> cut_sets, int n,
                      std::vector<double> upper_bound, std::vector<int> &count_v)
 /*!endprivate*/
 {
