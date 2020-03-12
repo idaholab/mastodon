@@ -38,7 +38,7 @@
     # Bins hazard curves into number_of_bins and scales ground motions
     type = HazardCurve
     filename = 'gm_data/hazard.csv'
-    number_of_bins = 4
+    number_of_bins = 2
     ground_motions = motions
     reference_acceleration = 0.04
   [../]

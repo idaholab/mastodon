@@ -9,42 +9,14 @@
     input = master.i
     boost = true
     allow_warnings = true # temporary to allow new API in MOOSE
-    csvdiff = "master_out_run_hazard00_sub0.csv
-               master_out_run_hazard00_sub1.csv
-               master_out_run_hazard00_sub2.csv
-               master_out_run_hazard01_sub0.csv
-               master_out_run_hazard01_sub1.csv
-               master_out_run_hazard01_sub2.csv
-               master_out_run_hazard02_sub0.csv
-               master_out_run_hazard02_sub1.csv
-               master_out_run_hazard02_sub2.csv
-               master_out_run_hazard03_sub0.csv
-               master_out_run_hazard03_sub1.csv
-               master_out_run_hazard03_sub2.csv
-               master_out_run_hazard04_sub0.csv
-               master_out_run_hazard04_sub1.csv
-               master_out_run_hazard04_sub2.csv
-               master_out_run_hazard05_sub0.csv
-               master_out_run_hazard05_sub1.csv
-               master_out_run_hazard05_sub2.csv
-               master_out_run_hazard06_sub0.csv
-               master_out_run_hazard06_sub1.csv
-               master_out_run_hazard06_sub2.csv
-               master_out_run_hazard07_sub0.csv
-               master_out_run_hazard07_sub1.csv
-               master_out_run_hazard07_sub2.csv
-               master_out_run_hazard08_sub0.csv
-               master_out_run_hazard08_sub1.csv
-               master_out_run_hazard08_sub2.csv
-               master_out_run_hazard09_sub0.csv
-               master_out_run_hazard09_sub1.csv
-               master_out_run_hazard09_sub2.csv
-               master_out_run_hazard10_sub0.csv
-               master_out_run_hazard10_sub1.csv
-               master_out_run_hazard10_sub2.csv
-               master_out_run_hazard11_sub0.csv
-               master_out_run_hazard11_sub1.csv
-               master_out_run_hazard11_sub2.csv"
+    csvdiff = "master_out_run_hazard0_sub0.csv
+               master_out_run_hazard0_sub1.csv
+               master_out_run_hazard1_sub0.csv
+               master_out_run_hazard1_sub1.csv
+               master_out_run_hazard2_sub0.csv
+               master_out_run_hazard2_sub1.csv
+               master_out_run_hazard3_sub0.csv
+               master_out_run_hazard3_sub1.csv"
 
     requirement = "MASTODON shall perform probabilistic simulations for seismic probabilistic risk assessment for a given hazard curve, number of bins, ground motions and a finite element model."
   [../]

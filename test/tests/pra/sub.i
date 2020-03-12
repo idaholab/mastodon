@@ -40,7 +40,7 @@
   [./monte_carlo]
     # performs monte carlo sampling
     type = MonteCarloSampler
-    num_rows = 3
+    num_rows = 2
     distributions = 'lognormal_density'
     execute_on = INITIAL # create random numbers on initial and use them for each timestep
   [../]
