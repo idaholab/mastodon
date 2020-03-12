@@ -24,6 +24,7 @@ Extensions:
         name: MASTODON
         repo: https://github.com/idaholab/mastodon
         home: https://www.mooseframework.org/mastodon
+        google-cse: 000781241768298771085:vnudcgneeya
         menu:
             Getting Started:
                 Installation: getting_started/installation.md
@@ -70,7 +71,7 @@ Extensions:
 
     MooseDocs.extensions.sqa:
         active: True
-        repos: 
+        repos:
              default: https://github.com/idaholab/mastodon
         categories:
             mastodon:
