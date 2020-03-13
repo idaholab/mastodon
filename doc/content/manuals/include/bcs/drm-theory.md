@@ -6,10 +6,10 @@ kilometers) with a earthquake fault. The nuclear power plant structure, which is
 affects the response of the soil in the vicinity of the structure. In most of these situations, where
 a localized feature such as a structure is present in a huge soil domain, the problem can be divided
 into two parts: (i) a free-field 'source-to-site' simulation is run on the huge soil domain (
-[fig:DRM](a)) that does not contain the localized feature, and (ii) the forces from the free-field
+[fig:DRM]a) that does not contain the localized feature, and (ii) the forces from the free-field
 simulation at one element layer, which is the element layer separating the bigger and smaller soil
 domain, can be transferred to a much smaller domain containing the localized feature (
-[fig:DRM](b)). This method of reducing the domain is called the domain reduction method (DRM)
+[fig:DRM]b). This method of reducing the domain is called the domain reduction method (DRM)
 [!citep](bielak2003domain). [fig:DRM] is reproduced from [!citet](bielak2003domain).
 
 !media media/theory/DRM.png
