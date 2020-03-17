@@ -207,6 +207,7 @@ ISoilUtils::computeSoilLayerProperties(
         modified_backbone_stress[i] = backbone_stress[k][i] - backbone_stress[k][i - 1];
       }
     }
+
     modified_backbone_stress[0] = backbone_stress[k][0];
 
     // backward substitution

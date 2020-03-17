@@ -18,7 +18,7 @@
     input = HYS_data_file_verification.i
     exodiff = HYS_data_file_verification_out.e
     verification = 'isoil_verification.md'
-    abs_zero = 5e-9
+    abs_zero = 5e-7
     rel_err = 2e-5
 
     requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the backbone curve from a user provided data file."
@@ -120,7 +120,7 @@
     type = Exodiff
     input = HYS_GQH.i
     exodiff = HYS_GQH_out.e
-    abs_zero = 1e-9
+    abs_zero = 1e-7
 
     requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve using the GQ/H formulation."
   [../]
@@ -130,7 +130,7 @@
     type = Exodiff
     input = HYS_GQH_verification.i
     exodiff = HYS_GQH_verification_out.e
-    abs_zero = 1e-9
+    abs_zero = 1e-7
     verification = 'isoil_verification.md'
 
     requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the backbone curve using the GQ/H formulation."
@@ -143,9 +143,29 @@
     exodiff = HYS_GQH_out.e
     cli_args = Outputs/file_base=HYS_GQH_out
     prereq = GQH
-    abs_zero = 1e-9
+    abs_zero = 1e-7
 
     requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the GQ/H formulation without the use of the ISoilAction."
+  [../]
+
+  [./GQH_twolayers]
+    # 2 elements problem to check stress-strain curve
+    type = Exodiff
+    input = HYS_GQH_twolayers.i
+    exodiff = HYS_GQH_twolayers_out.e
+    abs_zero = 1e-7
+
+    requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the GQ/H formulation with two soil layers."
+  [../]
+
+  [./GQH_twolayers_noaction]
+  # 2 elements problem to check stress-strain curve
+  type = Exodiff
+  input = HYS_GQH_twolayers_noaction.i
+  exodiff = HYS_GQH_twolayers_noaction_out.e
+  abs_zero = 1e-7
+
+  requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve using the GQ/H formulation without action and with two soil layers."
   [../]
 
   [./GQH_AD]
@@ -154,7 +174,7 @@
     input = HYS_GQH_AD.i
     exodiff = HYS_GQH_out.e
     cli_args = Outputs/file_base=HYS_GQH_out
-    abs_zero = 1e-9
+    abs_zero = 1e-7
     prereq = GQH_noaction
 
     requirement = "The ISoil action and ADComputeISoilStress class shall accurately model the nonlinear dynamic response of the system when automatic differentiation is used along with the auto-generated GQH stress-strain curves."
@@ -176,7 +196,7 @@
     # 1 element problem with ISoilAction and automatic differentiation to check auto-generated GQH stress-strain curves
     type = PetscJacobianTester
     input = HYS_data_file_AD_jac.i
-    ratio_tol = 6e-8
+    ratio_tol = 6e-7
     difference_tol = 1e-2
     cli_args = '-snes_test_err 1e-9 -mat_fd_type ds'
 
@@ -199,7 +219,7 @@
     csvdiff = HYS_data_file_pressure_contact_out.csv
     abs_zero = 5e-5
     rel_err = 5e-5
-
+    allow_warnings = True
     requirement = "The ComputeISoilStress class shall fail under tension and regain strength under compression."
   [../]
 
@@ -287,7 +307,7 @@
     input = HYS_stiffness_and_strength_pressure_dependency.i
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
     verification = 'isoil_verification.md'
-    abs_zero = 5e-9
+    abs_zero = 5e-7
 
     requirement = "The ISoilAction and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in both stiffness and strength of the soil."
   [../]
@@ -299,7 +319,7 @@
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
     cli_args = Outputs/file_base=HYS_stiffness_and_strength_pressure_dependency_out
     prereq = stiffness_and_strength_pressure_dependency
-    abs_zero = 5e-9
+    abs_zero = 5e-7
 
     requirement = "The ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil without the use of the ISoilAction."
   [../]

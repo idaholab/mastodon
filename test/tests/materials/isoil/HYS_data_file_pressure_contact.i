@@ -279,6 +279,7 @@
     b_exp = 0.5
     p_ref = 1e-4
     tension_pressure_cut_off = -1e-9
+    initial_shear_modulus = '5e-4'
     block = 2
   [../]
   [./sample_isoil_strain]
@@ -289,7 +290,7 @@
   [./sample_isoil_elasticitytensor]
     type = ComputeIsotropicElasticityTensorSoil
     block = '2'
-    elastic_modulus = '1.0'
+    shear_modulus = '5e-4'
     poissons_ratio = '0.3'
     density = '6'
     wave_speed_calculation = false
