@@ -220,7 +220,7 @@
   dt = 0.001
   dtmin = 0.0001
   nl_abs_tol = 1e-4
-    nl_rel_tol = 1e-5
+  nl_rel_tol = 1e-5
   l_tol = 1e-5
   l_max_its = 25
   timestep_tolerance = 1e-8
