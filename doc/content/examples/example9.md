@@ -77,6 +77,4 @@ The input file for simulating the SSI response is presented below. The amplifica
        id=fig:SSI_FreeField
        caption=Free-field response spectra from the SSI analysis and the individual soil analysis.
 
-For this example, an INL supercomputer is used with dt of 0.002 sec for a total of 1500 time steps due to its expensive computational cost. It is not recommended to run this problem on your local machine. For details on how to use an INL supercomputer, please see [FAQ](help/faq.md). On FALCON machine with 1 full node, this problem takes about 3-3.5 hours to complete.
-
 !bibtex bibliography
