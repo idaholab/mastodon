@@ -347,6 +347,7 @@
       block = 0
       initial_soil_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
       density = '2000'
+      initial_shear_modulus = '20155518.98'
       use_automatic_differentiation = true
     [../]
   [../]

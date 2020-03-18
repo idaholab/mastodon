@@ -351,6 +351,7 @@
       b_exp = 0.5 # Case 2
       #b_exp = 0.0 # Case 3
       p_ref = 6072.86
+      initial_shear_modulus = '19683812.98'
       tension_pressure_cut_off = -1
       a0 = 1
       a1 = 0

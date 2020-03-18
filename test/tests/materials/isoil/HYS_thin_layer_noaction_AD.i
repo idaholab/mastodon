@@ -357,7 +357,7 @@
   [./sample_isoil_elasticitytensor]
     type = ComputeIsotropicElasticityTensorSoil
     block = '0'
-    elastic_modulus = '1.0'
+    shear_modulus = '20000'
     poissons_ratio = '0.45'
     density = '2.0'
     wave_speed_calculation = false
