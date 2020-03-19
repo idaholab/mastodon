@@ -23,7 +23,6 @@
 #include "ISoilUtils.h"
 #include "Conversion.h"
 #include "FEProblem.h"
-#include <iostream>
 
 registerMooseObject("MastodonApp", ComputeISoilStress);
 
