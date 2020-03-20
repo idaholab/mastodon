@@ -21,7 +21,7 @@ int nsamp;
 int seed;
 
 // For output
-std::vector<double> fta;
+std::vector<std::vector<std::vector<double>>> results; // size = [7, 5, 3]
 
 TEST(FTAUtils, Quantification)
 {
@@ -43,7 +43,7 @@ TEST(FTAUtils, Quantification)
         IM = {0.1, 4};
         nbins = 15;
 
-        FTAUtils::Quantification(fta,
+        FTAUtils::Quantification(results,
                                  file_lists[0],
                                  file_lists[1],
                                  FTAUtils::Quantification::RISK,
@@ -69,7 +69,7 @@ TEST(FTAUtils, Quantification)
         IM = {0.1, 4};
         nbins = 15;
 
-        FTAUtils::Quantification(fta,
+        FTAUtils::Quantification(results,
                                  file_lists[0],
                                  file_lists[1],
                                  FTAUtils::Quantification::RISK,
@@ -117,7 +117,7 @@ TEST(FTAUtils, Quantification)
         
         nbins = 15;
 
-        FTAUtils::Quantification(fta,
+        FTAUtils::Quantification(results,
                                  file_lists[0],
                                  file_lists[1],
                                  FTAUtils::Quantification::FRAGILITY,
@@ -152,7 +152,7 @@ TEST(FTAUtils, Quantification)
             throw FTAUtils::CException(
                 "[THROW] The supplied value of nbins must be a +ve integer.");
         
-        FTAUtils::Quantification(fta,
+        FTAUtils::Quantification(results,
                                  file_lists[0],
                                  file_lists[1],
                                  FTAUtils::Quantification::FRAGILITY,
@@ -229,7 +229,7 @@ TEST(FTAUtils, Quantification)
   
         seed = 42.0;
 
-        FTAUtils::Quantification(fta,
+        FTAUtils::Quantification(results,
                                  file_lists[0],
                                  file_lists[1],
                                  FTAUtils::Quantification::RISK,
@@ -267,7 +267,7 @@ TEST(FTAUtils, Quantification)
             throw FTAUtils::CException(
                 "[THROW] The supplied value of seed must be a +ve integer.");
 
-        FTAUtils::Quantification(fta,
+        FTAUtils::Quantification(results,
                                  file_lists[0],
                                  file_lists[1],
                                  FTAUtils::Quantification::RISK,
@@ -297,7 +297,7 @@ TEST(FTAUtils, Quantification)
                   "hazard.txt"};
     IM = {0.1, 4};
     nbins = 15;
-    FTAUtils::Quantification(fta,                           
+    FTAUtils::Quantification(results,
                              file_lists[0],
                              file_lists[1],
                              FTAUtils::Quantification::RISK,
@@ -317,11 +317,11 @@ TEST(FTAUtils, Quantification)
     */
     
     // min-max
-    EXPECT_EQ(fta[0], 0.000694024);
+    EXPECT_EQ(results[0][0][0], 0.000694024);
     // upper bound
-    EXPECT_EQ(fta[1], 0.000704853860316601);
+    EXPECT_EQ(results[0][0][1], 0.000704853860316601);
     // rare event
-    EXPECT_EQ(fta[2], 0.0007050000000000001);
+    EXPECT_EQ(results[0][0][2], 0.0007050000000000001);
 
     // Note: 1. Correspond to the Line 115- in test_quantification.py
     // ...

@@ -13,13 +13,13 @@
  * Constructor for qualifications class
  */
 /*!public*/
-FTAUtils::Quantification::Quantification(std::vector<double> & fta,
+FTAUtils::Quantification::Quantification(std::vector<std::vector<std::vector<double>>> & results,
                                          std::string events_file, 
                                          std::string events_prob_file,
                                          _analysis_t analysis, 
                                          std::string hazard_file,
-                                         double im_lower, 
-                                         double im_upper, 
+                                         double im_lower,
+                                         double im_upper,
                                          int n_bins,
                                          bool uncertainty, std::string root, 
                                          int n_sample,
@@ -116,9 +116,14 @@ FTAUtils::Quantification::Quantification(std::vector<double> & fta,
   s2.printStats();
 
   // return the FTA top event risk
-  fta.push_back(s0._pe);
-  fta.push_back(s1._pe);
-  fta.push_back(s2._pe);
+  std::vector<double> fta_0;
+  std::vector<std::vector<double>> fta_1;
+  fta_0.push_back(s0._pe);
+  fta_0.push_back(s1._pe);
+  fta_0.push_back(s2._pe);
+
+  fta_1.push_back(fta_0);
+  results.push_back(fta_1);
 
   std::cout << "----------- PROBABILITY END --------------" << std::endl;
   std::cout << "-------- CUT SET DETAILS BEGIN -----------" << std::endl;

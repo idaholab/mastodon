@@ -35,7 +35,7 @@ public:
     RISK       //       = 1
   };
 
-  Quantification(std::vector<double> & fta,
+  Quantification(std::vector<std::vector<std::vector<double>>> & results,
                  std::string events_file, 
                  std::string events_prob_file,
                  _analysis_t analysis = FRAGILITY, 
