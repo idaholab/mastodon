@@ -13,6 +13,7 @@ namespace FTAUtils
   class Parser;
   class Quantification;
   class FaultTree;
+  class CException;
   std::string trim(const std::string& str);
   std::string str2Upper(const std::string& str_in, bool trim_input=false);
   double interpolate( std::vector <std::vector<double>> data, double x, bool extrapolate );
@@ -83,6 +84,13 @@ class FTAUtils::Parser {
    private:
       // Handle to file
       std::ifstream*  fileP;
+};
+
+class FTAUtils::CException
+{
+public:
+    std::string msg;
+    CException(std::string s) : msg(s) {}
 };
 
 #endif // _FAULT_TREE_H

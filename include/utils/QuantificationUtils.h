@@ -35,10 +35,17 @@ public:
     RISK       //       = 1
   };
 
-  Quantification(std::string events_file, std::string events_prob_file,
-                 _analysis_t analysis = FRAGILITY, std::string hazard_file = "",
-                 double im_lower = 0.1, double im_upper = 4, int n_bins = 15,
-                 bool uncertainty = false, std::string root = "", int n_sample = 1,
+  Quantification(std::vector<double> & fta,
+                 std::string events_file, 
+                 std::string events_prob_file,
+                 _analysis_t analysis = FRAGILITY, 
+                 std::string hazard_file = "",
+                 double im_lower = 0.1, 
+                 double im_upper = 4, 
+                 int n_bins = 15,
+                 bool uncertainty = false, 
+                 std::string root = "", 
+                 int n_sample = 1,
                  int seed = 0);
 
 private:

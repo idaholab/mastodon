@@ -342,7 +342,10 @@ FTAUtils::Parser::Parser( std::string fileName, FTAUtils::Parser::parseFormatT f
    ASSERT( format == FORMAT_CSV, "Unsupported parse format" );
    fileP    = new std::ifstream;
    fileP->open( fileName, std::ifstream::in );
-   ASSERT( fileP->is_open(), "Unable to open file: %s", fileName.c_str() ); 
+   // ASSERT( fileP->is_open(), "Unable to open file: %s", fileName.c_str());
+   
+   if (!fileP->is_open())
+      throw FTAUtils::CException("[THROW] Unable to open file.");
 }
 
 /*

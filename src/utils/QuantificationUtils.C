@@ -13,21 +13,18 @@
  * Constructor for qualifications class
  */
 /*!public*/
-FTAUtils::Quantification::Quantification(std::string events_file, std::string events_prob_file,
-                               _analysis_t analysis, std::string hazard_file,
-                               double im_lower, double im_upper, int n_bins,
-                               bool uncertainty, std::string root, int n_sample,
-                               int seed)
+FTAUtils::Quantification::Quantification(std::vector<double> & fta,
+                                         std::string events_file, 
+                                         std::string events_prob_file,
+                                         _analysis_t analysis, 
+                                         std::string hazard_file,
+                                         double im_lower, 
+                                         double im_upper, 
+                                         int n_bins,
+                                         bool uncertainty, std::string root, 
+                                         int n_sample,
+                                         int seed)
 /*!endpublic*/
-/*
-FTAUtils::Quantification(quantification_files[1], // "logic2.csv"                // std::string events_file
-                         quantification_files[2], // "logic2_bas_events_PE.csv"  // std::string events_prob_file,
-                         FTAUtils::Quantification::RISK,
-                         quantification_files[3], // "hazard.csv"                // std::string hazard_file
-                         0.1,
-                         4,
-                         15);
-*/
 {
   // std::cout << "-------Print Filename--------" << std::endl;
   // std::cout << "events_file: " << events_file << std::endl;
@@ -117,6 +114,12 @@ FTAUtils::Quantification(quantification_files[1], // "logic2.csv"               
   s1.printStats();
   std::cout << "3. Rare Event    : " << s2._pe << std::endl;
   s2.printStats();
+
+  // return the FTA top event risk
+  fta.push_back(s0._pe);
+  fta.push_back(s1._pe);
+  fta.push_back(s2._pe);
+
   std::cout << "----------- PROBABILITY END --------------" << std::endl;
   std::cout << "-------- CUT SET DETAILS BEGIN -----------" << std::endl;
   int i = 0;
@@ -467,14 +470,15 @@ std::vector<double> FTAUtils::Quantification::fragility(std::set<std::set<std::s
 
   // 2. lognormal parameters of TOP Event fragility
   // solveLnParams(im_bins, digest[0], mu, sigma);
-  // using the maximizelikehood function
+
+  // Use the maximizelikehood function instead of solver function
+  // Use SGD for optimization
   std::vector<double> loc_space = {0.01, 2};
   std::vector<double> sca_space = {0.01, 1};
-
-  std::vector<double> max_values1 = MastodonUtils::maximizeLogLikelihood(
-      im_bins, digest[0], loc_space, sca_space, 1000, true, 1e-05, 0.0001, 100, 1028);
-  mu = max_values1[0];
-  sigma = max_values1[1];
+  std::vector<double> max_values = MastodonUtils::maximizeLogLikelihood(
+      im_bins, digest[0], loc_space, sca_space, 1000, false, 1e-05, 0.0001, 1000, 1028);
+  mu = max_values[0];
+  sigma = max_values[1];
 
   // TODO: 3. TOP event Fragility plot
   return digest[0];

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "FaultTree.h"
 
 //-------------------------- MACRO UTILITIES BEGIN ---------------------
 // A custom assert block for assertions
