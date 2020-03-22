@@ -141,7 +141,7 @@ class TestQuantification(unittest.TestCase):
         self.assertEqual(imratio[1][3][0], 2.87706550337578)
         self.assertEqual(imratio[1][4][0], 1.174913088939574)
 
-        # Risk Reduction Ratio for B1, B2, B3, B4, B5
+        # Risk Increase Ratio for B1, B2, B3, B4, B5
         self.assertEqual(imratio[2][0][0], 86.11110290839181)
         self.assertEqual(imratio[2][1][0], 16.960273261286435)
         self.assertEqual(imratio[2][2][0], 5.808754991114076)
