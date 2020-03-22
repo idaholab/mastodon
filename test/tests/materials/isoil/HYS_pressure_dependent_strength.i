@@ -351,6 +351,7 @@
       b_exp = 0.0
       tension_pressure_cut_off = -1
       density = '2000'
+      initial_shear_modulus = '19683812.98'
 
       ## Case 1
       a0 = 0
