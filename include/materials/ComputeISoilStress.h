@@ -22,7 +22,11 @@
 #ifndef COMPUTEISOILSTRESS_H
 #define COMPUTEISOILSTRESS_H
 
+// MOOSE includes
 #include "ComputeFiniteStrainElasticStress.h"
+
+// Mastodon includes
+#include "LayeredMaterialInterface.h"
 
 class ComputeISoilStress;
 

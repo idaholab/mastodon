@@ -345,6 +345,7 @@
       poissons_ratio = '0.3'
       block = 0
       initial_soil_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
+      initial_shear_modulus = '20155518.98'
       density = '2000'
     [../]
   [../]

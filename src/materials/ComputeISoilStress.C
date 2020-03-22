@@ -112,10 +112,11 @@ validParams<ComputeISoilStress>()
       "and the second column corresponds to the stress values. Additionally, two "
       "segments of a backbone curve cannot have the same slope.");
   // params required for soil_type = 'darendeli', 'GQ/H' and 'thin_layer'
-  params.addParam<std::vector<Real>>(
-      "initial_shear_modulus",
-      "The initial shear modulus of the soil layers. "
-      "This is required if Darandeli or GQ/H type backbone curves are used.");
+  params.addRequiredParam<std::vector<Real>>("initial_shear_modulus",
+                                             "The initial shear modulus of the soil layers. ");
+  params.addParam<MaterialPropertyName>("shear_modulus",
+                                        "Name of Material Property  or a constant real number "
+                                        "defining the shear modulus of the materials.");
   // params required for soil_type = 'darendeli' and 'GQ/H'
   params.addParam<unsigned int>("number_of_points",
                                 "The total number of data points in which the "
@@ -192,6 +193,7 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
         getParam<std::vector<FunctionName>>("initial_soil_stress").size() ==
         LIBMESH_DIM * LIBMESH_DIM)
 {
+
   // checking that density, and Poisson's ratio are the same size as layer_ids
   if (_poissons_ratio.size() != _layer_ids.size())
     mooseError("Error in " + name() + ". Poisson's ratio should be of the same "
@@ -227,6 +229,8 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
   const MooseEnum & soil_type = getParam<MooseEnum>("soil_type");
   std::vector<std::vector<Real>> backbone_stress(_layer_ids.size());
   std::vector<std::vector<Real>> backbone_strain(_layer_ids.size());
+  std::vector<Real> initial_shear_modulus = getParam<std::vector<Real>>("initial_shear_modulus");
+
   // Calculating backbone curve for soil_type = user_defined
   if (soil_type == "user_defined")
   {
@@ -243,7 +247,6 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
   // Calculating backbone curve for soil_type = darendeli
   else if (soil_type == "darendeli")
   {
-    std::vector<Real> initial_shear_modulus = getParam<std::vector<Real>>("initial_shear_modulus");
     std::vector<Real> over_consolidation_ratio =
         getParam<std::vector<Real>>("over_consolidation_ratio");
     std::vector<Real> plasticity_index = getParam<std::vector<Real>>("plasticity_index");
@@ -273,7 +276,6 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
   // Calculating backbone curve for soil_type = gqh
   else if (soil_type == "gqh")
   {
-    std::vector<Real> initial_shear_modulus = getParam<std::vector<Real>>("initial_shear_modulus");
     unsigned int number_of_points = getParam<unsigned int>("number_of_points");
     std::vector<Real> theta_1 = getParam<std::vector<Real>>("theta_1");
     std::vector<Real> theta_2 = getParam<std::vector<Real>>("theta_2");
@@ -313,7 +315,6 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
     _a0 = 0.0;
     _a1 = 0.0;
     _a2 = 1.0;
-    std::vector<Real> initial_shear_modulus = getParam<std::vector<Real>>("initial_shear_modulus");
     std::vector<Real> friction_coefficient = getParam<std::vector<Real>>("friction_coefficient");
     std::vector<Real> hardening_ratio = getParam<std::vector<Real>>("hardening_ratio");
     if (initial_shear_modulus.size() != _layer_ids.size() ||
@@ -381,6 +382,26 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
   _stress_new.zero();
   _individual_stress_increment.zero();
   _deviatoric_trial_stress.zero();
+
+  // // checking that the input and the backbone shear modulus values are consistent.
+  std::vector<Real> initial_shear;
+  initial_shear.resize(_poissons_ratio.size());
+  Real tmp = 0.0;
+  for (int j = 0; j < _poissons_ratio.size(); j++)
+  {
+    tmp = 0.0;
+    for (int i = 0; i < _base_models.size(); i++)
+    {
+      tmp += _youngs[j][i] / (2 * (1 + _poissons_ratio[j]));
+    }
+    initial_shear[j] = tmp;
+  }
+
+  bool value_bool = MastodonUtils::checkEqual(initial_shear, initial_shear_modulus, 5.0);
+  if (value_bool == false)
+    mooseWarning(
+        "Shear moduli inferred from the backbone curve are different from the input values."
+        " Using the backbone curve inferred value for further computations.");
 }
 
 void
@@ -480,8 +501,12 @@ ComputeISoilStress::computeQpStress()
   if (_tangent_modulus == 0.0)
     _tangent_modulus = _youngs[_pos][_youngs.size() - 1];
 
+  Real lame_1 = _elasticity_tensor[_qp](0, 0, 1, 1);
+  Real lame_2 = (_elasticity_tensor[_qp](0, 0, 0, 0) - lame_1) / 2;
+  Real initial_youngs = (lame_2 * (3 * lame_1 + 2 * lame_2)) / (lame_1 + lame_2);
+
   _Jacobian_mult[_qp] =
-      _elasticity_tensor[_qp] * _tangent_modulus; // This is NOT the exact jacobian
+      _elasticity_tensor[_qp] * _tangent_modulus / initial_youngs; // This is NOT the exact jacobian
 }
 
 void
@@ -520,9 +545,13 @@ ComputeISoilStress::computeStress()
 
   _mean_pressure = 0.0;
 
+  Real lame_1 = _elasticity_tensor[_qp](0, 0, 1, 1);
+  Real lame_2 = (_elasticity_tensor[_qp](0, 0, 0, 0) - lame_1) / 2;
+  Real initial_youngs = (lame_2 * (3 * lame_1 + 2 * lame_2)) / (lame_1 + lame_2);
+
   // compute trial stress increment - note that _elasticity_tensor here
-  // assumes youngs modulus = 1
-  _individual_stress_increment = _elasticity_tensor[_qp] * (_strain_increment[_qp]);
+  _individual_stress_increment =
+      _elasticity_tensor[_qp] * (_strain_increment[_qp]) / initial_youngs;
 
   _mean_pressure_tmp = _individual_stress_increment.trace() / 3.0 * _stiffness_pressure_correction;
 

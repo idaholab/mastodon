@@ -322,7 +322,7 @@
       initial_soil_stress = 'initial_ymid 0 0  0 initial_ymid 0  0 0 initial_zzmid'
       density = '2500'
       #initial_bulk_modulus = '7.83e10'
-      #initial_shear_modulus = '2.7e10'
+      initial_shear_modulus = '2.70588e11'
       #taumax = 275998
   #    theta_1 = '0'
   #    theta_2 = '0'

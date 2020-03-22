@@ -88,10 +88,13 @@ ComputeIsotropicElasticityTensorSoil::ComputeIsotropicElasticityTensorSoil(
     _shear_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("shear_wave_speed") : NULL),
     _P_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("P_wave_speed") : NULL),
     _density(declareProperty<Real>("density")),
-    _scale_density(getParam<Real>("scale_factor_density"))
+    _scale_density(getParam<Real>("scale_factor_density")),
+    _effective_stiffness_local(parameters.isParamValid("effective_stiffness_local"))
 {
+
   // all tensors created by this class are always isotropic
   issueGuarantee(_elasticity_tensor_name, Guarantee::ISOTROPIC);
+  issueGuarantee("effective_stiffness", Guarantee::ISOTROPIC);
 
   // all tensors created by this class are always constant in time
   issueGuarantee(_elasticity_tensor_name, Guarantee::CONSTANT_IN_TIME);
@@ -104,6 +107,7 @@ ComputeIsotropicElasticityTensorSoil::ComputeIsotropicElasticityTensorSoil(
 void
 ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
 {
+
   _P_wave_modulus = _layer_shear_modulus[_qp] * 2.0 * (1.0 - _layer_poissons_ratio[_qp]) /
                     (1.0 - 2.0 * _layer_poissons_ratio[_qp]);
 
@@ -125,6 +129,16 @@ ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
   // Fill elasticity tensor
   _Cijkl.fillFromInputVector(iso_const, RankFourTensor::symmetric_isotropic);
 
+  // Effective stiffness computations
+  Real elas_mod = _layer_shear_modulus[_qp] * 2.0 * (1.0 + _layer_poissons_ratio[_qp]);
+  _effective_stiffness_local =
+      std::max(std::sqrt((elas_mod * (1 - _layer_poissons_ratio[_qp])) /
+                         ((1 + _layer_poissons_ratio[_qp]) * (1 - 2 * _layer_poissons_ratio[_qp]))),
+               std::sqrt(elas_mod / (2 * (1 + _layer_poissons_ratio[_qp]))));
+
   // Assign elasticity tensor at a given quad point
   _elasticity_tensor[_qp] = _Cijkl;
+
+  // Assign effective stiffness at a given quad point
+  _effective_stiffness[_qp] = _effective_stiffness_local;
 }
