@@ -3,7 +3,8 @@
 
 // A macro to reduce typing while printing stats
 #define QUANT_BE_STAT_PRINT_HELPER(index, i)                                   \
-  "PE: " << be_stats[index][i][0] << ", Mean: " << be_stats[index][i][1]       \
+            "PE: " << be_stats[index][i][0]                                    \
+         << ", Mean: " << be_stats[index][i][1]                                \
          << ", Median: " << be_stats[index][i][2]                              \
          << ", SD: " << be_stats[index][i][3]                                  \
          << ", 5th: " << be_stats[index][i][4]                                 \
@@ -13,59 +14,65 @@
  * Constructor for qualifications class
  */
 /*!public*/
-FTAUtils::Quantification::Quantification(std::vector<std::vector<std::vector<double>>> & results,
-                                         std::string events_file, 
-                                         std::string events_prob_file,
-                                         _analysis_t analysis, 
-                                         std::string hazard_file,
-                                         double im_lower,
-                                         double im_upper,
-                                         int n_bins,
-                                         bool uncertainty, std::string root, 
-                                         int n_sample,
-                                         int seed)
+FTAUtils::Quantification::Quantification(
+  std::map<std::string, std::vector<std::vector<double>>> & params_double,
+  std::map<std::string, std::vector<std::vector<std::string>>> & params_string,
+  std::map<std::string, int> & params_int,
+  std::map<std::string, bool> & params_bool,
+  std::map<std::string, _analysis_t> & params_analysis_t,
+  std::string events_file,
+  std::string events_prob_file,
+  _analysis_t analysis,
+  std::string hazard_file,
+  double im_lower,
+  double im_upper,
+  int n_bins,
+  bool uncertainty,
+  std::string root,
+  int n_sample,
+  int seed)
 /*!endpublic*/
 {
-  // std::cout << "-------Print Filename--------" << std::endl;
-  // std::cout << "events_file: " << events_file << std::endl;
-  // std::cout << "events_prob_file: " << events_prob_file << std::endl;
-  // std::cout << "hazard_file: " << hazard_file << std::endl;
+  //---------------- SAVE PARAMETERS ------------------------------------------
+  std::vector<double> params_double1;
+  params_double1.push_back(im_lower);
+  params_double1.push_back(im_upper);
+
+  std::vector<std::vector<double>> params_double2;
+  params_double2.push_back(params_double1);
+  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("IM", params_double2));
+
+  params_int.insert(std::pair<std::string, int>("n_bins", n_bins));
+  params_int.insert(std::pair<std::string, int>("nsamp", n_sample));
+  params_int.insert(std::pair<std::string, int>("seed", seed));
+  params_bool.insert(std::pair<std::string, bool>("uncertainty", uncertainty));
+  params_analysis_t.insert(std::pair<std::string, _analysis_t>("analysis", analysis));
 
   //---------------- COMPUTE --------------------------------------------------
   // Construct the fault tree with MOCUS algo for minimal cut sets
-  // std::cout << "^^^^^^^^Begin FaultTree Construction^^^^^^^^^" << std::endl;
   FTAUtils::FaultTree ft = FTAUtils::FaultTree(events_file, root);
+  Parser parser_events = Parser(events_file, Parser::FORMAT_CSV);
+  std::vector<std::vector<std::string>> lines_events = parser_events.yieldLines();
   std::set<std::set<std::string>> cut_sets = ft.getCutSets();
   // ft.printSets();
-  // std::cout << "^^^^^^^^End FaultTree Construction^^^^^^^^^" << std::endl;
+  params_string.insert(std::pair<std::string, std::vector<std::vector<std::string>>>("events_files", lines_events));
 
   // Read basic events file
-  FTAUtils::Parser parser_event_prob = FTAUtils::Parser(events_prob_file, FTAUtils::Parser::FORMAT_CSV);
+  FTAUtils::Parser parser_event_prob = 
+    FTAUtils::Parser(events_prob_file, FTAUtils::Parser::FORMAT_CSV);
+  // std::vector<std::vector<std::string>> lines_events_prob = parser_event_prob.yieldLines();
   /*
-  std::cout << "^^^^^^^^Begin Basic Events Construction^^^^^^^^^" << std::endl;
-  MooseUtils::DelimitedFileReader demand_event_prob(events_prob_file);
-  demand_event_prob.read();
-  std::vector<std::string> event_prob = demand_event_prob.getNames();  
-
-  // print event_prob
-  std::vector<string>::iterator it_event_prob = event_prob.begin();
-  while( it_event_prob != event_prob.end() ){
-    std::cout << (*it_event_prob++) << " ";
-  }
-  std::cout << std::endl;
-  std::cout << "^^^^^^^^End Basic Events Construction^^^^^^^^^" << std::endl;
-  */
+  [ASSERT] In File: /home/gnie/projects/mastodon/unit/../src/utils/QuantificationUtils.C, 
+  Line: 407 => "'C1' key not found in _b_nodes" ./run_tests: line 18:  3016 Aborted 
+  (core dumped) ./$APPLICATION_NAME-unit-$METHOD
+  */    
 
   if (analysis == FRAGILITY) {
     // Read and interpolate hazard curve
-    /*
-    MooseUtils::DelimitedFileReader demand_hazard(hazard_file);
-    demand_hazard.read(); // type: MooseUtils::DelimitedFileReader
-    std::vector<std::vector<double>> hazard = demand_hazard.getData();
-    */
     FTAUtils::Parser parser_hazard = FTAUtils::Parser(hazard_file, FTAUtils::Parser::FORMAT_CSV);
-    std::vector<std::vector<std::string>> lines = parser_hazard.yieldLines();
-    std::vector<std::vector<double>> hazard = FTAUtils::Quantification::linesToDouble(lines);
+    std::vector<std::vector<std::string>> lines_hazard = parser_hazard.yieldLines();
+    std::vector<std::vector<double>> hazard = FTAUtils::Quantification::linesToDouble(lines_hazard);
+    params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("hazard", hazard));
 
     // List of Intensity Measure bin values
     std::vector<double> im_bins = getBinMeans(im_lower, im_upper, n_bins);
@@ -74,24 +81,26 @@ FTAUtils::Quantification::Quantification(std::vector<std::vector<std::vector<dou
     std::vector<double> hazard_freq = hazInterp(hazard, im_bins);
 
     // Dictionary of basic events for fragility input
-    // beProb(event_prob, n_sample, seed, analysis, im_bins, uncertainty);
     beProb(parser_event_prob, n_sample, seed, analysis, im_bins, uncertainty);
 
     // Top event fragility (lognormal parameters)
     double mu, sigma;
     fragility(cut_sets, n_bins, im_bins, mu, sigma);
+    /*
     std::cout << "----------- LN PARAMS BEGIN --------------" << std::endl;
     std::cout << "mu: " << mu << std::endl;
     std::cout << "sigma: " << sigma << std::endl;
     std::cout << "------------ LN PARAMS END ---------------" << std::endl;
+    */
 
     // Dictionary of basic events risk (convoluting fragility and hazard)
     computeRisk(n_bins, hazard_freq);
   } else {
     // Dictionary of basic events risk (risk inputs)
-    // beProb(event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
     beProb(parser_event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
+    /*
     std::cout << "------------ LN PARAMS END ---------------" << std::endl;
+    */
   }
 
   // Calculate minimal cut sets probability
@@ -107,6 +116,7 @@ FTAUtils::Quantification::Quantification(std::vector<std::vector<std::vector<dou
       beIM(cut_sets, n_sample + 1, digest[1], count_v);
 
   //---------------- PRINTING --------------------------------------------------
+  /*
   std::cout << "---------- PROBABILITY BEGIN -------------" << std::endl;
   std::cout << "1. Exact solution: " << s0._pe << std::endl;
   s0.printStats();
@@ -114,6 +124,7 @@ FTAUtils::Quantification::Quantification(std::vector<std::vector<std::vector<dou
   s1.printStats();
   std::cout << "3. Rare Event    : " << s2._pe << std::endl;
   s2.printStats();
+  */
 
   // return the FTA top event risk
   std::vector<double> fta_0;
@@ -121,12 +132,13 @@ FTAUtils::Quantification::Quantification(std::vector<std::vector<std::vector<dou
   fta_0.push_back(s0._pe);
   fta_0.push_back(s1._pe);
   fta_0.push_back(s2._pe);
-
   fta_1.push_back(fta_0);
-  results.push_back(fta_1);
+  params_double.insert(std::make_pair("fta", fta_1));
 
+  /*
   std::cout << "----------- PROBABILITY END --------------" << std::endl;
   std::cout << "-------- CUT SET DETAILS BEGIN -----------" << std::endl;
+  
   int i = 0;
   for (std::set<std::set<std::string>>::iterator row = cut_sets.begin(); row != cut_sets.end();
        ++row) {
@@ -135,6 +147,7 @@ FTAUtils::Quantification::Quantification(std::vector<std::vector<std::vector<dou
          << std::endl;
     i++;
   }
+  
   std::cout << "--------- CUT SET DETAILS END ------------" << std::endl;
   i = 0;
   for (std::map<std::string, std::vector<double>>::iterator bn_it = _b_nodes.begin();
@@ -148,6 +161,17 @@ FTAUtils::Quantification::Quantification(std::vector<std::vector<std::vector<dou
     std::cout << "\t[BI]  " QUANT_BE_STAT_PRINT_HELPER("bi", i);
     i++;
   }
+  */
+
+  // Return the Risk Reduction Ratio for B1, B2, B3, B4, B5
+  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("fv", be_stats["fv"]));
+  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("rrr", be_stats["rrr"]));
+  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("rir", be_stats["rir"]));
+  
+  // Return the Risk Reduction Difference for B1, B2, B3, B4, B5
+  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("rri", be_stats["rri"]));
+  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("rii", be_stats["rii"]));
+  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("bi", be_stats["bi"]));
 }
 
 /*
@@ -281,20 +305,6 @@ void FTAUtils::Quantification::beProb(FTAUtils::Parser parser, int n_sample, int
                                       n_sample, seed, intmes, analysis, uncert);
   }
 }
-
-/*
-void FTAUtils::Quantification::beProb(std::vector<std::string> line, int n_sample, int seed,
-                            _analysis_t analysis, std::vector<double> intmes,
-                            bool uncert)
-                            */
-/*!endprivate*/
-/*
-{
-  double b = line.size() > 3 ? stod(line[3]) : 0;
-  _b_nodes[line[0]] = getProbVector(_str2dist[line[1]], stod(line[2]), b, n_sample, seed, intmes, analysis, uncert);
-}
-*/
-
 
 /*
  * Computes accumulated probability for the entire cut set

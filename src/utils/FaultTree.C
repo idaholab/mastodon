@@ -21,17 +21,6 @@ FTAUtils::FaultTree::FaultTree(std::string file_name, std::string root)
   FTAUtils::Parser parser = FTAUtils::Parser(file_name, FTAUtils::Parser::FORMAT_CSV);
   buildTree(parser);
   
-
-  // print fault_tree_logic
-  /*
-  std::cout << "-------print fault_tree_logic file: logic2.csv--------" << std::endl;
-  std::vector<std::string>::iterator it_fault_tree_logic = fault_tree_logic.begin();
-  while( it_fault_tree_logic != fault_tree_logic.end() ){
-    std::cout << (*it_fault_tree_logic++) << " ";
-  }
-  std::cout << std::endl;
-  */
-
   // Override root node if not default
   if (root != "") {
     ASSERT(getNode(root),
@@ -82,29 +71,6 @@ void FTAUtils::FaultTree::buildTree(FTAUtils::Parser parser)
     _node_d_b[line[0]] = node;
   }
 }
-
-// void FTAUtils::FaultTree::buildTree(std::vector<std::string> line)
-/*!endprivate*/
-/*
-{
-  // Stash name, operator
-  _node *node = new _node(line[0], str2Operator(line[1]));
-
-  // Add children
-  for (int i = 2; i < line.size(); i++)
-    node->_child.push_back(line[i]);
-
-  // Stash the first entry as ROOT of tree
-  if (_node_d_b.size() == 0)
-    _root = line[0];
-
-  // Add the newly created node to node lookup hashmap
-  _node_d_b[line[0]] = node;
-
-  return;
-}
-*/
-
 
 /*
  * Translates string to opeartor
