@@ -10,17 +10,9 @@
 FTAUtils::FaultTree::FaultTree(std::string file_name, std::string root)
 /*!endpublic*/
 {
-  // std::cout << "-------Step into Fault Tree Function--------" << std::endl;
-  // std::cout << "file name: " << file_name << std::endl;
-  /*
-  MooseUtils::DelimitedFileReader demand_logic_file(file_name);
-  demand_logic_file.read();
-  std::vector<std::string> fault_tree_logic = demand_logic_file.getNames();
-  buildTree(fault_tree_logic);
-  */
   FTAUtils::Parser parser = FTAUtils::Parser(file_name, FTAUtils::Parser::FORMAT_CSV);
   buildTree(parser);
-  
+
   // Override root node if not default
   if (root != "") {
     ASSERT(getNode(root),
@@ -31,6 +23,38 @@ FTAUtils::FaultTree::FaultTree(std::string file_name, std::string root)
   }
 
   computeMinimumCutSets();
+}
+
+/*!public*/
+FTAUtils::FaultTree::FaultTree(std::set<std::set<std::string>> & sets_link,
+                               std::map<std::string, FTAUtils::FaultTree::_node *> _node_base)
+/*!endpublic*/
+{
+  std::string root = "";
+  _node_d_b = _node_base;
+
+  // Clearing up sets vector for safety
+  rmSets();
+
+  // Add root to set
+  std::set<std::string> root_set, sub_sets;
+  root_set.insert("TOP"); // "TOP", size: 1
+
+  _sets.insert(root_set);
+
+  // Start with root node to expand on heirarchy
+  cutSetsExpand(getNode("TOP"));
+
+  // Check if first row is empty
+  // NOTE: Since its std::set, only first row could
+  // be empty
+  if (_sets.begin()->size() == 0) {
+    _sets.erase(_sets.begin());
+  }
+
+  removeSubsets();
+
+  sets_link = _sets;
 }
 
 /*
@@ -44,9 +68,10 @@ FTAUtils::FaultTree::~FaultTree()
 /*
  * Builds m-ary fault tree
  */
-/*!private*/
-void FTAUtils::FaultTree::buildTree(FTAUtils::Parser parser)
-/*!endprivate*/
+/*!public*/
+std::map<std::string, FTAUtils::FaultTree::_node *>
+FTAUtils::FaultTree::buildTree(FTAUtils::Parser parser)
+/*!endpublic*/
 {
   std::vector<std::string> line;
   while (true) {
@@ -70,7 +95,10 @@ void FTAUtils::FaultTree::buildTree(FTAUtils::Parser parser)
     // Add the newly created node to node lookup hashmap
     _node_d_b[line[0]] = node;
   }
+
+  return _node_d_b;
 }
+
 
 /*
  * Translates string to opeartor
@@ -88,16 +116,18 @@ FTAUtils::FaultTree::_operator_t FTAUtils::FaultTree::str2Operator(std::string o
 /*
  * Computes minimum cut sets based on MOCUS Algorithm
  */
-/*!private*/
-void FTAUtils::FaultTree::computeMinimumCutSets()
-/*!endprivate*/
+/*!public*/
+std::set<std::set<std::string>>
+FTAUtils::FaultTree::computeMinimumCutSets()
+/*!endpublic*/
 {
   // Clearing up sets vector for safety
   rmSets();
 
   // Add root to set
-  std::set<std::string> root_set;
+  std::set<std::string> root_set, sub_sets;
   root_set.insert(getRoot());
+
   _sets.insert(root_set);
 
   // Start with root node to expand on heirarchy
@@ -111,6 +141,8 @@ void FTAUtils::FaultTree::computeMinimumCutSets()
   }
 
   removeSubsets();
+
+  return _sets;
 }
 
 /*!private*/
@@ -218,6 +250,7 @@ void FTAUtils::FaultTree::cutSetsExpand(_node *node)
     // A quick fix to this is to check for first row and delete it at end
     _sets.erase(row_it);
     _sets.insert(row);
+
   }
 
   // Add newly created rows
@@ -301,6 +334,10 @@ std::set<std::set<std::string>> FTAUtils::FaultTree::getCutSets()
 
 
 // **************************Parser Definition**************************
+/*
+ * Constructor for parser class
+ */
+/*!public*/
 FTAUtils::Parser::Parser( std::string fileName, FTAUtils::Parser::parseFormatT format )
 /*!endpublic*/
 {
@@ -309,9 +346,9 @@ FTAUtils::Parser::Parser( std::string fileName, FTAUtils::Parser::parseFormatT f
    fileP    = new std::ifstream;
    fileP->open( fileName, std::ifstream::in );
    // ASSERT( fileP->is_open(), "Unable to open file: %s", fileName.c_str());
-   
+
    if (!fileP->is_open())
-      throw FTAUtils::CException("[THROW] Unable to open file.");
+      throw FTAUtils::CException("Unable to open file.");
 }
 
 /*
@@ -341,7 +378,7 @@ std::vector <std::vector<std::string>> FTAUtils::Parser::yieldLines()
 
       // Stop if no new line to process
       if( line.size() == 0 ) break;
-      lines.push_back( line );
+        lines.push_back( line );
    }
    return lines;
 }

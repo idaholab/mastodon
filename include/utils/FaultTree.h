@@ -38,17 +38,21 @@ public:
   };
 
   FaultTree(std::string file_name, std::string root = "");
+  FaultTree(std::set<std::set<std::string>> & sets_link,
+            std::map<std::string, _node *> _node_base);
   ~FaultTree();
   std::string getRoot();
   void printSets();
   static void printSets(std::set<std::set<std::string>> sets);
   static void printRow(std::set<std::string> row);
   std::set<std::set<std::string>> getCutSets();
+  std::map<std::string, _node *> buildTree(Parser parser);
+  std::set<std::set<std::string>> computeMinimumCutSets();
+  std::vector<std::string> event(std::map<std::string, _node *>);
 
 private:
   // Hash map for operators
   std::map<std::string, _operator_t> _opDict = {{"AND", AND}, {"OR", OR}};
-
   // Inverse mapping for printing purpose only
   std::map<_operator_t, std::string> _opDictInv = {{AND, "AND"}, {OR, "OR"}};
   std::map<std::string, _node *> _node_d_b;
@@ -58,9 +62,8 @@ private:
   std::set<std::set<std::string>> _sets;
 
   // Member functions
-  // void buildTree(std::vector<std::string> line);
-  void buildTree(Parser parser);
-  void computeMinimumCutSets();
+  // void buildTree(Parser parser);
+  // void computeMinimumCutSets();
   _operator_t str2Operator(std::string op);
   void rmSets();
   _node *getNode(std::string name);

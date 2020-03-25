@@ -133,11 +133,9 @@ private:
   std::vector<double> getProbVector(_dist_t dist, double a, double b, int n,
                                int seed, std::vector<double> im,
                                _analysis_t analysis, bool uc);
-  // void beProb(std::vector<std::string> line, int n_sample, int seed, _analysis_t analysis,
-  //             std::vector<double> intmes, bool uncert);
-  void beProb(FTAUtils::Parser parser, int n_sample, int seed,
-                            _analysis_t analysis, std::vector<double> intmes,
-                            bool uncert);
+  std::vector<std::vector<std::string>>
+  beProb(FTAUtils::Parser parser, int n_sample, int seed,
+         _analysis_t analysis, std::vector<double> intmes, bool uncert);
 
   std::vector<std::vector<double>> computeCutSetProb(std::set<std::set<std::string>> cut_sets, int n,
                                            bool bypass = false,

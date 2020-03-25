@@ -55,12 +55,14 @@ FTAUtils::Quantification::Quantification(
   std::vector<std::vector<std::string>> lines_events = parser_events.yieldLines();
   std::set<std::set<std::string>> cut_sets = ft.getCutSets();
   // ft.printSets();
-  params_string.insert(std::pair<std::string, std::vector<std::vector<std::string>>>("events_files", lines_events));
+  params_string.insert(
+    std::pair<std::string, std::vector<std::vector<std::string>>>
+    ("events_files", lines_events));
 
   // Read basic events file
   FTAUtils::Parser parser_event_prob = 
     FTAUtils::Parser(events_prob_file, FTAUtils::Parser::FORMAT_CSV);
-  // std::vector<std::vector<std::string>> lines_events_prob = parser_event_prob.yieldLines();
+  std::vector<std::vector<std::string>> lines_events_prob;
   /*
   [ASSERT] In File: /home/gnie/projects/mastodon/unit/../src/utils/QuantificationUtils.C, 
   Line: 407 => "'C1' key not found in _b_nodes" ./run_tests: line 18:  3016 Aborted 
@@ -81,6 +83,7 @@ FTAUtils::Quantification::Quantification(
     std::vector<double> hazard_freq = hazInterp(hazard, im_bins);
 
     // Dictionary of basic events for fragility input
+    lines_events_prob =
     beProb(parser_event_prob, n_sample, seed, analysis, im_bins, uncertainty);
 
     // Top event fragility (lognormal parameters)
@@ -97,11 +100,14 @@ FTAUtils::Quantification::Quantification(
     computeRisk(n_bins, hazard_freq);
   } else {
     // Dictionary of basic events risk (risk inputs)
+    lines_events_prob =
     beProb(parser_event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
     /*
     std::cout << "------------ LN PARAMS END ---------------" << std::endl;
     */
   }
+  params_string.insert(std::pair<std::string, 
+    std::vector<std::vector<std::string>>>("basic_events", lines_events_prob));
 
   // Calculate minimal cut sets probability
   // Digest cut set probability to unified probability
@@ -286,17 +292,21 @@ std::vector<double> FTAUtils::Quantification::getProbVector(_dist_t dist, double
  * Parses and floods probabilties of basic elements
  */
 /*!private*/
-void FTAUtils::Quantification::beProb(FTAUtils::Parser parser, int n_sample, int seed,
+std::vector<std::vector<std::string>>
+FTAUtils::Quantification::beProb(FTAUtils::Parser parser, int n_sample, int seed,
                             _analysis_t analysis, std::vector<double> intmes,
                             bool uncert)
 /*!endprivate*/
 {
   std::vector<std::string> line;
+  std::vector<std::vector<std::string>> lines;
   while (true) {
     line = parser.yieldLine();
 
     // Stop if no new line to process
-    if (line.size() == 0)
+    if (line.size() != 0)
+      lines.push_back(line);
+    else
       break;
 
     // Stash name, probability vector
@@ -304,6 +314,8 @@ void FTAUtils::Quantification::beProb(FTAUtils::Parser parser, int n_sample, int
     _b_nodes[line[0]] = getProbVector(_str2dist[line[1]], stod(line[2]), b,
                                       n_sample, seed, intmes, analysis, uncert);
   }
+
+  return lines;
 }
 
 /*
