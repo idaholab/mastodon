@@ -21,155 +21,169 @@ int nsamp;
 int seed;
 
 // For output
-std::map<std::string, std::vector<std::vector<double>>> params_double_1, 
-                                                        params_double_2,
-                                                        params_double_3,
-                                                        params_double_4,
-                                                        params_double_5,
-                                                        params_double_6,
-                                                        params_double_7,
-                                                        params_double_8,
-                                                        params_double_9;
+std::map<std::string, std::vector<std::vector<double>>> params_double_1, params_double_2,
+    params_double_3, params_double_4, params_double_5, params_double_6, params_double_7,
+    params_double_8, params_double_9;
 
-std::map<std::string, std::vector<std::vector<std::string>>> params_string_1,
-                                                             params_string_2,
-                                                             params_string_3,
-                                                             params_string_4,
-                                                             params_string_5,
-                                                             params_string_6,
-                                                             params_string_7,
-                                                             params_string_8,
-                                                             params_string_9;
+std::map<std::string, std::vector<std::vector<std::string>>> params_string_1, params_string_2,
+    params_string_3, params_string_4, params_string_5, params_string_6, params_string_7,
+    params_string_8, params_string_9;
 
-std::map<std::string, bool> params_bool_1,
-                            params_bool_2,
-                            params_bool_3,
-                            params_bool_4,
-                            params_bool_5,
-                            params_bool_6,
-                            params_bool_7,
-                            params_bool_8,
-                            params_bool_9;
+std::map<std::string, bool> params_bool_1, params_bool_2, params_bool_3, params_bool_4,
+    params_bool_5, params_bool_6, params_bool_7, params_bool_8, params_bool_9;
 
 std::map<std::string, FTAUtils::Quantification::_analysis_t> params_analysis_t_1,
-                                                             params_analysis_t_2,
-                                                             params_analysis_t_3,
-                                                             params_analysis_t_4,
-                                                             params_analysis_t_5,
-                                                             params_analysis_t_6,
-                                                             params_analysis_t_7,
-                                                             params_analysis_t_8,
-                                                             params_analysis_t_9;
+    params_analysis_t_2, params_analysis_t_3, params_analysis_t_4, params_analysis_t_5,
+    params_analysis_t_6, params_analysis_t_7, params_analysis_t_8, params_analysis_t_9;
 
-std::map<std::string, int> params_int_1,
-                           params_int_2,
-                           params_int_3,
-                           params_int_4,
-                           params_int_5,
-                           params_int_6,
-                           params_int_7,
-                           params_int_8,
-                           params_int_9;
+std::map<std::string, int> params_int_1, params_int_2, params_int_3, params_int_4, params_int_5,
+    params_int_6, params_int_7, params_int_8, params_int_9;
 
 // TestCase for Quantification Object
 TEST(FTAUtils, Quantification)
-{   
-    
-    // ===========================================================================
-    // =============================== Test Inputs ===============================
-    // ===========================================================================
-   
+{
 
+  // ===========================================================================
+  // =============================== Test Inputs ===============================
+  // ===========================================================================
 
+  // +++++++++++++++++++++++ Input values +++++++++++++++++++++++
 
+  // ############### File Inputs ###############
 
-    // +++++++++++++++++++++++ Input values +++++++++++++++++++++++
-
-
-
-
-    // ############### File Inputs ###############
-
-    // Note: 1. Correspond to the Line 18-23 in test_quantification.py
-    try
-    {
-        file_lists_quantification_utils = {"not_a_valid_filename.txt",
-                                           "not_a_valid_filename.txt",
-                                           "not_a_valid_filename.txt"};        
-        IM = {0.1, 4};
-        nbins = 15;
-
-        FTAUtils::Quantification(params_double_1,
-                                 params_string_1,
-                                 params_int_1,
-                                 params_bool_1,
-                                 params_analysis_t_1,
-                                 file_lists_quantification_utils[0],
-                                 file_lists_quantification_utils[1],
-                                 FTAUtils::Quantification::RISK,
-                                 file_lists_quantification_utils[2],
-                                 IM[0],
-                                 IM[1],
-                                 nbins);
-    }
-    catch (FTAUtils::CException e)
-    {   
-        /* 
-        * ------- IO Error -------
-        * does not exist
-        */
-        EXPECT_EQ(e.msg, "Unable to open file.");
-    }    
-
-    
-    
-    // Note: 1. Correspond to the Line 25-27 in test_quantification.py
-    try
-    {
-        file_lists_quantification_utils = {"",
-                                           "",
-                                           ""};
-        IM = {0.1, 4};
-        nbins = 15;
-
-        FTAUtils::Quantification(params_double_2,
-                                 params_string_2,
-                                 params_int_2,
-                                 params_bool_2,
-                                 params_analysis_t_2,
-                                 file_lists_quantification_utils[0],
-                                 file_lists_quantification_utils[1],
-                                 FTAUtils::Quantification::RISK,
-                                 file_lists_quantification_utils[2],
-                                 IM[0],
-                                 IM[1],
-                                 nbins);
-    }
-    catch (FTAUtils::CException e)
-    {
-        /* 
-        * ------- Type Error -------
-        * must be a filename or a list
-        */
-        EXPECT_EQ(e.msg, "Unable to open file.");
-    }
-    
-    
-
-
-
-    // ############## Inputs for Fragility ##############
-
-    file_lists_quantification_utils = {"logic1.txt",
-                                       "logic1_bas_events_LNORM.txt",
-                                       "hazard.txt"};
+  try
+  {
+    file_lists_quantification_utils = {
+        "not_a_valid_filename.txt", "not_a_valid_filename.txt", "not_a_valid_filename.txt"};
     IM = {0.1, 4};
     nbins = 15;
-    FTAUtils::Quantification(params_double_3,
-                             params_string_3,
-                             params_int_3,
-                             params_bool_3,
-                             params_analysis_t_3,
+
+    FTAUtils::Quantification(params_double_1,
+                             params_string_1,
+                             params_int_1,
+                             params_bool_1,
+                             params_analysis_t_1,
+                             file_lists_quantification_utils[0],
+                             file_lists_quantification_utils[1],
+                             FTAUtils::Quantification::RISK,
+                             file_lists_quantification_utils[2],
+                             IM[0],
+                             IM[1],
+                             nbins);
+  }
+  catch (FTAUtils::CException e)
+  {
+    /*
+     * ------- IO Error -------
+     * does not exist
+     */
+    EXPECT_EQ(e.msg, "Unable to open file.");
+  }
+
+  try
+  {
+    file_lists_quantification_utils = {"", "", ""};
+    IM = {0.1, 4};
+    nbins = 15;
+
+    FTAUtils::Quantification(params_double_2,
+                             params_string_2,
+                             params_int_2,
+                             params_bool_2,
+                             params_analysis_t_2,
+                             file_lists_quantification_utils[0],
+                             file_lists_quantification_utils[1],
+                             FTAUtils::Quantification::RISK,
+                             file_lists_quantification_utils[2],
+                             IM[0],
+                             IM[1],
+                             nbins);
+  }
+  catch (FTAUtils::CException e)
+  {
+    /*
+     * ------- Type Error -------
+     * must be a filename or a list
+     */
+    EXPECT_EQ(e.msg, "Unable to open file.");
+  }
+
+  // ############## Inputs for Fragility ##############
+
+  file_lists_quantification_utils = {"logic1.txt", "logic1_bas_events_LNORM.txt", "hazard.txt"};
+  IM = {0.1, 4};
+  nbins = 15;
+  FTAUtils::Quantification(params_double_3,
+                           params_string_3,
+                           params_int_3,
+                           params_bool_3,
+                           params_analysis_t_3,
+                           file_lists_quantification_utils[0],
+                           file_lists_quantification_utils[1],
+                           FTAUtils::Quantification::FRAGILITY,
+                           file_lists_quantification_utils[2],
+                           IM[0],
+                           IM[1],
+                           nbins);
+
+  // >>>>>>>> logic Value Check <<<<<<<<
+
+  std::vector<std::vector<std::string>> event_files_matrix3{{"TE", "OR", "IE3", "IE4"},
+                                                            {"IE4", "OR", "C4"},
+                                                            {"IE3", "OR", "C3", "IE2"},
+                                                            {"IE2", "AND", "C2", "IE1"},
+                                                            {"IE1", "OR", "C1"}};
+  EXPECT_EQ(params_string_3["events_files"], event_files_matrix3);
+
+  // >>>>>>>> Basic Events Value Check <<<<<<<<
+
+  std::vector<std::vector<std::string>> basic_events_matrix3{{"C1", "LNORM", "1.88", "0.5"},
+                                                             {"C2", "LNORM", "3.78", "0.79"},
+                                                             {"C3", "LNORM", "2.33", "0.76"},
+                                                             {"C4", "LNORM", "3.66", "0.45"}};
+  std::vector<std::vector<std::string>> basic_events_3 = params_string_3["basic_events"];
+  EXPECT_EQ(basic_events_3, basic_events_matrix3);
+
+  // >>>>>>>> antype Value Check <<<<<<<<
+
+  EXPECT_EQ(params_analysis_t_3["analysis"], FTAUtils::Quantification::FRAGILITY);
+
+  // >>>>>>>> hazard Value Check <<<<<<<<
+
+  std::vector<std::vector<double>> matrix_hazard{{0.0608, 0.01},
+                                                 {0.2124, 0.001},
+                                                 {0.4, 0.0001},
+                                                 {0.629, 1e-05},
+                                                 {0.9344, 1e-06},
+                                                 {1.3055, 1e-07}};
+  std::vector<std::vector<double>> hazard = params_double_3["hazard"];
+  EXPECT_EQ(hazard, matrix_hazard);
+
+  // >>>>>>>> imrange Value Check <<<<<<<<
+
+  EXPECT_EQ(params_double_3["IM"][0][0], 0.1);
+  EXPECT_EQ(params_double_3["IM"][0][1], 4);
+
+  // >>>>>>>> nbins Value Check <<<<<<<<
+
+  EXPECT_EQ(params_int_3["n_bins"], 15);
+
+  // >>>>>>>> nbins Value Check <<<<<<<<
+
+  try
+  {
+    file_lists_quantification_utils = {"logic1.txt", "logic1_bas_events_LNORM.txt", "hazard.txt"};
+    IM = {0.1, 4};
+
+    nbins = -15;
+    if (!(nbins > 0))
+      throw FTAUtils::CException("ValueError");
+
+    FTAUtils::Quantification(params_double_4,
+                             params_string_4,
+                             params_int_4,
+                             params_bool_4,
+                             params_analysis_t_4,
                              file_lists_quantification_utils[0],
                              file_lists_quantification_utils[1],
                              FTAUtils::Quantification::FRAGILITY,
@@ -177,412 +191,127 @@ TEST(FTAUtils, Quantification)
                              IM[0],
                              IM[1],
                              nbins);
-    
-
-
-    // >>>>>>>> logic Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 32-34 in test_quantification.py
+  }
+  catch (FTAUtils::CException e)
+  {
     /*
-    filename    | content            | type
-    ------------------------------------------------------------
-    logic1.txt  | [[TE,OR,IE3,IE4],  | vector<vector<string>>
-                |  [IE4,OR,C4],      |
-                |  [IE3,OR,C3,IE2],  |
-                |  [IE2,AND,C2,IE1], | 
-                |  [IE1,OR,C1]]      |
-
-    ==== Line 48-73 in FaultTree.C ====
-    void FTAUtils::FaultTree::buildTree(FTAUtils::Parser parser)
-    {
-    std::vector<std::string> line;
-    while (true) {
-        line = parser.yieldLine();
-
-        ...
-        
-        // Stash name, operator
-        _node *node = new _node(line[0], str2Operator(line[1]));
-
-        ...
-
-        }
-    }
-
-    For vector<string> line = [TE,OR,IE3,IE4],
-    line[0] is TE,
-    line[1] is OR.
-    
-    * The "OR/AND" with type of string is converted to "OR/AND" with type of _opDict 
-    * by the translation function of "FTAUtils::FaultTree::str2Operator()",
-    * which is shown below, it needn't be converted to 0/1 with type of integer.
-
-    ==== Line 79-86 in Faulttree.C ====
-    // Translates string to opeartor
-    FTAUtils::FaultTree::_operator_t FTAUtils::FaultTree::str2Operator(std::string op)
-    {
-    std::string op_s = FTAUtils::str2Upper(op, true);
-    ASSERT(_opDict.count(op_s) != 0, "Illegal Operator found: %s", op.c_str());
-
-    return _opDict[op_s];
-    }
-    
-    ==== Line 49-50 in FaultTree.h ====
-    // Hash map for operators
-    std::map<std::string, _operator_t> _opDict = {{"AND", AND}, {"OR", OR}};
-    */
-
-    std::vector<std::vector<std::string>> event_files_matrix3 {{"TE","OR","IE3","IE4"},
-                                                               {"IE4","OR","C4"},
-                                                               {"IE3","OR","C3","IE2"},
-                                                               {"IE2","AND","C2","IE1"}, 
-                                                               {"IE1","OR","C1"}};
-    EXPECT_EQ(params_string_3["events_files"], event_files_matrix3);
-
-
-    
-    // >>>>>>>> Basic Events Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 35-38 in test_quantification.py
-    /*
-    * The function of "parser.yieldLines()" are called 
-    * to read the data in the file "logic1_bas_events_LNORM.txt",
-    * and returns the data with the type of "vector<vector<string>>".
-
-    filename                     | content                | type
-    --------------------------------------------------------------------------------
-    logic1_bas_events_LNORM.txt  | [[C1,LNORM,1.88,0.5],  | vector<vector<string>>
-                                 |  [C2,LNORM,3.78,0.79], |
-                                 |  [C3,LNORM,2.33,0.76], |
-                                 |  [C4,LNORM,3.66,0.45]] |    
-    
-    * For each line, when elements are used,
-    * they will be separatedly converted to the needed type,
-    * for example: 
-    * "LNORM" is converted from the type of "string" to the type of "_dist_t" ("enum" type),
-    * "1.88", "0.5" are converted from the type of "string" to the type of "double".
-        '''
-            // Line 267-269 in QuantificationUtils.C
-            // Stash name, probability vector
-            double b = line.size() > 3 ? stod(line[3]) : 0;
-            _b_nodes[line[0]] = getProbVector(_str2dist[line[1]], stod(line[2]), b,
-                                      n_sample, seed, intmes, analysis, uncert);
-            line[1] is LNORM
-            line[2] is 1.88
-        '''
-    
-    * Compared with the input action in "parser.yieldLines()",
-    * in test_quantification.py,
-    * the function of "__readEventsFile()" is called
-    * to read the data in the file "logic1_bas_events_LNORM.txt",
-    * and returns the data with the type of "[string, string, float, float]".
-
-    ==== Line 503 in test_quantification.py ====
-    # read basic events file
-    self.__bas_events = self.__readEventsFile(basic_events)
-
-    ==== Line 1113-1115 in FTA.py ====
-    @staticmethod
-    def __readEventsFile(fname):
-
-        ...
-            data.append([items[0].strip(),
-                         items[1].strip().upper(),
-                         [float(x.strip()) for x in items[2:]]])
-        ...
-
-        return data
-
-    
-    * Besause 
-    * 1. the type of data in the file "logic1_bas_events_LNORM.txt" 
-    *    read by function of "parser.yieldLines()" is "vector<vector<string>>", 
-    *    and for each element, the types of the data 
-    *    are separately converted to the needed type in the called functions,
-    *    which is different from the fact that the returned type of data 
-    *    by function of "__readEventsFile()" is "[string, string, float, float]" 
-    *    in test_quantification.py
-    * 2. there is no further operation after reading data with type of vector<vector<string>>.
-    *    and before using data in other called functions,
-    * 3. there is no type in c++ containing all types of string, enum, double
-    *    which is as similar as "[string, string, float, float]" in python.
-    * we needn't to check this input.
+     * ------- Value Error -------
+     * The supplied value of nbins must be a +ve integer
      */
+    EXPECT_EQ(e.msg, "ValueError");
+  }
 
-    std::vector<std::vector<std::string>> basic_events_matrix3 {{"C1", "LNORM", "1.88", "0.5"},
-                                                                {"C2", "LNORM", "3.78", "0.79"},
-                                                                {"C3", "LNORM", "2.33", "0.76"},
-                                                                {"C4", "LNORM", "3.66", "0.45"}};
-    std::vector<std::vector<std::string>> basic_events_3 = params_string_3["basic_events"];
-    EXPECT_EQ(basic_events_3, basic_events_matrix3);
+  // ############## Inputs for Risk analysis (not fragility) ##############
 
+  file_lists_quantification_utils = {"logic2.txt", "logic2_bas_events_PE.txt"};
+  FTAUtils::Quantification(params_double_5,
+                           params_string_5,
+                           params_int_5,
+                           params_bool_5,
+                           params_analysis_t_5,
+                           file_lists_quantification_utils[0],
+                           file_lists_quantification_utils[1],
+                           FTAUtils::Quantification::RISK);
 
+  // >>>>>>>> logic Value Check <<<<<<<<
 
-    // >>>>>>>> antype Value Check <<<<<<<<
+  std::vector<std::vector<std::string>> event_files_matrix5{
+      {"TOP", "AND", "GATE1", "GATE2"},
+      {"GATE1", "OR", "FT-N/m-1", "FT-N/m-2", "FT-N/m-3"},
+      {"GATE2", "OR", "B1", "B3", "B4"},
+      {"GATE3", "OR", "B2", "B4"},
+      {"FT-N/m-1", "AND", "GATE3", "B3", "B5"},
+      {"FT-N/m-2", "AND", "GATE3", "B1"},
+      {"FT-N/m-3", "AND", "B3", "B5", "B1"}};
 
-    // Note: 1. Correspond to the Line 39 in test_quantification.py
-    /*
-    * It is not nesessary to check this input, 
-    * because there is no further opeartion for this input value.    
+  EXPECT_EQ(params_string_5["events_files"], event_files_matrix5);
 
-    ==== Line 657-662 in FTA.py ==== 
-    @property
-    def antype(self):
-        """
-        Return the analysis type
-        """
-        return self.__antype    
-    
-    ==== Line 506 in FTA.py ==== 
-    self.__antype = analysis
-    */
-    EXPECT_EQ(params_analysis_t_3["analysis"], FTAUtils::Quantification::FRAGILITY);
+  // >>>>>>>> Basic Events Value Check <<<<<<<<
 
+  std::vector<std::vector<std::string>> basic_events_matrix5{{"B1", "PE", "0.01"},
+                                                             {"B2", "PE", "0.02"},
+                                                             {"B3", "PE", "0.03"},
+                                                             {"B4", "PE", "0.04"},
+                                                             {"B5", "PE", "0.05"}};
+  std::vector<std::vector<std::string>> basic_events_5 = params_string_5["basic_events"];
+  EXPECT_EQ(basic_events_5, basic_events_matrix5);
 
+  // >>>>>>>> antype Value Check <<<<<<<<
 
-    // >>>>>>>> hazard Value Check <<<<<<<<
+  EXPECT_NE(params_analysis_t_5["analysis"], FTAUtils::Quantification::FRAGILITY);
 
-    // Note: 1. Correspond to the Line 40-41 in test_quantification.py
-    std::vector<std::vector<double>> matrix_hazard {{0.0608, 0.01},
-                                                    {0.2124, 0.001},
-                                                    {0.4, 0.0001},
-                                                    {0.629, 1e-05}, 
-                                                    {0.9344, 1e-06}, 
-                                                    {1.3055, 1e-07}};
-    std::vector<std::vector<double>> hazard = params_double_3["hazard"];
-    EXPECT_EQ(hazard, matrix_hazard);
+  // >>>>>>>> uncertainty Value Check <<<<<<<<
 
+  EXPECT_EQ(params_bool_5["uncertainty"], false);
 
+  // >>>>>>>> nsamp Value Check <<<<<<<<
 
-    // >>>>>>>> imrange Value Check <<<<<<<<
+  EXPECT_EQ(params_int_5["nsamp"], 1);
 
-    // Note: 1. Correspond to the Line 42 in test_quantification.py
-    /*
-    * It is not nesessary to check this input, 
-    * because there is no further opeartion for this input value.
-    
-    ==== Line 671-674 in FTA.py ==== 
-    @property
-    def imrang(self):
-        """Return the Intensity Measure range"""
-        return self.__imrang
-    
-    ==== Line 536-544 in FTA.py ==== 
-    if IM is None:
-        self.__imrang = [0.1, 4]
-    # When provided, check that it is a list
-    if not isinstance(IM, list):
-        raise TypeError("The supplied items of IM range must be a list.")
-    # If 2 elements are provided, assume that it is a range and
-    # calculate the IMs and IMextents according to the number of bins
-    if len(IM) == 2:
-        self.__imrang = IM    
-    */
-    EXPECT_EQ(params_double_3["IM"][0][0], 0.1);
-    EXPECT_EQ(params_double_3["IM"][0][1], 4);
+  // >>>>>>>> seed Value Check <<<<<<<<
 
+  EXPECT_EQ(params_int_5["seed"], 0);
 
+  // ###### Testing for input errors making sure parameters are input correctly ######
 
-    // >>>>>>>> nbins Value Check <<<<<<<<
+  file_lists_quantification_utils = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
+  IM = {0.1, 4};
+  nbins = 15;
+  uncertainty = true;
+  nsamp = 1000;
+  seed = 436546754;
 
-    // Note: 1. Correspond to the Line 43 in test_quantification.py
-    /*
-    * It is not nesessary to check this input, 
-    * because there is no further opeartion for this input value.
-    
-    ==== Line 676-679 in FTA.py ==== 
-    @property
-    def nbins(self):
-        """Return number of bins"""
-        return self.__nbins
-    
-    ==== Line 546 in FTA.py ==== 
-    self.__nbins = self.__parValue(nbins, 'nbins')
+  FTAUtils::Quantification(params_double_6,
+                           params_string_6,
+                           params_int_6,
+                           params_bool_6,
+                           params_analysis_t_6,
+                           file_lists_quantification_utils[0],
+                           file_lists_quantification_utils[1],
+                           FTAUtils::Quantification::RISK,
+                           file_lists_quantification_utils[2],
+                           IM[0],
+                           IM[1],
+                           nbins,
+                           uncertainty,
+                           "",
+                           nsamp,
+                           seed);
 
-    ==== Line 1054-1070 in FTA.py ====
-    @staticmethod
-    def __parValue(value, name):
-        """
-        Function for raising input errors (nbins, nsamp, seed)
-        """
-        if name == 'seed':
-            if value != None:
-                if not isinstance(value, int):
-                    raise TypeError("The supplied value of %s must be an integer." % (name))
-                if (value < 0) or (value > 2**32-1):
-                    raise ValueError("The supplied value of %s must be a +ve integer." % (name))
-        else:
-            if not isinstance(value, int):
-                raise TypeError("The supplied value of %s must be an integer." % (name))
-            if value <= 0:
-                raise ValueError("The supplied value of %s must be a +ve integer." % (name))
-        return value
-    */
-    EXPECT_EQ(params_int_3["n_bins"], 15);
+  // >>>>>>>> uncertainty Value Check <<<<<<<<
 
+  EXPECT_EQ(params_bool_6["uncertainty"], true);
 
+  // >>>>>>>> nsamp Value Check <<<<<<<<
 
-    // >>>>>>>> IM range Type Check <<<<<<<<
+  EXPECT_EQ(params_int_6["nsamp"], 1000);
 
-    // Note: 1. Correspond to the Line 45-48 in test_quantification.py
-    //       2. In this code, double im_lower and double im_upper are input separately
-    //       3. So I think we needn't check "The supplied items of IM range must be a list.";
-    /*
-    FTAUtils::Quantification::Quantification(
-            std::map<std::string, std::vector<std::vector<double>>> & params,
-            std::string events_file, 
-            std::string events_prob_file,
-            _analysis_t analysis, 
-            std::string hazard_file,
-            double im_lower,
-            double im_upper,
-            int n_bins,
-            bool uncertainty, 
-            std::string root, 
-            int n_sample,
-            int seed)
-    */
-    
+  // >>>>>>>> seed Value Check <<<<<<<<
 
+  EXPECT_EQ(params_int_6["seed"], 436546754);
 
-    // >>>>>>>> nbins type Check <<<<<<<<
+  // ############## Testing for input type errors and value errors ##############
 
-    // Note: 1. Correspond to the Line 50-53 in test_quantification.py
-    //       2. nbins with double or other types can be converted to the required type automately
-    //       3. So I think we needn't check "The supplied value of nbins must be an integer.");
+  // >>>>>>>> nsamp Value Check <<<<<<<<
 
-
-
-    // >>>>>>>> nbins Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 55-59 in test_quantification.py
-    try
-    {
-        file_lists_quantification_utils = {"logic1.txt",
-                                           "logic1_bas_events_LNORM.txt",
-                                           "hazard.txt"};
-        IM = {0.1, 4};
-
-        nbins = -15;
-        if (!(nbins > 0))
-            throw FTAUtils::CException(
-                "ValueError");        
-        
-        FTAUtils::Quantification(params_double_4,
-                                 params_string_4,
-                                 params_int_4,
-                                 params_bool_4,
-                                 params_analysis_t_4,
-                                 file_lists_quantification_utils[0],
-                                 file_lists_quantification_utils[1],
-                                 FTAUtils::Quantification::FRAGILITY,
-                                 file_lists_quantification_utils[2],
-                                 IM[0],
-                                 IM[1],
-                                 nbins);
-    }
-    catch (FTAUtils::CException e)
-    {
-        /*
-        * ------- Value Error -------
-        * The supplied value of nbins must be a +ve integer
-        */
-        EXPECT_EQ(e.msg, "ValueError");
-    }
-    
-
-
-
-    // ############## Inputs for Risk analysis (not fragility) ##############
-
-    file_lists_quantification_utils = {"logic2.txt",
-                                       "logic2_bas_events_PE.txt"};
-    FTAUtils::Quantification(params_double_5,
-                             params_string_5,
-                             params_int_5,
-                             params_bool_5,
-                             params_analysis_t_5,
-                             file_lists_quantification_utils[0],
-                             file_lists_quantification_utils[1],
-                             FTAUtils::Quantification::RISK
-                             );
-
-
-    
-    // >>>>>>>> logic Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 63-69 in test_quantification.py
-    std::vector<std::vector<std::string>> event_files_matrix5 {{"TOP", "AND", "GATE1", "GATE2"},
-                                                               {"GATE1", "OR", "FT-N/m-1", "FT-N/m-2", "FT-N/m-3"},
-                                                               {"GATE2", "OR", "B1", "B3", "B4"},
-                                                               {"GATE3", "OR", "B2", "B4"}, 
-                                                               {"FT-N/m-1", "AND", "GATE3", "B3", "B5"},
-                                                               {"FT-N/m-2", "AND", "GATE3", "B1"},
-                                                               {"FT-N/m-3", "AND", "B3", "B5", "B1"}};
-
-    EXPECT_EQ(params_string_5["events_files"], event_files_matrix5);
-
-    
-
-    // >>>>>>>> Basic Events Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 70-72 in test_quantification.py
-    std::vector<std::vector<std::string>> basic_events_matrix5 {{"B1", "PE", "0.01"},
-                                                                {"B2", "PE", "0.02"},
-                                                                {"B3", "PE", "0.03"},
-                                                                {"B4", "PE", "0.04"},
-                                                                {"B5", "PE", "0.05"}};
-    std::vector<std::vector<std::string>> basic_events_5 = params_string_5["basic_events"];
-    EXPECT_EQ(basic_events_5, basic_events_matrix5);
-
-
-
-    // >>>>>>>> antype Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 73 in test_quantification.py
-    EXPECT_NE(params_analysis_t_5["analysis"], FTAUtils::Quantification::FRAGILITY);
-
-
-
-    // >>>>>>>> uncertainty Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 74 in test_quantification.py
-    EXPECT_EQ(params_bool_5["uncertainty"], false);
-
-
-
-    // >>>>>>>> nsamp Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 75 in test_quantification.py
-    EXPECT_EQ(params_int_5["nsamp"], 1);
-
-
-
-    // >>>>>>>> seed Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 76 in test_quantification.py
-    EXPECT_EQ(params_int_5["seed"], 0);
-
-
-
-    
-    // ###### Testing for input errors making sure parameters are input correctly ######
-
-    // Note: 1. Correspond to the Line 79-84 in test_quantification.py
-    file_lists_quantification_utils = {"logic2.txt",
-                                       "logic2_bas_events_PE.txt",
-                                       "hazard.txt"};
+  try
+  {
+    file_lists_quantification_utils = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
     IM = {0.1, 4};
     nbins = 15;
     uncertainty = true;
-    nsamp = 1000;  
-    seed = 436546754;
 
-    FTAUtils::Quantification(params_double_6,
-                             params_string_6,
-                             params_int_6,
-                             params_bool_6,
-                             params_analysis_t_6,
+    nsamp = -10;
+    if (!(nsamp > 0))
+      throw FTAUtils::CException("ValueError");
+
+    seed = 42.0;
+
+    FTAUtils::Quantification(params_double_7,
+                             params_string_7,
+                             params_int_7,
+                             params_bool_7,
+                             params_analysis_t_7,
                              file_lists_quantification_utils[0],
                              file_lists_quantification_utils[1],
                              FTAUtils::Quantification::RISK,
@@ -594,309 +323,134 @@ TEST(FTAUtils, Quantification)
                              "",
                              nsamp,
                              seed);
+  }
+  catch (FTAUtils::CException e)
+  {
+    /*
+     * ------- Value Error -------
+     * The supplied value of nsamp must be a +ve integer.
+     */
+    EXPECT_EQ(e.msg, "ValueError");
+  }
 
+  // >>>>>>>> seed Value Check <<<<<<<<
 
-
-    // >>>>>>>> uncertainty Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 74 in test_quantification.py
-    EXPECT_EQ(params_bool_6["uncertainty"], true);
-
-
-
-    // >>>>>>>> nsamp Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 75 in test_quantification.py
-    EXPECT_EQ(params_int_6["nsamp"], 1000);
-
-
-
-    // >>>>>>>> seed Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 76 in test_quantification.py
-    EXPECT_EQ(params_int_6["seed"], 436546754);
-
-
-
-
-    // ############## Testing for input type errors and value errors ##############
-
-    // >>>>>>>> nsamp Type Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 87-90 in test_quantification.py
-
-
-
-    // >>>>>>>> seed Type Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 92-95 in test_quantification.py
-
-
-
-    // >>>>>>>> nsamp Value Check <<<<<<<<    
-
-    // Note: 1. Correspond to the Line 97-101 in test_quantification.py
-    try{
-        file_lists_quantification_utils = {"logic2.txt",
-                                           "logic2_bas_events_PE.txt",
-                                           "hazard.txt"};
-        IM = {0.1, 4};
-        nbins = 15;
-        uncertainty = true;
-
-        nsamp = -10;
-        if (!(nsamp > 0))
-            throw FTAUtils::CException(
-                "ValueError");
-  
-        seed = 42.0;
-
-        FTAUtils::Quantification(params_double_7,
-                                 params_string_7,
-                                 params_int_7,
-                                 params_bool_7,
-                                 params_analysis_t_7,
-                                 file_lists_quantification_utils[0],
-                                 file_lists_quantification_utils[1],
-                                 FTAUtils::Quantification::RISK,
-                                 file_lists_quantification_utils[2],
-                                 IM[0],
-                                 IM[1],
-                                 nbins,
-                                 uncertainty,
-                                 "",
-                                 nsamp,
-                                 seed);
-    }
-    catch (FTAUtils::CException e)
-    {
-        /* 
-        * ------- Value Error -------
-        * The supplied value of nsamp must be a +ve integer.
-        */
-        EXPECT_EQ(e.msg, "ValueError");
-    }
-
-
-    // >>>>>>>> seed Value Check <<<<<<<<
-
-    // Note: 1. Correspond to the Line 103-107 in test_quantification.py
-    //       2. Check seed value
-    try{
-        file_lists_quantification_utils = {"logic2.txt",
-                                           "logic2_bas_events_PE.txt",
-                                           "hazard.txt"};
-        IM = {0.1, 4};
-        nbins = 15;
-        uncertainty = true;
-        nsamp = 10;
-
-        seed = -42;
-        if (!(seed > 0))
-            throw FTAUtils::CException(
-                "ValueError");
-
-        FTAUtils::Quantification(params_double_8,
-                                 params_string_8,
-                                 params_int_8,
-                                 params_bool_8,
-                                 params_analysis_t_8,
-                                 file_lists_quantification_utils[0],
-                                 file_lists_quantification_utils[1],
-                                 FTAUtils::Quantification::RISK,
-                                 file_lists_quantification_utils[2],
-                                 IM[0],
-                                 IM[1],
-                                 nbins,
-                                 uncertainty,
-                                 "",
-                                 nsamp,
-                                 seed);
-    }
-    catch (FTAUtils::CException e)
-    {
-        /*
-        * ------- Value Error -------
-        * The supplied value of seed must be a +ve integer.
-        */
-        EXPECT_EQ(e.msg, "ValueError");
-    }
-
-
-
-
-
-
-
-
-    // ===========================================================================
-    // ============================== Test TOP Risk ==============================
-    // ===========================================================================
-
-
-
-
-
-    // ############ Function for asserting FTA top event risk ############
-
-
-
-    // ++++++++++ Check FTA top event risk ++++++++++
-
-    file_lists_quantification_utils = {"logic2.txt",
-                                       "logic2_bas_events_PE.txt",
-                                       "hazard.txt"};
+  try
+  {
+    file_lists_quantification_utils = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
     IM = {0.1, 4};
     nbins = 15;
-    FTAUtils::Quantification(params_double_9,
-                             params_string_9,
-                             params_int_9,
-                             params_bool_9,
-                             params_analysis_t_9,
+    uncertainty = true;
+    nsamp = 10;
+
+    seed = -42;
+    if (!(seed > 0))
+      throw FTAUtils::CException("ValueError");
+
+    FTAUtils::Quantification(params_double_8,
+                             params_string_8,
+                             params_int_8,
+                             params_bool_8,
+                             params_analysis_t_8,
                              file_lists_quantification_utils[0],
                              file_lists_quantification_utils[1],
                              FTAUtils::Quantification::RISK,
                              file_lists_quantification_utils[2],
                              IM[0],
                              IM[1],
-                             nbins);
+                             nbins,
+                             uncertainty,
+                             "",
+                             nsamp,
+                             seed);
+  }
+  catch (FTAUtils::CException e)
+  {
+    /*
+     * ------- Value Error -------
+     * The supplied value of seed must be a +ve integer.
+     */
+    EXPECT_EQ(e.msg, "ValueError");
+  }
 
+  // ===========================================================================
+  // ============================== Test TOP Risk ==============================
+  // ===========================================================================
 
+  // ############ Function for asserting FTA top event risk ############
 
-    // >>>>>>>> Risk Value Check <<<<<<<<
+  // ++++++++++ Check FTA top event risk ++++++++++
 
-    // Note: 1. Correspond to the Line 118-127 in test_quantification.py
-    // min-max
-    EXPECT_EQ(std::to_string(params_double_9["fta"][0][0]), "0.000694");
+  file_lists_quantification_utils = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
+  IM = {0.1, 4};
+  nbins = 15;
+  FTAUtils::Quantification(params_double_9,
+                           params_string_9,
+                           params_int_9,
+                           params_bool_9,
+                           params_analysis_t_9,
+                           file_lists_quantification_utils[0],
+                           file_lists_quantification_utils[1],
+                           FTAUtils::Quantification::RISK,
+                           file_lists_quantification_utils[2],
+                           IM[0],
+                           IM[1],
+                           nbins);
 
-    // upper bound
-    EXPECT_EQ(std::to_string(params_double_9["fta"][0][1]), "0.000705");
+  // >>>>>>>> Risk Value Check <<<<<<<<
 
-    // rare event 
-    EXPECT_EQ(std::to_string(params_double_9["fta"][0][2]), "0.000705");
+  // min-max
+  EXPECT_EQ(std::to_string(params_double_9["fta"][0][0]), "0.000694");
 
+  // upper bound
+  EXPECT_EQ(std::to_string(params_double_9["fta"][0][1]), "0.000705");
 
+  // rare event
+  EXPECT_EQ(std::to_string(params_double_9["fta"][0][2]), "0.000705");
 
-    // >>>>>>>> IMratio Value Check <<<<<<<<
+  // >>>>>>>> IMratio Value Check <<<<<<<<
 
-    // Note: 1. Correspond to the Line 129-158 in test_quantification.py
-    // Fussell-Vesely for B1, B2, B3, B4, B5
-    EXPECT_EQ(std::to_string(params_double_9["fv"][0][0]), "0.872395");
-    EXPECT_EQ(std::to_string(params_double_9["fv"][1][0]), "0.326300");
-    EXPECT_EQ(std::to_string(params_double_9["fv"][2][0]), "0.148963");
-    EXPECT_EQ(std::to_string(params_double_9["fv"][3][0]), "0.652584");
-    EXPECT_EQ(std::to_string(params_double_9["fv"][4][0]), "0.148963");
+  // Fussell-Vesely for B1, B2, B3, B4, B5
+  EXPECT_EQ(std::to_string(params_double_9["fv"][0][0]), "0.872395");
+  EXPECT_EQ(std::to_string(params_double_9["fv"][1][0]), "0.326300");
+  EXPECT_EQ(std::to_string(params_double_9["fv"][2][0]), "0.148963");
+  EXPECT_EQ(std::to_string(params_double_9["fv"][3][0]), "0.652584");
+  EXPECT_EQ(std::to_string(params_double_9["fv"][4][0]), "0.148963");
 
-    // Risk Reduction Ratio for B1, B2, B3, B4, B5 
-    EXPECT_EQ(std::to_string(params_double_9["rrr"][0][0]), "7.831866");
-    EXPECT_EQ(std::to_string(params_double_9["rrr"][1][0]), "1.483999");
-    EXPECT_EQ(std::to_string(params_double_9["rrr"][2][0]), "1.174913");
-    EXPECT_EQ(std::to_string(params_double_9["rrr"][3][0]), "2.877066");
-    EXPECT_EQ(std::to_string(params_double_9["rrr"][4][0]), "1.174913");
+  // Risk Reduction Ratio for B1, B2, B3, B4, B5
+  EXPECT_EQ(std::to_string(params_double_9["rrr"][0][0]), "7.831866");
+  EXPECT_EQ(std::to_string(params_double_9["rrr"][1][0]), "1.483999");
+  EXPECT_EQ(std::to_string(params_double_9["rrr"][2][0]), "1.174913");
+  EXPECT_EQ(std::to_string(params_double_9["rrr"][3][0]), "2.877066");
+  EXPECT_EQ(std::to_string(params_double_9["rrr"][4][0]), "1.174913");
 
-    // Risk Increase Ratio for B1, B2, B3, B4, B5
-    EXPECT_EQ(std::to_string(params_double_9["rir"][0][0]), "86.111103");
-    EXPECT_EQ(std::to_string(params_double_9["rir"][1][0]), "16.960273");
-    EXPECT_EQ(std::to_string(params_double_9["rir"][2][0]), "5.808755");
-    EXPECT_EQ(std::to_string(params_double_9["rir"][3][0]), "16.637742");
-    EXPECT_EQ(std::to_string(params_double_9["rir"][4][0]), "3.826894");
+  // Risk Increase Ratio for B1, B2, B3, B4, B5
+  EXPECT_EQ(std::to_string(params_double_9["rir"][0][0]), "86.111103");
+  EXPECT_EQ(std::to_string(params_double_9["rir"][1][0]), "16.960273");
+  EXPECT_EQ(std::to_string(params_double_9["rir"][2][0]), "5.808755");
+  EXPECT_EQ(std::to_string(params_double_9["rir"][3][0]), "16.637742");
+  EXPECT_EQ(std::to_string(params_double_9["rir"][4][0]), "3.826894");
 
+  // >>>>>>>> IMdiff Value Check <<<<<<<<
 
+  // Risk Reduction Difference for B1, B2, B3, B4, B5
+  EXPECT_EQ(std::to_string(params_double_9["rri"][0][0]), "0.000615");
+  EXPECT_EQ(std::to_string(params_double_9["rri"][1][0]), "0.000230");
+  EXPECT_EQ(std::to_string(params_double_9["rri"][2][0]), "0.000105");
+  EXPECT_EQ(std::to_string(params_double_9["rri"][3][0]), "0.000460");
+  EXPECT_EQ(std::to_string(params_double_9["rri"][4][0]), "0.000105");
 
-    // >>>>>>>> IMdiff Value Check <<<<<<<<
+  // Risk Increase Difference for B1, B2, B3, B4, B5
+  EXPECT_EQ(std::to_string(params_double_9["rii"][0][0]), "0.059991");
+  EXPECT_EQ(std::to_string(params_double_9["rii"][1][0]), "0.011250");
+  EXPECT_EQ(std::to_string(params_double_9["rii"][2][0]), "0.003389");
+  EXPECT_EQ(std::to_string(params_double_9["rii"][3][0]), "0.011022");
+  EXPECT_EQ(std::to_string(params_double_9["rii"][4][0]), "0.001993");
 
-    // Note: 1. Correspond to the Line 160-183 in test_quantification.py
-    // Risk Reduction Difference for B1, B2, B3, B4, B5
-    EXPECT_EQ(std::to_string(params_double_9["rri"][0][0]), "0.000615");
-    EXPECT_EQ(std::to_string(params_double_9["rri"][1][0]), "0.000230");
-    EXPECT_EQ(std::to_string(params_double_9["rri"][2][0]), "0.000105");
-    EXPECT_EQ(std::to_string(params_double_9["rri"][3][0]), "0.000460");
-    EXPECT_EQ(std::to_string(params_double_9["rri"][4][0]), "0.000105");
-
-    // Risk Increase Difference for B1, B2, B3, B4, B5
-    EXPECT_EQ(std::to_string(params_double_9["rii"][0][0]), "0.059991");
-    EXPECT_EQ(std::to_string(params_double_9["rii"][1][0]), "0.011250");
-    EXPECT_EQ(std::to_string(params_double_9["rii"][2][0]), "0.003389");
-    EXPECT_EQ(std::to_string(params_double_9["rii"][3][0]), "0.011022");
-    EXPECT_EQ(std::to_string(params_double_9["rii"][4][0]), "0.001993");
-
-    // Birnbaum Difference for B1, B2, B3, B4, B5
-    EXPECT_EQ(std::to_string(params_double_9["bi"][0][0]), "0.060606");
-    EXPECT_EQ(std::to_string(params_double_9["bi"][1][0]), "0.011480");
-    EXPECT_EQ(std::to_string(params_double_9["bi"][2][0]), "0.003494");
-    EXPECT_EQ(std::to_string(params_double_9["bi"][3][0]), "0.011482");
-    EXPECT_EQ(std::to_string(params_double_9["bi"][4][0]), "0.002097");
-
-    /*A NOTE
-    * We suffers from the issues when compare between two values with type of double
-    * The expections are related to these three lines below:
-
-    EXPECT_EQ(params_double_9["rir"][3][0], 16.637742224118053);
-    EXPECT_EQ(params_double_9["rii"][3][0], 0.01102232297330552);
-    EXPECT_EQ(params_double_9["bi"][3][0], 0.011482186283532259);
-
-
-    * Results with expections are shown in the terminal
-    
-    [ RUN      ] FTAUtils.Quantification
-    /home/gnie/projects/mastodon/unit/src/TestQuantificationUtils.C:701: Failure
-        Expected: params_double_9["rir"][3][0]
-        Which is: 16.6377
-    To be equal to: 16.637742224118053
-        Which is: 16.6377
-    /home/gnie/projects/mastodon/unit/src/TestQuantificationUtils.C:719: Failure
-        Expected: params_double_9["rii"][3][0]
-        Which is: 0.0110223
-    To be equal to: 0.01102232297330552
-        Which is: 0.0110223
-    /home/gnie/projects/mastodon/unit/src/TestQuantificationUtils.C:727: Failure
-        Expected: params_double_9["bi"][3][0]
-        Which is: 0.0114822
-    To be equal to: 0.011482186283532259
-        Which is: 0.0114822
-    [  FAILED  ] FTAUtils.Quantification (3398 ms)
-
-
-    ------------------- 1st update --------------------
-    * We updated the code by cut the value as suggested in the error message, 
-    * e.g., we replace 16.637742224118053 with 16.6377 with type of double.
-    
-    EXPECT_EQ(params_double_9["rir"][3][0], 16.6377);
-    EXPECT_EQ(params_double_9["rii"][3][0], 0.0110223);
-    EXPECT_EQ(params_double_9["bi"][3][0], 0.0114822);
-
-
-    * There are still three same expections shown in the terminal
-    
-    [ RUN      ] FTAUtils.Quantification
-    /home/gnie/projects/mastodon/unit/src/TestQuantificationUtils.C:724: Failure
-        Expected: params_double_9["rir"][3][0]
-        Which is: 16.6377
-    To be equal to: 16.6377
-    /home/gnie/projects/mastodon/unit/src/TestQuantificationUtils.C:725: Failure
-        Expected: params_double_9["rii"][3][0]
-        Which is: 0.0110223
-    To be equal to: 0.0110223
-    /home/gnie/projects/mastodon/unit/src/TestQuantificationUtils.C:726: Failure
-        Expected: params_double_9["bi"][3][0]
-        Which is: 0.0114822
-    To be equal to: 0.0114822
-    [  FAILED  ] FTAUtils.Quantification (3405 ms)
-
-
-    ------------------- 2nd update --------------------
-    * According to this results, we have to make a type conversion 
-    * from double to string, which is shown below:
-    
-    EXPECT_EQ(std::to_string(params_double_9["rir"][3][0]), "16.637742");
-    EXPECT_EQ(std::to_string(params_double_9["rii"][3][0]), "0.011022");
-    EXPECT_EQ(std::to_string(params_double_9["bi"][3][0]), "0.011482");
-
-    * There is no expection after we updated the code, 
-    * and the result is shown below.
-     
-    [ RUN      ] FTAUtils.Quantification
-    [       OK ] FTAUtils.Quantification (3444 ms)
-
-    */
+  // Birnbaum Difference for B1, B2, B3, B4, B5
+  EXPECT_EQ(std::to_string(params_double_9["bi"][0][0]), "0.060606");
+  EXPECT_EQ(std::to_string(params_double_9["bi"][1][0]), "0.011480");
+  EXPECT_EQ(std::to_string(params_double_9["bi"][2][0]), "0.003494");
+  EXPECT_EQ(std::to_string(params_double_9["bi"][3][0]), "0.011482");
+  EXPECT_EQ(std::to_string(params_double_9["bi"][4][0]), "0.002097");
 }

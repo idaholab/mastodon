@@ -2,21 +2,24 @@
 #define _QUANTIFICATION_H
 
 #include <random>
-#include "FaultTree.h"
+#include "FaultTreeUtils.h"
 #include "MastodonUtils.h"
 
 #define CLIP(A, MIN, MAX) (((A) < MIN) ? MIN : ((A) > MAX ? MAX : (A)))
 
-#define GEN_QUALIFICATION_R_VEC(gen, d, n, rv)                                 \
-  for (int index = 0; index < n; index++) {                                    \
-    double dataPoint = d(gen);                                                 \
-    rv.push_back(CLIP(dataPoint, 0.0, 1.0));                                   \
+#define GEN_QUALIFICATION_R_VEC(gen, d, n, rv)                                                     \
+  for (int index = 0; index < n; index++)                                                          \
+  {                                                                                                \
+    double dataPoint = d(gen);                                                                     \
+    rv.push_back(CLIP(dataPoint, 0.0, 1.0));                                                       \
   }
 
 // Quantification class
-class FTAUtils::Quantification {
+class FTAUtils::Quantification
+{
 public:
-  enum _dist_t {
+  enum _dist_t
+  {
     PE,    //    = 0
     EXP,   //   = 1
     GAMMA, // = 2
@@ -30,7 +33,8 @@ public:
     STUDENT_T
   };
 
-  enum _analysis_t {
+  enum _analysis_t
+  {
     FRAGILITY, // = 0
     RISK       //       = 1
   };
@@ -40,9 +44,9 @@ public:
                  std::map<std::string, int> & params_int,
                  std::map<std::string, bool> & params_bool,
                  std::map<std::string, _analysis_t> & params_analysis_t,
-                 std::string events_file, 
+                 std::string events_file,
                  std::string events_prob_file,
-                 _analysis_t analysis = FRAGILITY, 
+                 _analysis_t analysis = FRAGILITY,
                  std::string hazard_file = "",
                  double im_lower = 0.1,
                  double im_upper = 4,
@@ -53,7 +57,8 @@ public:
                  int seed = 0);
 
 private:
-  struct Stats {
+  struct Stats
+  {
     double _pe;
     double _mean;
     double _median;
@@ -61,14 +66,17 @@ private:
     double _variance;
     double _p5;
     double _p95;
-    Stats(std::vector<double> vec_in) {
+    Stats(std::vector<double> vec_in)
+    {
 
       std::vector<double> vec;
       vec.clear();
 
       // Remove all INF from vector
-      for (int index = 0; index < vec_in.size(); index++) {
-        if (!std::isinf(vec_in[index])) {
+      for (int index = 0; index < vec_in.size(); index++)
+      {
+        if (!std::isinf(vec_in[index]))
+        {
           vec.push_back(vec_in[index]);
         }
       }
@@ -85,30 +93,31 @@ private:
       _mean = accumulate(vec.begin(), vec.end(), 0.0) / size;
 
       _variance = 0;
-      for (int i = 0; i < vec.size(); i++) {
+      for (int i = 0; i < vec.size(); i++)
+      {
         _variance += pow(vec[i] - _mean, 2);
       }
       _variance /= vec.size();
       _sd = sqrt(_variance);
 
-      _median = (size % 2) ? vec[size / 2]
-                           : ((vec[size / 2 - 1] + vec[size / 2]) / 2);
+      _median = (size % 2) ? vec[size / 2] : ((vec[size / 2 - 1] + vec[size / 2]) / 2);
 
       _p5 = getPercentile(vec, 5);
       _p95 = getPercentile(vec, 95);
     }
-    double getPercentile(std::vector<double> vec, int percentile) {
+    double getPercentile(std::vector<double> vec, int percentile)
+    {
       double p_i = (vec.size() + 1) * (percentile / 100.0);
       int p_min = floor(p_i);
       p_min = (p_min < 1) ? 1 : p_min;
       int p_max = ceil(p_i);
       p_max = (p_max > (vec.size() - 1)) ? vec.size() : p_max;
-      return vec[p_min - 1] +
-             ((p_i - p_min) * (vec[p_max - 1] - vec[p_min - 1]));
+      return vec[p_min - 1] + ((p_i - p_min) * (vec[p_max - 1] - vec[p_min - 1]));
     }
-    void printStats() {
+    void printStats()
+    {
       std::cout << "Mean: " << _mean << ", Median: " << _median << ", SD: " << _sd
-           << ", 5th: " << _p5 << ", 95th: " << _p95 << "\n\n";
+                << ", 5th: " << _p5 << ", 95th: " << _p95 << "\n\n";
     }
   };
 
@@ -130,33 +139,50 @@ private:
 
   std::vector<std::vector<double>> _cut_set_prob;
   std::map<std::string, std::vector<double>> _b_nodes;
-  std::vector<double> getProbVector(_dist_t dist, double a, double b, int n,
-                               int seed, std::vector<double> im,
-                               _analysis_t analysis, bool uc);
-  std::vector<std::vector<std::string>>
-  beProb(FTAUtils::Parser parser, int n_sample, int seed,
-         _analysis_t analysis, std::vector<double> intmes, bool uncert);
+  std::vector<double> getProbVector(_dist_t dist,
+                                    double a,
+                                    double b,
+                                    int n,
+                                    int seed,
+                                    std::vector<double> im,
+                                    _analysis_t analysis,
+                                    bool uc);
+  std::vector<std::vector<std::string>> beProb(FTAUtils::Parser parser,
+                                               int n_sample,
+                                               int seed,
+                                               _analysis_t analysis,
+                                               std::vector<double> intmes,
+                                               bool uncert);
 
-  std::vector<std::vector<double>> computeCutSetProb(std::set<std::set<std::string>> cut_sets, int n,
-                                           bool bypass = false,
-                                           std::string bypass_key = "",
-                                           double bypass_value = 0);
-  std::vector<double> cutSetRowProb(std::set<std::string> row, int n,
-                               bool sign_positive = true, bool bypass = false,
-                               std::string bypass_key = "", double bypass_value = 0);
-  std::vector<double> *cutSetProbWDigest(std::set<std::set<std::string>> cut_sets, int n,
-                                    bool only_min_max = false);
+  std::vector<std::vector<double>> computeCutSetProb(std::set<std::set<std::string>> cut_sets,
+                                                     int n,
+                                                     bool bypass = false,
+                                                     std::string bypass_key = "",
+                                                     double bypass_value = 0);
+  std::vector<double> cutSetRowProb(std::set<std::string> row,
+                                    int n,
+                                    bool sign_positive = true,
+                                    bool bypass = false,
+                                    std::string bypass_key = "",
+                                    double bypass_value = 0);
+  std::vector<double> *
+  cutSetProbWDigest(std::set<std::set<std::string>> cut_sets, int n, bool only_min_max = false);
   double getGateProb(double a, double b, bool is_and);
   std::vector<std::vector<double>> minCutIM(std::vector<double> upperBound);
-  std::map<std::string, std::vector<std::vector<double>>> beIM(std::set<std::set<std::string>> cut_sets, int n,
-                                           std::vector<double> upper_bound,
-                                           std::vector<int> &count_v);
+  std::map<std::string, std::vector<std::vector<double>>>
+  beIM(std::set<std::set<std::string>> cut_sets,
+       int n,
+       std::vector<double> upper_bound,
+       std::vector<int> & count_v);
   std::vector<std::vector<double>> linesToDouble(std::vector<std::vector<std::string>> lines);
   std::vector<double> getBinMeans(double im_lower, double im_upper, int n_bins);
   std::vector<double> hazInterp(std::vector<std::vector<double>> hazard,
-                           std::vector<double> im_bins);
-  std::vector<double> fragility(std::set<std::set<std::string>> cut_sets, int n,
-                           std::vector<double> im_bins, double &mu, double &sigma);
+                                std::vector<double> im_bins);
+  std::vector<double> fragility(std::set<std::set<std::string>> cut_sets,
+                                int n,
+                                std::vector<double> im_bins,
+                                double & mu,
+                                double & sigma);
   void computeRisk(int n, std::vector<double> hazard);
 };
 

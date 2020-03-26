@@ -2,35 +2,32 @@
 // #include "DelimitedFileReader.h"
 
 // A macro to reduce typing while printing stats
-#define QUANT_BE_STAT_PRINT_HELPER(index, i)                                   \
-            "PE: " << be_stats[index][i][0]                                    \
-         << ", Mean: " << be_stats[index][i][1]                                \
-         << ", Median: " << be_stats[index][i][2]                              \
-         << ", SD: " << be_stats[index][i][3]                                  \
-         << ", 5th: " << be_stats[index][i][4]                                 \
-         << ", 95th: " << be_stats[index][i][5] << "\n"
+#define QUANT_BE_STAT_PRINT_HELPER(index, i)                                                       \
+  "PE: " << be_stats[index][i][0] << ", Mean: " << be_stats[index][i][1]                           \
+         << ", Median: " << be_stats[index][i][2] << ", SD: " << be_stats[index][i][3]             \
+         << ", 5th: " << be_stats[index][i][4] << ", 95th: " << be_stats[index][i][5] << "\n"
 
 /*
  * Constructor for qualifications class
  */
 /*!public*/
 FTAUtils::Quantification::Quantification(
-  std::map<std::string, std::vector<std::vector<double>>> & params_double,
-  std::map<std::string, std::vector<std::vector<std::string>>> & params_string,
-  std::map<std::string, int> & params_int,
-  std::map<std::string, bool> & params_bool,
-  std::map<std::string, _analysis_t> & params_analysis_t,
-  std::string events_file,
-  std::string events_prob_file,
-  _analysis_t analysis,
-  std::string hazard_file,
-  double im_lower,
-  double im_upper,
-  int n_bins,
-  bool uncertainty,
-  std::string root,
-  int n_sample,
-  int seed)
+    std::map<std::string, std::vector<std::vector<double>>> & params_double,
+    std::map<std::string, std::vector<std::vector<std::string>>> & params_string,
+    std::map<std::string, int> & params_int,
+    std::map<std::string, bool> & params_bool,
+    std::map<std::string, _analysis_t> & params_analysis_t,
+    std::string events_file,
+    std::string events_prob_file,
+    _analysis_t analysis,
+    std::string hazard_file,
+    double im_lower,
+    double im_upper,
+    int n_bins,
+    bool uncertainty,
+    std::string root,
+    int n_sample,
+    int seed)
 /*!endpublic*/
 {
   //---------------- SAVE PARAMETERS ------------------------------------------
@@ -40,7 +37,8 @@ FTAUtils::Quantification::Quantification(
 
   std::vector<std::vector<double>> params_double2;
   params_double2.push_back(params_double1);
-  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("IM", params_double2));
+  params_double.insert(
+      std::pair<std::string, std::vector<std::vector<double>>>("IM", params_double2));
 
   params_int.insert(std::pair<std::string, int>("n_bins", n_bins));
   params_int.insert(std::pair<std::string, int>("nsamp", n_sample));
@@ -56,25 +54,21 @@ FTAUtils::Quantification::Quantification(
   std::set<std::set<std::string>> cut_sets = ft.getCutSets();
   // ft.printSets();
   params_string.insert(
-    std::pair<std::string, std::vector<std::vector<std::string>>>
-    ("events_files", lines_events));
+      std::pair<std::string, std::vector<std::vector<std::string>>>("events_files", lines_events));
 
   // Read basic events file
-  FTAUtils::Parser parser_event_prob = 
-    FTAUtils::Parser(events_prob_file, FTAUtils::Parser::FORMAT_CSV);
+  FTAUtils::Parser parser_event_prob =
+      FTAUtils::Parser(events_prob_file, FTAUtils::Parser::FORMAT_CSV);
   std::vector<std::vector<std::string>> lines_events_prob;
-  /*
-  [ASSERT] In File: /home/gnie/projects/mastodon/unit/../src/utils/QuantificationUtils.C, 
-  Line: 407 => "'C1' key not found in _b_nodes" ./run_tests: line 18:  3016 Aborted 
-  (core dumped) ./$APPLICATION_NAME-unit-$METHOD
-  */    
 
-  if (analysis == FRAGILITY) {
+  if (analysis == FRAGILITY)
+  {
     // Read and interpolate hazard curve
     FTAUtils::Parser parser_hazard = FTAUtils::Parser(hazard_file, FTAUtils::Parser::FORMAT_CSV);
     std::vector<std::vector<std::string>> lines_hazard = parser_hazard.yieldLines();
     std::vector<std::vector<double>> hazard = FTAUtils::Quantification::linesToDouble(lines_hazard);
-    params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("hazard", hazard));
+    params_double.insert(
+        std::pair<std::string, std::vector<std::vector<double>>>("hazard", hazard));
 
     // List of Intensity Measure bin values
     std::vector<double> im_bins = getBinMeans(im_lower, im_upper, n_bins);
@@ -83,8 +77,7 @@ FTAUtils::Quantification::Quantification(
     std::vector<double> hazard_freq = hazInterp(hazard, im_bins);
 
     // Dictionary of basic events for fragility input
-    lines_events_prob =
-    beProb(parser_event_prob, n_sample, seed, analysis, im_bins, uncertainty);
+    lines_events_prob = beProb(parser_event_prob, n_sample, seed, analysis, im_bins, uncertainty);
 
     // Top event fragility (lognormal parameters)
     double mu, sigma;
@@ -98,21 +91,23 @@ FTAUtils::Quantification::Quantification(
 
     // Dictionary of basic events risk (convoluting fragility and hazard)
     computeRisk(n_bins, hazard_freq);
-  } else {
+  }
+  else
+  {
     // Dictionary of basic events risk (risk inputs)
     lines_events_prob =
-    beProb(parser_event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
+        beProb(parser_event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
     /*
     std::cout << "------------ LN PARAMS END ---------------" << std::endl;
     */
   }
-  params_string.insert(std::pair<std::string, 
-    std::vector<std::vector<std::string>>>("basic_events", lines_events_prob));
+  params_string.insert(std::pair<std::string, std::vector<std::vector<std::string>>>(
+      "basic_events", lines_events_prob));
 
   // Calculate minimal cut sets probability
   // Digest cut set probability to unified probability
   // Adding 1 to accomodate mean as 0th element
-  std::vector<double> *digest = cutSetProbWDigest(cut_sets, n_sample + 1);
+  std::vector<double> * digest = cutSetProbWDigest(cut_sets, n_sample + 1);
   std::vector<std::vector<double>> mc_im = minCutIM(digest[1]);
   Stats s0(digest[0]);
   Stats s1(digest[1]);
@@ -144,7 +139,7 @@ FTAUtils::Quantification::Quantification(
   /*
   std::cout << "----------- PROBABILITY END --------------" << std::endl;
   std::cout << "-------- CUT SET DETAILS BEGIN -----------" << std::endl;
-  
+
   int i = 0;
   for (std::set<std::set<std::string>>::iterator row = cut_sets.begin(); row != cut_sets.end();
        ++row) {
@@ -153,7 +148,7 @@ FTAUtils::Quantification::Quantification(
          << std::endl;
     i++;
   }
-  
+
   std::cout << "--------- CUT SET DETAILS END ------------" << std::endl;
   i = 0;
   for (std::map<std::string, std::vector<double>>::iterator bn_it = _b_nodes.begin();
@@ -170,14 +165,20 @@ FTAUtils::Quantification::Quantification(
   */
 
   // Return the Risk Reduction Ratio for B1, B2, B3, B4, B5
-  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("fv", be_stats["fv"]));
-  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("rrr", be_stats["rrr"]));
-  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("rir", be_stats["rir"]));
-  
+  params_double.insert(
+      std::pair<std::string, std::vector<std::vector<double>>>("fv", be_stats["fv"]));
+  params_double.insert(
+      std::pair<std::string, std::vector<std::vector<double>>>("rrr", be_stats["rrr"]));
+  params_double.insert(
+      std::pair<std::string, std::vector<std::vector<double>>>("rir", be_stats["rir"]));
+
   // Return the Risk Reduction Difference for B1, B2, B3, B4, B5
-  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("rri", be_stats["rri"]));
-  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("rii", be_stats["rii"]));
-  params_double.insert(std::pair<std::string, std::vector<std::vector<double>>>("bi", be_stats["bi"]));
+  params_double.insert(
+      std::pair<std::string, std::vector<std::vector<double>>>("rri", be_stats["rri"]));
+  params_double.insert(
+      std::pair<std::string, std::vector<std::vector<double>>>("rii", be_stats["rii"]));
+  params_double.insert(
+      std::pair<std::string, std::vector<std::vector<double>>>("bi", be_stats["bi"]));
 }
 
 /*
@@ -185,19 +186,23 @@ FTAUtils::Quantification::Quantification(
  * measures
  */
 /*!private*/
-std::vector<double> FTAUtils::Quantification::hazInterp(std::vector<std::vector<double>> hazard, std::vector<double> im_bins)
+std::vector<double>
+FTAUtils::Quantification::hazInterp(std::vector<std::vector<double>> hazard,
+                                    std::vector<double> im_bins)
 /*!endprivate*/
 {
   std::vector<double> data;
   // Convert all hazard values to log10
-  for (int index = 0; index < hazard.size(); index++) {
+  for (int index = 0; index < hazard.size(); index++)
+  {
     ASSERT(hazard[index].size() == 2, "hazard dimension error");
     hazard[index][0] = log10(hazard[index][0]);
     hazard[index][1] = log10(hazard[index][1]);
   }
 
   // Interpolate
-  for (int index = 0; index < im_bins.size(); index++) {
+  for (int index = 0; index < im_bins.size(); index++)
+  {
     data.push_back(pow(10, interpolate(hazard, log10(im_bins[index]), true)));
   }
   return data;
@@ -207,12 +212,14 @@ std::vector<double> FTAUtils::Quantification::hazInterp(std::vector<std::vector<
  * Function for getting BIN mean values of intensity measure
  */
 /*!private*/
-std::vector<double> FTAUtils::Quantification::getBinMeans(double im_lower, double im_upper, int n_bins)
+std::vector<double>
+FTAUtils::Quantification::getBinMeans(double im_lower, double im_upper, int n_bins)
 /*!endprivate*/
 {
   std::vector<double> bins;
   double delta = (im_upper - im_lower) / (n_bins);
-  for (int index = 0; index < n_bins; index++) {
+  for (int index = 0; index < n_bins; index++)
+  {
     double bin = im_lower + (delta * (index + 0.5));
     bins.push_back(bin);
   }
@@ -228,10 +235,13 @@ FTAUtils::Quantification::linesToDouble(std::vector<std::vector<std::string>> li
 /*!endprivate*/
 {
   std::vector<std::vector<double>> lines_double;
-  for (int index = 0; index < lines.size(); index++) {
+  for (int index = 0; index < lines.size(); index++)
+  {
     std::vector<double> double_vector(lines[index].size());
-    transform(lines[index].begin(), lines[index].end(), double_vector.begin(),
-              [](const std::string &val) { return stod(val); });
+    transform(lines[index].begin(),
+              lines[index].end(),
+              double_vector.begin(),
+              [](const std::string & val) { return stod(val); });
     lines_double.push_back(double_vector);
   }
   return lines_double;
@@ -243,64 +253,90 @@ FTAUtils::Quantification::linesToDouble(std::vector<std::vector<std::string>> li
  * eg., a => mean, b => std for NORM
  */
 /*!private*/
-std::vector<double> FTAUtils::Quantification::getProbVector(_dist_t dist, double a, double b,
-                                             int n, int seed, std::vector<double> im,
-                                             _analysis_t analysis, bool uc)
+std::vector<double>
+FTAUtils::Quantification::getProbVector(_dist_t dist,
+                                        double a,
+                                        double b,
+                                        int n,
+                                        int seed,
+                                        std::vector<double> im,
+                                        _analysis_t analysis,
+                                        bool uc)
 /*!endprivate*/
 {
   std::vector<double> rv;
 
   std::default_random_engine gen(seed);
 
-  if (analysis == FRAGILITY) {
+  if (analysis == FRAGILITY)
+  {
     ASSERT(dist == LNORM, "unsupported distribution for fragility analysis");
-    for (int index = 0; index < im.size(); index++) {
+    for (int index = 0; index < im.size(); index++)
+    {
       rv.push_back(FTAUtils::normalCDF(log(im[index] / a) / b));
     }
-  } else {
-    if (!uc) {
-      switch (dist) {
-      case PE: {
-        GEN_QUALIFICATION_R_VEC(a, double, 2, rv);
-      } break;
-      case NORM: {
-        GEN_QUALIFICATION_R_VEC(a, double, 2, rv);
-      } break;
-      default:
-        ASSERT(false, "Un-supported dist found");
+  }
+  else
+  {
+    if (!uc)
+    {
+      switch (dist)
+      {
+        case PE:
+        {
+          GEN_QUALIFICATION_R_VEC(a, double, 2, rv);
+        }
+        break;
+        case NORM:
+        {
+          GEN_QUALIFICATION_R_VEC(a, double, 2, rv);
+        }
+        break;
+        default:
+          ASSERT(false, "Un-supported dist found");
       }
-    } else {
-      switch (dist) {
-      case PE: {
-        GEN_QUALIFICATION_R_VEC(a, double, n, rv);
-      } break;
-      case NORM: {
-        rv.push_back(CLIP(a, 0, 1));
-        std::normal_distribution<double> d(a, b);
-        GEN_QUALIFICATION_R_VEC(gen, d, n, rv);
-      } break;
-      default:
-        ASSERT(false, "Un-supported dist found");
+    }
+    else
+    {
+      switch (dist)
+      {
+        case PE:
+        {
+          GEN_QUALIFICATION_R_VEC(a, double, n, rv);
+        }
+        break;
+        case NORM:
+        {
+          rv.push_back(CLIP(a, 0, 1));
+          std::normal_distribution<double> d(a, b);
+          GEN_QUALIFICATION_R_VEC(gen, d, n, rv);
+        }
+        break;
+        default:
+          ASSERT(false, "Un-supported dist found");
       }
     }
   }
   return rv;
 }
 
-
 /*
  * Parses and floods probabilties of basic elements
  */
 /*!private*/
 std::vector<std::vector<std::string>>
-FTAUtils::Quantification::beProb(FTAUtils::Parser parser, int n_sample, int seed,
-                            _analysis_t analysis, std::vector<double> intmes,
-                            bool uncert)
+FTAUtils::Quantification::beProb(FTAUtils::Parser parser,
+                                 int n_sample,
+                                 int seed,
+                                 _analysis_t analysis,
+                                 std::vector<double> intmes,
+                                 bool uncert)
 /*!endprivate*/
 {
   std::vector<std::string> line;
   std::vector<std::vector<std::string>> lines;
-  while (true) {
+  while (true)
+  {
     line = parser.yieldLine();
 
     // Stop if no new line to process
@@ -311,8 +347,8 @@ FTAUtils::Quantification::beProb(FTAUtils::Parser parser, int n_sample, int seed
 
     // Stash name, probability vector
     double b = line.size() > 3 ? stod(line[3]) : 0;
-    _b_nodes[line[0]] = getProbVector(_str2dist[line[1]], stod(line[2]), b,
-                                      n_sample, seed, intmes, analysis, uncert);
+    _b_nodes[line[0]] = getProbVector(
+        _str2dist[line[1]], stod(line[2]), b, n_sample, seed, intmes, analysis, uncert);
   }
 
   return lines;
@@ -329,25 +365,30 @@ FTAUtils::Quantification::beProb(FTAUtils::Parser parser, int n_sample, int seed
  *       2. Sets the vector cutSetProb
  */
 /*!private*/
-std::vector<double> *FTAUtils::Quantification::cutSetProbWDigest(std::set<std::set<std::string>> cut_sets,
-                                                  int n, bool only_min_max)
+std::vector<double> *
+FTAUtils::Quantification::cutSetProbWDigest(std::set<std::set<std::string>> cut_sets,
+                                            int n,
+                                            bool only_min_max)
 /*!endprivate*/
 {
-  std::vector<double> *digest = new std::vector<double>[3];
+  std::vector<double> * digest = new std::vector<double>[3];
 
   // Digest 2: Generate power set to generate all possible combinations
   std::vector<std::vector<double>> ps_p;
   int pow_set_size = pow(2, cut_sets.size());
   // Start from 1 as NULL set is not needed
-  for (int index = 1; index < pow_set_size; index++) {
+  for (int index = 1; index < pow_set_size; index++)
+  {
     std::set<std::string> power_set_row;
-    for (int j = 0; j < cut_sets.size(); j++) {
+    for (int j = 0; j < cut_sets.size(); j++)
+    {
       // Check if jth bit in the index is set
       // If set then form row of power set
-      if (index & (1 << j)) {
+      if (index & (1 << j))
+      {
         std::set<std::string> j_elem = *next(cut_sets.begin(), j);
-        for (std::set<std::string>::iterator it = j_elem.begin(); it != j_elem.end();
-             ++it) {
+        for (std::set<std::string>::iterator it = j_elem.begin(); it != j_elem.end(); ++it)
+        {
           power_set_row.insert(*it);
         }
       }
@@ -356,28 +397,31 @@ std::vector<double> *FTAUtils::Quantification::cutSetProbWDigest(std::set<std::s
     bool is_positive = (__builtin_popcount(index) % 2);
     std::vector<double> cut_prob = cutSetRowProb(power_set_row, n, is_positive);
     ps_p.push_back(cut_prob);
-
   }
 
   // Digest 0, 1, 2
   // Avoiding an extra function call to interm event like in the python
   // counterpart for performance reasons (loop merging)
   _cut_set_prob = computeCutSetProb(cut_sets, n);
-  for (int index = 0; index < n; index++) {
+  for (int index = 0; index < n; index++)
+  {
     double min_max = 0;
     double upper_bound = 1;
     double top_rare = 0;
-    if (!only_min_max) {
+    if (!only_min_max)
+    {
       for (std::vector<std::vector<double>>::iterator it = _cut_set_prob.begin();
-           it != _cut_set_prob.end(); ++it) {
+           it != _cut_set_prob.end();
+           ++it)
+      {
         top_rare += (*it)[index];
         upper_bound *= 1 - (*it)[index];
       }
       digest[1].push_back(1 - upper_bound);
       digest[2].push_back(top_rare);
     }
-    for (std::vector<std::vector<double>>::iterator it = ps_p.begin(); it != ps_p.end();
-         ++it) {
+    for (std::vector<std::vector<double>>::iterator it = ps_p.begin(); it != ps_p.end(); ++it)
+    {
       min_max += (*it)[index];
     }
     digest[0].push_back(min_max);
@@ -392,8 +436,11 @@ std::vector<double> *FTAUtils::Quantification::cutSetProbWDigest(std::set<std::s
  */
 /*!private*/
 std::vector<std::vector<double>>
-FTAUtils::Quantification::computeCutSetProb(std::set<std::set<std::string>> cut_sets, int n, bool bypass,
-                                  std::string bypass_key, double bypass_value)
+FTAUtils::Quantification::computeCutSetProb(std::set<std::set<std::string>> cut_sets,
+                                            int n,
+                                            bool bypass,
+                                            std::string bypass_key,
+                                            double bypass_value)
 /*!endprivate*/
 {
   // For each row in cut set, compute:
@@ -401,30 +448,34 @@ FTAUtils::Quantification::computeCutSetProb(std::set<std::set<std::string>> cut_
   //    probability analysis for each basic element
   std::vector<std::vector<double>> quant;
   for (std::set<std::set<std::string>>::iterator row = cut_sets.begin(); row != cut_sets.end();
-       ++row) {
-    quant.push_back(
-        cutSetRowProb(*row, n, true, bypass, bypass_key, bypass_value));
+       ++row)
+  {
+    quant.push_back(cutSetRowProb(*row, n, true, bypass, bypass_key, bypass_value));
   }
   return quant;
 }
 
 /*!private*/
-std::vector<double> FTAUtils::Quantification::cutSetRowProb(std::set<std::string> row, int n,
-                                             bool sign_positive, bool bypass,
-                                             std::string bypass_key,
-                                             double bypass_value)
+std::vector<double>
+FTAUtils::Quantification::cutSetRowProb(std::set<std::string> row,
+                                        int n,
+                                        bool sign_positive,
+                                        bool bypass,
+                                        std::string bypass_key,
+                                        double bypass_value)
 /*!endprivate*/
 {
   std::vector<double> prob;
   double sign_m = sign_positive ? 1 : -1;
-  for (int index = 0; index < n; index++) {
+  for (int index = 0; index < n; index++)
+  {
     double value = 1;
-    for (std::set<std::string>::iterator col = row.begin(); col != row.end(); ++col) {
-      ASSERT(_b_nodes.find(*col) != _b_nodes.end(),
-             "'%s' key not found in _b_nodes", (*col).c_str());
+    for (std::set<std::string>::iterator col = row.begin(); col != row.end(); ++col)
+    {
+      ASSERT(
+          _b_nodes.find(*col) != _b_nodes.end(), "'%s' key not found in _b_nodes", (*col).c_str());
 
-      double bv = (bypass && (bypass_key == *col)) ? bypass_value
-                                                   : _b_nodes[*col][index];
+      double bv = (bypass && (bypass_key == *col)) ? bypass_value : _b_nodes[*col][index];
       value = getGateProb(value, bv, true);
     }
     prob.push_back(value * sign_m);
@@ -438,25 +489,25 @@ std::vector<double> FTAUtils::Quantification::cutSetRowProb(std::set<std::string
  * OR  => (1 - a) * (1 - b)
  */
 /*!private*/
-double FTAUtils::Quantification::getGateProb(double a, double b, bool is_and)
-/*!endprivate*/
-{
-  return is_and ? a * b : (1.0 - a) * (1.0 - b);
-}
+double
+FTAUtils::Quantification::getGateProb(double a, double b, bool is_and)
+/*!endprivate*/ { return is_and ? a * b : (1.0 - a) * (1.0 - b); }
 
 /*
  * Computes cut-set Fussel-Vesely Important measures
  */
 /*!private*/
-std::vector<std::vector<double>> FTAUtils::Quantification::minCutIM(std::vector<double> upper_bound)
+std::vector<std::vector<double>>
+FTAUtils::Quantification::minCutIM(std::vector<double> upper_bound)
 /*!endprivate*/
 {
   std::vector<std::vector<double>> mc_i_m;
-  for (int row = 0; row < _cut_set_prob.size(); row++) {
+  for (int row = 0; row < _cut_set_prob.size(); row++)
+  {
     std::vector<double> mc_i_m_row;
-    for (int col = 0; col < upper_bound.size(); col++) {
-      mc_i_m_row.push_back((100.0 * _cut_set_prob[row][col]) /
-                           upper_bound[col]);
+    for (int col = 0; col < upper_bound.size(); col++)
+    {
+      mc_i_m_row.push_back((100.0 * _cut_set_prob[row][col]) / upper_bound[col]);
     }
     mc_i_m.push_back(mc_i_m_row);
   }
@@ -469,17 +520,20 @@ std::vector<std::vector<double>> FTAUtils::Quantification::minCutIM(std::vector<
  * WARNING: This consumes _b_nodes and then overwrites it
  */
 /*!private*/
-void FTAUtils::Quantification::computeRisk(int n, std::vector<double> hazard)
+void
+FTAUtils::Quantification::computeRisk(int n, std::vector<double> hazard)
 /*!endprivate*/
 {
   for (std::map<std::string, std::vector<double>>::iterator bn_it = _b_nodes.begin();
-       bn_it != _b_nodes.end(); ++bn_it) {
+       bn_it != _b_nodes.end();
+       ++bn_it)
+  {
     double risk = 0;
-    for (int index = 0; index < n; index++) {
+    for (int index = 0; index < n; index++)
+    {
       risk += bn_it->second[index] * hazard[index];
     }
-    _b_nodes[bn_it->first] =
-        getProbVector(PE, risk, 0, 1, 0, std::vector<double>(), RISK, false);
+    _b_nodes[bn_it->first] = getProbVector(PE, risk, 0, 1, 0, std::vector<double>(), RISK, false);
   }
 }
 
@@ -487,13 +541,16 @@ void FTAUtils::Quantification::computeRisk(int n, std::vector<double> hazard)
  * Function for top event fragility
  */
 /*!private*/
-std::vector<double> FTAUtils::Quantification::fragility(std::set<std::set<std::string>> cut_sets, int n,
-                                         std::vector<double> im_bins, double &mu,
-                                         double &sigma)
+std::vector<double>
+FTAUtils::Quantification::fragility(std::set<std::set<std::string>> cut_sets,
+                                    int n,
+                                    std::vector<double> im_bins,
+                                    double & mu,
+                                    double & sigma)
 /*!endprivate*/
 {
   // 1. Calculate TOP event fragility using min-max approach (exact) {digest[0]}
-  std::vector<double> *digest = cutSetProbWDigest(cut_sets, n, true);
+  std::vector<double> * digest = cutSetProbWDigest(cut_sets, n, true);
 
   // 2. lognormal parameters of TOP Event fragility
   // solveLnParams(im_bins, digest[0], mu, sigma);
@@ -517,24 +574,31 @@ std::vector<double> FTAUtils::Quantification::fragility(std::set<std::set<std::s
  */
 /*!private*/
 std::map<std::string, std::vector<std::vector<double>>>
-FTAUtils::Quantification::beIM(std::set<std::set<std::string>> cut_sets, int n,
-                     std::vector<double> upper_bound, std::vector<int> &count_v)
+FTAUtils::Quantification::beIM(std::set<std::set<std::string>> cut_sets,
+                               int n,
+                               std::vector<double> upper_bound,
+                               std::vector<int> & count_v)
 /*!endprivate*/
 {
   std::map<std::string, std::vector<std::vector<double>>> stats;
   for (std::map<std::string, std::vector<double>>::iterator bn_it = _b_nodes.begin();
-       bn_it != _b_nodes.end(); ++bn_it) {
+       bn_it != _b_nodes.end();
+       ++bn_it)
+  {
     // Generate available vector to save computation on per index loop
     std::vector<bool> available;
     int count = 0;
     for (std::set<std::set<std::string>>::iterator cs_it = cut_sets.begin();
-         cs_it != cut_sets.end(); ++cs_it) {
+         cs_it != cut_sets.end();
+         ++cs_it)
+    {
       bool is_a = cs_it->find(bn_it->first) != cs_it->end();
       count += is_a;
       available.push_back(is_a);
     }
     count_v.push_back(count);
-    if (count != 0) {
+    if (count != 0)
+    {
       std::vector<double> fv, rrr, rir, rri, rii, bi;
 
       std::vector<std::vector<double>> mc_p1 =
@@ -543,11 +607,13 @@ FTAUtils::Quantification::beIM(std::set<std::set<std::string>> cut_sets, int n,
           computeCutSetProb(cut_sets, n, true, bn_it->first, 0);
 
       // OR it with loop merging
-      for (int index = 0; index < n; index++) {
+      for (int index = 0; index < n; index++)
+      {
         double f0_val = 1;
         double f1_val = 1;
         double fi_val = 1;
-        for (int row = 0; row < mc_p0.size(); row++) {
+        for (int row = 0; row < mc_p0.size(); row++)
+        {
           f0_val *= 1 - mc_p0[row][index];
           f1_val *= 1 - mc_p1[row][index];
           if (available[row])
@@ -571,18 +637,42 @@ FTAUtils::Quantification::beIM(std::set<std::set<std::string>> cut_sets, int n,
       Stats rir_stats(rir);
       Stats rii_stats(rii);
       Stats bi_stats(bi);
-      stats["fv"].push_back({fv_stats._pe, fv_stats._mean, fv_stats._median,
-                             fv_stats._sd, fv_stats._p5, fv_stats._p95});
-      stats["rrr"].push_back({rrr_stats._pe, rrr_stats._mean, rrr_stats._median,
-                              rrr_stats._sd, rrr_stats._p5, rrr_stats._p95});
-      stats["rri"].push_back({rri_stats._pe, rri_stats._mean, rri_stats._median,
-                              rri_stats._sd, rri_stats._p5, rri_stats._p95});
-      stats["rir"].push_back({rir_stats._pe, rir_stats._mean, rir_stats._median,
-                              rir_stats._sd, rir_stats._p5, rir_stats._p95});
-      stats["rii"].push_back({rii_stats._pe, rii_stats._mean, rii_stats._median,
-                              rii_stats._sd, rii_stats._p5, rii_stats._p95});
-      stats["bi"].push_back({bi_stats._pe, bi_stats._mean, bi_stats._median,
-                             bi_stats._sd, bi_stats._p5, bi_stats._p95});
+      stats["fv"].push_back({fv_stats._pe,
+                             fv_stats._mean,
+                             fv_stats._median,
+                             fv_stats._sd,
+                             fv_stats._p5,
+                             fv_stats._p95});
+      stats["rrr"].push_back({rrr_stats._pe,
+                              rrr_stats._mean,
+                              rrr_stats._median,
+                              rrr_stats._sd,
+                              rrr_stats._p5,
+                              rrr_stats._p95});
+      stats["rri"].push_back({rri_stats._pe,
+                              rri_stats._mean,
+                              rri_stats._median,
+                              rri_stats._sd,
+                              rri_stats._p5,
+                              rri_stats._p95});
+      stats["rir"].push_back({rir_stats._pe,
+                              rir_stats._mean,
+                              rir_stats._median,
+                              rir_stats._sd,
+                              rir_stats._p5,
+                              rir_stats._p95});
+      stats["rii"].push_back({rii_stats._pe,
+                              rii_stats._mean,
+                              rii_stats._median,
+                              rii_stats._sd,
+                              rii_stats._p5,
+                              rii_stats._p95});
+      stats["bi"].push_back({bi_stats._pe,
+                             bi_stats._mean,
+                             bi_stats._median,
+                             bi_stats._sd,
+                             bi_stats._p5,
+                             bi_stats._p95});
     }
   }
   return stats;

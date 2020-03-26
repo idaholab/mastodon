@@ -10,36 +10,43 @@
 
 namespace FTAUtils
 {
-  class Parser;
-  class Quantification;
-  class FaultTree;
-  class CException;
-  std::string trim(const std::string& str);
-  std::string str2Upper(const std::string& str_in, bool trim_input=false);
-  double interpolate( std::vector <std::vector<double>> data, double x, bool extrapolate );
-  double normalCDF(double x); // Phi(-∞, x) aka N(x)
-  double normalCDF ( double x, double mu, double sigma );
-  double lnCDF ( double x, double mu, double sigma );
-}
+class Parser;
+class Quantification;
+class FaultTree;
+class CException;
+std::string trim(const std::string & str);
+std::string str2Upper(const std::string & str_in, bool trim_input = false);
+double interpolate(std::vector<std::vector<double>> data, double x, bool extrapolate);
+double normalCDF(double x); // Phi(-∞, x) aka N(x)
+double normalCDF(double x, double mu, double sigma);
+double lnCDF(double x, double mu, double sigma);
+} // namespace FTAUtils
 
 // Fault Tree class
-class FTAUtils::FaultTree {
+class FTAUtils::FaultTree
+{
 public:
-  enum _operator_t { AND, OR, UNDEF };
+  enum _operator_t
+  {
+    AND,
+    OR,
+    UNDEF
+  };
 
-  struct _node {
+  struct _node
+  {
     std::string _name;
     _operator_t _op;
     std::vector<std::string> _child;
-    _node(std::string name, _operator_t op) {
+    _node(std::string name, _operator_t op)
+    {
       this->_name = name;
       this->_op = op;
     }
   };
 
   FaultTree(std::string file_name, std::string root = "");
-  FaultTree(std::set<std::set<std::string>> & sets_link,
-            std::map<std::string, _node *> _node_base);
+  FaultTree(std::set<std::set<std::string>> & sets_link, std::map<std::string, _node *> _node_base);
   ~FaultTree();
   std::string getRoot();
   void printSets();
@@ -62,38 +69,38 @@ private:
   std::set<std::set<std::string>> _sets;
 
   // Member functions
-  // void buildTree(Parser parser);
-  // void computeMinimumCutSets();
   _operator_t str2Operator(std::string op);
   void rmSets();
-  _node *getNode(std::string name);
-  void cutSetsExpand(_node *node);
+  _node * getNode(std::string name);
+  void cutSetsExpand(_node * node);
   void removeSubsets();
 };
 
-class FTAUtils::Parser {
-   public:
-      // Supported formats for parsing
-      enum parseFormatT {
-         FORMAT_CSV,
-         FORMAT_UNDEF
-      };
+class FTAUtils::Parser
+{
+public:
+  // Supported formats for parsing
+  enum parseFormatT
+  {
+    FORMAT_CSV,
+    FORMAT_UNDEF
+  };
 
-      Parser( std::string fileName, parseFormatT format );
-      ~Parser();
-      std::vector <std::string> yieldLine();
-      std::vector <std::vector<std::string>> yieldLines();
+  Parser(std::string fileName, parseFormatT format);
+  ~Parser();
+  std::vector<std::string> yieldLine();
+  std::vector<std::vector<std::string>> yieldLines();
 
-   private:
-      // Handle to file
-      std::ifstream*  fileP;
+private:
+  // Handle to file
+  std::ifstream * fileP;
 };
 
 class FTAUtils::CException
 {
 public:
-    std::string msg;
-    CException(std::string s) : msg(s) {}
+  std::string msg;
+  CException(std::string s) : msg(s) {}
 };
 
 #endif // _FAULT_TREE_H
