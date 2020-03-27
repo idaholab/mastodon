@@ -49,9 +49,9 @@ public:
   FaultTree(std::set<std::set<std::string>> & sets_link, std::map<std::string, _node *> _node_base);
   ~FaultTree();
   std::string getRoot();
-  void printSets();
-  static void printSets(std::set<std::set<std::string>> sets);
-  static void printRow(std::set<std::string> row);
+  // void printSets();
+  // static void printSets(std::set<std::set<std::string>> sets);
+  // static void printRow(std::set<std::string> row);
   std::set<std::set<std::string>> getCutSets();
   std::map<std::string, _node *> buildTree(Parser parser);
   std::set<std::set<std::string>> computeMinimumCutSets();

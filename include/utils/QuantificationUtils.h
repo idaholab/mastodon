@@ -114,11 +114,13 @@ private:
       p_max = (p_max > (vec.size() - 1)) ? vec.size() : p_max;
       return vec[p_min - 1] + ((p_i - p_min) * (vec[p_max - 1] - vec[p_min - 1]));
     }
+    /*
     void printStats()
     {
       std::cout << "Mean: " << _mean << ", Median: " << _median << ", SD: " << _sd
                 << ", 5th: " << _p5 << ", 95th: " << _p95 << "\n\n";
     }
+    */
   };
 
   // TODO: 3 of the following are not supported as they need 1 arg rather than 2

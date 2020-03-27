@@ -305,9 +305,9 @@ FTAUtils::FaultTree::getRoot()
 /*!endpublic*/ { return _root; }
 
 /*!public*/
-void
-FTAUtils::FaultTree::printSets(std::set<std::set<std::string>> sets)
+// void FTAUtils::FaultTree::printSets(std::set<std::set<std::string>> sets)
 /*!endpublic*/
+/*
 {
   std::cout << "------------- SETS BEGIN ----------------- " << std::endl;
   for (std::set<std::set<std::string>>::iterator row = sets.begin(); row != sets.end(); ++row)
@@ -317,22 +317,26 @@ FTAUtils::FaultTree::printSets(std::set<std::set<std::string>> sets)
   }
   std::cout << "-------------- SETS END ------------------ " << std::endl;
 }
+*/
 
 /*!public*/
-void
-FTAUtils::FaultTree::printSets()
-/*!endpublic*/ { printSets(_sets); }
+// void
+// FTAUtils::FaultTree::printSets()
+/*!endpublic*/ 
+// { printSets(_sets); }
 
 /*!public*/
-void
-FTAUtils::FaultTree::printRow(std::set<std::string> row)
+// void
+// FTAUtils::FaultTree::printRow(std::set<std::string> row)
 /*!endpublic*/
+/*
 {
   for (std::set<std::string>::iterator col = row.begin(); col != row.end(); ++col)
   {
     std::cout << *col << ", ";
   }
 }
+*/
 
 /*
  * Function returns cut sets at the given point
