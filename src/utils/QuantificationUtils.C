@@ -17,7 +17,6 @@ FTAUtils::Quantification::Quantification(std::map<std::string, vector_double> & 
                                          int n_sample,
                                          int seed)
 {
-  //---------------- SAVE PARAMETERS ------------------------------------------
   std::vector<double> params_double1;
   params_double1.push_back(im_lower);
   params_double1.push_back(im_upper);
@@ -31,55 +30,44 @@ FTAUtils::Quantification::Quantification(std::map<std::string, vector_double> & 
   params_bool.insert(std::pair<std::string, bool>("uncertainty", uncertainty));
   params_analysis_t.insert(std::pair<std::string, _analysis_t>("analysis", analysis));
 
-  //---------------- COMPUTE --------------------------------------------------
-  // Construct the fault tree with MOCUS algo for minimal cut sets
+
   FTAUtils::FaultTree ft = FTAUtils::FaultTree(events_file, root);
   Parser parser_events = Parser(events_file, Parser::FORMAT_CSV);
   vector_string lines_events = parser_events.yieldLines();
   set_string cut_sets = ft.getCutSets();
   params_string.insert(std::pair<std::string, vector_string>("events_files", lines_events));
 
-  // Read basic events file
   FTAUtils::Parser parser_event_prob =
       FTAUtils::Parser(events_prob_file, FTAUtils::Parser::FORMAT_CSV);
   vector_string lines_events_prob;
 
   if (analysis == FRAGILITY)
   {
-    // Read and interpolate hazard curve
     FTAUtils::Parser parser_hazard = FTAUtils::Parser(hazard_file, FTAUtils::Parser::FORMAT_CSV);
     vector_string lines_hazard = parser_hazard.yieldLines();
     vector_double hazard = FTAUtils::Quantification::linesToDouble(lines_hazard);
     params_double.insert(pair_string_double("hazard", hazard));
 
-    // List of Intensity Measure bin values
     std::vector<double> im_bins = getBinMeans(im_lower, im_upper, n_bins);
 
-    // List of Intensity Measure bin values
     std::vector<double> hazard_freq = hazInterp(hazard, im_bins);
 
-    // Dictionary of basic events for fragility input
     lines_events_prob = beProb(parser_event_prob, n_sample, seed, analysis, im_bins, uncertainty);
 
-    // Top event fragility (lognormal parameters)
     double mu, sigma;
     fragility(cut_sets, n_bins, im_bins, mu, sigma);
 
-    // Dictionary of basic events risk (convoluting fragility and hazard)
     computeRisk(n_bins, hazard_freq);
   }
   else
   {
-    // Dictionary of basic events risk (risk inputs)
     lines_events_prob =
         beProb(parser_event_prob, n_sample, seed, analysis, std::vector<double>(), uncertainty);
   }
 
   params_string.insert(std::pair<std::string, vector_string>("basic_events", lines_events_prob));
 
-  // Calculate minimal cut sets probability
-  // Digest cut set probability to unified probability
-  // Adding 1 to accomodate mean as 0th element
+
   std::vector<double> * digest = cutSetProbWDigest(cut_sets, n_sample + 1);
   vector_double mc_im = minCutIM(digest[1]);
   Stats s0(digest[0]);
@@ -88,7 +76,6 @@ FTAUtils::Quantification::Quantification(std::map<std::string, vector_double> & 
   std::vector<int> count_v;
   std::map<std::string, vector_double> be_stats = beIM(cut_sets, n_sample + 1, digest[1], count_v);
 
-  // return the FTA top event risk
   std::vector<double> fta_0;
   vector_double fta_1;
   fta_0.push_back(s0._pe);
@@ -97,12 +84,10 @@ FTAUtils::Quantification::Quantification(std::map<std::string, vector_double> & 
   fta_1.push_back(fta_0);
   params_double.insert(std::make_pair("fta", fta_1));
 
-  // Return the Risk Reduction Ratio for B1, B2, B3, B4, B5
   params_double.insert(pair_string_double("fv", be_stats["fv"]));
   params_double.insert(pair_string_double("rrr", be_stats["rrr"]));
   params_double.insert(pair_string_double("rir", be_stats["rir"]));
 
-  // Return the Risk Reduction Difference for B1, B2, B3, B4, B5
   params_double.insert(pair_string_double("rri", be_stats["rri"]));
   params_double.insert(pair_string_double("rii", be_stats["rii"]));
   params_double.insert(pair_string_double("bi", be_stats["bi"]));
@@ -112,10 +97,8 @@ std::vector<double>
 FTAUtils::Quantification::hazInterp(vector_double hazard, std::vector<double> im_bins)
 {
   std::vector<double> data;
-  // Convert all hazard values to log10
   for (int index = 0; index < hazard.size(); index++)
   {
-    // ASSERT
     if (hazard[index].size() != 2)
     {
       fprintf(stderr,
@@ -130,7 +113,6 @@ FTAUtils::Quantification::hazInterp(vector_double hazard, std::vector<double> im
     hazard[index][1] = log10(hazard[index][1]);
   }
 
-  // Interpolate
   for (int index = 0; index < im_bins.size(); index++)
   {
     data.push_back(pow(10, interpolate(hazard, log10(im_bins[index]), true)));
@@ -178,7 +160,6 @@ FTAUtils::genQuantificationRVec(double dataPoint, int n, std::vector<double> rv)
 {
   for (int index = 0; index < n; index++)
   {
-    // double dataPoint = double(gen);
     rv.push_back(FTAUtils::Clip(dataPoint, 0.0, 1.0));
   }
   return rv;
@@ -200,7 +181,6 @@ FTAUtils::Quantification::getProbVector(_dist_t dist,
 
   if (analysis == FRAGILITY)
   {
-    // ASSERT
     if (dist != LNORM)
     {
       fprintf(stderr,
@@ -234,7 +214,6 @@ FTAUtils::Quantification::getProbVector(_dist_t dist,
         break;
         default:
         {
-          // ASSERT
           fprintf(stderr,
                   "[ASSERT] In File: %s, Line: %d => "
                   "Un-supported dist found.\n",
@@ -265,7 +244,6 @@ FTAUtils::Quantification::getProbVector(_dist_t dist,
         break;
         default:
         {
-          // ASSERT
           fprintf(stderr,
                   "[ASSERT] In File: %s, Line: %d => "
                   "Un-supported dist found.\n",
@@ -293,13 +271,11 @@ FTAUtils::Quantification::beProb(FTAUtils::Parser parser,
   {
     line = parser.yieldLine();
 
-    // Stop if no new line to process
     if (line.size() != 0)
       lines.push_back(line);
     else
       break;
 
-    // Stash name, probability vector
     double b = line.size() > 3 ? stod(line[3]) : 0;
     _b_nodes[line[0]] = getProbVector(
         _str2dist[line[1]], stod(line[2]), b, n_sample, seed, intmes, analysis, uncert);
@@ -313,17 +289,14 @@ FTAUtils::Quantification::cutSetProbWDigest(set_string cut_sets, int n, bool onl
 {
   std::vector<double> * digest = new std::vector<double>[3];
 
-  // Digest 2: Generate power set to generate all possible combinations
   vector_double ps_p;
   int pow_set_size = pow(2, cut_sets.size());
-  // Start from 1 as NULL set is not needed
   for (int index = 1; index < pow_set_size; index++)
   {
     std::set<std::string> power_set_row;
     for (int j = 0; j < cut_sets.size(); j++)
     {
-      // Check if jth bit in the index is set
-      // If set then form row of power set
+
       if (index & (1 << j))
       {
         std::set<std::string> j_elem = *next(cut_sets.begin(), j);
@@ -333,15 +306,12 @@ FTAUtils::Quantification::cutSetProbWDigest(set_string cut_sets, int n, bool onl
         }
       }
     }
-    // For elements taken n at a time, if n is odd, positive else negative
     bool is_positive = (__builtin_popcount(index) % 2);
     std::vector<double> cut_prob = cutSetRowProb(power_set_row, n, is_positive);
     ps_p.push_back(cut_prob);
   }
 
-  // Digest 0, 1, 2
-  // Avoiding an extra function call to interm event like in the python
-  // counterpart for performance reasons (loop merging)
+
   _cut_set_prob = computeCutSetProb(cut_sets, n);
   for (int index = 0; index < n; index++)
   {
@@ -372,9 +342,7 @@ vector_double
 FTAUtils::Quantification::computeCutSetProb(
     set_string cut_sets, int n, bool bypass, std::string bypass_key, double bypass_value)
 {
-  // For each row in cut set, compute:
-  // 1. For each sample in the generated vector, compute AND gate
-  //    probability analysis for each basic element
+
   vector_double quant;
   for (set_string::iterator row = cut_sets.begin(); row != cut_sets.end(); ++row)
   {
@@ -398,7 +366,6 @@ FTAUtils::Quantification::cutSetRowProb(std::set<std::string> row,
     double value = 1;
     for (std::set<std::string>::iterator col = row.begin(); col != row.end(); ++col)
     {
-      // ASSERT
       if (_b_nodes.find(*col) == _b_nodes.end())
       {
         fprintf(stderr,
@@ -460,14 +427,9 @@ std::vector<double>
 FTAUtils::Quantification::fragility(
     set_string cut_sets, int n, std::vector<double> im_bins, double & mu, double & sigma)
 {
-  // 1. Calculate TOP event fragility using min-max approach (exact) {digest[0]}
   std::vector<double> * digest = cutSetProbWDigest(cut_sets, n, true);
 
-  // 2. lognormal parameters of TOP Event fragility
-  // solveLnParams(im_bins, digest[0], mu, sigma);
 
-  // Use the maximizelikehood function instead of solver function
-  // Use SGD for optimization
   std::vector<double> loc_space = {0.01, 2};
   std::vector<double> sca_space = {0.01, 1};
   std::vector<double> max_values = MastodonUtils::maximizeLogLikelihood(
@@ -475,7 +437,6 @@ FTAUtils::Quantification::fragility(
   mu = max_values[0];
   sigma = max_values[1];
 
-  // TODO: 3. TOP event Fragility plot
   return digest[0];
 }
 
@@ -490,7 +451,6 @@ FTAUtils::Quantification::beIM(set_string cut_sets,
        bn_it != _b_nodes.end();
        ++bn_it)
   {
-    // Generate available vector to save computation on per index loop
     std::vector<bool> available;
     int count = 0;
     for (set_string::iterator cs_it = cut_sets.begin(); cs_it != cut_sets.end(); ++cs_it)
@@ -507,7 +467,6 @@ FTAUtils::Quantification::beIM(set_string cut_sets,
       vector_double mc_p1 = computeCutSetProb(cut_sets, n, true, bn_it->first, 1);
       vector_double mc_p0 = computeCutSetProb(cut_sets, n, true, bn_it->first, 0);
 
-      // OR it with loop merging
       for (int index = 0; index < n; index++)
       {
         double f0_val = 1;
@@ -531,7 +490,6 @@ FTAUtils::Quantification::beIM(set_string cut_sets,
         rii.push_back(f1_val - upper_bound[index]);
         bi.push_back(f1_val - f0_val);
       }
-      // Calculate stats for current row and stash
       Stats fv_stats(fv);
       Stats rrr_stats(rrr);
       Stats rri_stats(rri);
