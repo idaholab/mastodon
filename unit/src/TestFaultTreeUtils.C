@@ -12,9 +12,11 @@
 // QUANTIFICATIONUTILS includes
 #include "FaultTreeUtils.h"
 
+typedef FTAUtils::FaultTree::_node ft_node_test;
+
 // Helper to make sure the test tree is correct.
 void
-assertTree(std::map<std::string, FTAUtils::FaultTree::_node *> tree_node)
+assertTree(std::map<std::string, ft_node_test *> tree_node)
 {
   // TOP
   EXPECT_EQ(tree_node["TOP"]->_name, "TOP");
@@ -65,17 +67,17 @@ assertTree(std::map<std::string, FTAUtils::FaultTree::_node *> tree_node)
 
 // Helper to make sure the mocus is correct.
 void
-assertMocus(std::set<std::set<std::string>> tree_mocus)
+assertMocus(set_string tree_mocus)
 {
 
-  std::set<std::set<std::string>>::iterator it_tree_mocus;
+  set_string::iterator it_tree_mocus;
   std::set<std::string> tree_mocus_children, set_mocus, set_gold;
   std::set<std::string>::iterator it_tree_mocus_children;
 
-  std::set<std::set<std::string>> matrix_gold = {
+  set_string matrix_gold = {
       {"B2", "B1"}, {"B4", "B1"}, {"B1", "B5", "B3"}, {"B5", "B2", "B3"}, {"B4", "B5", "B3"}};
 
-  std::set<std::set<std::string>>::iterator it_matrix_gold = matrix_gold.begin();
+  set_string::iterator it_matrix_gold = matrix_gold.begin();
 
   EXPECT_EQ(tree_mocus.size(), matrix_gold.size());
 
@@ -91,11 +93,11 @@ assertMocus(std::set<std::set<std::string>> tree_mocus)
 }
 
 // Create a test event list.
-std::map<std::string, FTAUtils::FaultTree::_node *>
+std::map<std::string, ft_node_test *>
 eventList()
 {
 
-  std::map<std::string, FTAUtils::FaultTree::_node *> _node_d_b;
+  std::map<std::string, ft_node_test *> _node_d_b;
 
   std::vector<std::vector<std::string>> line = {{"TOP", "AND", "GATE1", "GATE2"},
                                                 {"GATE1", "OR", "FT-N/m-1", "FT-N/m-2", "FT-N/m-3"},
@@ -115,7 +117,7 @@ eventList()
 
   for (int i = 0; i < line.size(); i++)
   {
-    FTAUtils::FaultTree::_node * node = new FTAUtils::FaultTree::_node(line[i][0], op[i]);
+    ft_node_test * node = new ft_node_test(line[i][0], op[i]);
     // Add children
     for (int j = 2; j < line[i].size(); j++)
       node->_child.push_back(line[i][j]);
@@ -127,7 +129,7 @@ eventList()
 }
 
 // For input
-std::vector<FileName> file_lists_fault_tree_1, file_lists_fault_tree_2, file_lists_fault_tree_3;
+std::vector<FileName> file_lists;
 
 TEST(FTAUtils, FaultTree)
 {
@@ -139,9 +141,9 @@ TEST(FTAUtils, FaultTree)
 
   try
   {
-    file_lists_fault_tree_1 = {"not_a_valid_filename.txt", ""};
+    file_lists = {"not_a_valid_filename.txt", ""};
 
-    FTAUtils::FaultTree(file_lists_fault_tree_1[0], file_lists_fault_tree_1[1]);
+    FTAUtils::FaultTree(file_lists[0], file_lists[1]);
   }
   catch (FTAUtils::CException e)
   {
@@ -154,23 +156,21 @@ TEST(FTAUtils, FaultTree)
 
   // ---------------- Test creating tree from list ----------------
 
-  std::map<std::string, FTAUtils::FaultTree::_node *> tree_node_from_list = eventList();
-  std::set<std::set<std::string>> tree_mocus_from_list;
+  std::map<std::string, ft_node_test *> tree_node_from_list = eventList();
+  set_string tree_mocus_from_list;
   FTAUtils::FaultTree ft_from_list = FTAUtils::FaultTree(tree_mocus_from_list, tree_node_from_list);
   assertTree(tree_node_from_list);
   assertMocus(tree_mocus_from_list);
 
   // ---------------- Test creating tree from file ----------------
 
-  file_lists_fault_tree_2 = {"logic2.txt", ""};
+  file_lists = {"logic2.txt", ""};
 
-  FTAUtils::FaultTree ft_from_file_2 =
-      FTAUtils::FaultTree(file_lists_fault_tree_2[0], file_lists_fault_tree_2[1]);
-  FTAUtils::Parser parser_events_2 =
-      FTAUtils::Parser(file_lists_fault_tree_2[0], FTAUtils::Parser::FORMAT_CSV);
-  std::map<std::string, FTAUtils::FaultTree::_node *> tree_node_from_file =
+  FTAUtils::FaultTree ft_from_file_2 = FTAUtils::FaultTree(file_lists[0], file_lists[1]);
+  FTAUtils::Parser parser_events_2 = FTAUtils::Parser(file_lists[0], FTAUtils::Parser::FORMAT_CSV);
+  std::map<std::string, ft_node_test *> tree_node_from_file =
       ft_from_file_2.buildTree(parser_events_2);
-  std::set<std::set<std::string>> tree_mocus_from_file = ft_from_file_2.computeMinimumCutSets();
+  set_string tree_mocus_from_file = ft_from_file_2.computeMinimumCutSets();
   assertTree(tree_node_from_file);
   assertMocus(tree_mocus_from_file);
 }

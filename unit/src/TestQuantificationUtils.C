@@ -13,7 +13,7 @@
 #include "QuantificationUtils.h"
 
 // For input
-std::vector<FileName> file_lists_quantification_utils;
+std::vector<FileName> file_lists_q;
 std::vector<double> IM;
 int nbins;
 bool uncertainty;
@@ -53,7 +53,7 @@ TEST(FTAUtils, Quantification)
 
   try
   {
-    file_lists_quantification_utils = {
+    file_lists_q = {
         "not_a_valid_filename.txt", "not_a_valid_filename.txt", "not_a_valid_filename.txt"};
     IM = {0.1, 4};
     nbins = 15;
@@ -63,10 +63,10 @@ TEST(FTAUtils, Quantification)
                              params_int_1,
                              params_bool_1,
                              params_analysis_t_1,
-                             file_lists_quantification_utils[0],
-                             file_lists_quantification_utils[1],
+                             file_lists_q[0],
+                             file_lists_q[1],
                              FTAUtils::Quantification::RISK,
-                             file_lists_quantification_utils[2],
+                             file_lists_q[2],
                              IM[0],
                              IM[1],
                              nbins);
@@ -82,7 +82,7 @@ TEST(FTAUtils, Quantification)
 
   try
   {
-    file_lists_quantification_utils = {"", "", ""};
+    file_lists_q = {"", "", ""};
     IM = {0.1, 4};
     nbins = 15;
 
@@ -91,10 +91,10 @@ TEST(FTAUtils, Quantification)
                              params_int_2,
                              params_bool_2,
                              params_analysis_t_2,
-                             file_lists_quantification_utils[0],
-                             file_lists_quantification_utils[1],
+                             file_lists_q[0],
+                             file_lists_q[1],
                              FTAUtils::Quantification::RISK,
-                             file_lists_quantification_utils[2],
+                             file_lists_q[2],
                              IM[0],
                              IM[1],
                              nbins);
@@ -110,7 +110,7 @@ TEST(FTAUtils, Quantification)
 
   // ############## Inputs for Fragility ##############
 
-  file_lists_quantification_utils = {"logic1.txt", "logic1_bas_events_LNORM.txt", "hazard.txt"};
+  file_lists_q = {"logic1.txt", "logic1_bas_events_LNORM.txt", "hazard.txt"};
   IM = {0.1, 4};
   nbins = 15;
   FTAUtils::Quantification(params_double_3,
@@ -118,10 +118,10 @@ TEST(FTAUtils, Quantification)
                            params_int_3,
                            params_bool_3,
                            params_analysis_t_3,
-                           file_lists_quantification_utils[0],
-                           file_lists_quantification_utils[1],
+                           file_lists_q[0],
+                           file_lists_q[1],
                            FTAUtils::Quantification::FRAGILITY,
-                           file_lists_quantification_utils[2],
+                           file_lists_q[2],
                            IM[0],
                            IM[1],
                            nbins);
@@ -172,7 +172,7 @@ TEST(FTAUtils, Quantification)
 
   try
   {
-    file_lists_quantification_utils = {"logic1.txt", "logic1_bas_events_LNORM.txt", "hazard.txt"};
+    file_lists_q = {"logic1.txt", "logic1_bas_events_LNORM.txt", "hazard.txt"};
     IM = {0.1, 4};
 
     nbins = -15;
@@ -184,10 +184,10 @@ TEST(FTAUtils, Quantification)
                              params_int_4,
                              params_bool_4,
                              params_analysis_t_4,
-                             file_lists_quantification_utils[0],
-                             file_lists_quantification_utils[1],
+                             file_lists_q[0],
+                             file_lists_q[1],
                              FTAUtils::Quantification::FRAGILITY,
-                             file_lists_quantification_utils[2],
+                             file_lists_q[2],
                              IM[0],
                              IM[1],
                              nbins);
@@ -203,14 +203,15 @@ TEST(FTAUtils, Quantification)
 
   // ############## Inputs for Risk analysis (not fragility) ##############
 
-  file_lists_quantification_utils = {"logic2.txt", "logic2_bas_events_PE.txt"};
+  file_lists_q = {"logic2.txt", "logic2_bas_events_PE.txt"};
+
   FTAUtils::Quantification(params_double_5,
                            params_string_5,
                            params_int_5,
                            params_bool_5,
                            params_analysis_t_5,
-                           file_lists_quantification_utils[0],
-                           file_lists_quantification_utils[1],
+                           file_lists_q[0],
+                           file_lists_q[1],
                            FTAUtils::Quantification::RISK);
 
   // >>>>>>>> logic Value Check <<<<<<<<
@@ -233,7 +234,9 @@ TEST(FTAUtils, Quantification)
                                                              {"B3", "PE", "0.03"},
                                                              {"B4", "PE", "0.04"},
                                                              {"B5", "PE", "0.05"}};
+
   std::vector<std::vector<std::string>> basic_events_5 = params_string_5["basic_events"];
+
   EXPECT_EQ(basic_events_5, basic_events_matrix5);
 
   // >>>>>>>> antype Value Check <<<<<<<<
@@ -254,7 +257,7 @@ TEST(FTAUtils, Quantification)
 
   // ###### Testing for input errors making sure parameters are input correctly ######
 
-  file_lists_quantification_utils = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
+  file_lists_q = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
   IM = {0.1, 4};
   nbins = 15;
   uncertainty = true;
@@ -266,10 +269,10 @@ TEST(FTAUtils, Quantification)
                            params_int_6,
                            params_bool_6,
                            params_analysis_t_6,
-                           file_lists_quantification_utils[0],
-                           file_lists_quantification_utils[1],
+                           file_lists_q[0],
+                           file_lists_q[1],
                            FTAUtils::Quantification::RISK,
-                           file_lists_quantification_utils[2],
+                           file_lists_q[2],
                            IM[0],
                            IM[1],
                            nbins,
@@ -296,7 +299,7 @@ TEST(FTAUtils, Quantification)
 
   try
   {
-    file_lists_quantification_utils = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
+    file_lists_q = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
     IM = {0.1, 4};
     nbins = 15;
     uncertainty = true;
@@ -312,10 +315,10 @@ TEST(FTAUtils, Quantification)
                              params_int_7,
                              params_bool_7,
                              params_analysis_t_7,
-                             file_lists_quantification_utils[0],
-                             file_lists_quantification_utils[1],
+                             file_lists_q[0],
+                             file_lists_q[1],
                              FTAUtils::Quantification::RISK,
-                             file_lists_quantification_utils[2],
+                             file_lists_q[2],
                              IM[0],
                              IM[1],
                              nbins,
@@ -337,7 +340,7 @@ TEST(FTAUtils, Quantification)
 
   try
   {
-    file_lists_quantification_utils = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
+    file_lists_q = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
     IM = {0.1, 4};
     nbins = 15;
     uncertainty = true;
@@ -352,10 +355,10 @@ TEST(FTAUtils, Quantification)
                              params_int_8,
                              params_bool_8,
                              params_analysis_t_8,
-                             file_lists_quantification_utils[0],
-                             file_lists_quantification_utils[1],
+                             file_lists_q[0],
+                             file_lists_q[1],
                              FTAUtils::Quantification::RISK,
-                             file_lists_quantification_utils[2],
+                             file_lists_q[2],
                              IM[0],
                              IM[1],
                              nbins,
@@ -381,7 +384,7 @@ TEST(FTAUtils, Quantification)
 
   // ++++++++++ Check FTA top event risk ++++++++++
 
-  file_lists_quantification_utils = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
+  file_lists_q = {"logic2.txt", "logic2_bas_events_PE.txt", "hazard.txt"};
   IM = {0.1, 4};
   nbins = 15;
   FTAUtils::Quantification(params_double_9,
@@ -389,10 +392,10 @@ TEST(FTAUtils, Quantification)
                            params_int_9,
                            params_bool_9,
                            params_analysis_t_9,
-                           file_lists_quantification_utils[0],
-                           file_lists_quantification_utils[1],
+                           file_lists_q[0],
+                           file_lists_q[1],
                            FTAUtils::Quantification::RISK,
-                           file_lists_quantification_utils[2],
+                           file_lists_q[2],
                            IM[0],
                            IM[1],
                            nbins);

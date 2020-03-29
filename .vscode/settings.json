@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "QuantificationUtils.C": "cpp",
-        "FaultTreeUtils.C": "cpp",
-        "TestMastodonUtils.C": "cpp",
-        "TestISoilUtils.C": "cpp"
-    }
-}

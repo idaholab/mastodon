@@ -1,14 +1,9 @@
 #include "FaultTreeUtils.h"
 #include "MastodonUtils.h"
-// #include "DelimitedFileReader.h"
 
-/*
- * Constructor for fault tree class
- * NOTE: Default value of root is the first node in file
- */
-/*!public*/
+typedef FTAUtils::FaultTree::_node ft_node;
+
 FTAUtils::FaultTree::FaultTree(std::string file_name, std::string root)
-/*!endpublic*/
 {
   FTAUtils::Parser parser = FTAUtils::Parser(file_name, FTAUtils::Parser::FORMAT_CSV);
   buildTree(parser);
@@ -16,21 +11,27 @@ FTAUtils::FaultTree::FaultTree(std::string file_name, std::string root)
   // Override root node if not default
   if (root != "")
   {
-    ASSERT(getNode(root),
-           "Root node requested (%s) not found in heirarchy. Please the check "
-           "file %s",
-           root.c_str(),
-           file_name.c_str());
+    // ASSERT
+    if (!(getNode(root)))
+    {
+      fprintf(stderr,
+              "[ASSERT] In File: %s, Line: %d => Root node "
+              "requested (%s) not found in heirarchy. "
+              "Please the check file %s.\n",
+              __FILE__,
+              __LINE__,
+              root.c_str(),
+              file_name.c_str());
+      abort();
+    }
+
     this->_root = root;
   }
 
   computeMinimumCutSets();
 }
 
-/*!public*/
-FTAUtils::FaultTree::FaultTree(std::set<std::set<std::string>> & sets_link,
-                               std::map<std::string, FTAUtils::FaultTree::_node *> _node_base)
-/*!endpublic*/
+FTAUtils::FaultTree::FaultTree(set_string & sets_link, std::map<std::string, ft_node *> _node_base)
 {
   std::string root = "";
   _node_d_b = _node_base;
@@ -60,20 +61,10 @@ FTAUtils::FaultTree::FaultTree(std::set<std::set<std::string>> & sets_link,
   sets_link = _sets;
 }
 
-/*
- * Destructor
- */
-/*!public*/
-FTAUtils::FaultTree::~FaultTree()
-/*!endpublic*/ {}
+FTAUtils::FaultTree::~FaultTree() {}
 
-/*
- * Builds m-ary fault tree
- */
-/*!public*/
-std::map<std::string, FTAUtils::FaultTree::_node *>
+std::map<std::string, ft_node *>
 FTAUtils::FaultTree::buildTree(FTAUtils::Parser parser)
-/*!endpublic*/
 {
   std::vector<std::string> line;
   while (true)
@@ -102,27 +93,26 @@ FTAUtils::FaultTree::buildTree(FTAUtils::Parser parser)
   return _node_d_b;
 }
 
-/*
- * Translates string to opeartor
- */
-/*!private*/
 FTAUtils::FaultTree::_operator_t
 FTAUtils::FaultTree::str2Operator(std::string op)
-/*!endprivate*/
 {
   std::string op_s = FTAUtils::str2Upper(op, true);
-  ASSERT(_opDict.count(op_s) != 0, "Illegal Operator found: %s", op.c_str());
-
+  // ASSERT
+  if (_opDict.count(op_s) == 0)
+  {
+    fprintf(stderr,
+            "[ASSERT] In File: %s, Line: %d => "
+            "Illegal Operator found: %s.\n",
+            __FILE__,
+            __LINE__,
+            op.c_str());
+    abort();
+  }
   return _opDict[op_s];
 }
 
-/*
- * Computes minimum cut sets based on MOCUS Algorithm
- */
-/*!public*/
-std::set<std::set<std::string>>
+set_string
 FTAUtils::FaultTree::computeMinimumCutSets()
-/*!endpublic*/
 {
   // Clearing up sets vector for safety
   rmSets();
@@ -149,21 +139,16 @@ FTAUtils::FaultTree::computeMinimumCutSets()
   return _sets;
 }
 
-/*!private*/
 void
 FTAUtils::FaultTree::removeSubsets()
-/*!endprivate*/
 {
   std::set<uint64_t> rm_its;
 
   uint64_t index1 = 0;
-  for (std::set<std::set<std::string>>::iterator row1_it = _sets.begin(); row1_it != _sets.end();
-       ++row1_it)
+  for (set_string::iterator row1_it = _sets.begin(); row1_it != _sets.end(); ++row1_it)
   {
     uint64_t index2 = index1 + 1;
-    for (std::set<std::set<std::string>>::iterator row2_it = next(row1_it, 1);
-         row2_it != _sets.end();
-         ++row2_it)
+    for (set_string::iterator row2_it = next(row1_it, 1); row2_it != _sets.end(); ++row2_it)
     {
       bool row1_is_subset =
           includes(row2_it->begin(), row2_it->end(), row1_it->begin(), row1_it->end());
@@ -189,34 +174,38 @@ FTAUtils::FaultTree::removeSubsets()
   }
 }
 
-/*
- * Recursive call function to flood fill sets by expanding them based on
- * operation ALGO:
- *       1. Iterate through entire list and match for own node's name
- *       2. Replace self with children based on operation
- *          (i) . Replace self with children in same row if AND
- *          (ii). Replace self with child one per row if OR
- *       3. Recurse on each non leaf child
- *
- * NOTE: 1. Updates "sets" variable
- *       2. Uses std::set 2d array, hence absorption and idempotence properties
- *          are implicit
- */
-/*!private*/
 void
 FTAUtils::FaultTree::cutSetsExpand(_node * node)
-/*!endprivate*/
 {
-  ASSERT(node, "NULL node encountered");
-  ASSERT(node->_child.size() != 0, "Empty child list found for node '%s'", node->_name.c_str());
+  // ASSERT
+  if (!node)
+  {
+    fprintf(stderr,
+            "[ASSERT] In File: %s, Line: %d => "
+            "NULL node encountered.\n",
+            __FILE__,
+            __LINE__);
+    abort();
+  }
+
+  // ASSERT
+  if (node->_child.size() == 0)
+  {
+    fprintf(stderr,
+            "[ASSERT] In File: %s, Line: %d => "
+            "Empty child list found for node '%s'.\n",
+            __FILE__,
+            __LINE__,
+            node->_name.c_str());
+    abort();
+  }
 
   // New rows which have to be appended at end. Adding them might
   // result in data hazards
-  std::set<std::set<std::string>> mk_rows;
+  set_string mk_rows;
 
   // 1. Iterate through entire list and match for own node's name
-  for (std::set<std::set<std::string>>::iterator row_it = _sets.begin(); row_it != _sets.end();
-       ++row_it)
+  for (set_string::iterator row_it = _sets.begin(); row_it != _sets.end(); ++row_it)
   {
     std::set<std::string> row(*row_it);
     // Search for the element in row
@@ -253,8 +242,16 @@ FTAUtils::FaultTree::cutSetsExpand(_node * node)
           break;
 
         default:
-          ASSERT(false, "Unknown Operator found!");
-          break;
+        {
+          // ASSERT
+          fprintf(stderr,
+                  "[ASSERT] In File: %s, Line: %d => "
+                  "Unknown Operator found!.\n",
+                  __FILE__,
+                  __LINE__);
+          abort();
+        }
+        break;
       }
     }
 
@@ -267,7 +264,7 @@ FTAUtils::FaultTree::cutSetsExpand(_node * node)
   }
 
   // Add newly created rows
-  for (std::set<std::set<std::string>>::iterator it = mk_rows.begin(); it != mk_rows.end(); ++it)
+  for (set_string::iterator it = mk_rows.begin(); it != mk_rows.end(); ++it)
   {
     std::set<std::string> row(*it);
     _sets.insert(*it);
@@ -282,109 +279,59 @@ FTAUtils::FaultTree::cutSetsExpand(_node * node)
   }
 }
 
-/*!private*/
 void
 FTAUtils::FaultTree::rmSets()
-/*!endprivate*/
 {
-  for (std::set<std::set<std::string>>::iterator row_it = _sets.begin(); row_it != _sets.end();
-       ++row_it)
+  for (set_string::iterator row_it = _sets.begin(); row_it != _sets.end(); ++row_it)
   {
     _sets.erase(row_it);
   }
 }
 
-/*!private*/
-FTAUtils::FaultTree::_node *
+ft_node *
 FTAUtils::FaultTree::getNode(std::string name)
-/*!endprivate*/ { return (_node_d_b.count(name) != 0) ? _node_d_b[name] : NULL; }
+{
+  return (_node_d_b.count(name) != 0) ? _node_d_b[name] : NULL;
+}
 
-/*!public*/
 std::string
 FTAUtils::FaultTree::getRoot()
-/*!endpublic*/ { return _root; }
-
-/*!public*/
-// void FTAUtils::FaultTree::printSets(std::set<std::set<std::string>> sets)
-/*!endpublic*/
-/*
 {
-  std::cout << "------------- SETS BEGIN ----------------- " << std::endl;
-  for (std::set<std::set<std::string>>::iterator row = sets.begin(); row != sets.end(); ++row)
-  {
-    printRow(*row);
-    std::cout << std::endl;
-  }
-  std::cout << "-------------- SETS END ------------------ " << std::endl;
+  return _root;
 }
-*/
 
-/*!public*/
-// void
-// FTAUtils::FaultTree::printSets()
-/*!endpublic*/ 
-// { printSets(_sets); }
-
-/*!public*/
-// void
-// FTAUtils::FaultTree::printRow(std::set<std::string> row)
-/*!endpublic*/
-/*
-{
-  for (std::set<std::string>::iterator col = row.begin(); col != row.end(); ++col)
-  {
-    std::cout << *col << ", ";
-  }
-}
-*/
-
-/*
- * Function returns cut sets at the given point
- * NOTE: If MOCUS ran before this function call, min cut sets will be returned
- */
-/*!public*/
-std::set<std::set<std::string>>
+set_string
 FTAUtils::FaultTree::getCutSets()
-/*!endpublic*/ { return _sets; }
+{
+  return _sets;
+}
 
-// **************************Parser Definition**************************
-/*
- * Constructor for parser class
- */
-/*!public*/
 FTAUtils::Parser::Parser(std::string fileName, FTAUtils::Parser::parseFormatT format)
-/*!endpublic*/
 {
   // Assertion on supported parsing formats
-  ASSERT(format == FORMAT_CSV, "Unsupported parse format");
+  if (format != FORMAT_CSV)
+  {
+    fprintf(stderr,
+            "[ASSERT] In File: %s, Line: %d => "
+            "Unsupported parse format.\n",
+            __FILE__,
+            __LINE__);
+    abort();
+  }
+
   fileP = new std::ifstream;
   fileP->open(fileName, std::ifstream::in);
-  // ASSERT( fileP->is_open(), "Unable to open file: %s", fileName.c_str());
 
   if (!fileP->is_open())
     throw FTAUtils::CException("Unable to open file.");
 }
 
-/*
- * Destructor for parser class
- */
-/*!public*/
-FTAUtils::Parser::~Parser()
-/*!endpublic*/ {}
+FTAUtils::Parser::~Parser() {}
 
-/*
- * Yields all records, populates the standard structure and returns
- * This function acts as an abstract layer to hide different formats
- * that might be supported in future
- *
- * Returns: Array of strings
- */
-/*!public*/
-std::vector<std::vector<std::string>>
+vector_string
 FTAUtils::Parser::yieldLines()
-/*!endpublic*/
 {
-  std::vector<std::vector<std::string>> lines;
+  vector_string lines;
   std::vector<std::string> line;
   while (true)
   {
@@ -398,19 +345,19 @@ FTAUtils::Parser::yieldLines()
   return lines;
 }
 
-/*
- * Yields a single record, populates the standard structure and returns
- * This function acts as an abstract layer to hide different formats
- * that might be supported in future
- *
- * Returns: Array of strings
- */
-/*!public*/
 std::vector<std::string>
 FTAUtils::Parser::yieldLine()
-/*!endpublic*/
 {
-  ASSERT(fileP->is_open(), "Illegal call to yieldLine. File not open yet!");
+  // ASSERT
+  if (!(fileP->is_open()))
+  {
+    fprintf(stderr,
+            "[ASSERT] In File: %s, Line: %d => "
+            "Unsupported parse format.\n",
+            __FILE__,
+            __LINE__);
+    abort();
+  }
 
   std::string buffer;
   std::vector<std::string> line;
@@ -428,9 +375,6 @@ FTAUtils::Parser::yieldLine()
   return line;
 }
 
-/*
- * String trim method which removes all leading and lagging whitespace in a string
- */
 std::string
 FTAUtils::trim(const std::string & str)
 {
@@ -445,11 +389,6 @@ FTAUtils::trim(const std::string & str)
   return str.substr(first, (last - first + 1));
 }
 
-// defined in Utils.cpp in FTA code
-
-/*
- * Converts ASCII string to upper case
- */
 std::string
 FTAUtils::str2Upper(const std::string & str_in, bool trim_input)
 {
@@ -462,13 +401,8 @@ FTAUtils::str2Upper(const std::string & str_in, bool trim_input)
   return str;
 }
 
-/*
- * Returns interpolated value at x from parallel arrays ( xData, yData )
- * Assumes that xData has at least two elements, is sorted and is strictly monotonic increasing
- * boolean argument extrapolate determines behaviour beyond ends of array (if needed)
- */
 double
-FTAUtils::interpolate(std::vector<std::vector<double>> data, double x, bool extrapolate)
+FTAUtils::interpolate(vector_double data, double x, bool extrapolate)
 {
   int size = data.size();
 
@@ -505,7 +439,6 @@ FTAUtils::interpolate(std::vector<std::vector<double>> data, double x, bool extr
   return yL + dydx * (x - xL);
 }
 
-// Phi(-∞, x) aka N(x)
 double
 FTAUtils::normalCDF(double x)
 {

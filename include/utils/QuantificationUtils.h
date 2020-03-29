@@ -5,16 +5,8 @@
 #include "FaultTreeUtils.h"
 #include "MastodonUtils.h"
 
-#define CLIP(A, MIN, MAX) (((A) < MIN) ? MIN : ((A) > MAX ? MAX : (A)))
+/********************* Quantification Definition *********************/
 
-#define GEN_QUALIFICATION_R_VEC(gen, d, n, rv)                                                     \
-  for (int index = 0; index < n; index++)                                                          \
-  {                                                                                                \
-    double dataPoint = d(gen);                                                                     \
-    rv.push_back(CLIP(dataPoint, 0.0, 1.0));                                                       \
-  }
-
-// Quantification class
 class FTAUtils::Quantification
 {
 public:
@@ -39,8 +31,8 @@ public:
     RISK       //       = 1
   };
 
-  Quantification(std::map<std::string, std::vector<std::vector<double>>> & params_double,
-                 std::map<std::string, std::vector<std::vector<std::string>>> & params_string,
+  Quantification(std::map<std::string, vector_double> & params_double,
+                 std::map<std::string, vector_string> & params_string,
                  std::map<std::string, int> & params_int,
                  std::map<std::string, bool> & params_bool,
                  std::map<std::string, _analysis_t> & params_analysis_t,
@@ -82,7 +74,18 @@ private:
       }
 
       int size = vec.size();
-      ASSERT(size > 0, "Size 0 vector passed for stats computation");
+
+      // ASSERT
+      if (!(size > 0))
+      {
+        fprintf(stderr,
+                "[ASSERT] In File: %s, Line: %d => Root node "
+                "requested (%s) not found in heirarchy. "
+                "Size 0 vector passed for stats computation.\n",
+                __FILE__,
+                __LINE__);
+        abort();
+      }
 
       _pe = vec[0];
 
@@ -114,33 +117,29 @@ private:
       p_max = (p_max > (vec.size() - 1)) ? vec.size() : p_max;
       return vec[p_min - 1] + ((p_i - p_min) * (vec[p_max - 1] - vec[p_min - 1]));
     }
-    /*
-    void printStats()
-    {
-      std::cout << "Mean: " << _mean << ", Median: " << _median << ", SD: " << _sd
-                << ", 5th: " << _p5 << ", 95th: " << _p95 << "\n\n";
-    }
-    */
   };
 
   // TODO: 3 of the following are not supported as they need 1 arg rather than 2
   // for their distribution. Remove these 3 if not needed else add support
   std::map<std::string, _dist_t> _str2dist = {
-      /*{"EXP"      , EXP      },*/
       {"GAMMA", GAMMA},
       {"WEIBULL", WEIBULL},
       {"EXTREME", EXTREME},
       {"NORM", NORM},
       {"LNORM", LNORM},
       {"PE", PE},
-      /*{"CHI_SQ"   , CHI_SQ   },*/
       {"CAUCHY", CAUCHY},
       {"FISHER_F", FISHER_F},
-      /*{"STUDENT_T", STUDENT_T}*/
   };
 
-  std::vector<std::vector<double>> _cut_set_prob;
+  vector_double _cut_set_prob;
   std::map<std::string, std::vector<double>> _b_nodes;
+
+  /**
+   *  Generates probability vector for a specified distribution
+   *  Nomenclature of a and b changes with distribution.
+   *  eg., a => mean, b => std for NORM
+   */
   std::vector<double> getProbVector(_dist_t dist,
                                     double a,
                                     double b,
@@ -149,42 +148,103 @@ private:
                                     std::vector<double> im,
                                     _analysis_t analysis,
                                     bool uc);
-  std::vector<std::vector<std::string>> beProb(FTAUtils::Parser parser,
-                                               int n_sample,
-                                               int seed,
-                                               _analysis_t analysis,
-                                               std::vector<double> intmes,
-                                               bool uncert);
 
-  std::vector<std::vector<double>> computeCutSetProb(std::set<std::set<std::string>> cut_sets,
-                                                     int n,
-                                                     bool bypass = false,
-                                                     std::string bypass_key = "",
-                                                     double bypass_value = 0);
+  /**
+   *  Parses and floods probabilties of basic elements
+   */
+  vector_string beProb(FTAUtils::Parser parser,
+                       int n_sample,
+                       int seed,
+                       _analysis_t analysis,
+                       std::vector<double> intmes,
+                       bool uncert);
+
+  /**
+   *  Computes probability for a given cut set on a per set basis based on
+   *  pre-flooded basic elem probs
+   */
+  vector_double computeCutSetProb(std::set<std::set<std::string>> cut_sets,
+                                  int n,
+                                  bool bypass = false,
+                                  std::string bypass_key = "",
+                                  double bypass_value = 0);
+
   std::vector<double> cutSetRowProb(std::set<std::string> row,
                                     int n,
                                     bool sign_positive = true,
                                     bool bypass = false,
                                     std::string bypass_key = "",
                                     double bypass_value = 0);
+
+  /**
+   *  Computes accumulated probability for the entire cut set
+   *  3 Digests are computed:
+   *    0. Min Max
+   *    1. Upper Bound
+   *    2. Top Rare
+   *
+   *  NOTE
+   *    1. Its better to compute these 2 together as they have common loops
+   *           which can save time
+   *    2. Sets the vector cutSetProb
+   */
   std::vector<double> *
   cutSetProbWDigest(std::set<std::set<std::string>> cut_sets, int n, bool only_min_max = false);
+
+  /**
+   *  Wrapper function for gate probability arith
+   *  AND => a * b
+   *  OR  => (1 - a) * (1 - b)
+   */
   double getGateProb(double a, double b, bool is_and);
-  std::vector<std::vector<double>> minCutIM(std::vector<double> upperBound);
-  std::map<std::string, std::vector<std::vector<double>>>
-  beIM(std::set<std::set<std::string>> cut_sets,
-       int n,
-       std::vector<double> upper_bound,
-       std::vector<int> & count_v);
-  std::vector<std::vector<double>> linesToDouble(std::vector<std::vector<std::string>> lines);
+
+  /**
+   *  Computes cut-set Fussel-Vesely Important measures
+   */
+  vector_double minCutIM(std::vector<double> upperBound);
+
+  /**
+   *  For each basic element:
+   *    1. Calculate #occurrence in minimal cut set (beCount)
+   *    2. Store row index of all occurrence (beIndex)
+   */
+  std::map<std::string, vector_double> beIM(std::set<std::set<std::string>> cut_sets,
+                                            int n,
+                                            std::vector<double> upper_bound,
+                                            std::vector<int> & count_v);
+
+  /**
+   *  Translator function for string -> double
+   */
+  vector_double linesToDouble(vector_string lines);
+
+  /**
+   *  Function for getting BIN mean values of intensity measure
+   */
   std::vector<double> getBinMeans(double im_lower, double im_upper, int n_bins);
-  std::vector<double> hazInterp(std::vector<std::vector<double>> hazard,
-                                std::vector<double> im_bins);
+
+  /**
+   *  Function for interpolating the hazard curve based on range of intensity
+   *  measures
+   */
+  std::vector<double> hazInterp(vector_double hazard, std::vector<double> im_bins);
+
+  /**
+   *  Function for top event fragility
+   */
   std::vector<double> fragility(std::set<std::set<std::string>> cut_sets,
                                 int n,
                                 std::vector<double> im_bins,
                                 double & mu,
                                 double & sigma);
+
+  /**
+   *  Function for calculating risk by convoluting hazard and fragility
+   *  Assign risk to basic event probabilites
+   *
+   *  WARNING
+   *    This consumes _b_nodes and then overwrites it
+   */
   void computeRisk(int n, std::vector<double> hazard);
 };
 
