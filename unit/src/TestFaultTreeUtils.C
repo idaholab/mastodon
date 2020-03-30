@@ -1,58 +1,71 @@
+// MOOSE includes
 #include "gtest/gtest.h"
 #include "MooseUtils.h"
 #include "Conversion.h"
 
+// Boost distribution includes
 #include "BoostDistribution.h"
 
+// MASTODON includes
 #include "MastodonUtils.h"
 
+// QUANTIFICATIONUTILS includes
 #include "FaultTreeUtils.h"
 
 typedef FTAUtils::FaultTree::_node ft_node_test;
 
+// Helper to make sure the test tree is correct.
 void
 assertTree(std::map<std::string, ft_node_test *> tree_node)
 {
+  // TOP
   EXPECT_EQ(tree_node["TOP"]->_name, "TOP");
   EXPECT_EQ(tree_node["TOP"]->_op, FTAUtils::FaultTree::AND);
   EXPECT_EQ(tree_node["TOP"]->_child.at(0), "GATE1");
   EXPECT_EQ(tree_node["TOP"]->_child.at(1), "GATE2");
 
+  // GATE1
   EXPECT_EQ(tree_node["GATE1"]->_name, "GATE1");
   EXPECT_EQ(tree_node["GATE1"]->_op, FTAUtils::FaultTree::OR);
   EXPECT_EQ(tree_node["GATE1"]->_child.at(0), "FT-N/m-1");
   EXPECT_EQ(tree_node["GATE1"]->_child.at(1), "FT-N/m-2");
   EXPECT_EQ(tree_node["GATE1"]->_child.at(2), "FT-N/m-3");
 
+  // GATE2
   EXPECT_EQ(tree_node["GATE2"]->_name, "GATE2");
   EXPECT_EQ(tree_node["GATE2"]->_op, FTAUtils::FaultTree::OR);
   EXPECT_EQ(tree_node["GATE2"]->_child.at(0), "B1");
   EXPECT_EQ(tree_node["GATE2"]->_child.at(1), "B3");
   EXPECT_EQ(tree_node["GATE2"]->_child.at(2), "B4");
 
+  // FT-N/m-1
   EXPECT_EQ(tree_node["FT-N/m-1"]->_name, "FT-N/m-1");
   EXPECT_EQ(tree_node["FT-N/m-1"]->_op, FTAUtils::FaultTree::AND);
   EXPECT_EQ(tree_node["FT-N/m-1"]->_child.at(0), "GATE3");
   EXPECT_EQ(tree_node["FT-N/m-1"]->_child.at(1), "B3");
   EXPECT_EQ(tree_node["FT-N/m-1"]->_child.at(2), "B5");
 
+  // FT-N/m-2
   EXPECT_EQ(tree_node["FT-N/m-2"]->_name, "FT-N/m-2");
   EXPECT_EQ(tree_node["FT-N/m-2"]->_op, FTAUtils::FaultTree::AND);
   EXPECT_EQ(tree_node["FT-N/m-2"]->_child.at(0), "GATE3");
   EXPECT_EQ(tree_node["FT-N/m-2"]->_child.at(1), "B1");
 
+  // FT-N/m-3
   EXPECT_EQ(tree_node["FT-N/m-3"]->_name, "FT-N/m-3");
   EXPECT_EQ(tree_node["FT-N/m-3"]->_op, FTAUtils::FaultTree::AND);
   EXPECT_EQ(tree_node["FT-N/m-3"]->_child.at(0), "B3");
   EXPECT_EQ(tree_node["FT-N/m-3"]->_child.at(1), "B5");
   EXPECT_EQ(tree_node["FT-N/m-3"]->_child.at(2), "B1");
 
+  // GATE3
   EXPECT_EQ(tree_node["GATE3"]->_name, "GATE3");
   EXPECT_EQ(tree_node["GATE3"]->_op, FTAUtils::FaultTree::OR);
   EXPECT_EQ(tree_node["GATE3"]->_child.at(0), "B2");
   EXPECT_EQ(tree_node["GATE3"]->_child.at(1), "B4");
 }
 
+// Helper to make sure the mocus is correct.
 void
 assertMocus(set_string tree_mocus)
 {
@@ -79,6 +92,7 @@ assertMocus(set_string tree_mocus)
   }
 }
 
+// Create a test event list.
 std::map<std::string, ft_node_test *>
 eventList()
 {
@@ -104,19 +118,26 @@ eventList()
   for (int i = 0; i < line.size(); i++)
   {
     ft_node_test * node = new ft_node_test(line[i][0], op[i]);
+    // Add children
     for (int j = 2; j < line[i].size(); j++)
       node->_child.push_back(line[i][j]);
+    // Add the newly created node to node lookup hashmap
     _node_d_b[line[i][0]] = node;
   }
 
   return _node_d_b;
 }
 
+// For input
 std::vector<FileName> file_lists;
 
 TEST(FTAUtils, FaultTree)
 {
+  // ==================== TestCase for FaultTree Object ===================
 
+  // ---------------- Test error message for events input ----------------
+
+  // ###### File Inputs ######
 
   try
   {
@@ -126,10 +147,14 @@ TEST(FTAUtils, FaultTree)
   }
   catch (FTAUtils::CException e)
   {
-
+    /*
+     * ------- IO Error -------
+     * does not exist
+     */
     EXPECT_EQ(e.msg, "Unable to open file.");
   }
 
+  // ---------------- Test creating tree from list ----------------
 
   std::map<std::string, ft_node_test *> tree_node_from_list = eventList();
   set_string tree_mocus_from_list;
@@ -137,6 +162,7 @@ TEST(FTAUtils, FaultTree)
   assertTree(tree_node_from_list);
   assertMocus(tree_mocus_from_list);
 
+  // ---------------- Test creating tree from file ----------------
 
   file_lists = {"logic2.txt", ""};
 
