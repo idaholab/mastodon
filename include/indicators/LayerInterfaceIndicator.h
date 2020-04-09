@@ -4,12 +4,6 @@
 // MOOSE includes
 #include "InternalSideIndicator.h"
 
-// Forward Declarations
-class LayerInterfaceIndicator;
-
-template <>
-InputParameters validParams<LayerInterfaceIndicator>();
-
 /**
  * Computes the "error" as defined by the difference between the layers. Since,
  * layer ids are arbitrary the
@@ -24,6 +18,7 @@ InputParameters validParams<LayerInterfaceIndicator>();
 class LayerInterfaceIndicator : public InternalSideIndicator
 {
 public:
+  static InputParameters validParams();
   LayerInterfaceIndicator(const InputParameters & params);
 
   /**

@@ -9,11 +9,10 @@
 #include "BlackBearApp.h"
 #endif
 
-template <>
 InputParameters
-validParams<MastodonApp>()
+MastodonApp::validParams()
 {
-  InputParameters params = validParams<MooseApp>();
+  InputParameters params = MooseApp::validParams();
   params.set<bool>("error_unused") = true;
   params.set<bool>("use_legacy_uo_initialization") = false;
   params.set<bool>("use_legacy_uo_aux_computation") = false;

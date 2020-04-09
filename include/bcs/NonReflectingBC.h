@@ -16,10 +16,7 @@
 
 #include "IntegratedBC.h"
 
-class NonReflectingBC;
 
-template <>
-InputParameters validParams<NonReflectingBC>();
 
 /**
  * NonReflecting BC applies a Lysmer damper on a given boundary in the normal
@@ -28,6 +25,7 @@ InputParameters validParams<NonReflectingBC>();
 class NonReflectingBC : public IntegratedBC
 {
 public:
+  static InputParameters validParams();
   NonReflectingBC(const InputParameters & parameters);
 
   /**

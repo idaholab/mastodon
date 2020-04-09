@@ -18,15 +18,10 @@
 #include "Kernel.h"
 #include "ColumnMajorMatrix.h"
 
-// Forward Declarations
-class StressDivergenceDamper;
-
-template <>
-InputParameters validParams<StressDivergenceDamper>();
-
 class StressDivergenceDamper : public Kernel
 {
 public:
+  static InputParameters validParams();
   StressDivergenceDamper(const InputParameters & parameters);
   virtual void computeResidual() override;
   virtual void computeJacobian() override;

@@ -20,12 +20,6 @@
 // MASTODON includes
 #include "ResponseHistoryBuilder.h"
 
-// Forward Declarations
-class ResponseHistoryMean;
-
-template <>
-InputParameters validParams<ResponseHistoryMean>();
-
 /**
  *  ResponseHistoryMean is a type of NodalVectorPostprocessor computes the mean
  *  response history given a suite of response histories from the
@@ -34,6 +28,7 @@ InputParameters validParams<ResponseHistoryMean>();
 class ResponseHistoryMean : public GeneralVectorPostprocessor
 {
 public:
+  static InputParameters validParams();
   ResponseHistoryMean(const InputParameters & parameters);
   virtual void initialize() override;
   virtual void execute() override;

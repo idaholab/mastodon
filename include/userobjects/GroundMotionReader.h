@@ -6,10 +6,7 @@
 #include "GeneralUserObject.h"
 #include "DelimitedFileReader.h"
 
-class GroundMotionReader;
 
-template <>
-InputParameters validParams<GroundMotionReader>();
 
 /**
  * Reads and provides access to ground motion data.
@@ -17,6 +14,7 @@ InputParameters validParams<GroundMotionReader>();
 class GroundMotionReader : public GeneralUserObject
 {
 public:
+  static InputParameters validParams();
   /// Flag for indicating the data column from input ground motionss
   enum class Component
   {

@@ -11,11 +11,10 @@
 
 registerMooseObject("MastodonApp", LayerInterfaceIndicator);
 
-template <>
 InputParameters
-validParams<LayerInterfaceIndicator>()
+LayerInterfaceIndicator::validParams()
 {
-  InputParameters params = validParams<InternalSideIndicator>();
+  InputParameters params = InternalSideIndicator::validParams();
   params.addParam<Real>("tolerance",
                         1e-10,
                         "Differences in the layer_id between elements above "

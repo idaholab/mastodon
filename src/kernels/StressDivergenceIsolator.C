@@ -28,11 +28,10 @@
 
 registerMooseObject("MastodonApp", StressDivergenceIsolator);
 
-template <>
 InputParameters
-validParams<StressDivergenceIsolator>()
+StressDivergenceIsolator::validParams()
 {
-  InputParameters params = validParams<Kernel>();
+  InputParameters params = Kernel::validParams();
   params.addClassDescription("Kernel for isolator element");
   params.addRequiredParam<unsigned int>(
       "component",

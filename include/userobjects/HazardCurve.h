@@ -8,10 +8,7 @@
 // MASTODON includes
 #include "GroundMotionReader.h"
 
-class HazardCurve;
 
-template <>
-InputParameters validParams<HazardCurve>();
 
 /**
  * Reads hazard curve data and create scaled ground motions.
@@ -19,6 +16,7 @@ InputParameters validParams<HazardCurve>();
 class HazardCurve : public GeneralUserObject
 {
 public:
+  static InputParameters validParams();
   HazardCurve(const InputParameters & parameters);
   virtual void execute() override;
   virtual void initialize() override {}

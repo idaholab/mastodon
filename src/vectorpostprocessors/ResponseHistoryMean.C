@@ -7,11 +7,10 @@
 
 registerMooseObject("MastodonApp", ResponseHistoryMean);
 
-template <>
 InputParameters
-validParams<ResponseHistoryMean>()
+ResponseHistoryMean::validParams()
 {
-  InputParameters params = validParams<GeneralVectorPostprocessor>();
+  InputParameters params = GeneralVectorPostprocessor::validParams();
   params.addRequiredParam<VectorPostprocessorName>(
       "response_history",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "

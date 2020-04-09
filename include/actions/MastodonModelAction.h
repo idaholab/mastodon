@@ -28,6 +28,7 @@
 class MastodonModelAction : public Action
 {
 public:
+  static InputParameters validParams();
   MastodonModelAction(const InputParameters & params);
 
   virtual void act() override;
@@ -55,7 +56,5 @@ private:
   const bool _use_displaced_mesh;
 };
 
-template <>
-InputParameters validParams<MastodonModelAction>();
 
 #endif // MASTODONMODELACTION_H

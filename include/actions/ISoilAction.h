@@ -31,6 +31,7 @@
 class ISoilAction : public Action
 {
 public:
+  static InputParameters validParams();
   ISoilAction(const InputParameters & params);
 
   virtual void act() override;
@@ -38,7 +39,5 @@ public:
 private:
 };
 
-template <>
-InputParameters validParams<ISoilAction>();
 
 #endif // ISOILACTION_H

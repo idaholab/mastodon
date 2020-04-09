@@ -7,10 +7,7 @@
 // MASTODON includes
 #include "HazardCurve.h"
 
-class HazardCurveTransfer;
 
-template <>
-InputParameters validParams<HazardCurveTransfer>();
 
 /**
  * Transfers scale hazard curve to a Piecewise function.
@@ -18,6 +15,7 @@ InputParameters validParams<HazardCurveTransfer>();
 class HazardCurveTransfer : public MultiAppTransfer, public UserObjectInterface
 {
 public:
+  static InputParameters validParams();
   HazardCurveTransfer(const InputParameters & parameters);
   virtual void execute() override;
 

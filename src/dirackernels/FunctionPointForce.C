@@ -17,11 +17,10 @@
 
 registerMooseObject("MastodonApp", FunctionPointForce);
 
-template <>
 InputParameters
-validParams<FunctionPointForce>()
+FunctionPointForce::validParams()
 {
-  InputParameters params = validParams<DiracKernel>();
+  InputParameters params = DiracKernel::validParams();
   params.addClassDescription("This class applies a force at the given "
                              "point/points in a given direction. The force can "
                              "be given as a function of space and/or time.");

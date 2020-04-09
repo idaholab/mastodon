@@ -9,11 +9,10 @@
 
 registerMooseObject("MastodonApp", Fragility);
 
-template <>
 InputParameters
-validParams<Fragility>()
+Fragility::validParams()
 {
-  InputParameters params = validParams<GeneralVectorPostprocessor>();
+  InputParameters params = GeneralVectorPostprocessor::validParams();
   params.addRequiredParam<std::string>("master_file", "Name of the master file without extension.");
   params.addRequiredParam<std::string>(
       "hazard_multiapp", "Name of the multiapp corresponding to ground motion sampling.");

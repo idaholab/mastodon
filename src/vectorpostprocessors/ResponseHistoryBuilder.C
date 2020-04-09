@@ -10,11 +10,10 @@
 
 registerMooseObject("MastodonApp", ResponseHistoryBuilder);
 
-template <>
 InputParameters
-validParams<ResponseHistoryBuilder>()
+ResponseHistoryBuilder::validParams()
 {
-  InputParameters params = validParams<NodalVectorPostprocessor>();
+  InputParameters params = NodalVectorPostprocessor::validParams();
   params.addParam<std::vector<dof_id_type>>(
       "nodes", "Node number(s) at which the response history is needed.");
 

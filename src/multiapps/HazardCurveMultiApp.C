@@ -2,11 +2,10 @@
 
 registerMooseObject("MastodonApp", HazardCurveMultiApp);
 
-template <>
 InputParameters
-validParams<HazardCurveMultiApp>()
+HazardCurveMultiApp::validParams()
 {
-  InputParameters params = validParams<TransientMultiApp>();
+  InputParameters params = TransientMultiApp::validParams();
   params.addClassDescription(
       "Creates a sub file for each row of each HazardCurve bin and ground motion.");
   params.addRequiredParam<UserObjectName>(

@@ -11,11 +11,10 @@
 
 registerMooseObject("MastodonApp", ShearWaveIndicator);
 
-template <>
 InputParameters
-validParams<ShearWaveIndicator>()
+ShearWaveIndicator::validParams()
 {
-  InputParameters params = validParams<Indicator>();
+  InputParameters params = Indicator::validParams();
   params.addParam<MaterialPropertyName>("shear_wave_speed",
                                         "shear_wave_speed",
                                         "The name of the material properties "

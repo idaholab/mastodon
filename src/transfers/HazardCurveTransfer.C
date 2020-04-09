@@ -10,11 +10,10 @@
 
 registerMooseObject("MastodonApp", HazardCurveTransfer);
 
-template <>
 InputParameters
-validParams<HazardCurveTransfer>()
+HazardCurveTransfer::validParams()
 {
-  InputParameters params = validParams<MultiAppTransfer>();
+  InputParameters params = MultiAppTransfer::validParams();
   params.addClassDescription("Transfers scaled ground motion data from a HazardCurve object to "
                              "a PiecewiseLinear function on the sub application.");
   params.set<MultiMooseEnum>("direction") = "to_multiapp";

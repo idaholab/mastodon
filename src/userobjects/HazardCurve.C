@@ -8,11 +8,10 @@
 
 registerMooseObject("MastodonApp", HazardCurve);
 
-template <>
 InputParameters
-validParams<HazardCurve>()
+HazardCurve::validParams()
 {
-  InputParameters params = validParams<GeneralUserObject>();
+  InputParameters params = GeneralUserObject::validParams();
   params.addClassDescription(
       "Reads the hazard curve file and creates ground motion bins for time-based assessment.");
   params.set<ExecFlagEnum>("execute_on") = EXEC_NONE;

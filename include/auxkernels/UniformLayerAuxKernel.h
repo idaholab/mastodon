@@ -4,18 +4,13 @@
 // MOOSE includes
 #include "AuxKernel.h"
 
-// Forward Declarations
-class UniformLayerAuxKernel;
-
-template <>
-InputParameters validParams<UniformLayerAuxKernel>();
-
 /**
  * Computes uniform layer ids given thicknesses and a direction.
  */
 class UniformLayerAuxKernel : public AuxKernel
 {
 public:
+  static InputParameters validParams();
   UniformLayerAuxKernel(const InputParameters & parameters);
 
 protected:

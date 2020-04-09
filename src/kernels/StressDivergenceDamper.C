@@ -14,11 +14,10 @@
 
 registerMooseObject("MastodonApp", StressDivergenceDamper);
 
-template <>
 InputParameters
-validParams<StressDivergenceDamper>()
+StressDivergenceDamper::validParams()
 {
-  InputParameters params = validParams<Kernel>();
+  InputParameters params = Kernel::validParams();
   params.addClassDescription("Kernel for two-noded nonlinear fluid viscous damper element");
   params.addRequiredParam<unsigned int>("component",
                                         "An integer corresponding to the direction "

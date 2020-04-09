@@ -9,11 +9,10 @@
 
 registerMooseObject("MooseApp", BeamMeshGenerator);
 
-template <>
 InputParameters
-validParams<BeamMeshGenerator>()
+BeamMeshGenerator::validParams()
 {
-  InputParameters params = validParams<MeshGenerator>();
+  InputParameters params = MeshGenerator::validParams();
 
   params.addRequiredParam<FileName>(
       "mesh_file",
