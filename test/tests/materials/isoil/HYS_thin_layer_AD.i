@@ -2,8 +2,6 @@
 # Coulomb friction. The top surface of the element (z=0) is fixed and the
 # bottom surface (z=1) is moved by applying a cyclic preset displacement.
 
-# This file DOES NOT use ISoilAction
-
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
   dim = 3 # Dimension of the mesh
@@ -21,6 +19,7 @@
 
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
+  use_displaced_mesh = false
 []
 
 [Variables]
@@ -103,7 +102,6 @@
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
     zeta = 0.00006366
-    use_displaced_mesh = false
     use_automatic_differentiation = true
   [../]
   [./inertia_x]
@@ -114,7 +112,6 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
-    use_displaced_mesh = false
     density = 'reg_density'
   [../]
   [./inertia_y]
@@ -125,7 +122,6 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
-    use_displaced_mesh = false
     density = 'reg_density'
   [../]
   [./inertia_z]
@@ -136,14 +132,12 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
-    use_displaced_mesh = false
     density = 'reg_density'
   [../]
   [./gravity]
     type = Gravity
     variable = disp_z
     value = -9.81
-    use_displaced_mesh = false
     density = 'reg_density'
   [../]
 []
@@ -340,37 +334,25 @@
 []
 
 [Materials]
-  [./sample_isoil]
-    type = ADComputeISoilStress
-    soil_type = 'thin_layer'
-    layer_variable = layer_id
-    layer_ids = '0'
-    initial_shear_modulus = '20000'
-    poissons_ratio = '0.45'
-    friction_coefficient = '0.7'
-    hardening_ratio = '0.001'
-    p_ref = '8.6209091'
-    initial_soil_stress = '-8.0263636 0 0  0 -8.0263636 0  0 0 -9.810'
-  [../]
-  [./sample_isoil_strain]
-    ## Use ComputeFiniteStrain for soil_type = thin_layer since large strains are expected
-    type = ADComputeFiniteStrain
-    block = '0'
-    displacements = 'disp_x disp_y disp_z'
-  [../]
-  [./sample_isoil_elasticitytensor]
-    type = ADComputeIsotropicElasticityTensorSoil
-    block = '0'
-    shear_modulus = '20000'
-    poissons_ratio = '0.45'
-    density = '2.0'
-    wave_speed_calculation = false
-    layer_ids = '0'
-    layer_variable = layer_id
+  [./I_Soil]
+    [./soil_thin_layer]
+      soil_type = 'thin_layer'
+      layer_variable = layer_id
+      layer_ids = '0'
+      initial_shear_modulus = '20000'
+      poissons_ratio = '0.45'
+      block = 0
+      density = '2.0'
+      friction_coefficient = '0.7'
+      hardening_ratio = '0.001'
+      p_ref = '8.6209091'
+      initial_soil_stress = '-8.0263636 0 0  0 -8.0263636 0  0 0 -9.810'
+      use_automatic_differentiation = true
+    [../]
   [../]
   [converter]
     type = MaterialConverter
-    ad_props_in = 'density'
+    ad_props_in =  'density'
     reg_props_out = 'reg_density'
   []
 []
@@ -509,6 +491,7 @@
 []
 
 [Outputs]
+  file_base = HYS_thin_layer_out
   exodus = true
   csv = true
   perf_graph = false

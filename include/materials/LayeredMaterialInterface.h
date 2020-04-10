@@ -22,12 +22,6 @@
 // Mastodon includes
 #include "LayerParameter.h"
 
-template <class T = Material>
-class LayeredMaterialInterface;
-
-template <>
-InputParameters validParams<LayeredMaterialInterface<>>();
-
 /**
  * An interface class to build materials based on a layer number from a
  * variable.
@@ -35,11 +29,13 @@ InputParameters validParams<LayeredMaterialInterface<>>();
  * The main purpose is to add the getLayerParam function that allows access to
  * input parameters associated with a layer id in a simple manner.
  */
-template <class T>
+template <class T = Material>
 class LayeredMaterialInterface : public T
 {
 public:
   LayeredMaterialInterface(const InputParameters & parameters);
+
+  static InputParameters validParams();
 
   /**
    * Adds updating of the layer parameter data structure.
@@ -111,7 +107,7 @@ template <class T>
 LayeredMaterialInterface<T>::LayeredMaterialInterface(const InputParameters & parameters)
   : T(parameters),
     _layer_variable(T::coupledValue("layer_variable")),
-    _input_layer_ids(T::template getParamTempl<std::vector<unsigned int>>("layer_ids")),
+    _input_layer_ids(T::template getParam<std::vector<unsigned int>>("layer_ids")),
     _layer_id(getLayerParam<unsigned int>("layer_ids"))
 {
   if (!dynamic_cast<Material *>(this))
@@ -169,7 +165,7 @@ const MooseArray<P> &
 LayeredMaterialInterface<T>::getLayerParam(const std::string & param_name)
 {
   // Get the parameter data and check that it is the same size as "layer_ids"
-  const std::vector<P> & data = T::template getParamTempl<std::vector<P>>(param_name);
+  const std::vector<P> & data = T::template getParam<std::vector<P>>(param_name);
   if (data.size() != _input_layer_ids.size())
     mooseError("The parameter \"",
                param_name,
@@ -209,6 +205,23 @@ LayeredMaterialInterface<T>::addLayerVector(const std::vector<P> & data)
   std::shared_ptr<LayerParameter<P>> ptr =
       std::static_pointer_cast<LayerParameter<P>>(_layer_data.back());
   return ptr->array();
+}
+
+template <typename T>
+InputParameters
+LayeredMaterialInterface<T>::validParams()
+{
+  InputParameters params = emptyInputParameters();
+  params.addRequiredParam<std::vector<unsigned int>>(
+      "layer_ids",
+      "Vector of layer ids that maps one-to-one with the layered "
+      "input parameters. [This should be modified in the parent "
+      "classes validParam function using setDocString to include "
+      "information on the parameters which the layer ids "
+      "correspond.]");
+  params.addRequiredCoupledVar("layer_variable",
+                               "The variable providing the soil layer identification.");
+  return params;
 }
 
 #endif

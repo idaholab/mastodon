@@ -182,12 +182,8 @@ ISoilAction::act()
 {
   const bool use_ad = getParam<bool>("use_automatic_differentiation");
   std::string ad_prepend = "";
-  std::string ad_append = "";
   if (use_ad)
-  {
     ad_prepend = "AD";
-    ad_append = "<RESIDUAL>";
-  }
 
   std::vector<SubdomainName> block = getParam<std::vector<SubdomainName>>("block");
   std::vector<VariableName> layer_variable = getParam<std::vector<VariableName>>("layer_variable");
@@ -200,7 +196,7 @@ ISoilAction::act()
     mooseError("Error in" + name() + ". Density should be of the same size as layer_ids.");
   MooseEnum soil_type = getParam<MooseEnum>("soil_type");
   // Stress calculation
-  auto params = _factory.getValidParams(ad_prepend + "ComputeISoilStress" + ad_append);
+  auto params = _factory.getValidParams(ad_prepend + "ComputeISoilStress");
   params.set<std::vector<unsigned int>>("layer_ids") = layer_ids;
   params.set<std::vector<VariableName>>("layer_variable") = layer_variable;
   params.set<std::vector<SubdomainName>>("block") = block;
@@ -256,12 +252,7 @@ ISoilAction::act()
   }
   if (use_ad)
   {
-    _problem->addADResidualMaterial(ad_prepend + "ComputeISoilStress" + "<RESIDUAL>",
-                                    name() + "_stress" + "_residual" + block[0],
-                                    params);
-    _problem->addADJacobianMaterial(ad_prepend + "ComputeISoilStress" + "<JACOBIAN>",
-                                    name() + "_stress" + "_jacobian" + block[0],
-                                    params);
+    _problem->addMaterial(ad_prepend + "ComputeISoilStress", name() + "_stress" + block[0], params);
     _problem->haveADObjects(true);
   }
   else
@@ -273,19 +264,15 @@ ISoilAction::act()
   if (!finite_strain && soil_type != "thin_layer")
   {
     // create small incremental strain block
-    params = _factory.getValidParams(ad_prepend + "ComputeIncrementalSmallStrain" + ad_append);
+    params = _factory.getValidParams(ad_prepend + "ComputeIncrementalSmallStrain");
     std::string unique_strain_name = "strain_" + block[0];
     params.set<std::vector<SubdomainName>>("block") = block;
     params.set<std::vector<VariableName>>("displacements") = displacements;
     // params.set<bool>("stateful_displacements") = true; // deprecated
     if (use_ad)
     {
-      _problem->addADResidualMaterial(ad_prepend + "ComputeIncrementalSmallStrain" + "<RESIDUAL>",
-                                      name() + "_strain" + "_residual" + block[0],
-                                      params);
-      _problem->addADJacobianMaterial(ad_prepend + "ComputeIncrementalSmallStrain" + "<JACOBIAN>",
-                                      name() + "_strain" + "_jacobian" + block[0],
-                                      params);
+      _problem->addMaterial(
+          ad_prepend + "ComputeIncrementalSmallStrain", name() + "_strain" + block[0], params);
       _problem->haveADObjects(true);
     }
     else
@@ -295,19 +282,15 @@ ISoilAction::act()
   {
     if (soil_type == "thin_layer")
       // create finite strain block
-      params = _factory.getValidParams(ad_prepend + "ComputeFiniteStrain" + ad_append);
+      params = _factory.getValidParams(ad_prepend + "ComputeFiniteStrain");
     std::string unique_strain_name = "strain_" + block[0];
     params.set<std::vector<SubdomainName>>("block") = block;
     params.set<std::vector<VariableName>>("displacements") = displacements;
     // params.set<bool>("stateful_displacements") = true; // deprecated
     if (use_ad)
     {
-      _problem->addADResidualMaterial(ad_prepend + "ComputeFiniteStrain" + "<RESIDUAL>",
-                                      name() + "_strain" + "_residual" + block[0],
-                                      params);
-      _problem->addADJacobianMaterial(ad_prepend + "ComputeFiniteStrain" + "<JACOBIAN>",
-                                      name() + "_strain" + "_jacobian" + block[0],
-                                      params);
+      _problem->addMaterial(
+          ad_prepend + "ComputeFiniteStrain", name() + "_strain" + block[0], params);
       _problem->haveADObjects(true);
     }
     else
@@ -327,5 +310,6 @@ ISoilAction::act()
   params.set<bool>("wave_speed_calculation") = false;
   params.set<std::vector<unsigned int>>("layer_ids") = layer_ids;
   params.set<std::vector<VariableName>>("layer_variable") = layer_variable;
-  _problem->addMaterial("ComputeIsotropicElasticityTensorSoil", unique_elasticity_name, params);
+  _problem->addMaterial(
+      ad_prepend + "ComputeIsotropicElasticityTensorSoil", unique_elasticity_name, params);
 }
