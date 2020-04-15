@@ -64,14 +64,14 @@
     execute_on = initial
   [../]
   [./stress_zx]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = stress
     variable = stress_zx
     index_i = 0
     index_j = 2
   [../]
   [./strain_zx]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = total_strain
     variable = strain_zx
     index_i = 0
@@ -144,7 +144,7 @@
     displacements = 'disp_x disp_y disp_z'
   [../]
   [./sample_isoil_elasticitytensor]
-    type = ComputeIsotropicElasticityTensorSoil
+    type = ADComputeIsotropicElasticityTensorSoil
     block = '0'
     elastic_modulus = '1.0'
     poissons_ratio = '0.3'

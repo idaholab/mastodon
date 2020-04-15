@@ -58,6 +58,7 @@
     beta = 0.25
     gamma = 0.5
     eta = 0.64026
+    density = 'reg_density'
   [../]
   [./inertia_y]
     type = InertialForce
@@ -67,6 +68,7 @@
     beta = 0.25
     gamma = 0.5
     eta = 0.64026
+    density = 'reg_density'
   [../]
   [./inertia_z]
     type = InertialForce
@@ -76,11 +78,13 @@
     beta = 0.25
     gamma = 0.5
     eta = 0.64026
+    density = 'reg_density'
   [../]
   [./gravity]
     type = Gravity
     variable = disp_z
     value = -9.81
+    density = 'reg_density'
   [../]
 []
 
@@ -221,6 +225,11 @@
        use_automatic_differentiation = true
     [../]
   [../]
+  [converter]
+    type = MaterialConverter
+    ad_props_in = 'density'
+    reg_props_out = 'reg_density'
+  []
 []
 
 [Preconditioning]

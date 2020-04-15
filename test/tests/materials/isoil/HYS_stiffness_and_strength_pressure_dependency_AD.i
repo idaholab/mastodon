@@ -1,8 +1,14 @@
-# One element test to test the auto-generated thin_layer backbone curve for
-# Coulomb friction. The top surface of the element (z=0) is fixed and the
-# bottom surface (z=1) is moved by applying a cyclic preset displacement.
+# One element test to check pressure dependent stiffness and yield strength calcualtion.
 
-# This file DOES NOT use ISoilAction
+# The element is first intialized with stresses corresponding to acceleration due to gravity (g).
+# Then a body force equal to 3 * g is applied to the element thereby increasing the pressure experienced
+# by the element. The element is then sheared by moving the front surface (z = 0) in the x direction.
+
+# The resulting stress-strain curve is stiffer due to the increase in pressure and also the maximum/ultimate shear
+# stress at which the material completely fails is also higher due to the yield strength pressure correction.
+
+# Two combinations of the parameters a_0, a_1, and a_2 were tested using this input file, but only
+# one case can be used at a time.
 
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
@@ -18,9 +24,9 @@
   zmax = 1
 []
 
-
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
+  use_displaced_mesh = false
 []
 
 [Variables]
@@ -103,7 +109,6 @@
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
     zeta = 0.00006366
-    use_displaced_mesh = false
     use_automatic_differentiation = true
   [../]
   [./inertia_x]
@@ -114,7 +119,6 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
-    use_displaced_mesh = false
     density = 'reg_density'
   [../]
   [./inertia_y]
@@ -125,7 +129,6 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
-    use_displaced_mesh = false
     density = 'reg_density'
   [../]
   [./inertia_z]
@@ -136,14 +139,12 @@
     beta = 0.25
     gamma = 0.5
     eta = 7.854
-    use_displaced_mesh = false
     density = 'reg_density'
   [../]
   [./gravity]
     type = Gravity
     variable = disp_z
-    value = -9.81
-    use_displaced_mesh = false
+    value = -29.43
     density = 'reg_density'
   [../]
 []
@@ -283,7 +284,7 @@
     variable = layer_id
     interfaces = '2.0'
     direction = '0 0 1'
-    execute_on = initial
+    execute_on = 'initial'
   [../]
 []
 
@@ -291,13 +292,13 @@
   [./x_bot]
     type = PresetBC
     variable = disp_x
-    boundary = '0 1 2 3 4'
+    boundary = 0
     value = 0.0
   [../]
   [./y_bot]
     type = PresetBC
     variable = disp_y
-    boundary = '0 1 2 3 4'
+    boundary = 0
     value = 0.0
   [../]
   [./z_bot]
@@ -340,33 +341,33 @@
 []
 
 [Materials]
-  [./sample_isoil]
-    type = ADComputeISoilStress
-    soil_type = 'thin_layer'
-    layer_variable = layer_id
-    layer_ids = '0'
-    initial_shear_modulus = '20000'
-    poissons_ratio = '0.45'
-    friction_coefficient = '0.7'
-    hardening_ratio = '0.001'
-    p_ref = '8.6209091'
-    initial_soil_stress = '-8.0263636 0 0  0 -8.0263636 0  0 0 -9.810'
-  [../]
-  [./sample_isoil_strain]
-    ## Use ComputeFiniteStrain for soil_type = thin_layer since large strains are expected
-    type = ADComputeFiniteStrain
-    block = '0'
-    displacements = 'disp_x disp_y disp_z'
-  [../]
-  [./sample_isoil_elasticitytensor]
-    type = ADComputeIsotropicElasticityTensorSoil
-    block = '0'
-    shear_modulus = '20000'
-    poissons_ratio = '0.45'
-    density = '2.0'
-    wave_speed_calculation = false
-    layer_ids = '0'
-    layer_variable = layer_id
+  [./I_Soil]
+    [./soil_1]
+      soil_type = 'user_defined'
+      layer_variable = layer_id
+      layer_ids = '0'
+      backbone_curve_files = 'stress_strain20.csv'
+      poissons_ratio = '0.3'
+      block = 0
+      initial_soil_stress = '-12613 0 0  0 -12613 0  0 0 -29430'
+      pressure_dependency = true
+      b_exp = 0.5
+      p_ref = 6072.86
+      tension_pressure_cut_off = -1
+      density = '2000'
+      initial_shear_modulus = '19683812.98'
+
+      # Case 1
+      a0 = 0
+      a1 = 0
+      a2 = 1
+
+      # Case 2
+      #a0 = 0
+      #a1 = 1
+      #a2 = 0
+      use_automatic_differentiation = true
+    [../]
   [../]
   [converter]
     type = MaterialConverter
@@ -384,11 +385,11 @@
 
 [Executioner]
   type = Transient
-  solve_type = PJFNK
-  nl_abs_tol = 1e-8
-  nl_rel_tol = 1e-8
+  solve_type = NEWTON
+  nl_abs_tol = 1e-11
+  nl_rel_tol = 1e-11
   start_time = 0
-  end_time = 8
+  end_time = 10
   dt = 0.01
   timestep_tolerance = 1e-6
   petsc_options = '-snes_ksp_ew'
@@ -509,7 +510,11 @@
 []
 
 [Outputs]
-  exodus = true
+  file_base = HYS_stiffness_and_strength_pressure_dependency_out
+  [./out]
+    type = Exodus
+    hide = 'vel_x vel_y vel_z accel_x accel_y accel_z'
+  [../]
   csv = true
   perf_graph = false
 []

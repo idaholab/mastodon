@@ -23,21 +23,12 @@
 
 #include "ADComputeFiniteStrainElasticStress.h"
 
-#define usingComputeISoilStressMembers                                                             \
-  usingComputeFiniteStrainElasticStressMembers;                                                    \
-  using ADComputeISoilStress<compute_stage>::computeStress;                                        \
-  using ADComputeISoilStress<compute_stage>::computeSoilLayerProperties;
-
-template <ComputeStage>
-class ADComputeISoilStress;
-
-declareADValidParams(ADComputeISoilStress);
-
-template <ComputeStage compute_stage>
-class ADComputeISoilStress : public ADComputeFiniteStrainElasticStress<compute_stage>
+class ADComputeISoilStress : public ADComputeFiniteStrainElasticStress
 {
 public:
   ADComputeISoilStress(const InputParameters & parameters);
+
+  static InputParameters validParams();
 
   //  virtual void initialSetup() override;
 
@@ -65,7 +56,7 @@ protected:
 
   /// Material property which stores the current stress for each elastic
   /// perfectly plastic curve.
-  std::vector<ADMaterialProperty(RankTwoTensor) *> _stress_model;
+  std::vector<ADMaterialProperty<RankTwoTensor> *> _stress_model;
 
   /// Material property which stores the old stress for each elastic perfectly
   /// plastic curve.
@@ -91,7 +82,7 @@ protected:
   const std::vector<Real> _poissons_ratio;
 
   /// Density stored as a material property.
-  const MaterialProperty<Real> * _density;
+  const ADMaterialProperty<Real> * _density;
 
   /// Exponential parameter used in pressure dependent stiffness calcualtion.
   const Real _b_exp;
@@ -128,10 +119,10 @@ protected:
   ADReal _stiffness_pressure_correction;
 
   /// Computed shear wave speed.
-  MaterialProperty<Real> * _shear_wave_speed;
+  ADMaterialProperty<Real> * _shear_wave_speed;
 
   /// Computed P wave speed.
-  MaterialProperty<Real> * _P_wave_speed;
+  ADMaterialProperty<Real> * _P_wave_speed;
 
   /// The position of the current layer id in the vector layer_ids.
   int _pos;
@@ -175,6 +166,4 @@ protected:
 
   /// initial stress components
   std::vector<const Function *> _initial_soil_stress;
-
-  usingComputeFiniteStrainElasticStressMembers;
 };
