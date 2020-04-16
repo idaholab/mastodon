@@ -119,6 +119,7 @@
     gamma = 0.5
     eta = 7.854
     use_displaced_mesh = false
+    density = 'reg_density'
   [../]
   [./inertia_y]
     type = InertialForce
@@ -129,6 +130,7 @@
     gamma = 0.5
     eta = 7.854
     use_displaced_mesh = false
+    density = 'reg_density'
   [../]
   [./inertia_z]
     type = InertialForce
@@ -139,12 +141,14 @@
     gamma = 0.5
     eta = 7.854
     use_displaced_mesh = false
+    density = 'reg_density'
   [../]
   [./gravity]
     type = Gravity
     variable = disp_z
     value = -29.43
     use_displaced_mesh = false
+    density = 'reg_density'
   [../]
 []
 
@@ -195,84 +199,84 @@
     execute_on = timestep_end
   [../]
   [./stress_xy]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = stress
     variable = stress_xy
     index_i = 1
     index_j = 0
   [../]
   [./stress_yz]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = stress
     variable = stress_yz
     index_i = 2
     index_j = 1
   [../]
   [./stress_zx]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = stress
     variable = stress_zx
     index_i = 0
     index_j = 2
   [../]
   [./strain_xy]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = total_strain
     variable = stress_xy
     index_i = 1
     index_j = 0
   [../]
   [./strain_yz]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = total_strain
     variable = strain_yz
     index_i = 2
     index_j = 1
   [../]
   [./strain_zx]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = total_strain
     variable = strain_zx
     index_i = 0
     index_j = 2
   [../]
   [./stress_xx]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = stress
     variable = stress_xx
     index_i = 0
     index_j = 0
   [../]
   [./stress_yy]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = stress
     variable = stress_yy
     index_i = 1
     index_j = 1
   [../]
   [./stress_zz]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = stress
     variable = stress_zz
     index_i = 2
     index_j = 2
   [../]
   [./strain_xx]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = total_strain
     variable = strain_xx
     index_i = 0
     index_j = 0
   [../]
   [./strain_yy]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor =total_strain
     variable = strain_yy
     index_i = 1
     index_j = 1
   [../]
   [./strain_zz]
-    type = RankTwoAux
+    type = ADRankTwoAux
     rank_two_tensor = total_strain
     variable = strain_zz
     index_i = 2
@@ -362,7 +366,7 @@
     displacements = 'disp_x disp_y disp_z'
   [../]
   [./sample_isoil_elasticitytensor]
-    type = ComputeIsotropicElasticityTensorSoil
+    type = ADComputeIsotropicElasticityTensorSoil
     block = '0'
     elastic_modulus = '1.0'
     poissons_ratio = '0.3'
@@ -371,6 +375,11 @@
     layer_ids = '0'
     layer_variable = layer_id
   [../]
+  [converter]
+    type = MaterialConverter
+    ad_props_in = 'density'
+    reg_props_out = 'reg_density'
+  []
 []
 
 [Preconditioning]

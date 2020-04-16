@@ -14,13 +14,14 @@
 #include "ComputeIsotropicElasticityTensorSoil.h"
 
 registerMooseObject("MastodonApp", ComputeIsotropicElasticityTensorSoil);
+registerMooseObject("MastodonApp", ADComputeIsotropicElasticityTensorSoil);
 
-template <>
+template <bool is_ad>
 InputParameters
-validParams<ComputeIsotropicElasticityTensorSoil>()
+ComputeIsotropicElasticityTensorSoilTempl<is_ad>::validParams()
 {
-  InputParameters params = validParams<ComputeElasticityTensorBase>();
-  params += validParams<LayeredMaterialInterface<>>();
+  InputParameters params = ComputeElasticityTensorBaseTempl<is_ad>::validParams();
+  params += LayeredMaterialInterface<ComputeElasticityTensorBaseTempl<is_ad>>::validParams();
   params.addClassDescription("Compute an isotropic elasticity tensor for a "
                              "layered soil material when shear modulus or elastic modulus, "
                              "poisson's ratio and density are provided as "
@@ -50,8 +51,9 @@ validParams<ComputeIsotropicElasticityTensorSoil>()
   return params;
 }
 
+template <bool is_ad>
 const MooseArray<Real> &
-getShearModulus(ComputeIsotropicElasticityTensorSoil * object,
+getShearModulus(ComputeIsotropicElasticityTensorSoilTempl<is_ad> * object,
                 std::vector<Real> & shear_modulus,
                 std::string name)
 {
@@ -63,13 +65,13 @@ getShearModulus(ComputeIsotropicElasticityTensorSoil * object,
     mooseError("In block " + name +
                ". Please provide ONE of the parameters, 'shear_modulus' or 'elastic_modulus'.");
   if (object->isParamValid("shear_modulus"))
-    return object->getLayerParam<Real>("shear_modulus");
+    return object->template getLayerParam<Real>("shear_modulus");
   else
   {
     const std::vector<Real> & elastic_modulus =
-        object->getParamTempl<std::vector<Real>>("elastic_modulus");
+        object->template getParam<std::vector<Real>>("elastic_modulus");
     const std::vector<Real> & poissons_ratio =
-        object->getParamTempl<std::vector<Real>>("poissons_ratio");
+        object->template getParam<std::vector<Real>>("poissons_ratio");
     shear_modulus.resize(elastic_modulus.size());
     for (std::size_t i = 0; i < shear_modulus.size(); ++i)
       shear_modulus[i] = elastic_modulus[i] / (2 * (1 + poissons_ratio[i]));
@@ -77,18 +79,23 @@ getShearModulus(ComputeIsotropicElasticityTensorSoil * object,
   }
 }
 
-ComputeIsotropicElasticityTensorSoil::ComputeIsotropicElasticityTensorSoil(
+template <bool is_ad>
+ComputeIsotropicElasticityTensorSoilTempl<is_ad>::ComputeIsotropicElasticityTensorSoilTempl(
     const InputParameters & parameters)
-  : LayeredMaterialInterface(parameters),
+  : LayeredMaterialInterface<ComputeElasticityTensorBaseTempl<is_ad>>(parameters),
     _input_shear_modulus(),
     _layer_shear_modulus(getShearModulus(this, _input_shear_modulus, name())),
-    _layer_density(getLayerParam<Real>("density")),
-    _layer_poissons_ratio(getLayerParam<Real>("poissons_ratio")),
-    _wave_speed_calculation(getParam<bool>("wave_speed_calculation")),
-    _shear_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("shear_wave_speed") : NULL),
-    _P_wave_speed(_wave_speed_calculation ? &declareProperty<Real>("P_wave_speed") : NULL),
-    _density(declareProperty<Real>("density")),
-    _scale_density(getParam<Real>("scale_factor_density")),
+    _layer_density(this->template getLayerParam<Real>("density")),
+    _layer_poissons_ratio(this->template getLayerParam<Real>("poissons_ratio")),
+    _wave_speed_calculation(this->template getParam<bool>("wave_speed_calculation")),
+    _shear_wave_speed(_wave_speed_calculation
+                          ? &this->template declareGenericProperty<Real, is_ad>("shear_wave_speed")
+                          : NULL),
+    _P_wave_speed(_wave_speed_calculation
+                      ? &this->template declareGenericProperty<Real, is_ad>("P_wave_speed")
+                      : NULL),
+    _density(this->template declareGenericProperty<Real, is_ad>("density")),
+    _scale_density(this->template getParam<Real>("scale_factor_density")),
     _effective_stiffness_local(parameters.isParamValid("effective_stiffness_local"))
 {
 
@@ -104,8 +111,9 @@ ComputeIsotropicElasticityTensorSoil::ComputeIsotropicElasticityTensorSoil(
   _Cijkl.fillFromInputVector(iso_const, RankFourTensor::symmetric_isotropic);
 }
 
+template <bool is_ad>
 void
-ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
+ComputeIsotropicElasticityTensorSoilTempl<is_ad>::computeQpElasticityTensor()
 {
 
   _P_wave_modulus = _layer_shear_modulus[_qp] * 2.0 * (1.0 - _layer_poissons_ratio[_qp]) /
@@ -142,3 +150,6 @@ ComputeIsotropicElasticityTensorSoil::computeQpElasticityTensor()
   // Assign effective stiffness at a given quad point
   _effective_stiffness[_qp] = _effective_stiffness_local;
 }
+
+template class ComputeIsotropicElasticityTensorSoilTempl<false>;
+template class ComputeIsotropicElasticityTensorSoilTempl<true>;

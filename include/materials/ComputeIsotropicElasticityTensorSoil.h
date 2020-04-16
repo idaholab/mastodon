@@ -20,21 +20,19 @@
 // Mastodon includes
 #include "LayeredMaterialInterface.h"
 
-class ComputeIsotropicElasticityTensorSoil;
-
-template <>
-InputParameters validParams<ComputeIsotropicElasticityTensorSoil>();
-
 /**
  * This material defines elasticity tensor for isotropic linear elastic
  * layer soil material and also calculates the material properties shear and P
  * wave velocities.
  */
-class ComputeIsotropicElasticityTensorSoil
-    : public LayeredMaterialInterface<ComputeElasticityTensorBase>
+template <bool is_ad>
+class ComputeIsotropicElasticityTensorSoilTempl
+  : public LayeredMaterialInterface<ComputeElasticityTensorBaseTempl<is_ad>>
 {
 public:
-  ComputeIsotropicElasticityTensorSoil(const InputParameters & parameters);
+  ComputeIsotropicElasticityTensorSoilTempl(const InputParameters & parameters);
+
+  static InputParameters validParams();
 
 protected:
   virtual void computeQpElasticityTensor() override;
@@ -57,13 +55,13 @@ protected:
   bool _wave_speed_calculation;
 
   /// Computed shear wave speed.
-  MaterialProperty<Real> * _shear_wave_speed;
+  GenericMaterialProperty<Real, is_ad> * _shear_wave_speed;
 
   /// Computed P wave speed.
-  MaterialProperty<Real> * _P_wave_speed;
+  GenericMaterialProperty<Real, is_ad> * _P_wave_speed;
 
   /// Density stored as a material property.
-  MaterialProperty<Real> & _density;
+  GenericMaterialProperty<Real, is_ad> & _density;
 
   /// Density scale factor
   const Real & _scale_density;
@@ -73,6 +71,16 @@ protected:
 
   /// Effective stiffness of the element: function of material properties
   Real _effective_stiffness_local;
+
+  using LayeredMaterialInterface<ComputeElasticityTensorBaseTempl<is_ad>>::issueGuarantee;
+  using LayeredMaterialInterface<ComputeElasticityTensorBaseTempl<is_ad>>::_elasticity_tensor_name;
+  using LayeredMaterialInterface<ComputeElasticityTensorBaseTempl<is_ad>>::_elasticity_tensor;
+  using LayeredMaterialInterface<ComputeElasticityTensorBaseTempl<is_ad>>::_qp;
+  using LayeredMaterialInterface<ComputeElasticityTensorBaseTempl<is_ad>>::name;
+  using LayeredMaterialInterface<ComputeElasticityTensorBaseTempl<is_ad>>::_effective_stiffness;
 };
+
+typedef ComputeIsotropicElasticityTensorSoilTempl<false> ComputeIsotropicElasticityTensorSoil;
+typedef ComputeIsotropicElasticityTensorSoilTempl<true> ADComputeIsotropicElasticityTensorSoil;
 
 #endif // COMPUTEISOTROPICELASTICITYTENSORSOIL_H

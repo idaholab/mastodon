@@ -96,11 +96,9 @@
   [./darendeli_AD]
     # 1 element problem with ISoilAction to check auto-generated darendeli stress-strain curves
     type = Exodiff
-    input = HYS_darendeli.i
+    input = HYS_darendeli_AD.i
     exodiff = HYS_darendeli_out.e
     prereq = darendeli_noaction
-    cli_args = 'Kernels/DynamicTensorMechanics/use_automatic_differentiation=true Materials/I_Soil/soil_1/use_automatic_differentiation=true Executioner/solve_type=NEWTON Outputs/file_base=HYS_darendeli_out'
-
     requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve using the Darendeli formulation and shall also automatically compute the Jacobian matrix."
   [../]
 
@@ -258,10 +256,9 @@
   [./thin_layer_AD]
     # 1 element problem with ISoilAction to check auto-generated thin_layer stress-strain curves
     type = Exodiff
-    input = HYS_thin_layer.i
+    input = HYS_thin_layer_AD.i
     exodiff = HYS_thin_layer_out.e
     prereq = thin_layer_noaction
-    cli_args = 'Kernels/DynamicTensorMechanics/use_automatic_differentiation=true Materials/I_Soil/soil_thin_layer/use_automatic_differentiation=true Executioner/solve_type=PJFNK Outputs/file_base=HYS_thin_layer_out'
     abs_zero = 3e-6
     rel_err = 5e-5
 
@@ -327,12 +324,10 @@
   [./stiffness_and_strength_pressure_dependency_AD]
     # 1 element problem with ISoilAction to check stiffness and strength pressure dependency
     type = Exodiff
-    input = HYS_stiffness_and_strength_pressure_dependency.i
+    input = HYS_stiffness_and_strength_pressure_dependency_AD.i
     exodiff = HYS_stiffness_and_strength_pressure_dependency_out.e
     prereq = stiffness_and_strength_pressure_dependency_noaction
     abs_zero = 5e-8
-    cli_args = 'Kernels/DynamicTensorMechanics/use_automatic_differentiation=true Materials/I_Soil/soil_1/use_automatic_differentiation=true Executioner/solve_type=NEWTON Outputs/file_base=HYS_stiffness_and_strength_pressure_dependency_out'
-
     requirement = "The ISoilAction and ComputeISoilStress class shall accurately adjust the stress-strain curve to account for pressure dependent changes in stiffness and strength of the soil and shall automatically construct the Jacobian matrix."
   [../]
 
