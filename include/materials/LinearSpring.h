@@ -18,12 +18,6 @@
 #include "Material.h"
 #include "RankTwoTensor.h"
 
-// Forward Declarations
-class LinearSpring;
-
-template <>
-InputParameters validParams<LinearSpring>();
-
 /**
  * LinearSpring material simulates a linear spring with a diagonal stiffness
  * matrix, including rotational stiffnesses.
@@ -31,6 +25,7 @@ InputParameters validParams<LinearSpring>();
 class LinearSpring : public Material
 {
 public:
+  static InputParameters validParams();
   LinearSpring(const InputParameters & parameters);
 
 protected:

@@ -23,15 +23,10 @@
  * of a damper element.
  **/
 
-// Forward Declarations
-class ComputeFVDamperElasticity;
-
-template <>
-InputParameters validParams<ComputeFVDamperElasticity>();
-
 class ComputeFVDamperElasticity : public Material
 {
 public:
+  static InputParameters validParams();
   ComputeFVDamperElasticity(const InputParameters & parameters);
 
 protected:
