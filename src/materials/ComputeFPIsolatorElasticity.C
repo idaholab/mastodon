@@ -14,11 +14,10 @@
 
 registerMooseObject("MastodonApp", ComputeFPIsolatorElasticity);
 
-template <>
 InputParameters
-validParams<ComputeFPIsolatorElasticity>()
+ComputeFPIsolatorElasticity::validParams()
 {
-  InputParameters params = validParams<Material>();
+  InputParameters params = Material::validParams();
   params.addClassDescription("Compute the forces and the stiffness matrix for a single concave "
                              "Friction Pendulum isolator element.");
   // Switches

@@ -26,11 +26,10 @@
 
 registerMooseObject("MastodonApp", ComputeISoilStress);
 
-template <>
 InputParameters
-validParams<ComputeISoilStress>()
+ComputeISoilStress::validParams()
 {
-  InputParameters params = validParams<ComputeFiniteStrainElasticStress>();
+  InputParameters params = ComputeFiniteStrainElasticStress::validParams();
   params.addClassDescription("Compute total stress for the nonlinear material "
                              "model I-Soil using a backbone curve.");
   params.addRequiredCoupledVar("layer_variable",

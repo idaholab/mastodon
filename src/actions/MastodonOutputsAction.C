@@ -26,11 +26,10 @@ registerMooseAction("MastodonApp", MastodonOutputsAction, "add_aux_variable");
 
 registerMooseAction("MastodonApp", MastodonOutputsAction, "add_aux_kernel");
 
-template <>
 InputParameters
-validParams<MastodonOutputsAction>()
+MastodonOutputsAction::validParams()
 {
-  InputParameters params = validParams<Action>();
+  InputParameters params = Action::validParams();
   params.addClassDescription("Create required objects for requested output.");
   params.addParam<bool>(
       "stress_strain_output", false, "true, if stress and strain output is required.");

@@ -4,11 +4,8 @@
 // MOOSE includes
 #include "MultiAppTransfer.h"
 
-class PiecewiseFunctionTransfer;
 class PiecewiseBase;
 
-template <>
-InputParameters validParams<PiecewiseFunctionTransfer>();
 
 /**
  * Transfers scale hazard curve to a Piecewise function.
@@ -16,6 +13,7 @@ InputParameters validParams<PiecewiseFunctionTransfer>();
 class PiecewiseFunctionTransfer : public MultiAppTransfer
 {
 public:
+  static InputParameters validParams();
   PiecewiseFunctionTransfer(const InputParameters & parameters);
   virtual void execute() override;
 

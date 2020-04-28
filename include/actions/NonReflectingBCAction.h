@@ -22,12 +22,11 @@
 class NonReflectingBCAction : public Action
 {
 public:
+  static InputParameters validParams();
   NonReflectingBCAction(const InputParameters & params);
 
   virtual void act() override;
 };
 
-template <>
-InputParameters validParams<NonReflectingBCAction>();
 
 #endif // NONREFLECTINGBCACTION_H

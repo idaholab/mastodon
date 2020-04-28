@@ -7,11 +7,10 @@
 
 registerMooseObject("MastodonApp", GroundMotionReader);
 
-template <>
 InputParameters
-validParams<GroundMotionReader>()
+GroundMotionReader::validParams()
 {
-  InputParameters params = validParams<GeneralUserObject>();
+  InputParameters params = GeneralUserObject::validParams();
   params.addClassDescription("Reads ground motion data from files.");
   params.set<ExecFlagEnum>("execute_on") = EXEC_NONE;
   params.suppressParameter<ExecFlagEnum>("execute_on");

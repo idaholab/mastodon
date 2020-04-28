@@ -8,11 +8,10 @@
 
 registerMooseObject("MastodonApp", HousnerSpectrumIntensity);
 
-template <>
 InputParameters
-validParams<HousnerSpectrumIntensity>()
+HousnerSpectrumIntensity::validParams()
 {
-  InputParameters params = validParams<GeneralVectorPostprocessor>();
+  InputParameters params = GeneralVectorPostprocessor::validParams();
   params.addRequiredParam<VectorPostprocessorName>(
       "vectorpostprocessor",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "

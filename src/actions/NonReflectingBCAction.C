@@ -18,11 +18,10 @@
 
 registerMooseAction("MastodonApp", NonReflectingBCAction, "add_bc");
 
-template <>
 InputParameters
-validParams<NonReflectingBCAction>()
+NonReflectingBCAction::validParams()
 {
-  InputParameters params = validParams<Action>();
+  InputParameters params = Action::validParams();
   params.addClassDescription("Set up Non-reflecting boundary conditions in different directions.");
   params += NonReflectingBC::commonParameters();
   params.addRequiredParam<std::vector<BoundaryName>>(

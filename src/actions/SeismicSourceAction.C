@@ -24,11 +24,10 @@
 **/
 registerMooseAction("MastodonApp", SeismicSourceAction, "add_dirac_kernel");
 
-template <>
 InputParameters
-validParams<SeismicSourceAction>()
+SeismicSourceAction::validParams()
 {
-  InputParameters params = validParams<Action>();
+  InputParameters params = Action::validParams();
   params.addClassDescription("Set up Seismic source dirac kernels in multiple directions.");
   params += SeismicSource::commonParameters();
   params.addRequiredParam<std::vector<NonlinearVariableName>>(

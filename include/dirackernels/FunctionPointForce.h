@@ -19,10 +19,6 @@
 
 // Forward Declarations
 class Function;
-class FunctionPointForce;
-
-template <>
-InputParameters validParams<FunctionPointForce>();
 
 /**
  * This class applies a force at the given point/points in a given direction.
@@ -31,6 +27,7 @@ InputParameters validParams<FunctionPointForce>();
 class FunctionPointForce : public DiracKernel
 {
 public:
+  static InputParameters validParams();
   FunctionPointForce(const InputParameters & parameters);
 
   virtual void addPoints() override;

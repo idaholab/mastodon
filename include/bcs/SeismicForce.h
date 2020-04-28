@@ -17,10 +17,7 @@
 #include "IntegratedBC.h"
 
 class Function;
-class SeismicForce;
 
-template <>
-InputParameters validParams<SeismicForce>();
 
 /**
  * SeismicForce applies a pressure on a given boundary in the direction defined
@@ -29,6 +26,7 @@ InputParameters validParams<SeismicForce>();
 class SeismicForce : public IntegratedBC
 {
 public:
+  static InputParameters validParams();
   SeismicForce(const InputParameters & parameters);
 
 protected:

@@ -14,11 +14,10 @@
 
 registerMooseObject("MastodonApp", LinearSpring);
 
-template <>
 InputParameters
-validParams<LinearSpring>()
+LinearSpring::validParams()
 {
-  InputParameters params = validParams<Material>();
+  InputParameters params = Material::validParams();
   params.addClassDescription(
       "Compute the deformations, forces and stiffness matrix of a two-noded spring element.");
   params.addRequiredCoupledVar(

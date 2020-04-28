@@ -32,11 +32,10 @@ registerMooseAction("MastodonApp", MastodonModelAction, "add_kernel");
 
 registerMooseAction("MastodonApp", MastodonModelAction, "add_aux_kernel");
 
-template <>
 InputParameters
-validParams<MastodonModelAction>()
+MastodonModelAction::validParams()
 {
-  InputParameters params = validParams<Action>();
+  InputParameters params = Action::validParams();
   params.addClassDescription("Creates the required displacement Variables, velocity and "
                              "acceleration AuxVariables and AuxKernels, inertia kernels and the "
                              "DynamicTensorMechanicsAction based on the dimension of the mesh and "

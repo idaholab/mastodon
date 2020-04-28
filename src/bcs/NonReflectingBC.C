@@ -18,11 +18,10 @@
 
 registerMooseObject("MastodonApp", NonReflectingBC);
 
-template <>
 InputParameters
-validParams<NonReflectingBC>()
+NonReflectingBC::validParams()
 {
-  InputParameters params = validParams<IntegratedBC>();
+  InputParameters params = IntegratedBC::validParams();
   params.addClassDescription("Applies Lysmer damper in the normal and "
                              "tangential directions to soil boundary.");
   params += NonReflectingBC::commonParameters();

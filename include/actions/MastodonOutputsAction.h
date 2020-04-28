@@ -25,6 +25,7 @@
 class MastodonOutputsAction : public Action
 {
 public:
+  static InputParameters validParams();
   MastodonOutputsAction(const InputParameters & params);
 
   virtual void act() override;
@@ -43,7 +44,5 @@ private:
   const std::vector<std::size_t> _matrix_size;
 };
 
-template <>
-InputParameters validParams<MastodonOutputsAction>();
 
 #endif // MASTODONOUTPUTSACTION_H

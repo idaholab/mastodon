@@ -22,11 +22,10 @@
 
 registerMooseAction("MastodonApp", SeismicDisplacementAction, "add_bc");
 
-template <>
 InputParameters
-validParams<SeismicDisplacementAction>()
+SeismicDisplacementAction::validParams()
 {
-  InputParameters params = validParams<Action>();
+  InputParameters params = Action::validParams();
   params.addClassDescription("This action sets up seismic displacement boundary conditions.");
 
   params.addRequiredParam<std::vector<BoundaryName>>(

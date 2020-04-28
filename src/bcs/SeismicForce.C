@@ -18,11 +18,10 @@
 
 registerMooseObject("MastodonApp", SeismicForce);
 
-template <>
 InputParameters
-validParams<SeismicForce>()
+SeismicForce::validParams()
 {
-  InputParameters params = validParams<IntegratedBC>();
+  InputParameters params = IntegratedBC::validParams();
   params.addClassDescription("Applies a seismic force on a given boundary in a "
                              "given direction proportional to input velocity.");
   params.addRequiredParam<unsigned int>("component",

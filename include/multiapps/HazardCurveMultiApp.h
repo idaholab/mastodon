@@ -8,14 +8,12 @@
 // MASTODON includes
 #include "HazardCurve.h"
 
-class HazardCurveMultiApp;
 
-template <>
-InputParameters validParams<HazardCurveMultiApp>();
 
 class HazardCurveMultiApp : public TransientMultiApp, public UserObjectInterface
 {
 public:
+  static InputParameters validParams();
   HazardCurveMultiApp(const InputParameters & parameters);
 
 protected:

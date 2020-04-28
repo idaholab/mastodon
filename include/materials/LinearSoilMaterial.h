@@ -7,12 +7,6 @@
 // Mastodon includes
 #include "LayeredMaterialInterface.h"
 
-// Forward Declarations
-class LinearSoilMaterial;
-
-template <>
-InputParameters validParams<LinearSoilMaterial>();
-
 /**
  * A material for computing soil properties
  * based on linear relationship using shear modules and density.
@@ -20,6 +14,7 @@ InputParameters validParams<LinearSoilMaterial>();
 class LinearSoilMaterial : public LayeredMaterialInterface<Material>
 {
 public:
+  static InputParameters validParams();
   LinearSoilMaterial(const InputParameters & parameters);
 
 protected:

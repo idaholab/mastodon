@@ -22,15 +22,10 @@
  * isolator element.
  */
 
-// Forward Declarations
-class ComputeIsolatorDeformation;
-
-template <>
-InputParameters validParams<ComputeIsolatorDeformation>();
-
 class ComputeIsolatorDeformation : public Material
 {
 public:
+  static InputParameters validParams();
   ComputeIsolatorDeformation(const InputParameters & parameters);
 
 protected:

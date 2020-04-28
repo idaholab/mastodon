@@ -18,12 +18,6 @@
 // MOOSE includes
 #include "GeneralVectorPostprocessor.h"
 
-// Forward Declarations
-class HousnerSpectrumIntensity;
-
-template <>
-InputParameters validParams<HousnerSpectrumIntensity>();
-
 /**
  *  HousnerSpectrumIntensity is a type of GeneralVectorPostprocessor that computes the
  *  Housner Spectrum Intensity (HSI) for the given acceleration variables from a
@@ -37,6 +31,7 @@ InputParameters validParams<HousnerSpectrumIntensity>();
 class HousnerSpectrumIntensity : public GeneralVectorPostprocessor
 {
 public:
+  static InputParameters validParams();
   HousnerSpectrumIntensity(const InputParameters & parameters);
   virtual void initialSetup() override;
   virtual void initialize() override;

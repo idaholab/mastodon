@@ -18,12 +18,6 @@
 // MOOSE includes
 #include "GeneralVectorPostprocessor.h"
 
-// Forward Declarations
-class ResponseSpectraCalculator;
-
-template <>
-InputParameters validParams<ResponseSpectraCalculator>();
-
 /**
  *  ResponseSpectraCalculator is a type of VectorPostprocessor that computes the
  *  response spectra (pseudo displacement, pseudo velocity and pseudo
@@ -33,6 +27,7 @@ InputParameters validParams<ResponseSpectraCalculator>();
 class ResponseSpectraCalculator : public GeneralVectorPostprocessor
 {
 public:
+  static InputParameters validParams();
   ResponseSpectraCalculator(const InputParameters & parameters);
   virtual void initialSetup() override;
   virtual void initialize() override;
