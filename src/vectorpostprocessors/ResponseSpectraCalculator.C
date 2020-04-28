@@ -7,11 +7,10 @@
 
 registerMooseObject("MastodonApp", ResponseSpectraCalculator);
 
-template <>
 InputParameters
-validParams<ResponseSpectraCalculator>()
+ResponseSpectraCalculator::validParams()
 {
-  InputParameters params = validParams<GeneralVectorPostprocessor>();
+  InputParameters params = GeneralVectorPostprocessor::validParams();
   params.addRequiredParam<VectorPostprocessorName>(
       "vectorpostprocessor",
       "Name of the ResponseHistoryBuilder vectorpostprocessor, for which "

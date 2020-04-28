@@ -18,12 +18,6 @@
 // MOOSE includes
 #include "NodalVectorPostprocessor.h"
 
-// Forward Declarations
-class ResponseHistoryBuilder;
-
-template <>
-InputParameters validParams<ResponseHistoryBuilder>();
-
 /**
  *  ResponseHistoryBuilder is a type of NodalVectorPostprocessor that builds the
  *  response histories of a nodal response such as acceleration, velocity,
@@ -32,6 +26,7 @@ InputParameters validParams<ResponseHistoryBuilder>();
 class ResponseHistoryBuilder : public NodalVectorPostprocessor
 {
 public:
+  static InputParameters validParams();
   ResponseHistoryBuilder(const InputParameters & parameters);
   virtual void initialize() override;
   virtual void finalize() override;

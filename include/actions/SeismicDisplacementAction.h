@@ -17,10 +17,7 @@
 // MOOSE includes
 #include "Action.h"
 
-class SeismicDisplacementAction;
 
-template <>
-InputParameters validParams<SeismicDisplacementAction>();
 
 /**
  * This action is used to apply seismic input by using PresetDisplacement
@@ -29,6 +26,7 @@ InputParameters validParams<SeismicDisplacementAction>();
 class SeismicDisplacementAction : public Action
 {
 public:
+  static InputParameters validParams();
   SeismicDisplacementAction(const InputParameters & params);
 
   virtual void act() override;

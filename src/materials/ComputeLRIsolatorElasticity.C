@@ -28,11 +28,10 @@
 
 registerMooseObject("MastodonApp", ComputeLRIsolatorElasticity);
 
-template <>
 InputParameters
-validParams<ComputeLRIsolatorElasticity>()
+ComputeLRIsolatorElasticity::validParams()
 {
-  InputParameters params = validParams<Material>();
+  InputParameters params = Material::validParams();
   params.addClassDescription(
       "Compute the forces and the stiffness matrix for an LR isolator element.");
   // Switches

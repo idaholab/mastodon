@@ -32,14 +32,12 @@
 
 // Forward Declarations
 class Function;
-class SeismicSource;
 
-template <>
-InputParameters validParams<SeismicSource>();
 
 class SeismicSource : public DiracKernel
 {
 public:
+  static InputParameters validParams();
   SeismicSource(const InputParameters & parameters);
 
   /**

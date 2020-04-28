@@ -23,15 +23,10 @@
  * of an FP isolator element.
  */
 
-// Forward Declarations
-class ComputeFPIsolatorElasticity;
-
-template <>
-InputParameters validParams<ComputeFPIsolatorElasticity>();
-
 class ComputeFPIsolatorElasticity : public Material
 {
 public:
+  static InputParameters validParams();
   ComputeFPIsolatorElasticity(const InputParameters & parameters);
 
 protected:

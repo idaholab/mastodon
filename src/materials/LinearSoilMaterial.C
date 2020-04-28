@@ -3,12 +3,11 @@
 
 registerMooseObject("MastodonApp", LinearSoilMaterial);
 
-template <>
 InputParameters
-validParams<LinearSoilMaterial>()
+LinearSoilMaterial::validParams()
 {
-  InputParameters params = validParams<Material>();
-  params += validParams<LayeredMaterialInterface<>>();
+  InputParameters params = Material::validParams();
+  params += LayeredMaterialInterface<>::validParams();
   params.setDocString("layer_ids",
                       "Vector of layer ids that map one-to-one "
                       "with the 'shear_modulus' and 'density' "

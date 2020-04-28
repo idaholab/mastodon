@@ -30,11 +30,10 @@
 
 registerMooseObject("MastodonApp", SeismicSource);
 
-template <>
 InputParameters
-validParams<SeismicSource>()
+SeismicSource::validParams()
 {
-  InputParameters params = validParams<DiracKernel>();
+  InputParameters params = DiracKernel::validParams();
   params.addClassDescription("This class applies a seismic source at a given point.");
   params += SeismicSource::commonParameters();
 

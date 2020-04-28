@@ -32,13 +32,10 @@ public:
     : LayeredMaterialInterface(parameters)
   {
   }
-
+  static InputParameters validParams();
 protected:
   virtual void computeQpProperties() override {}
 };
-
-template <>
-InputParameters validParams<TestLayeredMaterialInterfaceDocString>();
 
 /**
  * Test object needed to test Material type of LayeredMaterialInterface
@@ -46,14 +43,12 @@ InputParameters validParams<TestLayeredMaterialInterfaceDocString>();
 class TestLayeredMaterialInterfaceKernel : public Kernel
 {
 public:
+  static InputParameters validParams();
   TestLayeredMaterialInterfaceKernel(const InputParameters & parameters) : Kernel(parameters) {}
 
 protected:
   virtual void computeProperties() {}
 };
-
-template <>
-InputParameters validParams<TestLayeredMaterialInterfaceKernel>();
 
 /**
  * Test object for checking Material type check error of LayeredMaterialInterface
@@ -66,10 +61,8 @@ public:
     : LayeredMaterialInterface(parameters)
   {
   }
+  static InputParameters validParams();
   virtual Real computeQpResidual() override { return 0.0; }
 };
-
-template <>
-InputParameters validParams<TestLayeredMaterialInterfaceTypeError>();
 
 #endif

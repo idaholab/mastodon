@@ -28,14 +28,10 @@
 // Mastodon includes
 #include "LayeredMaterialInterface.h"
 
-class ComputeISoilStress;
-
-template <>
-InputParameters validParams<ComputeISoilStress>();
-
 class ComputeISoilStress : public ComputeFiniteStrainElasticStress
 {
 public:
+  static InputParameters validParams();
   ComputeISoilStress(const InputParameters & parameters);
 
 protected:

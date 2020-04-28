@@ -15,11 +15,10 @@
 
 registerMooseObject("MastodonApp", ComputeFVDamperElasticity);
 
-template <>
 InputParameters
-validParams<ComputeFVDamperElasticity>()
+ComputeFVDamperElasticity::validParams()
 {
-  InputParameters params = validParams<Material>();
+  InputParameters params = Material::validParams();
   params.addClassDescription("Compute the deformations, forces and the stiffness "
                              "matrix corresponding to a two-node nonlinear fluid "
                              "viscous damper element.");

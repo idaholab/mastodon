@@ -18,12 +18,6 @@
 // MOOSE includes
 #include "GeneralVectorPostprocessor.h"
 
-// Forward Declarations
-class Fragility;
-
-template <>
-InputParameters validParams<Fragility>();
-
 /**
  *  The `Fragility` VectorPostprocessor computes the seismic fragility of a component
  *  given the dynamic properties of the component, capacity distribution of the component,
@@ -38,6 +32,7 @@ InputParameters validParams<Fragility>();
 class Fragility : public GeneralVectorPostprocessor
 {
 public:
+  static InputParameters validParams();
   Fragility(const InputParameters & parameters);
   virtual void initialize() override;
   virtual void execute() override;

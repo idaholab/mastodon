@@ -6,11 +6,10 @@
 
 registerMooseObject("MastodonApp", MinimumElementSizeMarker);
 
-template <>
 InputParameters
-validParams<MinimumElementSizeMarker>()
+MinimumElementSizeMarker::validParams()
 {
-  InputParameters params = validParams<IndicatorMarker>();
+  InputParameters params = IndicatorMarker::validParams();
   params.addParam<Real>("scale",
                         1.0,
                         "Additional scale term to multiply with "

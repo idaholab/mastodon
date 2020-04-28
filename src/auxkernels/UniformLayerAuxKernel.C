@@ -3,11 +3,10 @@
 
 registerMooseObject("MastodonApp", UniformLayerAuxKernel);
 
-template <>
 InputParameters
-validParams<UniformLayerAuxKernel>()
+UniformLayerAuxKernel::validParams()
 {
-  InputParameters params = validParams<AuxKernel>();
+  InputParameters params = AuxKernel::validParams();
   params.addRequiredParam<std::vector<Real>>(
       "interfaces",
       "A list of layer interface locations to apply across the "

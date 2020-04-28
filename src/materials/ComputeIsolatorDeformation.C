@@ -28,11 +28,10 @@
 
 registerMooseObject("MastodonApp", ComputeIsolatorDeformation);
 
-template <>
 InputParameters
-validParams<ComputeIsolatorDeformation>()
+ComputeIsolatorDeformation::validParams()
 {
-  InputParameters params = validParams<Material>();
+  InputParameters params = Material::validParams();
   params.addClassDescription(
       "Compute the deformations and rotations in a two-noded isolator element.");
   params.addRequiredCoupledVar(

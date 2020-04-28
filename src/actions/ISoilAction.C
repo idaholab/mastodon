@@ -14,7 +14,6 @@
 
 // This code was implemented in colloboration with Ozgun Numanoglu
 // (numanog2@illinois.edu) and Omar Baltaji (baltaji2@illinois.edu) from UIUC.
-
 #include "ISoilAction.h"
 
 #include "ColumnMajorMatrix.h"
@@ -25,11 +24,10 @@
 
 registerMooseAction("MastodonApp", ISoilAction, "add_material");
 
-template <>
 InputParameters
-validParams<ISoilAction>()
+ISoilAction::validParams()
 {
-  InputParameters params = validParams<Action>();
+  InputParameters params = Action::validParams();
   params.addClassDescription("Set up I-Soil material model.");
   params.addRequiredParam<std::vector<VariableName>>(
       "displacements", "The vector of displacement variables in the problem.");

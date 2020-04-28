@@ -3,14 +3,12 @@
 
 #include "MooseApp.h"
 
-class MastodonApp;
 
-template <>
-InputParameters validParams<MastodonApp>();
 
 class MastodonApp : public MooseApp
 {
 public:
+  static InputParameters validParams();
   MastodonApp(InputParameters parameters);
   static void registerApps();
   static void registerAll(Factory &, ActionFactory &, Syntax &);

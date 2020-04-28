@@ -8,11 +8,10 @@
 
 registerMooseObject("MastodonApp", PiecewiseFunctionTransfer);
 
-template <>
 InputParameters
-validParams<PiecewiseFunctionTransfer>()
+PiecewiseFunctionTransfer::validParams()
 {
-  InputParameters params = validParams<MultiAppTransfer>();
+  InputParameters params = MultiAppTransfer::validParams();
   params.addClassDescription("Transfers from one Piecewise function to another.");
 
   params.addRequiredParam<std::string>("to_function",

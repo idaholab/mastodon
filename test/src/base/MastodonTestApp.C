@@ -5,11 +5,10 @@
 #include "ModulesApp.h"
 #include "MooseSyntax.h"
 
-template <>
 InputParameters
-validParams<MastodonTestApp>()
+MastodonTestApp::validParams()
 {
-  InputParameters params = validParams<MastodonApp>();
+  InputParameters params = MastodonApp::validParams();
   return params;
 }
 

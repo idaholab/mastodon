@@ -17,27 +17,24 @@
 registerMooseObject("MastodonTestApp", TestLayeredMaterialInterfaceDocString);
 registerMooseObject("MastodonTestApp", TestLayeredMaterialInterfaceTypeError);
 
-template <>
 InputParameters
-validParams<TestLayeredMaterialInterfaceDocString>()
+TestLayeredMaterialInterfaceDocString::validParams()
 {
-  InputParameters params = validParams<Material>();
-  params += validParams<LayeredMaterialInterface<>>();
+  InputParameters params = Material::validParams();
+  params += LayeredMaterialInterface<>::validParams();
   return params;
 }
 
-template <>
 InputParameters
-validParams<TestLayeredMaterialInterfaceKernel>()
+TestLayeredMaterialInterfaceKernel::validParams()
 {
-  return validParams<Kernel>();
+  return Kernel::validParams();
 }
 
-template <>
 InputParameters
-validParams<TestLayeredMaterialInterfaceTypeError>()
+TestLayeredMaterialInterfaceTypeError::validParams()
 {
-  InputParameters params = validParams<TestLayeredMaterialInterfaceKernel>();
-  params += validParams<LayeredMaterialInterface<>>();
+  InputParameters params = TestLayeredMaterialInterfaceKernel::validParams();
+  params += LayeredMaterialInterface<>::validParams();
   return params;
 }

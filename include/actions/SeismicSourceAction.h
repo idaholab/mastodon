@@ -22,12 +22,11 @@
 class SeismicSourceAction : public Action
 {
 public:
+  static InputParameters validParams();
   SeismicSourceAction(const InputParameters & params);
 
   virtual void act() override;
 };
 
-template <>
-InputParameters validParams<SeismicSourceAction>();
 
 #endif // SEISMICSOURCEACTION_H

@@ -7,18 +7,13 @@
 // libMesh includes
 #include "libmesh/quadrature.h"
 
-// Forward Declarations
-class ShearWaveIndicator;
-
-template <>
-InputParameters validParams<ShearWaveIndicator>();
-
 /**
  * Computes the minimum element size.
  */
 class ShearWaveIndicator : public Indicator
 {
 public:
+  static InputParameters validParams();
   ShearWaveIndicator(const InputParameters & params);
 
 protected:

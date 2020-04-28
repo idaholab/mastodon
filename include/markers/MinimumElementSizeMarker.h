@@ -4,18 +4,13 @@
 // MOOSE includes
 #include "IndicatorMarker.h"
 
-// Forward Declarations
-class MinimumElementSizeMarker;
-
-template <>
-InputParameters validParams<MinimumElementSizeMarker>();
-
 /**
  * Marks for refinement base on shear wave speed material property.
  */
 class MinimumElementSizeMarker : public IndicatorMarker
 {
 public:
+  static InputParameters validParams();
   MinimumElementSizeMarker(const InputParameters & params);
 
 protected:

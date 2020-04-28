@@ -30,11 +30,10 @@
 
 registerMooseObject("MastodonApp", StressDivergenceSpring);
 
-template <>
 InputParameters
-validParams<StressDivergenceSpring>()
+StressDivergenceSpring::validParams()
 {
-  InputParameters params = validParams<Kernel>();
+  InputParameters params = Kernel::validParams();
   params.addClassDescription("Kernel for spring element");
   params.addRequiredParam<unsigned int>(
       "component",

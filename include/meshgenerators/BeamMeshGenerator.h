@@ -3,12 +3,6 @@
 
 #include "MeshGenerator.h"
 
-// Forward declarations
-class BeamMeshGenerator;
-
-template <>
-InputParameters validParams<BeamMeshGenerator>();
-
 /**
  * Generates a mesh of 1D elements based on node and element connectivity information provided in a
  * file
@@ -16,6 +10,7 @@ InputParameters validParams<BeamMeshGenerator>();
 class BeamMeshGenerator : public MeshGenerator
 {
 public:
+  static InputParameters validParams();
   BeamMeshGenerator(const InputParameters & parameters);
 
   std::unique_ptr<MeshBase> generate();

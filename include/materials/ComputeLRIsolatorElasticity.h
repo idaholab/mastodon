@@ -23,15 +23,10 @@
  * of an LR isolator element.
  */
 
-// Forward Declarations
-class ComputeLRIsolatorElasticity;
-
-template <>
-InputParameters validParams<ComputeLRIsolatorElasticity>();
-
 class ComputeLRIsolatorElasticity : public Material
 {
 public:
+  static InputParameters validParams();
   ComputeLRIsolatorElasticity(const InputParameters & parameters);
 
 protected:
