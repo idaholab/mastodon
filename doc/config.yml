@@ -34,7 +34,7 @@ Extensions:
             SQA: /sqa/index.md
             News: news/index.md
             Help:
-                FAQ: help/faq.md
+                FAQ: help/faq/index.md
                 Contact: help/contact_us.md
 
     MooseDocs.extensions.appsyntax:
