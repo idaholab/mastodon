@@ -15,13 +15,3 @@ convert a velocity applied tangential to the boundary into a shear stress, Equat
 \tau = \rho  V_s  \frac{du}{dt}
 \end{equation}
 where, $V_s$ is the shear wave speed and $\tau$ is the shear stress.
-
-In some situations, the ground motion measured at a depth within the soil is available. This ground
-motion is the summation of the wave that enters and exits the soil domain. MASTODON has the
-capability to extract the incoming wave from the within soil ground motion. To calculate the incoming
-wave velocity, an iterative procedure is used. The initial guess for the incoming wave velocity
-($v_i$) at time t is taken to be the same as the within soil velocity measured at that location. The
-velocity at this boundary obtained from MASTODON ($v_{mastodon}$) is now going to be different from
-the measured within soil velocity ($v_{measured}$) at time t. Half the difference between
-$v_{mastodon}$ and $v_{measured}$ is added to $v_o$ and the iterations are continued until $v_i$
-converges (within a numerical tolerance).
