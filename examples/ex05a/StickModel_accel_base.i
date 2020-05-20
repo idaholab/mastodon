@@ -11,13 +11,13 @@
   [./disp_z]
   [../]
   [./rot_x]
-    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 16'
   [../]
   [./rot_y]
-    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 16'
   [../]
   [./rot_z]
-    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 16'
   [../]
 []
 
@@ -35,22 +35,22 @@
   [./accel_z]
   [../]
   [./rot_vel_x]
-    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 16'
   [../]
   [./rot_vel_y]
-    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 16'
   [../]
   [./rot_vel_z]
-    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 16'
   [../]
   [./rot_accel_x]
-    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 16'
   [../]
   [./rot_accel_y]
-    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 16'
   [../]
   [./rot_accel_z]
-    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+    block = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 16'
   [../]
 []
 
@@ -488,16 +488,12 @@
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
-  petsc_options = '-snes_ksp_ew'
-  petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
-  petsc_options_value = '201                hypre    boomeramg      4'
   end_time = 45.0
   dt = 0.005
   dtmin = 0.001
   nl_abs_tol = 1e-8
-    nl_rel_tol = 1e-06
+  nl_rel_tol = 1e-6
   l_tol = 1e-8
-  l_max_its = 20
   timestep_tolerance = 1e-8
 []
 
@@ -578,8 +574,6 @@
   [../]
 []
 
-
-
 [Outputs]
   [./out]
     type = CSV
@@ -591,5 +585,4 @@
     type = Console
     max_rows = 1
   [../]
-
 []
