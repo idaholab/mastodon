@@ -1,12 +1,20 @@
-[MASTODON Documentation](http://mooseframework.org/mastodon)
+[MASTODON Webpage](https://mooseframework.inl.gov/mastodon)
 
-[MASTODON Code Coverage](http://mooseframework.org/mastodon/docs/coverage/)
+[MASTODON Input Syntax](https://mooseframework.inl.gov/mastodon/syntax/index.html)
 
-[MASTODON Doxygen](http://mooseframework.org/mastodon/docs/doxygen/)
+[MASTODON Theory Manual](https://mooseframework.inl.gov/mastodon/manuals/theory/index.html)
+
+[MASTODON User Manual](https://mooseframework.inl.gov/mastodon/manuals/user/index.html)
+
+[MASTODON Code Coverage](https://mooseframework.inl.gov/mastodon/docs/coverage/)
+
+[MASTODON Doxygen](https://mooseframework.inl.gov/mastodon/docs/doxygen/)
+
+[MOOSE Webpage](https://mooseframework.inl.gov)
 
 ### Description
 
-Mastodon is a MOOSE-based application for nonlinear, three-dimensional seismic soil-structure interaction analysis.
+MASTODON is a MOOSE-based application for seismic analysis and risk assessment including linear and nonlinear site response and soil-structure interaction analysis.
 
 ### Other Software
 
@@ -14,11 +22,11 @@ Idaho National Laboratory is a cutting edge research facility which is a constan
 
 [Primary Technology Offerings Page](https://www.inl.gov/inl-initiatives/technology-deployment)
 
-[Supported Open Source Software](https://github.com/idaholab)
+[Supported Open-Source Software](https://github.com/idaholab)
 
-[Raw Experiment Open Source Software](https://github.com/IdahoLabResearch)
+[Raw Experiment Open-Source Software](https://github.com/IdahoLabResearch)
 
-[Unsupported Open Source Software](https://github.com/IdahoLabCuttingBoard)
+[Unsupported Open-Source Software](https://github.com/IdahoLabCuttingBoard)
 
 ### License
 
@@ -44,8 +52,8 @@ Author contact information:
    Idaho National Laboratory
    P.O. Box 1625, MS 3835
    Idaho Falls, ID 83415
-2. Swetha Veeraraghavan
-   swetha.veeraraghavan@inl.gov
+2. Chandrakanth Bolisetti
+   chandrakanth.bolisetti@inl.gov
    Idaho National Laboratory
-   P.O. Box 1625, MS 3840
+   P.O. Box 1625, MS 3860
    Idaho Falls, ID 83415
