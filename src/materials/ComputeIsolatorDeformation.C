@@ -100,10 +100,10 @@ ComputeIsolatorDeformation::computeQpProperties()
   // Fetch the two nodes of the link element
   std::vector<const Node *> node;
   for (unsigned int i = 0; i < 2; ++i)
-    node.push_back(_current_elem->node_ptr(i));
+    node.push_back(_current_elem->node_ptr(i)); // libmesh method to calc coords
   RealGradient x_orientation;
   for (unsigned int i = 0; i < _ndisp; ++i)
-    x_orientation(i) = (*node[1])(i) - (*node[0])(i);
+    x_orientation(i) = (*node[1])(i) - (*node[0])(i); // vector of orientations
   _length[_qp] = x_orientation.norm();
   if (_length[_qp] == 0.0)
     mooseError("Error in ComputeIsolatorDeformation block, ",

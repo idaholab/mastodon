@@ -1,0 +1,5 @@
+reset
+create surface rectangle width 12.2254 height 15.2 zplane
+body 1 move y 7.6
+create surface rectangle width 12.2 height 12 zplane
+body 2 move y 6.0127

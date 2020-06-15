@@ -1,0 +1,107 @@
+reset
+create cylinder radius 0.7679 height 2.0
+volume 1 move z 1.0
+create cylinder radius 0.76 height 1.9301
+volume 2 move z 1.00955
+subtract volume 2 from volume 1
+create cylinder radius 0.76 height 1.62
+volume 4 move z 0.8545
+merge all
+
+webcut volume 3  with sheet extended from surface 10
+webcut volume 3  with sheet extended from surface 12 
+webcut volume 7  with sheet extended from surface 8
+merge all
+merge surface 10 with surface 30 force
+merge surface 18 with surface 27 force
+webcut volume 3  with sheet extended from surface 9
+merge all
+merge surface 33 with surface 15 force
+
+create vertex 0.7679 0 0 on surface 13
+create vertex 0.61432 0 0 on surface 17
+create vertex 0.46074 0 0 on surface 17
+create vertex 0.30716 0 0 on surface 17
+create vertex 0.15358 0 0 on surface 17
+create vertex 0 0 0 on surface 17
+create vertex -0.61432 0 0 on surface 17
+create vertex -0.46074 0 0 on surface 17
+create vertex -0.30716 0 0 on surface 17
+create vertex -0.15358 0 0 on surface 17
+create vertex -0.7679 0 0 on surface 13
+
+create curve vertex 35 31
+create curve vertex 31 32
+create curve vertex 32 33
+create curve vertex 33 34
+create curve vertex 34 30
+create curve vertex 30 29
+create curve vertex 29 28
+create curve vertex 28 27
+create curve vertex 27 26
+create curve vertex 26 25
+
+imprint surface 17 with curve 25
+imprint surface 17 with curve 26
+imprint surface 17 with curve 27
+imprint surface 17 with curve 28
+imprint surface 17 with curve 29
+imprint surface 17 with curve 30
+imprint surface 17 with curve 31
+imprint surface 17 with curve 32
+imprint surface 17 with curve 33
+imprint surface 17 with curve 34
+
+delete curve 28 34 27 25 29 26 32 30 33 31
+
+surface 14 scheme hole rad_intervals 2
+surface 14 size 0.1
+mesh surface 14
+
+volume 3 int 1
+mesh volume 3
+
+volume 9 int 4
+mesh volume 9
+
+volume 8 int 25
+mesh volume 8
+
+volume 7 int 1
+mesh volume 7
+
+mesh volume 5
+mesh volume 6
+mesh volume 4
+
+block 1 add volume 3 5 6 7 8 9
+block 2 add volume 4
+
+sideset 2 add surface 38 37
+sideset 2 name "Bottom"
+
+sideset 4 add surface 12
+sideset 4 name "Fluid_top"
+
+nodeset 11 add node 4465
+nodeset 11 name "N1"
+nodeset 12 add node 4977
+nodeset 12 name "N2"
+nodeset 13 add node 5009
+nodeset 13 name "N3"
+nodeset 14 add node 5008
+nodeset 14 name "N4"
+nodeset 15 add node 5007
+nodeset 15 name "N5"
+nodeset 16 add node 5006
+nodeset 16 name "N6"
+nodeset 17 add node 5005
+nodeset 17 name "N7"
+nodeset 18 add node 5004
+nodeset 18 name "N8"
+nodeset 19 add node 5003
+nodeset 19 name "N9"
+nodeset 20 add node 5002
+nodeset 20 name "N10"
+nodeset 21 add node 4513
+nodeset 21 name "N11"

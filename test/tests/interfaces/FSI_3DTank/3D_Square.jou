@@ -1,0 +1,11 @@
+reset
+brick x 13.2 y 13.2 z 15.2
+volume 1 move z 7.6
+brick x 12.2 y 12.2 z 15.2
+volume 2 move z 8.1
+subtract volume 2 from volume 1
+brick x 12.2 y 12.2 z 12
+volume 3 move z 6.5
+webcut volume 1 with sheet extended from surface 15
+webcut volume 1 with sheet extended from surface 19
+webcut volume 4 with sheet extended from surface 30
