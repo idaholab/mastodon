@@ -386,10 +386,10 @@ ComputeISoilStress::ComputeISoilStress(const InputParameters & parameters)
   std::vector<Real> initial_shear;
   initial_shear.resize(_poissons_ratio.size());
   Real tmp = 0.0;
-  for (int j = 0; j < _poissons_ratio.size(); j++)
+  for (std::size_t j = 0; j < _poissons_ratio.size(); j++)
   {
     tmp = 0.0;
-    for (int i = 0; i < _base_models.size(); i++)
+    for (std::size_t i = 0; i < _base_models.size(); i++)
     {
       tmp += _youngs[j][i] / (2 * (1 + _poissons_ratio[j]));
     }
