@@ -30,7 +30,7 @@
 
 [Distributions]
   [./lognormal_density]
-    type = BoostLognormalDistribution
+    type = Lognormal
     location = 0 # log(1.0); median = 1.0
     scale = 1.3
   [../]
