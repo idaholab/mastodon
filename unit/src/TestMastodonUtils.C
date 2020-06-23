@@ -307,8 +307,7 @@ TEST(MastodonUtils, calcLogLikelihood)
   // Outputs for testing
   Real loglikelihood = MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n);
   // Value check
-  EXPECT_TRUE(
-      MooseUtils::absoluteFuzzyEqual(loglikelihood, -502.1889, std::abs(loglikelihood / 1000)));
+  EXPECT_NEAR(loglikelihood, -502.1889, std::abs(loglikelihood / 1000));
 }
 
 // Test for maximizeLogLikelihood function in MastodonUtils
