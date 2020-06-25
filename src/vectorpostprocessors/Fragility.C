@@ -113,13 +113,6 @@ Fragility::Fragility(const InputParameters & parameters)
     _sgd_numrnd(getParam<Real>("sgd_numrnd")),
     _sgd_seed(getParam<Real>("sgd_seed"))
 {
-#ifndef LIBMESH_HAVE_EXTERNAL_BOOST
-  mooseError("In Fragility block '",
-             name(),
-             "'. The Fragility block requires that libMesh be compiled with an external Boost "
-             "library, this may be done "
-             "using the --with-boost configure option.");
-#endif // LIBMESH_HAVE_EXTERNAL_BOOST
   // Check for non-positive SSC frequency
   if (_ssc_freq <= 0)
     mooseError("Error in block '" + name() + "'. SSC frequency must be positive.");
@@ -167,7 +160,6 @@ Fragility::initialize()
 void
 Fragility::execute()
 {
-#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
   _im.resize(_num_bins);
   _median_demand.resize(_num_bins);
   _beta_demand.resize(_num_bins);
@@ -181,12 +173,14 @@ Fragility::execute()
         bin); // calculating demands from csv files if it is a restart PRA
     _median_demand[bin] = MastodonUtils::median(stoc_demands);
     _beta_demand[bin] = MastodonUtils::lognormalStandardDeviation(stoc_demands);
-    boost::math::lognormal_distribution<Real> demand_distribution(log(_median_demand[bin]),
-                                                                  _beta_demand[bin]);
-    boost::math::lognormal_distribution<Real> capacity_distribution(log(_median_cap),
-                                                                    _beta_ssc_cap);
-    _conditional_pf[bin] = MastodonUtils::greaterProbability<boost::math::lognormal>(
-        demand_distribution, capacity_distribution);
+
+    Real demand_median = _median_demand[bin];
+    Real demand_scale = _beta_demand[bin];
+    Real capacity_median = _median_cap;
+    Real capacity_scale = _beta_ssc_cap;
+
+    _conditional_pf[bin] = MastodonUtils::greaterProbability(
+        demand_median, demand_scale, capacity_median, capacity_scale);
     _console << "**********\nFinished calculations for bin: " << bin
              << " \n Median demand: " << _median_demand[bin]
              << " \n Lognormal standard deviation: " << _beta_demand[bin]
@@ -205,13 +199,11 @@ Fragility::execute()
                                                                        _sgd_seed);
   _median_fragility[0] = fitted_vals[0];
   _beta_fragility[0] = fitted_vals[1];
-#endif // LIBMESH_HAVE_EXTERNAL_BOOST
 }
 
 std::vector<Real>
 Fragility::calcDemandsFromFile(unsigned int bin)
 {
-#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
   std::vector<Real> demand_sample;
   std::vector<std::vector<Real>> demand_sample_spectrum;
   std::vector<Real> stoc_demands;
@@ -242,9 +234,6 @@ Fragility::calcDemandsFromFile(unsigned int bin)
     }
   }
   return stoc_demands;
-#else
-  return {}; // return empty vector
-#endif // LIBMESH_HAVE_EXTERNAL_BOOST
 }
 
 // TODO: Currently all stochastic simulations have the same termination time.

@@ -3,9 +3,6 @@
 #include "MooseUtils.h"
 #include "Conversion.h"
 
-// Boost distribution includes
-#include "BoostDistribution.h"
-
 // MASTODON includes
 #include "MastodonUtils.h"
 
@@ -280,18 +277,21 @@ TEST(MastodonUtils, log10)
   }
 }
 
-// Unit tests for functions that require external BOOST
-#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 // Test for greaterProbability function in MastodonUtils
 TEST(MastodonUtils, greaterProbability)
 {
   // Inputs for testing
-  boost::math::lognormal_distribution<> demand_distribution(log(0.71), 0.39);
-  boost::math::lognormal_distribution<> capacity_distribution(log(0.71), 0.39);
+
+  Real demand_median = 0.71;
+  Real demand_scale = 0.39;
+  Real capacity_median = 0.71;
+  Real capacity_scale = 0.39;
+
   // Outputs for testing
   //  None
   // Value check
-  Real test_prob = MastodonUtils::greaterProbability(demand_distribution, capacity_distribution);
+  Real test_prob = MastodonUtils::greaterProbability(
+      demand_median, demand_scale, capacity_median, capacity_scale);
   EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(test_prob, 0.5, test_prob / 100));
 }
 
@@ -307,8 +307,7 @@ TEST(MastodonUtils, calcLogLikelihood)
   // Outputs for testing
   Real loglikelihood = MastodonUtils::calcLogLikelihood(im, pf, loc, sca, n);
   // Value check
-  EXPECT_TRUE(
-      MooseUtils::absoluteFuzzyEqual(loglikelihood, -502.1889, std::abs(loglikelihood / 1000)));
+  EXPECT_NEAR(loglikelihood, -502.1889, std::abs(loglikelihood / 1000));
 }
 
 // Test for maximizeLogLikelihood function in MastodonUtils
@@ -330,4 +329,3 @@ TEST(MastodonUtils, maximizeLogLikelihood)
   EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values2[0], 0.3981, 1e-3));
   EXPECT_TRUE(MooseUtils::absoluteFuzzyEqual(max_values2[1], 0.2330, 1e-3));
 }
-#endif // LIBMESH_HAVE_EXTERNAL_BOOST
