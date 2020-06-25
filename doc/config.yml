@@ -79,6 +79,11 @@ Extensions:
                     - tests
                 directories:
                     - ${ROOT_DIR}/test/tests
+            blackbear:
+                specs:
+                    - tests
+                directories:
+                    - ${BLACKBEAR_DIR}/test/tests
             framework: !include ${MOOSE_DIR}/framework/doc/sqa_framework.yml
             tensor_mechanics: !include ${MOOSE_DIR}/modules/tensor_mechanics/doc/sqa_tensor_mechanics.yml
             stochastic_tools: !include ${MOOSE_DIR}/modules/stochastic_tools/doc/sqa_stochastic_tools.yml
