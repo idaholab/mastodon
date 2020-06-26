@@ -17,8 +17,6 @@
 
 // MOOSE includes
 #include "GeneralVectorPostprocessor.h"
-// Other includes
-#include "BoostDistribution.h"
 
 // Forward Declarations
 namespace MastodonUtils
@@ -99,37 +97,10 @@ Real lognormalStandardDeviation(const std::vector<Real> & vector);
  * Function to calculate the probability that one random variable is greater
  * than another random variable
  */
-Real greaterProbability(Distribution & demand_distribution, Distribution & capacity_distribution);
-
-// Function declarations that require external Boost
-#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
-/**
- * Function template to calculate the probability that one random variable is greater
- * than another random variable for Boost distribution
- */
-template <typename T>
-Real
-greaterProbability(T & demand_distribution, T & capacity_distribution)
-{
-  Real min_demand =
-      boost::math::quantile(demand_distribution, 0.001); //~ -3 sigma for normal distributions
-  Real max_demand =
-      boost::math::quantile(demand_distribution, 0.999); //~ +3 sigma for normal distributions
-  Real prob = 0.0;
-  Real param = min_demand;
-  Real p_1, p_2;
-  Real delta = boost::math::median(demand_distribution) / 1000;
-  while (param < max_demand)
-  {
-    p_1 = boost::math::pdf(demand_distribution, param) *
-          boost::math::cdf(capacity_distribution, param);
-    p_2 = boost::math::pdf(demand_distribution, param + delta) *
-          boost::math::cdf(capacity_distribution, param + delta);
-    prob += delta * (p_1 + p_2) / 2;
-    param += delta;
-  }
-  return prob;
-}
+Real greaterProbability(Real demand_median,
+                        Real demand_scale,
+                        Real capacity_median,
+                        Real capacity_scale);
 
 /**
  * Function to calculate the loglikelihood (for MLE fiting) given the data
@@ -156,8 +127,6 @@ std::vector<Real> maximizeLogLikelihood(const std::vector<Real> & im,
                                         const Real gamma,
                                         const int num_rnd,
                                         const int seed);
-
-#endif // LIBMESH_HAVE_EXTERNAL_BOOST
 
 /**
  * This function zeropads the number n with zeros in the beginning and makes n

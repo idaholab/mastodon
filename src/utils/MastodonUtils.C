@@ -10,6 +10,7 @@
 #include "tinydir.h"
 #include "MooseUtils.h"
 #include "MooseRandom.h"
+#include "Lognormal.h"
 
 // MASTODON includes
 #include "MastodonUtils.h"
@@ -73,9 +74,9 @@ MastodonUtils::regularize(const std::vector<Real> & history_acc,
   {
     while (cur_tme >= history_time[i] && cur_tme <= history_time[i + 1])
     {
-      cur_acc = history_acc[i] +
-                (cur_tme - history_time[i]) / (history_time[i + 1] - history_time[i]) *
-                    (history_acc[i + 1] - history_acc[i]);
+      cur_acc = history_acc[i] + (cur_tme - history_time[i]) /
+                                     (history_time[i + 1] - history_time[i]) *
+                                     (history_acc[i + 1] - history_acc[i]);
       reg_acc.push_back(cur_acc);
       reg_tme.push_back(cur_tme);
       cur_tme += reg_dt;
@@ -280,27 +281,34 @@ MastodonUtils::log10(const std::vector<Real> & input)
 }
 
 Real
-MastodonUtils::greaterProbability(Distribution & demand_distribution,
-                                  Distribution & capacity_distribution)
+MastodonUtils::greaterProbability(Real demand_median,
+                                  Real demand_scale,
+                                  Real capacity_median,
+                                  Real capacity_scale)
 {
-  Real min_demand = demand_distribution.quantile(0.001); //~ -3 sigma for normal distributions
-  Real max_demand = demand_distribution.quantile(0.999); //~ +3 sigma for normal distributions
+  Real demand_location = log(demand_median);
+  Real capacity_location = log(capacity_median);
+
+  Real min_demand = Lognormal::quantile(
+      0.001, demand_location, demand_scale); //~ -3 sigma for normal distributions
+  Real max_demand = Lognormal::quantile(
+      0.999, demand_location, demand_scale); //~ +3 sigma for normal distributions
   Real prob = 0.0;
   Real param = min_demand;
   Real p_1, p_2;
-  Real delta = demand_distribution.median() / 1000;
+  Real delta = demand_median / 1000;
   while (param < max_demand)
   {
-    p_1 = demand_distribution.pdf(param) * capacity_distribution.cdf(param);
-    p_2 = demand_distribution.pdf(param + delta) * capacity_distribution.cdf(param + delta);
+    p_1 = Lognormal::pdf(param, demand_location, demand_scale) *
+          Lognormal::cdf(param, capacity_location, capacity_scale);
+    p_2 = Lognormal::pdf(param + delta, demand_location, demand_scale) *
+          Lognormal::cdf(param + delta, capacity_location, capacity_scale);
     prob += delta * (p_1 + p_2) / 2;
     param += delta;
   }
   return prob;
 }
 
-// Utils that require external Boost
-#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 Real
 MastodonUtils::calcLogLikelihood(const std::vector<Real> & im,
                                  const std::vector<Real> & pf,
@@ -325,9 +333,8 @@ MastodonUtils::calcLogLikelihood(const std::vector<Real> & im,
     mooseError("While calculating loglikelihood, scale parameter should be positive.");
   if (loc <= 0)
     mooseError("While calculating loglikelihood, location parameter should be positive.");
+
   // Calculating the likelihood at each IM value
-  boost::math::lognormal_distribution<Real> fragility_fit(
-      log(loc), sca); // Initial estimate of fragility fit from the seed values
   Real loglikelihood = 0;
   for (std::size_t i = 0; i < im.size(); ++i)
   {
@@ -338,7 +345,11 @@ MastodonUtils::calcLogLikelihood(const std::vector<Real> & im,
     Real log10_nCr = 0.0;
     for (std::size_t k = 1; k <= r; k++)
       log10_nCr += std::log10(n - r + k) - std::log10(k);
-    Real p = boost::math::cdf(fragility_fit, im[i]);
+
+    Real p = Lognormal::cdf(im[i], log(loc), sca);
+    if (p == 0)
+      p = std::numeric_limits<Real>::min();
+
     // calculating sum of loglikelihoods. Each loglikelihood is the log(binomial pdf),
     // which ends up to be the summation below.
     loglikelihood += log10_nCr + r * std::log10(p) + (n - r) * std::log10(1.0 - p);
@@ -431,5 +442,3 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
   }
   return params_return;
 }
-
-#endif // LIBMESH_HAVE_EXTERNAL_BOOST
