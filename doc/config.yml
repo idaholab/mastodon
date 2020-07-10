@@ -55,7 +55,9 @@ Extensions:
         shortcuts: !include ${MOOSE_DIR}/framework/doc/globals.yml
 
     MooseDocs.extensions.acronym:
-        acronyms: !include ${MOOSE_DIR}/framework/doc/acronyms.yml
+        acronyms:
+            framework: !include ${MOOSE_DIR}/framework/doc/acronyms.yml
+            mastodon: !include doc/acronyms.yml
 
     MooseDocs.extensions.template:
         active: True
