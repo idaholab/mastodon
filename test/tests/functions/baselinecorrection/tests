@@ -1,0 +1,112 @@
+[Tests]
+  issues = '#296'
+  design = functions/BaselineCorrection.md
+
+  [test_correction]
+    requirement = "The BaselineCorrection class shall accurately adjust a raw acceleration time history according to the method of using least squares polynomial fits."
+
+    [half_sine]
+      type = CSVDiff
+      input = half_sine.i
+      csvdiff = half_sine_out.csv
+
+      detail = "The input acceleration time history is a half cycle of `9.87 \sin(\pi t)`."
+    []
+    [full_sine]
+      type = CSVDiff
+      input = full_sine.i
+      csvdiff = full_sine_out.csv
+
+      detail = "The input acceleration time history is a single cycle of `9.87 \sin(\pi t)`."
+    []
+    [half_sine_scaled]
+      type = CSVDiff
+      input = half_sine_scaled.i
+      csvdiff = half_sine_scaled_out.csv
+
+      detail = "The corrected output should be scaled by a factor of 4.886. The input acceleration time history is a half cycle of `9.87 \sin(\pi t)`."
+    []
+    [twenty_sines]
+      type = CSVDiff
+      input = twenty_sines.i
+      csvdiff = twenty_sines_out.csv
+
+      detail = "The function should be capable of correcting a high-order input using all 3 correction types. The input acceleration time history is twenty cycles of `-250 \pi^{2} \sin(50 \pi t)`."
+    []
+    [twenty_sines_with_bc]
+      type = CSVDiff
+      input = twenty_sines_with_bc.i
+      csvdiff = twenty_sines_with_bc_out.csv
+
+      detail = "The corrected output shall support use in ICs and BCs and the displacement at a boundary should be characteristic of a baseline corrected time history. The input acceleration time history is twenty cycles of `-250 \pi^{2} \sin(50 \pi t)`."
+    []
+    [chichi_A0126300_N]
+      type = CSVDiff
+      input = chichi_A0126300_N.i
+      csvdiff = chichi_A0126300_N_out.csv
+
+      detail = "The function should be capable of adequately adjusting an accelelogram from the September 20, 1999 Chi-Chi earthquake. The uncorrected accelelogram was obtained from the Strong Motion VDC (Orig: A0126300.ASC)."
+    []
+    [chichi_QT063000_V]
+      type = CSVDiff
+      input = chichi_QT063000_V.i
+      csvdiff = chichi_QT063000_V_out.csv
+
+      detail = "The function should be capable of adequately adjusting an accelelogram from the September 20, 1999 Chi-Chi earthquake. The uncorrected accelelogram was obtained from the Strong Motion VDC (Orig: QT063000.ASC)."
+    []
+  []
+
+  [test_errors]
+    requirement = "The BaselineCorrection class shall appropriately invoke `mooseError()` when the input configuration is not supported."
+
+    [no_input]
+      type = RunException
+      input = no_input_error.i
+      expect_err = "In BaselineCorrection corrected_accel_func: Either `data_file` or `time_values` and `acceleration_values` must be specified exclusively."
+
+      detail = "This error shall occur since no acceleration time history was provided."
+    []
+    [extra_input]
+      type = RunException
+      input = extra_input_error.i
+      expect_err = "In BaselineCorrection corrected_accel_func: Either `data_file` or `time_values` and `acceleration_values` must be specified exclusively."
+
+      detail = "This error shall occur since the parameters which control the different input types were not provided exclusively."
+    []
+    [missing_value_param]
+      type = RunException
+      input = missing_value_param_error.i
+      expect_err = "In BaselineCorrection corrected_accel_func: Either `data_file` or `time_values` and `acceleration_values` must be specified exclusively."
+
+      detail = "This error shall occur since the `time_values` and `acceleration_values` parameters were not provided together."
+    []
+    [missing_file_param]
+      type = RunException
+      input = missing_file_param_error.i
+      expect_err = "In BaselineCorrection corrected_accel_func: A column header name was specified for the for the time data. Please specify a header for the acceleration data using the 'acceleration_name' parameter."
+
+      detail = "This error shall occur since the `time_name` and `acceleration_name` parameters were not provided together."
+    []
+    [size_mismatch]
+      type = RunException
+      input = size_mismatch_error.i
+      expect_err = "In BaselineCorrection corrected_accel_func: The length of time and acceleration data must be equal."
+
+      detail = "This error shall occur since the lengths of the time data and acceleration data are not equal"
+    []
+    [no_data]
+      type = RunException
+      input = no_data_error.i
+      expect_err = "In BaselineCorrection corrected_accel_func: The length of time and acceleration data must be > 0."
+
+      detail = "This error shall occur since no data was provided at all."
+    []
+    [no_order]
+      type = RunException
+      input = no_order_error.i
+      expect_err = "In BaselineCorrection corrected_accel_func: No values were input for parameters 'accel_fit_order', 'vel_fit_order', or 'disp_fit_order'. Please specify an integer value from 0 to 9 for at least one of these parameters."
+
+      detail = "This error shall occur since no least squares polynomials would be computed and, therefore, no adjustments would be made."
+    []
+  []
+[]
