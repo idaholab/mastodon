@@ -14,6 +14,6 @@ A list of example simulations using MASTODON is provided below. These examples i
 - [Example 7](examples/example7.md): Demonstration of domain reduction method.
 - [Example 8](examples/example8.md): Seismic risk assessment of a generic nuclear facility using the MASTODON FTA Python module.
 - [Example 9](examples/example9.md): Soil-structure interaction analysis of an undamped rigid structure on undamped linear soil.
-
-
+- [Example 10a](examples/example10a.md): Central Difference Time Integration in MASTODON
+- [Example 10b](examples/example10b.md): Central Difference Time Integration in MASTODON using HEX20 elements
 !bibtex bibliography
