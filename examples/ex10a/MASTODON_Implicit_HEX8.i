@@ -43,7 +43,6 @@
     order = CONSTANT
     family = MONOMIAL
   [../]
-
 []
 
 
@@ -184,9 +183,6 @@
   [../]
 []
 
-[Functions]
-[]
-
 [Preconditioning]
   [./smp]
     type = SMP
@@ -247,9 +243,6 @@
     variable = stress_zz
     point = '0.0 0.0 20'
   [../]
-[]
-
-[VectorPostprocessors]
 []
 
 [Outputs]

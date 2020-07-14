@@ -5,7 +5,7 @@ This example demonstrates the use of Central Difference Time Integration using H
 
 [fig:ex10b_input] demonstrates the overall dimensions and boundary conditions of the model.
 
-!media /examples/ex10b/media/MASTODON_ex10_model.png
+!media media/examples/MASTODON_ex10_model.png
        style=width:50%;margin-left:150px;float:center;
        id=fig:ex10b_input
        caption=Input model in MASTODON
@@ -31,13 +31,12 @@ The rest of the input file is identical to that of `Example10a`.
 ## Results
 The stress time-history and displacement time-history are obtained at locations (0, 0, 10) and (0, 0, 20) respectively and compared with results from ABAQUS/Standard (as shown in [fig:ex10b_stresszz_0_0_10] and [fig:ex10b_Dispz_0_0_20]).
 
-
-!media /examples/ex10b/media/Example10b_Stresszz_0_0_10.png
+!media media/examples/Example10b_Stresszz_0_0_10.png
        style=width:50%;margin-left:150px;float:center;
        id=fig:ex10b_stresszz_0_0_10
        caption=Stress-zz Time-History at (0, 0, 10)
 
-!media /examples/ex10b/media/Example10b_Dispz_0_0_20.png
+!media media/examples/Example10b_Dispz_0_0_20.png
        style=width:50%;margin-left:150px;float:center;
        id=fig:ex10b_Dispz_0_0_20
        caption=Disp-z Time-History at (0, 0, 20)

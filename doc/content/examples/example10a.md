@@ -6,7 +6,7 @@ This example demonstrates the use of Central Difference Time Integration in MAST
 
 [fig:ex10a_input] demonstrates the overall dimensions and boundary conditions of the model.
 
-!media /examples/ex10a/media/MASTODON_ex10_model.png
+!media media/examples/MASTODON_ex10_model.png
        style=width:50%;margin-left:150px;float:center;
        id=fig:ex10a_input
        caption=Input model in MASTODON
@@ -37,7 +37,7 @@ The model is fixed along x, y & z directions at the bottom surface and an unifor
 
 !listing examples/ex10a/MASTODON_Explicit_HEX8.i
          start=Executioner
-         end=VectorPostprocessors
+         end=Postprocessors
 
 Time integrators deriving from this class have three solve options, provided via the solve_type parameter - 
 	1. consistent: (the default) A full mass matrix is built and used in a linear solve for the update.
@@ -52,12 +52,12 @@ In this example, a fixed timestep which is less than the courant limit is specif
 The stress time-history and displacement time-history are obtained at locations (0, 0, 10) and (0, 0, 20) respectively and compared with results from Implicit Newmark-Beta time integration (as shown in [fig:ex10a_stresszz_0_0_10] and [fig:ex10a_Dispz_0_0_20]).
 
 
-!media /examples/ex10a/media/Example10a_Stresszz_0_0_10.png
+!media media/examples/Example10a_Stresszz_0_0_10.png
        style=width:50%;margin-left:150px;float:center;
        id=fig:ex10a_stresszz_0_0_10
        caption=Stress-zz Time-History at (0, 0, 10)
 
-!media /examples/ex10a/media/Example10a_Dispz_0_0_20.png
+!media media/examples/Example10a_Dispz_0_0_20.png
        style=width:50%;margin-left:150px;float:center;
        id=fig:ex10a_Dispz_0_0_20
        caption=Disp-z Time-History at (0, 0, 20)

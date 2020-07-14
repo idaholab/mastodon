@@ -43,9 +43,7 @@
     order = CONSTANT
     family = MONOMIAL
   [../]
-
 []
-
 
 [Kernels]
   [./DynamicTensorMechanics]
@@ -114,13 +112,11 @@
     youngs_modulus = 119751.528    # kip/ft^2
     poissons_ratio = 0.3
     type = ComputeIsotropicElasticityTensor
-    implicit = false
   [../]
   [./den_block]
     type = GenericConstantMaterial
     prop_names = density
     prop_values = 0.00367 # kip s^2/ft^4
-    implicit = false
   [../]
   [./strain]
     type = ComputeSmallStrain
@@ -129,7 +125,6 @@
   [../]
   [./stress]
     type = ComputeLinearElasticStress
-    implicit = false
   [../]
 []
 
@@ -147,7 +142,6 @@
     variable = disp_x
     boundary = 'back'
     value = 0
-    implicit = false
   [../]
   [./disp_y]
     type = DirichletBC
@@ -155,7 +149,6 @@
     variable = disp_y
     boundary = 'back'
     value = 0
-    implicit = false
   [../]
   [./disp_z]
     type = DirichletBC
@@ -163,11 +156,7 @@
     variable = disp_z
     boundary = 'back'
     value = 0
-    implicit = false
   [../]
-[]
-
-[Functions]
 []
 
 [Preconditioning]
@@ -225,9 +214,6 @@
     variable = stress_zz
     point = '0.0 0.0 20'
   [../]
-[]
-
-[VectorPostprocessors]
 []
 
 [Outputs]
