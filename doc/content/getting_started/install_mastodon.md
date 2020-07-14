@@ -15,21 +15,7 @@ git checkout master
 git submodule update --init moose
 ```
 
-## Compile libMesh
-
-MASTODON directly relies on the [libMesh](http://libmesh.github.io/) finite-element
-framework. Because of this strong tie MASTODON contains a particular version of libMesh that we have
-vetted for our users. To pull down and compile this version of libMesh you simply need to run a
-script in MOOSE:
-
-```bash
-cd ~/projects/mastodon/moose
-./scripts/update_and_rebuild_libmesh.sh
-```
-
 ## Compile and Test MASTODON
-
-After libMesh has compiled the next step is to compile and test MASTODON.
 
 ```bash
 cd ~/projects/mastodon
@@ -45,24 +31,29 @@ At this point you now have a working copy of MASTODON.
 !alert note
 The number 4 should be replaced with the number of processors you have available on your system.
 
-
 ## Update MASTODON
 
 MASTODON does not use traditional versioning, is under heavy development, and is being updated
 continuously. Therefore, it is critical that you continue to update MASTODON regularly to get the
-latest features.
+latest features. Following are the steps to update MASTODON.
 
-To update MASTODON, use the following commands:
+First update the MOOSE environment:
+
+```bash
+conda activate moose
+conda update --all
+```
+
+Then, update MASTODON using the following commands:
 
 ```bash
 cd ~/projects/mastodon
 git fetch origin
 git rebase origin/master
 git submodule update
-./moose/scripts/update_and_rebuild_libmesh.sh
 ```
 
-To verify that the new version is working correctly is must be compiled and tested.
+Compile and test your fresh copy.
 
 ```bash
 cd ~/projects/mastodon
