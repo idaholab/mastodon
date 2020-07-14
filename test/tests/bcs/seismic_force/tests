@@ -18,7 +18,6 @@
     max_parallel = 1
     method = 'opt'
     rel_err = 1e-5
-    abs_zero = 2e-3
 
     requirement = "The SeismicForce class shall accurately convert the user-provided input velocity to normal traction at the boundary."
   [../]
