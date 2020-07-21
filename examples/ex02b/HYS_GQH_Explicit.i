@@ -1,9 +1,8 @@
-# One element test to test the auto-generated Darendeli backbone curve.
+# One element test to test the auto-generated GQ/H backbone curve.
 # The back surface of the element (z=0) is fixed and the front surface (z=1)
 # is moved by applying a cyclic preset displacement.
 
-# The resulting shear stress vs shear strain curve was verified against that obtained
-# from DEEPSOIL.
+# The resulting shear stress-strain curve was verified against obtained from DEEPSOIL.
 
 [Mesh]
   type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
@@ -19,10 +18,8 @@
   zmax = 1
 []
 
-
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
-  use_displaced_mesh = false
 []
 
 [Variables]
@@ -104,33 +101,21 @@
 [Kernels]
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
-    zeta = 0.00006366
+    # zeta = 0.00006366
   [../]
   [./inertia_x]
     type = InertialForce
     variable = disp_x
-    velocity = vel_x
-    acceleration = accel_x
-    beta = 0.25
-    gamma = 0.5
     eta = 7.854
   [../]
   [./inertia_y]
     type = InertialForce
     variable = disp_y
-    velocity = vel_y
-    acceleration = accel_y
-    beta = 0.25
-    gamma = 0.5
     eta = 7.854
   [../]
   [./inertia_z]
     type = InertialForce
     variable = disp_z
-    velocity = vel_z
-    acceleration = accel_z
-    beta = 0.25
-    gamma = 0.5
     eta = 7.854
   [../]
   [./gravity]
@@ -142,49 +127,37 @@
 
 [AuxKernels]
   [./accel_x]
-    type = NewmarkAccelAux
+    type = TestNewmarkTI
     variable = accel_x
     displacement = disp_x
-    velocity = vel_x
-    beta = 0.25
-    execute_on = timestep_end
+    first = false
   [../]
   [./vel_x]
-    type = NewmarkVelAux
+    type = TestNewmarkTI
     variable = vel_x
-    acceleration = accel_x
-    gamma = 0.5
-    execute_on = timestep_end
+    displacement = disp_x
   [../]
   [./accel_y]
-    type = NewmarkAccelAux
+    type = TestNewmarkTI
     variable = accel_y
     displacement = disp_y
-    velocity = vel_y
-    beta = 0.25
-    execute_on = timestep_end
+    first = false
   [../]
   [./vel_y]
-    type = NewmarkVelAux
+    type = TestNewmarkTI
     variable = vel_y
-    acceleration = accel_y
-    gamma = 0.5
-    execute_on = timestep_end
+    displacement = disp_y
   [../]
   [./accel_z]
-    type = NewmarkAccelAux
+    type = TestNewmarkTI
     variable = accel_z
     displacement = disp_z
-    velocity = vel_z
-    beta = 0.25
-    execute_on = timestep_end
+    first = false
   [../]
   [./vel_z]
-    type = NewmarkVelAux
+    type = TestNewmarkTI
     variable = vel_z
-    acceleration = accel_z
-    gamma = 0.5
-    execute_on = timestep_end
+    displacement = disp_z
   [../]
   [./stress_xy]
     type = RankTwoAux
@@ -313,39 +286,76 @@
     [../]
   [../]
   [./top_x]
-    type = PresetDisplacement
+    type = FunctionDirichletBC
     boundary = 5
-    variable = disp_x
-    beta = 0.25
-    velocity = vel_x
-    acceleration = accel_x
     function = top_disp
+    variable = 'disp_x'
   [../]
 []
 
 [Functions]
   [./top_disp]
     type = PiecewiseLinear
-    data_file = Displacement2.csv
+    data_file = '../ex01a/Displacement2.csv'
     format = columns
   [../]
 []
 
+# [Materials]
+#   [./sample_isoil]
+#     type = ComputeISoilStress
+#     soil_type = 'gqh'
+#     layer_variable = layer_id
+#     layer_ids = '0'
+#     initial_soil_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
+#     poissons_ratio = '0.3'
+#     number_of_points = 10
+#     ### GQ/H ####
+#     initial_shear_modulus = '20000000'
+#     theta_1 = '-2.28'
+#     theta_2 = '-5.54'
+#     theta_3 = '1.0'
+#     theta_4 = '1.0'
+#     theta_5 = '0.99'
+#     taumax = '7500'
+#     block = '0'
+#   [../]
+#   [./sample_isoil_strain]
+#     type = ComputeIncrementalSmallStrain
+#     block = '0'
+#     displacements = 'disp_x disp_y disp_z'
+#     implicit = false
+#   [../]
+#   [./sample_isoil_elasticitytensor]
+#     type = ComputeIsotropicElasticityTensorSoil
+#     block = '0'
+#     density = '2000'
+#     wave_speed_calculation = false
+#     layer_ids = '0'
+#     poissons_ratio = '0.3'
+#     shear_modulus = '20000000'
+#     layer_variable = layer_id
+#   [../]
+# []
+
 [Materials]
   [./I_Soil]
     [./soil_1]
-      soil_type = 'darendeli'
+      soil_type = 'gqh'
       layer_variable = layer_id
       layer_ids = '0'
-      over_consolidation_ratio = '1'
-      plasticity_index = '0'
-      initial_shear_modulus = '20000'
+      theta_1 = '-2.28'
+      theta_2 = '-5.54'
+      theta_3 = '1.0'
+      theta_4 = '1.0'
+      theta_5 = '0.99'
+      taumax = '7500'
+      initial_shear_modulus = '20000000'
       number_of_points = 10
       poissons_ratio = '0.3'
       block = 0
-      initial_soil_stress = '-4.204286 0 0  0 -4.204286 0  0 0 -9.810'
-      density = '2'
-      p_ref = '6.07286'
+      initial_soil_stress = '-4204.286 0 0  0 -4204.286 0  0 0 -9810'
+      density = '2000'
     [../]
   [../]
 []
@@ -359,17 +369,18 @@
 
 [Executioner]
   type = Transient
-  solve_type = PJFNK
-  nl_abs_tol = 1e-11
-  nl_rel_tol = 1e-11
-  start_time = 0
-  end_time = 8
-  dt = 0.01
+  start_time = 0.0
+  end_time = 8.0
   timestep_tolerance = 1e-6
-  petsc_options = '-snes_ksp_ew'
-  petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
-  petsc_options_value = '201                hypre    boomeramg      4'
-  line_search = 'none'
+  l_abs_tol = 1e-12
+  [./TimeIntegrator]
+    type = CentralDifference
+  [../]
+  [./TimeStepper]
+    type = PostprocessorDT
+    postprocessor = time_step
+    dt = 0.001
+  [../]
 []
 
 [Postprocessors]
@@ -481,10 +492,15 @@
     variable = strain_zz
     elementid = 0
   [../]
+  [./time_step]
+    type = CriticalTimeStep
+    factor = 0.9
+  [../]
 []
 
 [Outputs]
   exodus = true
   csv = true
   perf_graph = false
+  file_base = HYS_GQH_explicit
 []

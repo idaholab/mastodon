@@ -35,7 +35,7 @@ ssh john@falcon1
 
 - Repeat the MASTODON installation process explained in [Getting Started/Installation/Ubuntu](getting_started/ubuntu.md) or similar. That is, modify your bash profile, install MASTODON, update and rebuild libmesh, and compile and test MASTODON. Note that you have to setup you [Github](https://github.com) on the hpc.
 
-- Job scheduling is performed using the Portable Batch System (PBS). Batch script files should be created with a unique name using the `.sh` extension. For example, if you want to run [Example 03](examples/example3.md) on hpc, create a file named `Example03_hpc.sh`. The filename can be anything but it should end with a `.sh` extension. This file should contain the following lines.
+- Job scheduling is performed using the Portable Batch System (PBS). Batch script files should be created with a unique name using the `.sh` extension. For example, if you want to run [Example 03a](examples/example3a.md) on hpc, create a file named `Example03_hpc.sh`. The filename can be anything but it should end with a `.sh` extension. This file should contain the following lines.
 
 ```
 #!/bin/bash

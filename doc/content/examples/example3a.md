@@ -1,4 +1,4 @@
-# Example 3: Nonlinear Site-Response Analysis
+# Example 3a: Nonlinear Site-Response Analysis
 
 This example demonstrates a nonlinear site-response analysis using I-soil. A 20 m soil column is
 created and meshed to have 20 elements, each measuring 1 m x 1 m x 1 m. Shear wave velocity (and the
@@ -13,12 +13,12 @@ the bottom. [fig:1dsoilcolumn] demonstrates the geometry of the problem.
 
 Below is the full input file provided to run this analysis.
 
-!listing examples/ex03/shear_beam_Isoil_free_field.i
+!listing examples/ex03a/shear_beam_Isoil_free_field.i
 
 The first step is to create the problem geometry. For simpler geometries, MASTODON provides an
 automeshing option and has the following block to generate the mesh described in [fig:1dsoilcolumn] :
 
-!listing examples/ex03/shear_beam_Isoil_free_field.i
+!listing examples/ex03a/shear_beam_Isoil_free_field.i
          start=Mesh
          end=GlobalParams
 
@@ -29,7 +29,7 @@ The shear beam model is fixed at gravity direction (z), the nodes at the same el
 constrained to move equally via periodic boundary condition and acceleration time history is applied
 at the bottom of the column in x direction using following inputs:
 
-!listing examples/ex03/shear_beam_Isoil_free_field.i
+!listing examples/ex03a/shear_beam_Isoil_free_field.i
          start=BCs
          end=Functions
 
@@ -37,7 +37,7 @@ In the above input block, PresetAcceleration type boundary condition is used to 
 excitation. Function of "function=accel_bottom" is used to input the acceleration time history and
 this function is defined as:
 
-!listing examples/ex03/shear_beam_Isoil_free_field.i
+!listing examples/ex03a/shear_beam_Isoil_free_field.i
          start=Functions
          end=Materials
 
@@ -48,7 +48,7 @@ calculated as K0 = Poisson's Ratio / (1-Poisson's ratio) where Poisson's ratio i
 0.3. Once the base excitation and initial stresses are defined, the material definition block is used
 to create the soil properties for each layer as:
 
-!listing examples/ex03/shear_beam_Isoil_free_field.i
+!listing examples/ex03a/shear_beam_Isoil_free_field.i
          start=Materials
          end=Preconditioning
 
@@ -71,7 +71,7 @@ during shaking, the pressure dependency parameters are set to be $ a_0 $ = 1, $ 
 Finally, the execution and output blocks are provided to run the analysis and extract the data using
 following chain of blocks (see [Getting Started](manuals/user/index.md)):
 
-!listing examples/ex03/shear_beam_Isoil_free_field.i
+!listing examples/ex03a/shear_beam_Isoil_free_field.i
          start=Preconditioning
 
 Accelerations obtained at the bottom, mid-depth and top of the soil columns are used to calculate the
@@ -103,13 +103,13 @@ These modifications ensure the AD versions of the stress divergence kernels and 
 material kernels are being used during the solve. Add 'use_automatic_differentiation = true'
 in 'Kernels/DynamicTensorMechanics':
 
-!listing examples/ex03/shear_beam_Isoil_free_field_AD.i
+!listing examples/ex03a/shear_beam_Isoil_free_field_AD.i
          start=Kernels
          end=AuxKernels
 
 Also, add 'use_automatic_differentiation = true' in 'Materials/I_Soil/soil_all':
 
-!listing examples/ex03/shear_beam_Isoil_free_field_AD.i
+!listing examples/ex03a/shear_beam_Isoil_free_field_AD.i
          start=Materials
          end=Preconditioning
 

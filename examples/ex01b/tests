@@ -1,7 +1,7 @@
 [Tests]
-  [./ex01]
+  [./ex01b]
     type = RunApp
-    input = HYS_darendeli.i
+    input = HYS_darendeli_explicit.i
     method = opt
     check_input = True
   [../]
