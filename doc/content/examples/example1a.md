@@ -1,10 +1,10 @@
-# Example 1: Direct shear test using the Darandeli backbone curve formulation
+# Example 1a: Direct shear test using the Darandeli backbone curve formulation
 
 This example demonstrates a single element direct simple shear test that utilizes I-soil with auto
 generated backbone curve using [!citet](darendeli2001development) modulus reduction curves. The
 relevant files for the example are:
 
-!listing examples/ex01/HYS_darendeli.i
+!listing examples/ex01a/HYS_darendeli.i
 
 In above input file, all the input blocks except material definition are explained at
 [Getting Started](manuals/user/index.md) section of User's Manual.
@@ -12,7 +12,7 @@ In above input file, all the input blocks except material definition are explain
 For this particular example, the units defining the parameters are kN, ton, and meter (m), and the
 material definition is created using following input:
 
-!listing examples/ex01/HYS_darendeli.i
+!listing examples/ex01a/HYS_darendeli.i
          start=Materials
          end=Preconditioning
 
@@ -49,7 +49,7 @@ The material used in this example is pressure independent thus no further input 
 block given below shows that a shear displacement is applied at the upper surface in x direction and
 the bottom surface of the element is fixed. This leads to a 0.02 cyclic shear strain amplitude.
 
-!listing examples/ex01/HYS_darendeli.i
+!listing examples/ex01a/HYS_darendeli.i
          start=BCs
          end=Functions
 
