@@ -6,7 +6,7 @@
     type = Exodiff
     input = HYS_data_file.i
     exodiff = HYS_data_file_out.e
-    abs_zero = 5e-9
+    abs_zero = 5e-7
     rel_err = 2e-5
 
     requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve from a user provided data file."
@@ -31,7 +31,7 @@
     exodiff = HYS_data_file_out.e
     cli_args = Outputs/file_base=HYS_data_file_out
     prereq = data_file
-    abs_zero = 5e-9
+    abs_zero = 5e-7
     rel_err = 2e-5
 
     requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve from a user provided data file without the use of the ISoilAction."

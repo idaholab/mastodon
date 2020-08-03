@@ -33,7 +33,7 @@ There are several steps in this process:
 ssh john@falcon1
 ```
 
-- Repeat the MASTODON installation process explained in [Getting Started/Installation/Ubuntu](getting_started/ubuntu.md) or similar. That is, modify your bash profile, install MASTODON, update and rebuild libmesh, and compile and test MASTODON. Note that you have to setup you [Github](https://github.com) on the hpc.
+- Install MASTODON on HPC
 
 - Job scheduling is performed using the Portable Batch System (PBS). Batch script files should be created with a unique name using the `.sh` extension. For example, if you want to run [Example 03a](examples/example3a.md) on hpc, create a file named `Example03_hpc.sh`. The filename can be anything but it should end with a `.sh` extension. This file should contain the following lines.
 
@@ -78,14 +78,14 @@ There might be one of several reasons for this:
 
 - You did not compile MASTODON. Compile MASTODON using `make` command.
 
-
-- If the errors while running tests are related to libmesh, your libmesh is out of date. Update and rebuild libmesh using the following command in the MASTODON folder. Then compile MASTODON and try running the tests.
+- Your MOOSE environment may not be up to date. Update using the following commands.
 
 ```
-./moose/scripts/update_and_rebuild_libmesh.sh
+conda activate moose
+conda update --all
 ```
 
-- You might have accidentally made some changes to MASTODON source code. To undo these changes use the below command. Then update and rebuild libmesh, compile MASTODON, and run the tests as described in the [Getting Started](getting_started/macos_mojave.md) page.  
+- You might have accidentally made some changes to MASTODON source code. To undo these changes use the below command. Then update and rebuild libmesh, compile MASTODON, and run the tests as described in the [Getting Started](getting_started/installation.md) page.  
 
 ```
 git clean -dxf

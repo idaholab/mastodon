@@ -1,1 +1,0 @@
-faq/index.md
