@@ -11,7 +11,6 @@ moose:
         - docs/content/documentation/systems/**/framework/**
         - docs/content/documentation/systems/Mesh/splitting.md
         - docs/content/documentation/systems/**/contact/**
-        - docs/content/documentation/systems/**/solid_mechanics/**
         - docs/content/documentation/systems/**/tensor_mechanics/**
         - docs/content/documentation/systems/**/stochastic_tools/**
 
