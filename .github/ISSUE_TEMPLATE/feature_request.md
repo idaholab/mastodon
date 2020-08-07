@@ -1,7 +1,6 @@
 ---
 name: Feature request
-about: New features or enhancements to MASTODON. If this doesn’t look right, please
-  choose a different issue type.
+about: New features or enhancements to MASTODON.
 title: ''
 labels: Feature Request
 assignees: ''
@@ -15,4 +14,4 @@ assignees: ''
 <!--A concise description (design) of what you want to happen.--->
 
 ## Impact
-<!--Will the enhancement change existing public APIs, internal APIs, or add something new?-->
+<!--Will the enhancement change existing objects or add something new?-->

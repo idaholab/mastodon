@@ -1,7 +1,6 @@
 ---
 name: Bug report
-about: Report a bug that is preventing proper operation of MASTODON. If this doesn’t
-  look right, please choose a different issue type.
+about: Report a bug that is preventing proper operation of MASTODON.
 title: ''
 labels: Bug
 assignees: ''
