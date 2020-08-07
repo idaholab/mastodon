@@ -2,7 +2,6 @@ Content:
     - doc/content
     - ${MOOSE_DIR}/framework/doc/content
     - ${MOOSE_DIR}/modules/contact/doc/content
-    - ${MOOSE_DIR}/modules/solid_mechanics/doc/content
     - ${MOOSE_DIR}/modules/stochastic_tools/doc/content
     - ${MOOSE_DIR}/modules/tensor_mechanics/doc/content
     - ${BLACKBEAR_DIR}/doc/content
@@ -45,21 +44,18 @@ Extensions:
         hide:
             framework: !include ${MOOSE_DIR}/framework/doc/hidden.yml
             contact: !include ${MOOSE_DIR}/modules/contact/doc/hidden.yml
-            #solid_mechanics: !include modules/solid_mechanics/doc/hidden.yml
             #stochastic_tools: !include modules/stochastic_tools/doc/hidden.yml
             tensor_mechanics: !include ${MOOSE_DIR}/modules/tensor_mechanics/doc/hidden.yml
             blackbear: !include ${BLACKBEAR_DIR}/doc/hidden.yml
         remove:
             framework: !include ${MOOSE_DIR}/framework/doc/remove.yml
             #contact: !include modules/contact/doc/remove.yml
-            solid_mechanics: !include ${MOOSE_DIR}/modules/solid_mechanics/doc/remove.yml
             stochastic_tools: !include ${MOOSE_DIR}/modules/stochastic_tools/doc/remove.yml
             #tensor_mechanics: !include modules/tensor_mechanics/doc/remove.yml
         includes:
             - include
             - ${MOOSE_DIR}/framework/include
             - ${MOOSE_DIR}/modules/contact/include
-            - ${MOOSE_DIR}/modules/solid_mechanics/include
             - ${MOOSE_DIR}/modules/stochastic_tools/include
             - ${MOOSE_DIR}/modules/tensor_mechanics/include
 
