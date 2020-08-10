@@ -1,0 +1,43 @@
+reset
+create cylinder radius 0.7979 height 2.0
+volume 1 move z 1.0
+create cylinder radius 0.79 height 2.1
+volume 2 move z 1.0579
+subtract volume 2 from volume 1
+create cylinder radius 0.79 height 1.8
+volume 3 move z 0.9079
+merge all
+webcut volume 1  with sheet extended from surface 7 
+webcut volume 1  with sheet extended from surface 8 
+webcut volume 5  with sheet extended from surface 12 
+merge all 
+merge surface 26 with surface 10 force
+merge surface 14 with surface 17 force
+
+surface 9 scheme hole rad_intervals 2
+surface 9 size 0.1
+mesh surface 9
+
+volume 5 int 3
+mesh volume 5
+
+volume 6 int 18
+mesh volume 6
+mesh volume 1
+
+mesh volume 4
+
+volume 3 int 18
+mesh volume 3
+
+
+block 1 add volume 6 4 1 5
+block 2 add volume 3
+
+sideset 1 add surface 15 13
+sideset 1 name "Bottom"
+
+sideset 4 add surface 12
+sideset 4 name "Fluid_top"
+
+

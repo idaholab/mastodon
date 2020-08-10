@@ -17,5 +17,8 @@ A list of example simulations using MASTODON is provided below. These examples i
 - [Example 7](examples/example7.md): Demonstration of domain reduction method.
 - [Example 8](examples/example8.md): Seismic risk assessment of a generic nuclear facility using the MASTODON FTA Python module.
 - [Example 9](examples/example9.md): Soil-structure interaction analysis of an undamped rigid structure on undamped linear soil.
+- [Example 11a](examples/example11a.md): Fluid-structure interaction analysis of a tank subjected to uni-directional harmonic acceleration.
+- [Example 11b](examples/example11b.md): Fluid-structure interaction analysis of a tank subjected to uni-directional earthquake acceleration.
+- [Example 12](examples/example12.md): Experimental validation of fluid-structure interaction simulations.
 
 !bibtex bibliography
