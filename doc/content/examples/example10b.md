@@ -1,7 +1,8 @@
-# Example 10b: Central Difference Time Integration in MASTODON using HEX20 elements
+# Example 10b: Cantilever example demonstrating central difference time integration using HEX20 elements
 
 ## Model Description
-This example demonstrates the use of Central Difference Time Integration using HEX20 elements in MASTODON. A 2 feet x 2 feet x 20 feet cantilever is modelled with the bottom surface fixed along x, y & z directions. A uniform normal pressure of 1 kip/ft^2 is applied to the top surface along the axis of the model. The resulting stress time-history and displacement time-history are then obtained at locations (0, 0, 10) and (0, 0, 20) respectively and compared with results from ABAQUS/Standard (since HEX20 elements are unavailable in ABAQUS/Explicit).
+
+This example demonstrates the Central Difference Time Integration using HEX20 elements in MASTODON. A 2 $ft$ x 2 $ft$ x 20 $ft$ cantilever is modeled with the bottom surface fixed along x, y & z directions. A uniform normal pressure of 1 $kip/ft^2$ is applied to the top surface along the axis of the model. The resulting stress time-history and displacement time-history are then obtained at locations (0, 0, 10) and (0, 0, 20) respectively and compared with results from ABAQUS/Standard (since HEX20 elements are unavailable in ABAQUS/Explicit).
 
 [fig:ex10b_input] demonstrates the overall dimensions and boundary conditions of the model.
 
@@ -10,11 +11,11 @@ This example demonstrates the use of Central Difference Time Integration using H
        id=fig:ex10b_input
        caption=Input model in MASTODON
 
-## Modelling in MASTODON
+## Modeling in MASTODON
 
 !listing examples/ex10b/MASTODON_Explicit_HEX20.i
 
-The automeshing option provided by MASTODON is used to create the geometry and specify the element type (see documentation of [GeneratedMesh](syntax/index.md) in Syntax for detailed information).
+The automeshing option provided by MASTODON is used to create the geometry and specify the element type (see documentation of [GeneratedMesh](mesh/index.md) in Syntax for detailed information).
 
 !listing examples/ex10b/MASTODON_Explicit_HEX20.i
          start=Mesh
@@ -29,6 +30,7 @@ The displacement variables are defined in the `Variables` block. The acceleratio
 The rest of the input file is identical to that of `Example10a`.
 
 ## Results
+
 The stress time-history and displacement time-history are obtained at locations (0, 0, 10) and (0, 0, 20) respectively and compared with results from ABAQUS/Standard (as shown in [fig:ex10b_stresszz_0_0_10] and [fig:ex10b_Dispz_0_0_20]).
 
 !media media/examples/Example10b_Stresszz_0_0_10.png
@@ -40,6 +42,3 @@ The stress time-history and displacement time-history are obtained at locations 
        style=width:50%;margin-left:150px;float:center;
        id=fig:ex10b_Dispz_0_0_20
        caption=Disp-z Time-History at (0, 0, 20)
-
-
-

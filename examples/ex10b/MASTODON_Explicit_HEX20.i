@@ -180,15 +180,25 @@
   type = Transient
   start_time = 0
   end_time = 2e-2
-  dt = 1e-5
   timestep_tolerance = 1e-06
-  [TimeIntegrator]
+  [./TimeIntegrator]
     type = CentralDifference
-#    solve_type = lumped
   []
+  [./TimeStepper]
+    type = PostprocessorDT
+    postprocessor = time_step
+    dt = 1e-5
+  [../]
 []
 
 [Postprocessors]
+  [./_dt]
+    type = TimestepSize
+  [../]
+  [./time_step]
+    type = CriticalTimeStep
+    factor = 0.9
+  [../]
   [./dispx_20]
     type = PointValue
     variable = disp_x
