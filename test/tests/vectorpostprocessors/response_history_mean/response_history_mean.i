@@ -1,13 +1,13 @@
 [Mesh]
-  type = GeneratedMesh
-  dim = 2
-  nx = 3
-  ny = 3
-[]
-
-[MeshModifiers]
+  [./generate]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 3
+    ny = 3
+  [../]
   [./add_bnd]
-    type = AddExtraNodeset
+    type = ExtraNodesetGenerator
+    input = generate
     new_boundary = 'bnd'
     nodes = '2 10'
   [../]

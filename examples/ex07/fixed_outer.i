@@ -1,58 +1,64 @@
 [Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 450.0
-  xmax = 550.0
-  ymin = 450.0
-  ymax = 500.0
-  nx = 10
-  ny = 5
-[]
-
-[MeshModifiers]
+  [./generate]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 450.0
+    xmax = 550.0
+    ymin = 450.0
+    ymax = 500.0
+    nx = 10
+    ny = 5
+  [../]
   [./SubdomainBoundingBox]
     type = SubdomainBoundingBox
+    input = generate
     block_id = 1
     bottom_left = '460.0 460.0 0.0'
     top_right = '540.0 500.0 0.0'
   [../]
   [./ed0]
-    type = BlockDeleter
+    type = BlockDeletionGenerator
+    input = SubdomainBoundingBoxGenerator
     block_id = 1
-    depends_on = SubdomainBoundingBox
   [../]
   [./outer_1] # outer-left boundary
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = ed0
     combinatorial_geometry = 'x > 449.9 & x < 450.1 & y > 449.9'
     new_sideset_name = outer_1
     normal = '-1.0 0.0 0.0'
   [../]
   [./outer_2] # outer-bottom boundary
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = outer_1
     combinatorial_geometry = 'x > 459.1 & x < 541.0 & y > 449.9 & y < 450.1'
     new_sideset_name = outer_2
     normal = '0.0 -1.0 0.0'
   [../]
   [./outer_3] # outer-right boundary
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = outer_2
     combinatorial_geometry = 'x > 549.1 & x < 550.1 & y > 449.9'
     new_sideset_name = outer_3
     normal = '1.0 0.0 0.0'
   [../]
   [./inner_1] # inner-left boundary
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = outer_3
     combinatorial_geometry = 'x > 459.9 & x < 460.1 & y > 459.9'
     new_sideset_name = inner_1
     normal = '1.0 0.0 0.0'
   [../]
   [./inner_2] # inner-bottom boundary
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = inner_1
     combinatorial_geometry = 'x > 469.1 & x < 530.1 & y > 459.9 & y < 460.1'
     new_sideset_name = inner_2
     normal = '0.0 1.0 0.0'
   [../]
   [./inner_3] # inner-right boundary
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = inner_2
     combinatorial_geometry = 'x > 539.9 & x < 540.1 & y > 459.9'
     new_sideset_name = inner_3
     normal = '-1.0 0.0 0.0'

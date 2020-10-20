@@ -1,47 +1,52 @@
 [Mesh]
-  type = GeneratedMesh
-  dim = 2
-  xmin = 400.0
-  xmax = 600.0
-  ymin = 400.0
-  ymax = 500.0
-  nx = 20
-  ny = 10
-[]
-
-[MeshModifiers]
+  [./generate]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = 400.0
+    xmax = 600.0
+    ymin = 400.0
+    ymax = 500.0
+    nx = 20
+    ny = 10
+  [../]
   [./outer_1]
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = generate
     combinatorial_geometry = 'x > 449.9 & x < 450.1 & y > 449.9'
     new_sideset_name = outer_1
     normal = '-1.0 0.0 0.0'
   [../]
   [./outer_2]
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = outer_1
     combinatorial_geometry = 'x > 459.1 & x < 541.0 & y > 449.9 & y < 450.1'
     new_sideset_name = outer_2
     normal = '0.0 -1.0 0.0'
   [../]
   [./outer_3]
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = outer_2
     combinatorial_geometry = 'x > 549.1 & x < 550.1 & y > 449.9'
     new_sideset_name = outer_3
     normal = '1.0 0.0 0.0'
   [../]
   [./inner_1]
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = outer_3
     combinatorial_geometry = 'x > 459.9 & x < 460.1 & y > 459.9'
     new_sideset_name = inner_1
     normal = '1.0 0.0 0.0'
   [../]
   [./inner_2]
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = inner_1
     combinatorial_geometry = 'x > 469.1 & x < 530.1 & y > 459.9 & y < 460.1'
     new_sideset_name = inner_2
     normal = '0.0 1.0 0.0'
   [../]
   [./inner_3]
-    type = ParsedAddSideset
+    type = ParsedAddSidesetGenerator
+    input = inner_2
     combinatorial_geometry = 'x > 539.9 & x < 540.1 & y > 459.9'
     new_sideset_name = inner_3
     normal = '-1.0 0.0 0.0'

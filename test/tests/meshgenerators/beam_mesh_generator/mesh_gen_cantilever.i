@@ -23,16 +23,12 @@
 # Prathap and Bhashyam (1982), International journal for numerical methods in engineering, vol. 18, 195-210.
 # Note that the force is scaled by 1e-4 compared to the reference problem.
 
-[MeshGenerators]
+[Mesh]
+  uniform_refine = 4
   [./beam]
     type = BeamMeshGenerator
     mesh_file = euler_beam.txt
   [../]
-[]
-
-[Mesh]
-  type = MeshGeneratorMesh
-  uniform_refine = 4
 []
 
 [Variables]
