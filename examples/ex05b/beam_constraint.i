@@ -1,13 +1,8 @@
-[MeshGenerators]
+[Mesh]
   [./beam]
     type = BeamMeshGenerator
     mesh_file = stick_model.txt
   [../]
-[]
-
-[Mesh]
-  type = MeshGeneratorMesh
-  uniform_refine = 4
 []
 
 [Variables]

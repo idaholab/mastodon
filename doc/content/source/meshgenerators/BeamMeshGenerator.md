@@ -14,8 +14,8 @@ This mesh generator object generates a 1D mesh from an input mesh text file that
 
 ## Further BeamMeshGenerator Documentation
 
-!syntax parameters /MeshGenerators/BeamMeshGenerator
+!syntax parameters /Mesh/BeamMeshGenerator
 
-!syntax inputs /MeshGenerators/BeamMeshGenerator
+!syntax inputs /Mesh/BeamMeshGenerator
 
-!syntax children /MeshGenerators/BeamMeshGenerator
+!syntax children /Mesh/BeamMeshGenerator
