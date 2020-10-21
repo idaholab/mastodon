@@ -14,43 +14,45 @@
 
 
 [Mesh]
-  type = GeneratedMesh # Can generate simple lines, rectangles and rectangular prisms
-  dim = 3 # Dimension of the mesh
-  nx = 1 # Number of elements in the x direction
-  ny = 1 # Number of elements in the y direction
-  nz = 3 # Number of elements in the z direction
-  xmin = 0.0
-  xmax = 1
-  ymin = 0.0
-  ymax = 1
-  zmin = 0.0
-  zmax = 3.0
-[]
-
-[GlobalParams]
-  displacements = 'disp_x disp_y disp_z'
-  volumetric_locking_correction = true
-[]
-
-[MeshModifiers]
+  [./generate]
+    type = GeneratedMeshGenerator # Can generate simple lines, rectangles and rectangular prisms
+    dim = 3 # Dimension of the mesh
+    nx = 1 # Number of elements in the x direction
+    ny = 1 # Number of elements in the y direction
+    nz = 3 # Number of elements in the z direction
+    xmin = 0.0
+    xmax = 1
+    ymin = 0.0
+    ymax = 1
+    zmin = 0.0
+    zmax = 3.0
+  [../]
   [./block1]
-    type = SubdomainBoundingBox
+    type = SubdomainBoundingBoxGenerator
+    input = generate
     bottom_left = '0.0 0.0 0.0'
     top_right = '1.0 1.0 1.0'
     block_id = '1'
   [../]
   [./block2]
-    type = SubdomainBoundingBox
+    type = SubdomainBoundingBoxGenerator
+    input = block1
     bottom_left = '0.0 0.0 1.0'
     top_right = '1.0 1.0 2.0'
     block_id = '2'
   [../]
   [./block3]
-    type = SubdomainBoundingBox
+    type = SubdomainBoundingBoxGenerator
+    input = block2
     bottom_left = '0.0 0.0 2.0'
     top_right = '1.0 1.0 3.0'
     block_id = '3'
   [../]
+[]
+
+[GlobalParams]
+  displacements = 'disp_x disp_y disp_z'
+  volumetric_locking_correction = true
 []
 
 [Variables]
