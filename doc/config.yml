@@ -72,6 +72,7 @@ Extensions:
         active: True
         repos:
              default: https://github.com/idaholab/mastodon
+        reports: !include ${ROOT_DIR}/doc/sqa_reports.yml
         categories:
             mastodon:
                 specs:
