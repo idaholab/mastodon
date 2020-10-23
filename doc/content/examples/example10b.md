@@ -2,7 +2,7 @@
 
 ## Model Description
 
-This example demonstrates the Central Difference Time Integration using HEX20 elements in MASTODON. A 2 $ft$ x 2 $ft$ x 20 $ft$ cantilever is modeled with the bottom surface fixed along x, y & z directions. A uniform normal pressure of 1 $kip/ft^2$ is applied to the top surface along the axis of the model. The resulting stress time-history and displacement time-history are then obtained at locations (0, 0, 10) and (0, 0, 20) respectively and compared with results from ABAQUS/Standard (since HEX20 elements are unavailable in ABAQUS/Explicit).
+This example demonstrates the central difference time integration using HEX20 elements in MASTODON. A 2 $ft$ x 2 $ft$ x 20 $ft$ cantilever is modeled with the bottom surface fixed along x, y & z directions. A uniform normal pressure of 1 $kip/ft^2$ is applied to the top surface along the axis of the model. The resulting stress time-history and displacement time-history are then obtained at co-ordinate locations (0, 0, 10) and (0, 0, 20), respectively and compared with results from ABAQUS/Standard (since HEX20 elements are unavailable in ABAQUS/Explicit).
 
 [fig:ex10b_input] demonstrates the overall dimensions and boundary conditions of the model.
 
@@ -36,9 +36,9 @@ The stress time-history and displacement time-history are obtained at locations 
 !media media/examples/Example10b_Stresszz_0_0_10.png
        style=width:50%;margin-left:150px;float:center;
        id=fig:ex10b_stresszz_0_0_10
-       caption=Stress-zz Time-History at (0, 0, 10)
+       caption=Stress-zz Time-history at (0, 0, 10)
 
 !media media/examples/Example10b_Dispz_0_0_20.png
        style=width:50%;margin-left:150px;float:center;
        id=fig:ex10b_Dispz_0_0_20
-       caption=Disp-z Time-History at (0, 0, 20)
+       caption=Disp-z Time-history at (0, 0, 20)

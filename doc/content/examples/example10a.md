@@ -2,7 +2,7 @@
 
 ## Model Description
 
-This example demonstrates the central difference time integration in MASTODON. A 2 x 2 x 20 $ft$ cantilever is modeled with the bottom surface fixed along x, y & z directions. A uniform normal pressure of 1 $kip/ft^2$ is applied to the top surface along the axis of the model. The resulting stress time-history and displacement time-history are then obtained at locations (0, 0, 10) and (0, 0, 20) respectively and compared with results from Implicit Newmark-Beta time integration.
+This example demonstrates central difference explicit time integration in MASTODON. A 2 x 2 x 20 $ft$ cantilever beam is modeled with the bottom surface fixed along x, y & z directions. A uniform normal pressure of 1 $kip/ft^2$ is applied to the top surface along the axis of the model. The resulting stress time-history and displacement time-history are then obtained at locations (0, 0, 10) and (0, 0, 20) respectively and compared with results from Implicit Newmark-Beta time integration.
 
 [fig:ex10a_input] demonstrates the overall dimensions and boundary conditions of the model.
 
@@ -23,7 +23,7 @@ The automeshing option provided by MASTODON is used to create the geometry and s
 
 The displacement variables are defined in the `Variables` block. The accelerations, velocities and stresses are defined as auxiliary variables in the `AuxVariables` block.
 
-The `TensorMechanics` action and `InertialForce` kernels are used to model the dynamics of the 3D solid elements. Gravity and damping are not modeled. The AuxKernel, `RankTwoAux` is used to store and output the stress-zz.
+The `TensorMechanics` action and `InertialForce` kernels are used to model the dynamics of the 3D solid elements. Gravity and damping are not modeled. The AuxKernel, `RankTwoAux` is used to store and output stress-zz.
 
 !listing examples/ex10a/MASTODON_Explicit_HEX8.i
          start=AuxKernels
@@ -49,7 +49,7 @@ In this example, a fixed time step which is less than the courant limit is speci
 
 ## Results
 
-The stress history and displacement history are obtained at locations (0, 0, 10) and (0, 0, 20) respectively and compared with results from Implicit Newmark-Beta time integration (as shown in [fig:ex10a_stresszz_0_0_10] and [fig:ex10a_Dispz_0_0_20]). These figures show that the implicit and explicit results are almost identical.
+The stress history and displacement history are obtained at co-ordinate locations (0, 0, 10) and (0, 0, 20) respectively and compared with results from Implicit Newmark-Beta time integration (as shown in [fig:ex10a_stresszz_0_0_10] and [fig:ex10a_Dispz_0_0_20]). These figures show that the implicit and explicit results are almost identical.
 
 
 !media media/examples/Example10a_Stresszz_0_0_10.png
