@@ -15,7 +15,7 @@ This example demonstrates central difference explicit time integration in MASTOD
 
 !listing examples/ex10a/MASTODON_Explicit_HEX8.i
 
-The automeshing option provided by MASTODON is used to create the geometry and specify the element type (see documentation of [GeneratedMesh](mesh/index.md) in Syntax for detailed information).
+The automeshing option provided by MASTODON is used to create the geometry and specify the element type (see documentation of [GeneratedMesh](mesh/GeneratedMesh.md) in Syntax for detailed information).
 
 !listing examples/ex10a/MASTODON_Explicit_HEX8.i
          start=Mesh

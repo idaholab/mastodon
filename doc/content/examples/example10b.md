@@ -15,7 +15,7 @@ This example demonstrates the central difference time integration using HEX20 el
 
 !listing examples/ex10b/MASTODON_Explicit_HEX20.i
 
-The automeshing option provided by MASTODON is used to create the geometry and specify the element type (see documentation of [GeneratedMesh](mesh/index.md) in Syntax for detailed information).
+The automeshing option provided by MASTODON is used to create the geometry and specify the element type (see documentation of [GeneratedMesh](mesh/GeneratedMesh.md) in Syntax for detailed information).
 
 !listing examples/ex10b/MASTODON_Explicit_HEX20.i
          start=Mesh
