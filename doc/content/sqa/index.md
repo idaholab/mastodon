@@ -28,3 +28,5 @@
 
 - [Theory Manual](manuals/theory/index.md)
 - [User Manual](manuals/user/index.md)
+
+!sqa report
