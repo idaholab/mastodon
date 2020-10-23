@@ -1,16 +1,18 @@
 [Mesh]
-  type = GeneratedMesh
-  nx = 1
-  ny = 1
-  nz = 10
-  xmin = -1
-  ymin = -1
-  zmin = 0.0
-  xmax = 1
-  ymax = 1
-  zmax = 20.0
-  dim = 3
-  elem_type = HEX20
+  [generate]
+    type = GeneratedMeshGenerator
+    nx = 1
+    ny = 1
+    nz = 10
+    xmin = -1
+    ymin = -1
+    zmin = 0.0
+    xmax = 1
+    ymax = 1
+    zmax = 20.0
+    dim = 3
+    elem_type = HEX20
+  []
 []
 
 [Variables]
