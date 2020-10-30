@@ -1,6 +1,6 @@
 !config navigation breadcrumbs=False scrollspy=False
 
-!media Mastodon_Banner-Blue_Outline-300dpi.png style=width:80%;margin:auto;
+!media Mastodon_Banner-Blue_Outline-300dpi.png style=display:block;margin-left:auto;margin-right:auto;width:70%;
 
 # Multi-hazard Analysis for STOchastic time-DOmaiN phenomena class=center light style=font-size:300%
 
