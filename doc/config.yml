@@ -41,17 +41,9 @@ Extensions:
 
     MooseDocs.extensions.appsyntax:
         executable: ${ROOT_DIR}
-        hide:
-            framework: !include ${MOOSE_DIR}/framework/doc/hidden.yml
-            contact: !include ${MOOSE_DIR}/modules/contact/doc/hidden.yml
-            #stochastic_tools: !include modules/stochastic_tools/doc/hidden.yml
-            tensor_mechanics: !include ${MOOSE_DIR}/modules/tensor_mechanics/doc/hidden.yml
-            blackbear: !include ${BLACKBEAR_DIR}/doc/hidden.yml
         remove:
             framework: !include ${MOOSE_DIR}/framework/doc/remove.yml
-            #contact: !include modules/contact/doc/remove.yml
             stochastic_tools: !include ${MOOSE_DIR}/modules/stochastic_tools/doc/remove.yml
-            #tensor_mechanics: !include modules/tensor_mechanics/doc/remove.yml
         includes:
             - include
             - ${MOOSE_DIR}/framework/include
