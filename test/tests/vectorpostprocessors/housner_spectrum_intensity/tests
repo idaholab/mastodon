@@ -18,7 +18,7 @@
     min_parallel = 3
     max_parallel = 3
 
-    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history during a multiple core execution."
   [../]
 
   [./hsi_threads]
@@ -28,7 +28,7 @@
     prereq = hsi_parallel
     min_threads = 3
 
-    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history during a multiple thread execution."
   [../]
 
   [./hsi_threads_parallel]
@@ -39,6 +39,6 @@
     min_threads = 3
     min_parallel = 2
 
-    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history on a parallel execution."
+    requirement = "The HSICalculator vectorpostprocessor shall accurately calculate the HSI of a response history during a multiple core and multiple thread execution."
   [../]
 []
