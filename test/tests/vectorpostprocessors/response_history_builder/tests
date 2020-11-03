@@ -18,7 +18,7 @@
     min_parallel = 3
     max_parallel = 3
 
-    requirement = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a parallel execution."
+    requirement = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a multiple core execution."
   [../]
 
   [./builder_threads]
@@ -28,7 +28,7 @@
     prereq = builder_parallel
     min_threads = 6
 
-    requirement = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a parallel execution."
+    requirement = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a multiple thread execution."
   [../]
 
   [./builder_threads_parallel]
@@ -39,6 +39,6 @@
     min_threads = 4
     min_parallel = 2
 
-    requirement = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a parallel execution."
+    requirement = "The ResponseHistoryBuilder vectorpostprocessor shall accurately evaluate the response histories for node input as well as boundary input during a multiple core and multiple thread execution."
   [../]
 []

@@ -14,7 +14,7 @@
     prereq = meanhist
     min_parallel = 3
     max_parallel = 3
-    requirement = "The ResponseHistoryMean vectorpostprocessor shall accurately calculate the mean response history during a parallel execution."
+    requirement = "The ResponseHistoryMean vectorpostprocessor shall accurately calculate the mean response history during a mutiple core execution."
   [../]
   [./meanhist_threads]
     type = CSVDiff
@@ -23,7 +23,7 @@
     prereq = meanhist_parallel
     min_threads = 3
 
-    requirement = "The ResponseHistoryMean vectorpostprocessor shall accurately calculate the mean response history during a parallel execution."
+    requirement = "The ResponseHistoryMean vectorpostprocessor shall accurately calculate the mean response history during a multiple thread execution."
   [../]
   [./meanhist_threads_parallel]
     type = CSVDiff
@@ -32,6 +32,6 @@
     prereq = meanhist_threads
     min_threads = 3
     min_parallel = 2
-    requirement = "The ResponseHistoryMean vectorpostprocessor shall accurately calculate the mean response history during a parallel execution."
+    requirement = "The ResponseHistoryMean vectorpostprocessor shall accurately calculate the mean response history during a mutiple core and multiple thread execution."
   [../]
 []
