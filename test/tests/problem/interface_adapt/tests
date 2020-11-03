@@ -6,6 +6,6 @@ design = 'LayerInterfaceIndicator.md'
     input = interface.i
     exodiff = interface_out.e
     vtk = true
-    requirement = 'Mastodon shall create a mesh using the shear wave indicator and layer interface indication, and the minimum element size marker and error tolerance marker.'
+    requirement = 'Mastodon shall create a mesh using the shear wave indicator and layer interface indicator, and the minimum element size marker and error tolerance marker.'
   [../]
 []

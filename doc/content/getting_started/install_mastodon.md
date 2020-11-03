@@ -5,8 +5,9 @@ from there using [git](https://git-scm.com/). We recommend creating the director
 all of your MASTODON related work.
 
 MASTODON can be installed with or without [BlackBear](https://mooseframework.inl.gov/blackbear).
-BlackBear is a MOOSE-based structural material and degradation simulation code and
-can be included in MASTODON as a submodule. Below are the instructions to install MASTODON with
+BlackBear is a MOOSE-based structural material degradation simulation code and
+can be included in MASTODON as a submodule to run multi-physics simulations of
+degraded structures. Below are the instructions to install MASTODON with
 or without BlackBear.
 
 To clone MASTODON +=without BlackBear=+, run the following commands in a terminal.
