@@ -27,8 +27,8 @@
  **/
 namespace BaselineCorrectionUtils
 {
-/// Evaluates an integral over a single time step with Newmark-beta method
-/// Also is used as simple trapezoidal rule when gamma = 0.5.
+/// Evaluates an integral over a single time step with Newmark-beta method. This reduces to a simple
+/// trapezoidal integration rule when gamma = 0.5 and is used as such for displacement fits.
 Real newmarkGammaIntegrate(const Real & u_ddot_old,
                            const Real & u_ddot,
                            const Real & u_dot_old,

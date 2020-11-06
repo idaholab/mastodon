@@ -52,10 +52,10 @@ protected:
   /// adjusted (corrected) acceleration ordinates
   std::vector<Real> _adj_accel;
 
-  /// object to output linearly interpolated corrected acceleration ordinates
+  /// linear interpolation object is applied over adjusted acceleration, i.e., AFTER correction
   std::unique_ptr<LinearInterpolation> _linear_interp;
 
-  /// function value scale factor
+  /// function value scale factor - final output is scale_factor * _linear_interp(_time, _adj_accel)
   const Real & _scale_factor;
 
 private:
