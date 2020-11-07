@@ -5,20 +5,6 @@
   [test_correction]
     requirement = "The BaselineCorrection class shall accurately adjust a raw acceleration time history according to the method of using least squares polynomial fits."
 
-    [half_sine]
-      type = CSVDiff
-      input = half_sine.i
-      csvdiff = half_sine_out.csv
-
-      detail = "The input acceleration time history is a half cycle of `9.87 \sin(\pi t)`."
-    []
-    [full_sine]
-      type = CSVDiff
-      input = full_sine.i
-      csvdiff = full_sine_out.csv
-
-      detail = "The input acceleration time history is a single cycle of `9.87 \sin(\pi t)`."
-    []
     [half_sine_scaled]
       type = CSVDiff
       input = half_sine_scaled.i
@@ -26,33 +12,12 @@
 
       detail = "The corrected output should be scaled by a factor of 4.886. The input acceleration time history is a half cycle of `9.87 \sin(\pi t)`."
     []
-    [twenty_sines]
-      type = CSVDiff
-      input = twenty_sines.i
-      csvdiff = twenty_sines_out.csv
-
-      detail = "The function should be capable of correcting a high-order input using all 3 correction types. The input acceleration time history is twenty cycles of `-250 \pi^{2} \sin(50 \pi t)`."
-    []
     [twenty_sines_with_bc]
       type = CSVDiff
       input = twenty_sines_with_bc.i
       csvdiff = twenty_sines_with_bc_out.csv
 
       detail = "The corrected output shall support use in ICs and BCs and the displacement at a boundary should be characteristic of a baseline corrected time history. The input acceleration time history is twenty cycles of `-250 \pi^{2} \sin(50 \pi t)`."
-    []
-    [chichi_A0126300_N]
-      type = CSVDiff
-      input = chichi_A0126300_N.i
-      csvdiff = chichi_A0126300_N_out.csv
-
-      detail = "The function should be capable of adequately adjusting an accelelogram from the September 20, 1999 Chi-Chi earthquake. The uncorrected accelelogram was obtained from the Strong Motion VDC (Orig: A0126300.ASC)."
-    []
-    [chichi_QT063000_V]
-      type = CSVDiff
-      input = chichi_QT063000_V.i
-      csvdiff = chichi_QT063000_V_out.csv
-
-      detail = "The function should be capable of adequately adjusting an accelelogram from the September 20, 1999 Chi-Chi earthquake. The uncorrected accelelogram was obtained from the Strong Motion VDC (Orig: QT063000.ASC)."
     []
   []
 

@@ -142,21 +142,21 @@ The corrections always occur in the sequence: +A+ [!icon!arrow_forward] +V+ [!ic
 
 ## Usage id=usage
 
-The `BaselineCorrection` object requires, as input, some sort of record of an acceleration time history. This may be provided by specifying the `data_file` parameter, as demonstrated in [example-1], or, directly, by specifying the `time_values` and `acceleration_values` parameters, as demonstrated in [example-2].
+The `BaselineCorrection` object requires, as input, some sort of record of an acceleration time history. The data may be provided either by specifying the `time_values` and `acceleration_values` parameters in an abscissa-ordinate pair fashion, as demonstrated in [example-1], or by specifying the `data_file` parameter with the name of a file containing the time and acceleration pairs in a delimited format, such as comma-separated values (see the "DelimitedFileReader" section on the [source/utils/MooseUtils.md] page). Optionally, a user may specify the `time_name` and `acceleration_name` parameters and the file reader will search for a row or column where the first index contains a text string that matches the provided input, as demonstrated in [example-2]. If no input for `time_name` and `acceleration_name` is provided, then it is assumed that the abscissa are in the very first row or column and the ordinates are in the second.
 
-!listing baselinecorrection/twenty_sines.i
+!listing baselinecorrection/half_sine_scaled.i
          block=Functions
          id=example-1
-         caption=Sample input syntax for `BaselineCorrection` with the `data_file` parameter used to input a twenty-cycle sinusoidal acceleration time history.
+         caption=Sample input syntax for `BaselineCorrection` with the `time_values` and `acceleration_values` parameters used to input a half-sine acceleration time history. The corrected acceleration is multiplied by the factor provided for the `scale_factor` parameter before being returned.
 
-!listing baselinecorrection/half_sine.i
+!listing baselinecorrection/twenty_sines_with_bc.i
          block=Functions
          id=example-2
-         caption=Sample input syntax for `BaselineCorrection` with the `time_values` and `acceleration_values` parameters used to input a half-sine acceleration time history.
+         caption=Sample input syntax for `BaselineCorrection` with the `data_file` parameter used to input a twenty-cycle sinusoidal acceleration time history. Note that if no input for the `time_name` and `acceleration_name` parameters is provided, it is assumed that time values are in the first row or column of the delimited file and accelerations are in the second.
 
-The `beta` and `gamma` parameters are those used for Newmark Integration. Ideally, they should correspond to the values used elsewhere throughout the input file. The `accel_fit_order`, `vel_fit_order`, and `disp_fit_order` variables control whether or not to use the polynomials present in [corrected-accel] when formulating the corrected time histories. If a value is specified, then a polynomial of that type and order will be found. Note that these are the parameters that define which of the combinations, described in [correction-combos], is used. For example, the set of inputs shown in [example-1] produces combination +AVD+, while those shown in [example-2] produces combination +A+.
+The `beta` and `gamma` parameters are those used for Newmark Integration. Ideally, they should correspond to the values used elsewhere throughout the input file. The `accel_fit_order`, `vel_fit_order`, and `disp_fit_order` variables control whether or not to use the polynomials present in [corrected-accel] when formulating the corrected time histories. If a value is specified, then a polynomial of that type and order will be found. Note that these are the parameters that define which of the combinations, described in [correction-combos], is used. For example, the set of inputs shown in [example-1] produces combination +A+, while those shown in [example-2] produces combination +AVD+.
 
-The order of the approximating polynomials, $n$, which are set by the `accel_fit_order`, `vel_fit_order`, or `disp_fit_order` parameters, can be assigned a maximum integer value of nine, since the computations typically become unstable when attempting to find polynomials of orders greater than nine. The corrections are highly sensitive to the approximation order, and so it is recommended that a user run with several trial values until the desired result is achieved. In general, the order should be less than that which is required to produce a true best-fit curve of $\ddot{u}(t)$. For example, in [example-2], a half-sine wave was input. Since a half-sine wave could be, nearly, perfectly approximated by a certain quadratic function, the order for the corrections was set to one. However, for higher order inputs, such as the 20-cycle sine wave used in [example-2], finding the right correction configuration becomes tricky, and is a matter of user-preference. The [#demo] section provides several examples that should clarify why it is important to choose a suitable polynomial order.
+The order of the approximating polynomials, $n$, which are set by the `accel_fit_order`, `vel_fit_order`, or `disp_fit_order` parameters, can be assigned a maximum integer value of nine, since the computations typically become unstable when attempting to find polynomials of orders greater than nine. The corrections are highly sensitive to the approximation order, and so it is recommended that a user run with several trial values until the desired result is achieved. In general, the order should be less than that which is required to produce a true best-fit curve of $\ddot{u}(t)$. For example, in [example-2], a half-sine wave was input. Since a half-sine wave could be, nearly, perfectly approximated by a certain quadratic function, the order for the corrections was set to one. However, for higher order inputs, such as the 20-cycle sine wave used in [example-2], finding the right correction configuration becomes tricky, and is a matter of user-preference.
 
 !alert tip title=Use the Fewest Polynomials with the Lowest Orders Possible
 When it is unclear which combination, and what approximation order, is the most suitable one, start by applying the simplest one: Combination +A+ with the order of $P_{A}$ being zero (constant). Then, incrementally increase the strength of the correction until a satisfactory result is achieved. The strongest correction possible is combination +AVD+ with all three, $P_{A}$, $P_{V}$, and $P_{D}$, being ninth-order. It is important to try to avoid an *overcorrection*!
@@ -175,222 +175,6 @@ The input file shown in [example-3] is an extension of [example-1] that solves a
 
 !alert tip title=Free Vibration Periods
 When an acceleration boundary condition suddenly comes to a half at time $T$, i.e., $\ddot{u}(T) = 0$, but $\dot{u}(T) \ne 0$ and $u(T) \ne 0$, this can cause displacement drifts during the subsequent free vibration period, $t \ge T$, even if the acceleration were baseline corrected. To circumvent this behavior, consider using the [`TimePeriod`](source/controls/TimePeriod.md) object to activate a [`DirichletBC`](source/bcs/DirichletBC.md) object that controls $u(t), \, \forall \, t \ge T$.
-
-## Demonstrations id=demo
-
-The section presents several different cases of inputs and discusses certain properties of the adjustments that MASTODON's `BaselineCorrection` object performs on those inputs. The purpose of [!ac](BLC), and how it is applied to the [!ac](FEM), will be explained.
-
-### Correction of a Half-sine id=demo-1
-
-Consider the half-sine acceleration whose data points were provided as input for the `BaselineCorrection` object in [example-2] and which is plotted in [demo-1]. This acceleration can be defined, analytically, by the following function:
-
-!equation id=basic-sine
-\ddot{u}(t) = \pi^{2} \sin(\pi t), \, \, \, \forall \, t\in[0, 1]
-
-!plot scatter filename=baselinecorrection_data/demo_1.csv
-              data=[{'x':'time', 'y':'acceleration', 'name':'Nominal Acceleration', 'mode':'lines'}]
-              layout={'xaxis':{'title':'Time'}, 'yaxis':{'title':'Acceleration'}, 'title':'Nominal Acceleration Time History'}
-              id=demo-1
-              caption=Plot of a half-cycle sinusoidal acceleration time history to be adjusted by the `BaselineCorrection` object.
-
-Integrating [basic-sine] twice leads to the following functions for the velocity and displacement:
-
-!equation id=basic-sine-ints
-\dot{u}(t) = -\pi \cos(\pi t) + C_{0}
-\newline \, \newline
-u(t) = -sin(\pi t) + C_{0} t + C_{1}
-
-In MOOSE, and in many computer applications that provide dynamic analysis capabilities, the following [!ac](IVP) is often the default:
-
-!equation id=ivp
-\dot{u}(0) = 0, u(0) = 0
-
-[basic-sine-ints] is merely the *general solution* for [basic-sine].
-A *particular solution* is found by enforcing the [!ac](IVP) of [ivp] and solving for the constants of integration, $C_{0}$, and $C_{1}$, i.e.,
-
-!equation id=particular
-\dot{u}(t) = -\pi \cos(\pi t) + \pi
-\newline \, \newline
-u(t) = -sin(\pi t) + \pi t
-
-It is clear that, by the assumption of [ivp], the nominal displacement time history is a superposition of a monotonic sine wave and a linear function. Thus, while the body oscillates, it will also continuously drift at a rate of $\pi t$. To demonstrate this behavior, the particular solution for $u(t)$, given by [particular], is shown in [demo-1-drift].
-
-!plot scatter filename=baselinecorrection_data/demo_1_drift.csv
-              data=[{'x':'time', 'y':'displacement', 'name':'Nominal Displacement', 'mode':'lines'}]
-              layout={'xaxis':{'title':'Time'},
-                      'yaxis':{'title':'Displacement'},
-                      'title':'Nominal Displacement Time History'}
-              id=demo-1-drift
-              caption=Plot of the displacement time history resulting from integration of the acceleration shown in [demo-1]. The values exhibit a drifting behavior, i.e., they are steadily increasing over time.
-
-To be sure, [particular] is a *real* solution, however, it is not appropriate for evaluating the response of solids to an oscillatory excitation, such as earthquake ground motion. A particular solution to [basic-sine-ints] that is more characteristic of vibratory motion could be found. For example, by assuming that the [!ac](IVP) is given by $\dot{u}(t) = -\pi$ and $u(t) = 0$, then the displacement time history would simply be $u(t) = -sin(\pi t)$, which is also a real solution.
-
-It is usually not so easy, but, rather, impossible to find an [!ac](IVP) that is compatible with vibratory motion. Especially for the case of acceleration data obtained from field measurements (see the [#demo-6] section). [!ac](BLC) is a common signal processing technique whose purpose is to remove an arbitrary set of functions superposed within the raw data, which are the result of initial conditions that are inconsistent with reality, while still satisfying the assumptions of [ivp].
-The least squares approach to [!ac](BLC) assumes that those functions to be removed are best-fit polynomials (see the [#theory] section).
-
-MASTODON's `BaselineCorrection` object corrected the acceleration defined by [basic-sine] and the corresponding displacement time history is shown in [demo-1-adjusted] - compare this to [demo-1-drift]. Also, note that the shape of this plot closely resembles that of the particular solution, $u(t) = -sin(\pi t)$.
-
-!plot scatter filename=baselinecorrection_data/demo_1_adjusted.csv
-              data=[{'x':'time', 'y':'displacement', 'name':'Corrected Displacement', 'mode':'lines'}]
-              layout={'xaxis':{'title':'Time'},
-                      'yaxis':{'title':'Displacement'},
-                      'title':'Corrected Displacement Time History'}
-              id=demo-1-adjusted
-              caption=Plot of the displacement time history resulting from integration of the baseline corrected values of the acceleration shown in [demo-1]. These values are more characteristic of sinusoidal motion than the nominal ones shown in [demo-1-drift].
-
-### Correction of a Half-sine with Scaling id=demo-2
-
-Sometimes, it may be desirable to achieve a target displacement amplitude. If the `BaselineCorrection` object fails to achieve such a value, a scaling factor can be applied by providing the `scale_factor` parameter. For example, consider the corrected displacement shown in [demo-1-adjusted] whose amplitude is approximately $-0.2047$ and assume that the target amplitude is $-1.0$. For this case, the following scale factor may be applied:
-
-!equation
-\textrm{scale} = \frac{\textrm{desired}}{\textrm{result}} = \frac{-1.0}{-0.2047} = 4.886
-
-This value can be input for the `BaselineCorrection` object, as demonstrated in [demo-2-input].
-
-!listing baselinecorrection/half_sine_scaled.i
-         block=Functions
-         id=demo-2-input
-         caption=Sample input syntax that is similar to [example-2], but provides a value for the `scale_factor` parameter.
-
-Now, the corrected displacement time history would resemble that shown in [demo-2-adjusted].
-
-!plot scatter filename=baselinecorrection_data/demo_2_adjusted.csv
-              data=[{'x':'time', 'y':'displacement', 'name':'Corrected Displacement', 'mode':'lines'}]
-              layout={'xaxis':{'title':'Time'},
-                      'yaxis':{'title':'Displacement'},
-                      'title':'Corrected and Scaled Displacement Time History'}
-              id=demo-2-adjusted
-              caption=Plot of the displacement time history resulting from integration of the baseline corrected and scaled values of the acceleration shown in [demo-1].
-
-### Correction of a Full-sine id=demo-3
-
-Consider the acceleration defined by [basic-sine], but over a full-sine interval, i.e., with $T = 2$. The input syntax for use of the `BaselineCorrection` object with this acceleration time history is given in [demo-3-input].
-
-!listing baselinecorrection/full_sine.i
-         block=Functions
-         id=demo-3-input
-         caption=Sample input syntax for applying the `BaselineCorrection` object to a full-sine acceleration time history.
-
-Notice that the polynomial order used for the correction of a full-sine wave, shown in [demo-3-input], is higher than that used for the correction of a half-sine wave, shown in [example-2] or [demo-2-input]. MASTODON's `BaselineCorrection` object produced a corrected acceleration that corresponds with the displacement time history shown in [demo-3-adjusted].
-
-!plot scatter filename=baselinecorrection_data/demo_3_adjusted.csv
-              data=[{'x':'time', 'y':'displacement', 'name':'Corrected Displacement'}]
-              layout={'xaxis':{'title':'Time'},
-                      'yaxis':{'title':'Displacement'},
-                      'title':'Corrected Displacement Time History'}
-              id=demo-3-adjusted
-              caption=Plot of the displacement time history resulting from integration of the baseline corrected values of the acceleration shown in [demo-1] extrapolated out to $t = 2$.
-
-### Correction of a Twenty-sine id=demo-4
-
-Consider the half-sine acceleration whose data points were provided as input for the `BaselineCorrection` object in [example-1] and which is plotted in [demo-4]. This acceleration can be defined, analytically, by the following function:
-
-!equation id=twenty-sine
-\ddot{u}(t) = -250 \pi^{2} sin(50 \pi t), \, \, \, \forall \, t\in[0, 0.8]
-
-!plot scatter filename=baselinecorrection/twenty_sines_accel.csv
-              data=[{'x':'time', 'y':'acceleration', 'name':'Nominal Acceleration'}]
-              layout={'xaxis':{'title':'Time'}, 'yaxis':{'title':'Acceleration'}, 'title':'Nominal Acceleration Time History'}
-              id=demo-4
-              caption=Plot of a twenty-cycle sinusoidal acceleration time history to be adjusted by the `BaselineCorrection` object.
-
-When the nominal acceleration is of high order and uniformity, a stronger correction is required. Thus, for the nominal time history given by [twenty-sine], combination +AVD+ was used with high-order polynomials for each type. MASTODON's `BaselineCorrection` object produced a corrected acceleration that corresponds with the displacement time history shown in [demo-4-adjusted].
-
-!plot scatter filename=baselinecorrection_data/demo_4_adjusted.csv
-              data=[{'x':'time', 'y':'displacement', 'name':'Corrected Displacement'}]
-              layout={'xaxis':{'title':'Time'},
-                      'yaxis':{'title':'Displacement'},
-                      'title':'Corrected Displacement Time History'}
-              id=demo-4-adjusted
-              caption=Plot of the displacement time history resulting from integration of the baseline corrected values of the acceleration shown in [demo-4].
-
-### Apply a Corrected Twenty-sine as a Boundary Condition id=demo-5
-
-[!ac](BLC) is especially necessary for the analysis of structures subject to external, harmonic accelerations, because, without it, the displacement solution can be unrealistic, or even unachievable, depending on the model details. To demonstrate this point, a simple solid dynamics problem, whose boundary conditions consists of a sinusoidal acceleration, shall be solved using the [!ac](FEM) with, and without, [!ac](BLC) and the two solutions shall be compared. It will be shown that the solution without [!ac](BLC) is not merely unrealistic, but outright absurd.
-
-Consider a $1 \, \textrm{m} \times 1 \, \textrm{m} \times 1 \, \textrm{m}$ block meshed with a single hexahedral element. The bottom face of the block ($z = 0$) is restrained in all directions and the acceleration time history given by [twenty-sine] is applied to the top face ($z = 1 \, \textrm{m}$) in the $x$-direction. The unit value of the acceleration is $\textrm{m} / \textrm{s}^{2}$. The block is constrained in the $x$-direction and $y$-direction such that deformations are caused by shear strains only (see the [source/actions/AddPeriodicBCAction.md] page). The goal is to determine the displacement, in the $x$-direction, at the top face of the block when the applied acceleration is a baseline corrected one and when it is not. For this problem, the material properties of the block are trivial, but it was assigned those of intact structural steel.
-
-The input file used for this problem's baseline corrected case was given in [example-3].
-For the nominal case, the acceleration was applied directly by passing the output from a [`PiecewiseLinear`](source/functions/PiecewiseLinear.md) object to `PresetAcceleration`, as opposed to that from a `BaselineCorrection` one. That is, the `[ICs]` block in [example-3] was removed, and the `[Functions]` and `[BCs]` blocks were replaced with the following:
-
-```
-[Functions]
-  [nominal_accel_func]
-    type = PiecewiseLinear
-    data_file = twenty_sines_accel.csv
-    format = columns
-  []
-[]
-
-[BCs]
-  #
-  # <DirichletBC objects to restrain the bottom face>
-  #
-  [apply_nominal_accel]
-    type = PresetAcceleration
-    variable = disp_x
-    velocity = vel_x
-    acceleration = accel_x
-    boundary = 5
-    function = nominal_accel_func
-  []
-[]
-```
-
-A graphical rendering of each of the two solutions are shown, simultaneously, in [demo-5]. The contour values represent the magnitude of the displacement field at a given point. The displacement time history at the top face of the block for the corrected case matches that shown in [demo-4-adjusted], while that for the nominal case exhibits drifting behavior.
-
-!media baselinecorrection/demo_5.gif
-       style=width:100%;margin-left:auto;margin-right:auto;
-       id=demo-5
-       caption=Renderings of solutions resulting from two different boundary value problems: one where the acceleration applied to the top of the block is baseline corrected, and another where it is not. The transparent block, which appears to vibrate in shear, represents the former case and the opaque block, which appears to stretch along the negative $x$-direction, represents the latter.
-
-If the expected result was that the block would vibrate about its centroid, then, by comparing those renderings of the two cases shown in [demo-5], it becomes clear that the model must use a corrected acceleration time history. Otherwise, the top face of the block continuously drifts relative to its bottom face, causing it to stretch indefinitely. Aside from this kind of behavior's appearance being silly, it could also lead to bogus results, numerical errors, and/or convergence issues when it occurs in more complicated models. In a slightly different scenario - one where the nominal acceleration was applied to the block as a ground excitation (i.e., applied to the bottom face, while the top face was left unrestrained) - the whole block would continuously drift in one direction, which is something that structures normally don't do during earthquakes.
-
-### Correction of a Raw Accelerogram id=demo-6
-
-Records of raw accelerograms from the September 20, 1999 Chi-Chi earthquake were obtained from the [Strong-Motion Virtual Data Center (VDC)](https://strongmotioncenter.org/vdc/scripts/event.plx?evt=629) from two stations: [TAP007](https://strongmotioncenter.org/vdc/scripts/stnpage.plx?stations=1893) and [TCU071](https://strongmotioncenter.org/vdc/scripts/stnpage.plx?stations=2252). The accelerograms from the two station's recordings of the Chi-Chi event are plotted in [demo-6-1] and [demo-6-2], respectively.
-
-!plot scatter filename=baselinecorrection/chichi_A0126300_N.csv
-              data=[{'x':'time', 'y':'acceleration', 'name':'Nominal Acceleration'}]
-              layout={'xaxis':{'title':'Time (s)'}, 'yaxis':{'title':'Acceleration (cm/s/s)'}, 'title':'Nominal Acceleration Time History'}
-              id=demo-6-1
-              caption=Raw accelerogram (Chi-Chi earthquake) from the TAP007 station in Tapei, Taiwan to be adjusted by the `BaselineCorrection` object.
-
-!plot scatter filename=baselinecorrection/chichi_QT063000_V.csv
-              data=[{'x':'time', 'y':'acceleration', 'name':'Nominal Acceleration'}]
-              layout={'xaxis':{'title':'Time (s)'}, 'yaxis':{'title':'Acceleration (cm/s/s)'}, 'title':'Nominal Acceleration Time History'}
-              id=demo-6-2
-              caption=Raw accelerogram (Chi-Chi earthquake) from the TCU071 station in Taichung, Taiwan to be adjusted by the `BaselineCorrection` object.
-
-The input syntax for use of the `BaselineCorrection` object with these acceleration time histories are given in [demo-6-1-input] and [demo-6-2-input], respectively.
-
-!listing baselinecorrection/chichi_A0126300_N.i
-         block=Functions
-         id=demo-6-1-input
-         caption=Sample input syntax for applying the `BaselineCorrection` object to the acceleration time history shown in [demo-6-1].
-
-!listing baselinecorrection/chichi_QT063000_V.i
-        block=Functions
-        id=demo-6-2-input
-        caption=Sample input syntax for applying the `BaselineCorrection` object to the acceleration time history shown in [demo-6-2].
-
-As mentioned in the [#usage] section, when an appropriate correction configuration is unclear, it is best to start with the simplest one, and increase the strength of the correction until the results are reasonable and satisfactory. Such was the approach used for selecting the inputs shown in [demo-6-1-input] and [demo-6-2-input]. [demo-6-1-comparison] and [demo-6-2-comparison] compare the nominal and corrected displacement time histories that correspond with the TAP007 and the TCU071 accelerograms, respectively.
-
-!plot scatter filename=baselinecorrection_data/demo_6_A0126300_N.csv
-              data=[{'x':'time', 'y':'nominal_disp', 'name':'Nominal Displacement'},
-                    {'x':'time', 'y':'corrected_disp', 'name':'Corrected Displacement'}]
-              layout={'xaxis':{'title':'Time (s)'}, 'yaxis':{'title':'Displacement (cm)'}, 'title':'Nominal vs. Corrected Displacement Time History'}
-              id=demo-6-1-comparison
-              caption=Comparison of the displacement time histories resulting from: 1) integration of the nominal values and 2) integration of the baseline corrected values of the acceleration shown in [demo-6-1].
-
-!plot scatter filename=baselinecorrection_data/demo_6_QT063000_V.csv
-              data=[{'x':'time', 'y':'nominal_disp', 'name':'Nominal Displacement'},
-                    {'x':'time', 'y':'corrected_disp', 'name':'Corrected Displacement'}]
-              layout={'xaxis':{'title':'Time (s)'}, 'yaxis':{'title':'Displacement (cm)'}, 'title':'Nominal vs. Corrected Displacement Time History'}
-              id=demo-6-2-comparison
-              caption=Comparison of the displacement time histories resulting from: 1) integration of the nominal values and 2) integration of the baseline corrected values of the acceleration shown in [demo-6-2].
-
-The corrected displacements shown in [demo-6-1-comparison] or [demo-6-2-comparison] are more characteristic of earthquake ground motions than their nominal counterparts. Typically, ground motions will oscillate about the initial (baseline) position, and come to rest at that position as well. Permanent ground displacements can occur from earthquakes, but, surely, a continuous drifting motion would still seem strange.
 
 !syntax parameters /Functions/BaselineCorrection
 
