@@ -28,9 +28,16 @@ InputParameters
 BaselineCorrection::validParams()
 {
   InputParameters params = Function::validParams();
-  params.addClassDescription("Applies a baseline correction to an accceleration time history "
-                             "using least squares polynomial fits and outputs the adjusted "
-                             "acceleration with linear interpolation.");
+  params.addClassDescription("Applies a baseline correction to an accceleration time history using "
+                             "least squares polynomial fits and outputs adjusted values for the "
+                             "specified kinematic variable.");
+
+  MooseEnum series_type("acceleration velocity displacement", "acceleration");
+  params.addParam<MooseEnum>(
+      "series_type",
+      series_type,
+      "The kineamtic variable whose corrected time history is to be evaluated. The default is "
+      "'acceleration'.");
 
   params.addParam<FileName>(
       "data_file", "The name of a CSV file containing raw acceleration time history data.");
@@ -78,6 +85,7 @@ BaselineCorrection::validParams()
 
 BaselineCorrection::BaselineCorrection(const InputParameters & parameters)
   : Function(parameters),
+    _series(getParam<MooseEnum>("series_type")),
     _gamma(getParam<Real>("gamma")),
     _beta(getParam<Real>("beta")),
     _scale_factor(getParam<Real>("scale_factor"))
@@ -119,7 +127,7 @@ BaselineCorrection::BaselineCorrection(const InputParameters & parameters)
   // try building a linear interpolation object
   try
   {
-    _linear_interp = libmesh_make_unique<LinearInterpolation>(_time, _adj_accel);
+    _linear_interp = libmesh_make_unique<LinearInterpolation>(_time, _adj_series);
   }
   catch (std::domain_error & e)
   {
@@ -154,22 +162,22 @@ BaselineCorrection::applyCorrection()
         _accel[i], _accel[i + 1], vel[i], disp[i], _beta, dt));
   }
 
-  // initialize polyfits and adjusted time history arrays as the nominal ones
+  // initialize polyfits and adjusted time history arrays with nominal ones
+  unsigned int order;
   DenseVector<Real> coeffs;
-  _adj_accel = _accel;
-  std::vector<Real> p_fit, adj_vel = vel, adj_disp = disp;
+  std::vector<Real> p_fit, adj_accel = _accel, adj_vel = vel, adj_disp = disp;
 
   // adjust time histories with acceleration fit if desired
   if (isParamValid("accel_fit_order"))
   {
-    _order = getParam<unsigned int>("accel_fit_order");
+    order = getParam<unsigned int>("accel_fit_order");
     coeffs = BaselineCorrectionUtils::getAccelerationFitCoeffs(
-        _order, _adj_accel, _time, index_end, _gamma);
+        order, adj_accel, _time, index_end, _gamma);
 
     for (unsigned int i = 0; i <= index_end; ++i)
     {
-      p_fit = BaselineCorrectionUtils::computePolynomials(_order, coeffs, _time[i]);
-      _adj_accel[i] -= p_fit[0];
+      p_fit = BaselineCorrectionUtils::computePolynomials(order, coeffs, _time[i]);
+      adj_accel[i] -= p_fit[0];
       adj_vel[i] -= p_fit[1];
       adj_disp[i] -= p_fit[2];
     }
@@ -178,14 +186,15 @@ BaselineCorrection::applyCorrection()
   // adjust with velocity fit
   if (isParamValid("vel_fit_order"))
   {
-    _order = getParam<unsigned int>("vel_fit_order");
+    order = getParam<unsigned int>("vel_fit_order");
     coeffs = BaselineCorrectionUtils::getVelocityFitCoeffs(
-        _order, _adj_accel, adj_vel, _time, index_end, _beta);
+        order, adj_accel, adj_vel, _time, index_end, _beta);
 
     for (unsigned int i = 0; i <= index_end; ++i)
     {
-      p_fit = BaselineCorrectionUtils::computePolynomials(_order, coeffs, _time[i]);
-      _adj_accel[i] -= p_fit[0];
+      p_fit = BaselineCorrectionUtils::computePolynomials(order, coeffs, _time[i]);
+      adj_accel[i] -= p_fit[0];
+      adj_vel[i] -= p_fit[1];
       adj_disp[i] -= p_fit[2];
     }
   }
@@ -193,15 +202,26 @@ BaselineCorrection::applyCorrection()
   // adjust with displacement fit
   if (isParamValid("disp_fit_order"))
   {
-    _order = getParam<unsigned int>("disp_fit_order");
-    coeffs = BaselineCorrectionUtils::getDisplacementFitCoeffs(_order, adj_disp, _time, index_end);
+    order = getParam<unsigned int>("disp_fit_order");
+    coeffs = BaselineCorrectionUtils::getDisplacementFitCoeffs(order, adj_disp, _time, index_end);
 
     for (unsigned int i = 0; i <= index_end; ++i)
     {
-      p_fit = BaselineCorrectionUtils::computePolynomials(_order, coeffs, _time[i]);
-      _adj_accel[i] -= p_fit[0];
+      p_fit = BaselineCorrectionUtils::computePolynomials(order, coeffs, _time[i]);
+      adj_accel[i] -= p_fit[0];
+      adj_vel[i] -= p_fit[1];
+      adj_disp[i] -= p_fit[2];
     }
   }
+
+  // copy adjusted values for specified time series to a global variable (would it be faster to set
+  // _adj_series with a std::map that pairs '_series' with 'adj_accel', etc.? Probably not...)
+  if (_series == "acceleration")
+    _adj_series = adj_accel;
+  else if (_series == "velocity")
+    _adj_series = adj_vel;
+  else
+    _adj_series = adj_disp;
 }
 
 void
