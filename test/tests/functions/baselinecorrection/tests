@@ -10,14 +10,14 @@
       input = half_sine_scaled.i
       csvdiff = half_sine_scaled_out.csv
 
-      detail = "The corrected output should be scaled by a factor of 4.886. The input acceleration time history is a half cycle of `9.87 \sin(\pi t)`."
+      detail = "The output should be a displacement time history scaled by a factor of 4.886 that does not exhibit drifting behavior. The input acceleration time history is a half cycle of `9.87 \sin(\pi t)`."
     []
     [twenty_sines_with_bc]
       type = CSVDiff
       input = twenty_sines_with_bc.i
       csvdiff = twenty_sines_with_bc_out.csv
 
-      detail = "The corrected output shall support use in ICs and BCs and the displacement at a boundary should be characteristic of a baseline corrected time history. The input acceleration time history is twenty cycles of `-250 \pi^{2} \sin(50 \pi t)`."
+      detail = "The output should be an adjusted acceleration time history that is compatible with ICs and BCs objects and the displacement at the mesh boundary where it is prescribed should not exhibit drifting behavior. The input acceleration time history is twenty cycles of `-250 \pi^{2} \sin(50 \pi t)`."
     []
   []
 
