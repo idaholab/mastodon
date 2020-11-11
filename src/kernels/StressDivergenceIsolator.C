@@ -125,10 +125,9 @@ StressDivergenceIsolator::computeJacobian()
 }
 
 void
-StressDivergenceIsolator::computeOffDiagJacobian(MooseVariableFEBase & jvar)
+StressDivergenceIsolator::computeOffDiagJacobian(const unsigned int jvar_num)
 // coupling one variable to another (disp x to disp y, etc)
 {
-  size_t jvar_num = jvar.number();
   if (jvar_num == _var.number())
     // jacobian calculation if jvar is the same as the current variable i.e.,
     // diagonal elements
