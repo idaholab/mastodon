@@ -238,7 +238,6 @@
   [./leftright]
     secondary = 102
     primary = 103
-    system = constraint
     model = coulomb
     formulation = penalty
     normalize_penalty = true
@@ -300,9 +299,6 @@
   l_max_its = 20
   timestep_tolerance = 1e-3
 []
-
-
-
 
 [Outputs]
   csv = true

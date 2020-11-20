@@ -137,7 +137,6 @@
   [./leftright]
     secondary = 102
     primary = 103
-    system = constraint
     model = coulomb
     formulation = penalty
     normalize_penalty = true
