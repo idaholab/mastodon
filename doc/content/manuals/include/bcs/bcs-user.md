@@ -9,7 +9,7 @@ separately (e.g. periodic boundary conditions.) Following input block creates a 
          start=BCs
          end=Periodic
 
-In the above input, `type = PresetBC` sets the variable = disp_"related degree of freedom" with the
+In the above input, `type = DirichletBC` sets the variable = disp_"related degree of freedom" with the
 value = 0 which provides the fixity by defining a zero displacement at the node. boundary = 0 command
 selects the nodes at the bottom surface of the element (labeled as surface 0) and assigns the
 boundary conditions.

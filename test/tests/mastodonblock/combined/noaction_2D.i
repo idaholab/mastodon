@@ -174,7 +174,7 @@
     velocity = vel_x
   [../]
   [./y_bot]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_y
     boundary = bottom
     value = 0.0

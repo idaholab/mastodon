@@ -189,19 +189,19 @@
 
 [BCs]
   [./x_bot]
-    type = PresetBC
+    type = DirichletBC
     boundary = 0
     variable = disp_x
     value = 0
   [../]
   [./y_bot]
-    type = PresetBC
+    type = DirichletBC
     boundary = 0
     variable = disp_y
     value = 0
   [../]
   [./z_bot]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_z
     boundary = 0
     value = 0.0

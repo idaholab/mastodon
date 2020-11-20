@@ -81,19 +81,19 @@
 
 [BCs]
   [./x_bot]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_x
     boundary = 'back'
     value = 0.0
   [../]
   [./y_bot]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_y
     boundary = 'left right top bottom'
     value = 0.0
   [../]
   [./z_bot]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_z
     boundary = 'left right top bottom'
     value = 0.0
