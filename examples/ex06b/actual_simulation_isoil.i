@@ -249,8 +249,8 @@
 
 [Contact]
   [./leftright]
-    slave = 102
-    master = 103
+    secondary = 102
+    primary = 103
     system = constraint
     model = coulomb
     formulation = penalty
