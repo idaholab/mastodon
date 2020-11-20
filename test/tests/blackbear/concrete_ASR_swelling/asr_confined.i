@@ -99,9 +99,8 @@
 
 [Contact]
   [./leftright]
-    system = Constraint
-    master = 6
-    slave = 5
+    primary = 6
+    secondary = 5
     model = frictionless
     tangential_tolerance = 5e-4
     penalty = 1.0e12
