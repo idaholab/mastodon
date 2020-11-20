@@ -113,7 +113,7 @@
     [../]
   [../]
  [./top_x]
-    type = FunctionPresetBC
+    type = FunctionDirichletBC
     boundary = front
     variable = disp_x
     function = top_disp

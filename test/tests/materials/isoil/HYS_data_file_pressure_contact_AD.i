@@ -245,13 +245,13 @@
     value = 0.0
   [../]
   [./top_disp]
-    type = FunctionPresetBC
+    type = FunctionDirichletBC
     variable = disp_x
     function = top_disp
     boundary = front
   [../]
   [./top_disp_z]
-    type = FunctionPresetBC
+    type = FunctionDirichletBC
     variable = disp_z
     function = top_disp_z
     boundary = front
