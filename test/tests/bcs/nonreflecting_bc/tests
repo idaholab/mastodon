@@ -5,9 +5,8 @@
     type = 'Exodiff'
     input = 'non_reflecting_bc_test.i'
     exodiff = 'non_reflecting_bc_test_out.e'
-    compiler = 'GCC CLANG'
     max_parallel = 1
-    skip = "regold after moose PR"
+    skip = "Intermittent failure after conda."
 
     requirement = "The NonReflectingBC class shall accurately model absorption of shear and compressive waves that are incident on the boundary."
   [../]
