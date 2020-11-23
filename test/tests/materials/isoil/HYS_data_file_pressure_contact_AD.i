@@ -227,31 +227,31 @@
 
 [BCs]
   [./x_bot]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_x
     boundary = 'back'
     value = 0.0
   [../]
   [./y_bot]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_y
     boundary = 'back'
     value = 0.0
   [../]
   [./z_bot]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_z
     boundary = 'back'
     value = 0.0
   [../]
   [./top_disp]
-    type = FunctionPresetBC
+    type = FunctionDirichletBC
     variable = disp_x
     function = top_disp
     boundary = front
   [../]
   [./top_disp_z]
-    type = FunctionPresetBC
+    type = FunctionDirichletBC
     variable = disp_z
     function = top_disp_z
     boundary = front

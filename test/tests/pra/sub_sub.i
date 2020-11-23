@@ -159,13 +159,13 @@
     velocity = vel_x
   [../]
   [./y_bot]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_y
     boundary = 0
     value = 0.0
   [../]
   [./z_bot]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_z
     boundary = 0
     value = 0.0

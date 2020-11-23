@@ -206,7 +206,7 @@
     velocity = vel_x
   [../]
   [./bottom_z]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_z
     boundary = back
     value = 0.0
