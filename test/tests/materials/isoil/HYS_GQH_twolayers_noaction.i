@@ -188,13 +188,13 @@
 
 [BCs]
   [./bottom_z]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_z
     boundary = 'back'
     value = 0.0
   [../]
   [./bottom_y]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_y
     boundary = 'back'
     value = 0.0

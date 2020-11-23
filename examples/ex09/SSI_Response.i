@@ -239,13 +239,13 @@
     boundary = 'NZ'
   [../]
   [./disp_y]
-    type = PresetBC
+    type = DirichletBC
     boundary = 'NZ'
     variable = disp_y
     value = 0.0
   [../]
   [./disp_z]
-    type = PresetBC
+    type = DirichletBC
     boundary = 'NZ'
     variable = disp_z
     value = 0.0

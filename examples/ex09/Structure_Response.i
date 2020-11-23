@@ -233,13 +233,13 @@
     boundary = 'NY_ns'
   [../]
   [./disp_y]
-    type = PresetBC
+    type = DirichletBC
     boundary = 'NY'
     variable = disp_y
     value = 0.0
   [../]
   [./disp_z]
-    type = PresetBC
+    type = DirichletBC
     boundary = 'NY'
     variable = disp_z
     value = 0.0

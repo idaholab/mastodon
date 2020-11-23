@@ -66,19 +66,19 @@
 
 [BCs]
   [./fix_x_soil]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_x
     boundary = 100
     value = 0.0
   [../]
   [./fix_y_soil]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_y
     boundary = 100
     value = 0.0
   [../]
   [./fix_z_soil]
-    type = PresetBC
+    type = DirichletBC
     variable = disp_z
     boundary = 100
     value = 0.0
@@ -135,9 +135,8 @@
 
 [Contact]
   [./leftright]
-    slave = 102
-    master = 103
-    system = constraint
+    secondary = 102
+    primary = 103
     model = coulomb
     formulation = penalty
     normalize_penalty = true
