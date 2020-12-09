@@ -20,7 +20,7 @@
 class OrmsbyWavelet;
 
 /**
-  * Class for an Ormsby Wavelet function
+ * Class for an Ormsby Wavelet function
  */
 class OrmsbyWavelet : public Function
 {

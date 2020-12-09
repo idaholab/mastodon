@@ -26,13 +26,13 @@ OrmsbyWavelet::validParams()
   params.addRequiredParam<Real>("f4", "Fourth frequency for defining the Ormsby wavelet.");
   params.addRequiredParam<Real>("ts", "Time of the peak of the Ormsby wavelet.");
   params.addParam<Real>("scale_factor", 1.0, "Amplitude scale factor to be applied to wavelet.");
-  params.addClassDescription("Calculates an amplitude normalized Ormsby wavelet with the given input parameters.");
+  params.addClassDescription(
+      "Calculates an amplitude normalized Ormsby wavelet with the given input parameters.");
   return params;
 }
 
 OrmsbyWavelet::OrmsbyWavelet(const InputParameters & parameters)
-  : Function(parameters),
-    _scale_factor(getParam<Real>("scale_factor"))
+  : Function(parameters), _scale_factor(getParam<Real>("scale_factor"))
 {
 }
 
@@ -47,13 +47,18 @@ OrmsbyWavelet::value(Real t, const Point &) const
 
   Real c1, c2, c3, c4, c;
 
-  c1 = libMesh::pi * f1 * f1 / (f2 - f1) * sinc(libMesh::pi * f1 * (t - ts)) * sinc(libMesh::pi * f1 * (t - ts));
-  c2 = libMesh::pi * f2 * f2 / (f2 - f1) * sinc(libMesh::pi * f2 * (t - ts)) * sinc(libMesh::pi * f2 * (t - ts));
-  c3 = libMesh::pi * f3 * f3 / (f3 - f4) * sinc(libMesh::pi * f3 * (t - ts)) * sinc(libMesh::pi * f3 * (t - ts));
-  c4 = libMesh::pi * f4 * f4 / (f3 - f4) * sinc(libMesh::pi * f4 * (t - ts)) * sinc(libMesh::pi * f4 * (t - ts));
+  c1 = libMesh::pi * f1 * f1 / (f2 - f1) * sinc(libMesh::pi * f1 * (t - ts)) *
+       sinc(libMesh::pi * f1 * (t - ts));
+  c2 = libMesh::pi * f2 * f2 / (f2 - f1) * sinc(libMesh::pi * f2 * (t - ts)) *
+       sinc(libMesh::pi * f2 * (t - ts));
+  c3 = libMesh::pi * f3 * f3 / (f3 - f4) * sinc(libMesh::pi * f3 * (t - ts)) *
+       sinc(libMesh::pi * f3 * (t - ts));
+  c4 = libMesh::pi * f4 * f4 / (f3 - f4) * sinc(libMesh::pi * f4 * (t - ts)) *
+       sinc(libMesh::pi * f4 * (t - ts));
 
   // c is the max value
-  c = (libMesh::pi * f4 * f4 / (f3 - f4) - libMesh::pi * f3 * f3 / (f3 - f4)) - (libMesh::pi * f2 * f2 / (f2 - f1) - libMesh::pi * f1 * f1 / (f2 - f1)) ;
+  c = (libMesh::pi * f4 * f4 / (f3 - f4) - libMesh::pi * f3 * f3 / (f3 - f4)) -
+      (libMesh::pi * f2 * f2 / (f2 - f1) - libMesh::pi * f1 * f1 / (f2 - f1));
 
   return _scale_factor / c * ((c4 - c3) - (c2 - c1));
 }
@@ -62,5 +67,5 @@ OrmsbyWavelet::value(Real t, const Point &) const
 inline Real
 OrmsbyWavelet::sinc(Real x) const
 {
-  return (x == 0) ? 1.0 : sin(x)/x;
+  return (x == 0) ? 1.0 : sin(x) / x;
 }
