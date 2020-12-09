@@ -1,0 +1,11 @@
+[Tests]
+  [./ormsby_eavelet]
+    type = CSVDiff
+    input = ormsby.i
+    csvdiff = ormsby_out.csv
+
+    design = "OrmsbyWavelet.md"
+    issues = "#352"
+    requirement = "The OrmsbyWavelet function shall accurately calculate the Ormsby Wavelet."
+  [../]
+[]
