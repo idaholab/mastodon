@@ -20,8 +20,8 @@ f(t)=\left[\frac{\pi f_4^2}{f_4-f_3}sinc(\pi f_4(t-t_s))-\frac{\pi f_3^2}{f_4-f_
 \end{aligned}
 \end{equation}
 
-A sample Ormsby wavelet calculated for the $f_1$, $f_1$, $f_1$, and $f_1$ values
-of 0 $Hz$, 0.2 $Hz$, 20 $Hz$, and 25 $Hz$, $t_s$ value of 2.0 $sec$, and a scale
+A sample Ormsby wavelet calculated using the $f_1$, $f_2$, $f_3$, and $f_4$ values
+of 0 $Hz$, 0.2 $Hz$, 20 $Hz$, and 25 $Hz$, a $t_s$ value of 2.0 $sec$, and a scale
 factor of 0.5, is shown in [sample]. The input syntax for generating this wavelet
 is shown below.
 
@@ -36,7 +36,7 @@ is shown below.
               id=sample
 
 More detailed information on the Ormsby wavelet can be found in Appendix B of
-[!citet](BolisettiandWhittakerMCEER2015), as well as [here](https://wiki.seg.org/wiki/Ormsby_wavelet). 
+[!citet](BolisettiandWhittakerMCEER2015), as well as [here](https://wiki.seg.org/wiki/Ormsby_wavelet).
 
 !syntax parameters /Functions/OrmsbyWavelet
 
