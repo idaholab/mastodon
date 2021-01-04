@@ -1,0 +1,14 @@
+[Tests]
+  [./parallel]
+    type = Exodiff
+    input = element_size_indicator.i
+    exodiff = element_size_indicator_out.e
+    min_parallel = 2
+    vtk = true
+    method = opt
+
+    design = "ElementSizeIndicator.md"
+    issues = "#351"
+    requirement = "The ElementSizeIndicator class shall accurately mesh the domain taking into account the provided element_size MaterialProperty."
+  [../]
+[]
