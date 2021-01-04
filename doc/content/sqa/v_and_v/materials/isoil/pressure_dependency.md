@@ -26,7 +26,7 @@ To conserve dynamic equilibrium in the first time-step, the element was initiali
 \sigma_{initial}=[-12613\,\,\,\,0\,\,\,\,0\,\,\,\,0\,\,\,\,-12613\,\,\,\,0\,\,\,\,0\,\,\,\,0\,\,\,\,-29430]^{\mathrm{T}}\,\,\,\text{Pa}
 \end{equation}
 
-Then a body force equal to three times the force of gravity was applied thereby increasing the vertical pressure experienced by the element. Finally a ramp displacement was applied in the manner described in [#problem-statement].
+Then a body force equal to three times the force of gravity was applied thereby increasing the vertical pressure experienced by the element. Finally a ramp displacement was applied in the manner described in [isoil/problem_statement.md].
 
 I-Soil is capable of varying the shear yield strength and the shear modulus as a function of engineering strain, $\gamma$, mean effective stress, $p$, a specified reference pressure, $p_{ref}$, and a tension pressure cutoff value, $p_0<0$. Assuming positive compression, MASTODON computes the mean effective stress as
 
@@ -65,7 +65,7 @@ The five cases described in [strength-cases] were used to investigate the behavi
 
 #### Results
 
-The engineering shear stress-strain backbone curve results for Cases 1, 2, and 3 are presented in [strength-comparison1], and those for Cases 2, 4, and 5 are presented in [strength-comparison2]. Both figures show their results along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [#problem-statement]). It can be seen in [strength-comparison1] and [strength-comparison2] that MASTODON effectively modifies the shear strength. In some cases, stiffness changes on those strain increments for which the mean effective stress exceeds $\tau_{y}(p,\gamma)$ can also be observed in these two figures, even though $b=0$. This is reasoned by the fact that, at a constant rate of strain, a change in strength of a material naturally (and numerically) leads to one in stiffness.
+The engineering shear stress-strain backbone curve results for Cases 1, 2, and 3 are presented in [strength-comparison1], and those for Cases 2, 4, and 5 are presented in [strength-comparison2]. Both figures show their results along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [isoil/problem_statement.md]). It can be seen in [strength-comparison1] and [strength-comparison2] that MASTODON effectively modifies the shear strength. In some cases, stiffness changes on those strain increments for which the mean effective stress exceeds $\tau_{y}(p,\gamma)$ can also be observed in these two figures, even though $b=0$. This is reasoned by the fact that, at a constant rate of strain, a change in strength of a material naturally (and numerically) leads to one in stiffness.
 
 !media media/materials/isoil/pressure_dependent_strength1.png
        id=strength-comparison1
@@ -94,7 +94,7 @@ The three cases described in [stiffness-cases] were used to investigate the beha
 
 #### Results
 
-The engineering shear stress-strain backbone curve results for all cases are presented in [stiffness-comparison]. The results are shown along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [#problem-statement]). It can be seen in [stiffness-comparison] that MASTODON effectively modifies the shear modulus. For reasons similar to why the curves shown in [strength-comparison1] and [strength-comparison2] exhibit stiffness changes, strength changes, particularly at the lower strains of Case 1 and Case 2, can also be observed in this figure, even though $a_{0}=1$, $a_{1}=0$, and $a_{2}=0$. However, the ultimate shear strength at which the material completely fails, which corresponds to the maximum stress value defined by the backbone curve ([p-ref-backbone-input]), remains the same.
+The engineering shear stress-strain backbone curve results for all cases are presented in [stiffness-comparison]. The results are shown along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [isoil/problem_statement.md]). It can be seen in [stiffness-comparison] that MASTODON effectively modifies the shear modulus. For reasons similar to why the curves shown in [strength-comparison1] and [strength-comparison2] exhibit stiffness changes, strength changes, particularly at the lower strains of Case 1 and Case 2, can also be observed in this figure, even though $a_{0}=1$, $a_{1}=0$, and $a_{2}=0$. However, the ultimate shear strength at which the material completely fails, which corresponds to the maximum stress value defined by the backbone curve ([p-ref-backbone-input]), remains the same.
 
 !media media/materials/isoil/pressure_dependent_stiffness.png
        id=stiffness-comparison
@@ -118,7 +118,7 @@ The two cases described in [strength-stiffness-cases] were used to simultaneousl
 
 #### Results
 
-The engineering shear stress-strain backbone curve results for both cases are presented in [strength-stiffness-comparison]. The results are shown along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [#problem-statement]). It can be seen in [strength-stiffness-comparison] that MASTODON effectively modifies both the strength and stiffness for a particular strain increment. Specifically, one should compare the curve shown in this figure to those in [strength-comparison1], [strength-comparison2], and [stiffness-comparison].
+The engineering shear stress-strain backbone curve results for both cases are presented in [strength-stiffness-comparison]. The results are shown along with the user-defined backbone curve shown in [p-ref-backbone-input]. The backbone curves were obtained in MOOSE by sampling the data during the initial load cycle, i.e., from 3 seconds to 4 seconds (see [isoil/problem_statement.md]). It can be seen in [strength-stiffness-comparison] that MASTODON effectively modifies both the strength and stiffness for a particular strain increment. Specifically, one should compare the curve shown in this figure to those in [strength-comparison1], [strength-comparison2], and [stiffness-comparison].
 
 !media media/materials/isoil/stiffness_and_strength_pressure_dependency.png
        id=strength-stiffness-comparison
