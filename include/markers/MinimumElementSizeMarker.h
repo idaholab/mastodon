@@ -2,12 +2,14 @@
 #define MINIMUMELEMENTSIZEMARKER_H
 
 // MOOSE includes
-#include "IndicatorMarker.h"
+// #include "IndicatorMarker.h"
+// #include "UniformMarker.h"
+#include "Marker.h"
 
 /**
  * Marks for refinement base on shear wave speed material property.
  */
-class MinimumElementSizeMarker : public IndicatorMarker
+class MinimumElementSizeMarker : public Marker // , public UniformMarker
 {
 public:
   static InputParameters validParams();
@@ -20,6 +22,13 @@ protected:
    */
   virtual MarkerValue computeElementMarker() override;
 
+  /// Required element size specified by the user.
+  // const std::string & _indicator_name;
+  // const IndicatorName & _indicator_name;
+
+  /// Required element size specified by the user.
+  const Real & _element_size;
+
   /// Term multiplied to the minimum element size indicator.
   const Real & _scale;
 
@@ -28,6 +37,8 @@ protected:
 
   /// Place to compute the element size (for effeciency)
   Real _minimum_element_size;
+
+  ErrorVector & _error_vector;
 };
 
 #endif // MINIMUMELEMENTSIZEMARKER_H

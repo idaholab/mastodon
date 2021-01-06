@@ -24,7 +24,6 @@ ElementSizeIndicator::validParams()
 
 ElementSizeIndicator::ElementSizeIndicator(const InputParameters & parameters)
   : Indicator(parameters),
-    // _element_size(getMaterialProperty<Real>("element_size")),
     _element_size(getMaterialProperty<Real>(getParam<MaterialPropertyName>("element_size"))),
     _qrule(_assembly.qRule()),
     _indicator_var(_sys.getFieldVariable<Real>(_tid, name()))

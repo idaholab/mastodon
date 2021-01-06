@@ -19,7 +19,7 @@
   [./Markers]
     [./marker]
       type = MinimumElementSizeMarker
-      indicator = minimum_element_size
+      indicator_name = minimum_element_size
     [../]
   []
 []

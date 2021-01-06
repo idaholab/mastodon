@@ -8,16 +8,17 @@
 [Adaptivity]
   initial_marker = marker
   initial_steps = 5
-  [./Indicators]
-    [./minimum_element_size]
-      type = ElementSizeIndicator
-      element_size = ele_size
-    [../]
-  [../]
+  # [./Indicators]
+  #   [./minimum_element_size]
+  #     type = ElementSizeIndicator
+  #     element_size = ele_size
+  #   [../]
+  # [../]
   [./Markers]
     [./marker]
       type = MinimumElementSizeMarker
-      indicator = minimum_element_size
+      # indicator_name = minimum_element_size
+      element_size = 0.05
     [../]
   []
 []
@@ -34,13 +35,13 @@
   [../]
 []
 
-[Materials]
-  [./ele_size]
-    type = GenericConstantMaterial
-    prop_names = ele_size
-    prop_values = 0.05
-  [../]
-[]
+# [Materials]
+#   [./ele_size]
+#     type = GenericConstantMaterial
+#     prop_names = ele_size
+#     prop_values = 0.05
+#   [../]
+# []
 
 [BCs]
   [./left]
