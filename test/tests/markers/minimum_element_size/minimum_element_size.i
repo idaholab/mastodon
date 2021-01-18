@@ -10,92 +10,92 @@
 [Adaptivity]
   initial_marker = marker
   initial_steps = 5
-  [./Indicators]
-    [./minimum_element_size]
+  [Indicators]
+    [minimum_element_size]
       type = ShearWaveIndicator
       cutoff_frequency = 25
-    [../]
-  [../]
-  [./Markers]
-    [./marker]
+    []
+  []
+  [Markers]
+    [marker]
       type = MinimumElementSizeMarker
-      indicator_name = minimum_element_size
-    [../]
+      indicator = minimum_element_size
+    []
   []
 []
 
 [Variables]
-  [./u]
-  [../]
+  [u]
+  []
 []
 
 [Kernels]
-  [./diff]
+  [diff]
     type = Diffusion
     variable = u
-  [../]
+  []
 []
 
 [BCs]
-  [./left]
+  [left]
     type = DirichletBC
     boundary = left
     variable = u
     value = 1
-  [../]
-  [./right]
+  []
+  [right]
     type = DirichletBC
     boundary = right
     variable = u
     value = 0
-  [../]
+  []
 []
 
 [AuxVariables]
-  [./layer]
+  [layer]
     family = MONOMIAL
     order = CONSTANT
-  [../]
-  [./hmin]
+  []
+  [hmin]
     family = MONOMIAL
     order = CONSTANT
-  [../]
+  []
 []
 
 [AuxKernels]
-  [./hmin]
+  [hmin]
     type = ElementLengthAux
     variable = hmin
     method = min
     execute_on = 'initial timestep_end'
-  [../]
+  []
 []
 
 [Functions]
-  [./image]
+  [image]
     type = ImageFunction
     file = ../../images/three_layer.png
     component = 0
-  [../]
+  []
 []
 
 [ICs]
-  [./layer_ic]
+  [layer_ic]
     type = FunctionIC
     function = image
     variable = layer
-  [../]
+  []
 []
 
 [Materials]
-  [./linear]
+  [linear]
     type = LinearSoilMaterial
     layer_variable = layer
     layer_ids     = '32     64     128'
     shear_modulus = '1.35e6 4.25e8 5.623e9'
     density       = '1500   1700   2500'
     outputs = exodus
-  [../]
+  []
 []
 
 [Executioner]

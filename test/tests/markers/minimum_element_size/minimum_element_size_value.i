@@ -8,54 +8,39 @@
 [Adaptivity]
   initial_marker = marker
   initial_steps = 5
-  # [./Indicators]
-  #   [./minimum_element_size]
-  #     type = ElementSizeIndicator
-  #     element_size = ele_size
-  #   [../]
-  # [../]
-  [./Markers]
-    [./marker]
+  [Markers]
+    [marker]
       type = MinimumElementSizeMarker
-      # indicator_name = minimum_element_size
       element_size = 0.05
-    [../]
+    []
   []
 []
 
 [Variables]
-  [./u]
-  [../]
+  [u]
+  []
 []
 
 [Kernels]
-  [./diff]
+  [diff]
     type = Diffusion
     variable = u
-  [../]
+  []
 []
 
-# [Materials]
-#   [./ele_size]
-#     type = GenericConstantMaterial
-#     prop_names = ele_size
-#     prop_values = 0.05
-#   [../]
-# []
-
 [BCs]
-  [./left]
+  [left]
     type = DirichletBC
     variable = u
     boundary = left
     value = 0
-  [../]
-  [./right]
+  []
+  [right]
     type = DirichletBC
     variable = u
     boundary = right
     value = 1
-  [../]
+  []
 []
 
 [Executioner]
