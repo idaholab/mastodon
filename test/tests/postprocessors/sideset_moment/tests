@@ -1,0 +1,11 @@
+[Tests]
+  design = "SidesetMoment.md"
+  issues = '#358'
+  [./moment]
+    type = 'Exodiff'
+    input = 'moment.i'
+    exodiff = 'moment_out.e'
+
+    requirement = "The SidesetMoment postprocessor shall accurately calculate the moment at the specified point."
+  [../]
+[]
