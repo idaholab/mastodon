@@ -116,7 +116,7 @@
     stress_tensor = stress
     boundary = 'left'
     ref_point = '0.0 0.0 0.25'
-    leverarm_dir = 1
+    leverarm_direction = 1
   [../]
 []
 

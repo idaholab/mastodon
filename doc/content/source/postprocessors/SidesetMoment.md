@@ -12,7 +12,7 @@ along vector $\vec{e}$ acting on a sideset $\partial S$ multiplied by the lever 
 \end{equation}
 
 where $M$ is the sideset moment. `SidesetMoment` requires a `ref_point` with reference
- to which the `x` is evaluated and a `leverarm_dir` along which the lever arm 
+ to which the `x` is evaluated and a `leverarm_direction` along which the lever arm 
 is computed.
 
 !syntax parameters /Postprocessors/SidesetMoment

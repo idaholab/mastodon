@@ -25,7 +25,7 @@ SidesetMomentTempl<is_ad>::validParams()
                                            "Direction in which the force is to be computed");
   params.addRequiredParam<RealVectorValue>(
       "ref_point", "Reference point on the sideset about which the moment is computed");
-  params.addRequiredParam<unsigned int>("leverarm_dir", "Lever arm direction");
+  params.addRequiredParam<unsigned int>("leverarm_direction", "Lever arm direction");
   params.set<bool>("use_displaced_mesh") = true;
   return params;
 }
@@ -36,10 +36,10 @@ SidesetMomentTempl<is_ad>::SidesetMomentTempl(const InputParameters & parameters
     _tensor(getGenericMaterialProperty<RankTwoTensor, is_ad>("stress_tensor")),
     _dir(getParam<RealVectorValue>("direction")),
     _ref_point(getParam<RealVectorValue>("ref_point")),
-    _leverarm_dir(getParam<unsigned int>("leverarm_dir"))
+    _leverarm_direction(getParam<unsigned int>("leverarm_direction"))
 {
-  if (_leverarm_dir > 2)
-    paramError("leverarm_dir", "leverarm_dir can be either 0, 1, or 2.");
+  if (_leverarm_direction > 2)
+    paramError("leverarm_direction", "leverarm_direction can be either 0, 1, or 2.");
 }
 
 template <bool is_ad>
@@ -47,7 +47,7 @@ Real
 SidesetMomentTempl<is_ad>::computeQpIntegral()
 {
   return _normals[_qp] * (MetaPhysicL::raw_value(_tensor[_qp]) * _dir) *
-         std::abs(_ref_point(_leverarm_dir) - _q_point[_qp](_leverarm_dir));
+         std::abs(_ref_point(_leverarm_direction) - _q_point[_qp](_leverarm_direction));
 }
 
 template class SidesetMomentTempl<false>;
