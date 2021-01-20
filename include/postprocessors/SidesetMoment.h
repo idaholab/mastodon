@@ -36,6 +36,7 @@ private:
   /// the reference point on the sideset about which the moment is computed
   const RealVectorValue _ref_point;
 
+  /// the direction along which the lever arm is computed
   const unsigned int _leverarm_dir;
 };
 
