@@ -6,6 +6,13 @@
     input = 'moment.i'
     exodiff = 'moment_out.e'
 
-    requirement = "The SidesetMoment postprocessor shall accurately calculate the moment at the specified point."
+    requirement = "The SidesetMoment postprocessor shall accurately calculate the moment at the specified point when stress_tensor is given an input."
+  [../]
+  [./moment_pressure]
+    type = 'Exodiff'
+    input = 'moment_pressure.i'
+    exodiff = 'moment_pressure_out.e'
+
+    requirement = "The SidesetMoment postprocessor shall accurately calculate the moment at the specified point when pressure is given an input."
   [../]
 []

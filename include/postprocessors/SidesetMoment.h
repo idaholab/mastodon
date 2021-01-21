@@ -1,3 +1,4 @@
+
 //* This file is part of the MOOSE framework
 //* https://www.mooseframework.org
 //*
@@ -28,16 +29,19 @@ protected:
 
 private:
   /// the stress tensor
-  const GenericMaterialProperty<RankTwoTensor, is_ad> & _tensor;
+  const GenericMaterialProperty<RankTwoTensor, is_ad> * _tensor;
 
   /// the direction along which the force is computed
-  const RealVectorValue _dir;
+  const RealVectorValue * _dir;
+
+  /// the pressure
+  const VariableValue * const _p;
 
   /// the reference point on the sideset about which the moment is computed
-  const RealVectorValue _ref_point;
+  const RealVectorValue & _ref_point;
 
   /// the direction along which the lever arm is computed
-  const unsigned int _leverarm_direction;
+  const unsigned int & _leverarm_direction;
 };
 
 typedef SidesetMomentTempl<false> SidesetMoment;
