@@ -6,30 +6,30 @@
 []
 
 [Variables]
-  [./p]
-  [../]
+  [p]
+  []
 []
 
 [Kernels]
-  [./diff]
+  [diff]
     type = Diffusion
     variable = p
-  [../]
+  []
 []
 
 [BCs]
-  [./left]
+  [left]
     type = DirichletBC
     variable = p
     boundary = left
     value = 0
-  [../]
-  [./right]
+  []
+  [right]
     type = DirichletBC
     variable = p
     boundary = right
     value = 1
-  [../]
+  []
 []
 
 [Executioner]
@@ -40,13 +40,13 @@
 []
 
 [Postprocessors]
-  [./moment]
+  [moment]
     type = SidesetMoment
     boundary = 'right'
     ref_point = '1.0 1.0 0.0'
     leverarm_direction = 1
     p = p
-  [../]
+  []
 []
 
 [Outputs]

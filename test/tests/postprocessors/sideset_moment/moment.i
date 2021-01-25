@@ -18,82 +18,82 @@
     new_boundary = 'corner_node'
     coord = '5.0 0.25 0.25'
     input = 'mesh_gen'
-  [../]
+  []
   displacements = 'disp_x disp_y disp_z'
   second_order = true
 []
 
 [Variables]
-  [./disp_x]
+  [disp_x]
     order = SECOND
     family = LAGRANGE
-  [../]
-  [./disp_y]
+  []
+  [disp_y]
     order = SECOND
     family = LAGRANGE
-  [../]
-  [./disp_z]
+  []
+  [disp_z]
     order = SECOND
     family = LAGRANGE
-  [../]
+  []
 []
 
 [Kernels]
-  [./DynamicTensorMechanics]
+  [DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
-  [../]
+  []
 []
 
 [BCs]
-  [./fixx1]
+  [fixx1]
     type = DirichletBC
     variable = disp_x
     boundary = left
     value = 0.0
-  [../]
-  [./fixy1]
+  []
+  [fixy1]
     type = DirichletBC
     variable = disp_y
     boundary = left
     value = 0.0
-  [../]
-  [./fixz1]
+  []
+  [fixz1]
     type = DirichletBC
     variable = disp_z
     boundary = left
     value = 0.0
-  [../]
+  []
 []
 
 [NodalKernels]
-  [./force_y2]
+  [force_y2]
     type = ConstantRate
     variable = disp_y
     boundary = corner_node
     rate = 1.0e-4
-  [../]
+  []
 []
 
 [Materials]
-  [./elasticity]
+  [elasticity]
     type = ComputeIsotropicElasticityTensor
     youngs_modulus = 2.1e2
     poissons_ratio = 0.3
-  [../]
-  [./strain]
+  []
+  [strain]
     type = ComputeFiniteStrain
     displacements = 'disp_x disp_y disp_z'
-  [../]
+  []
   [./stress]
     type =  ComputeFiniteStrainElasticStress
-  [../]
+  []
 []
 
 [Preconditioning]
-  [./smp]
+  [smp]
     type = SMP
     full = true
-  [../]
+  []
 []
 [Executioner]
   type = Transient
@@ -110,14 +110,14 @@
 []
 
 [Postprocessors]
-  [./moment_x_bot]
+  [moment_z_bot]
     type = SidesetMoment
-    direction = '1 0 0'
+    stress_dir = 0
     stress_tensor = stress
     boundary = 'left'
     ref_point = '0.0 0.0 0.25'
     leverarm_direction = 1
-  [../]
+  []
 []
 
 [Outputs]
