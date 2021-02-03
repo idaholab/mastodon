@@ -22,12 +22,11 @@ SidesetMomentTempl<is_ad>::validParams()
                              "user-specified direction "
                              "on a sideset from the surface traction");
   params.addParam<MaterialPropertyName>("stress_tensor", "The rank two stress tensor name");
-  params.addRangeCheckedParam<unsigned int>("stress_dir", 0, "stress_dir <= 2", "Stress direction");
+  params.addParam<RealVectorValue>("stress_dir", "Stress direction");
   params.addCoupledVar("p", "The scalar pressure");
   params.addRequiredParam<RealVectorValue>(
       "ref_point", "Reference point on the sideset about which the moment is computed");
-  params.addRequiredRangeCheckedParam<unsigned int>(
-      "leverarm_direction", "leverarm_direction <= 2", "Lever arm direction");
+  params.addRequiredParam<RealVectorValue>("leverarm_direction", "Lever arm direction");
   params.set<bool>("use_displaced_mesh") = true;
   return params;
 }
@@ -38,10 +37,10 @@ SidesetMomentTempl<is_ad>::SidesetMomentTempl(const InputParameters & parameters
     _tensor(isParamValid("stress_tensor")
                 ? &getGenericMaterialProperty<RankTwoTensor, is_ad>("stress_tensor")
                 : nullptr),
-    _stress_dir(isParamValid("stress_dir") ? &getParam<unsigned int>("stress_dir") : nullptr),
+    _stress_dir(isParamValid("stress_dir") ? &getParam<RealVectorValue>("stress_dir") : nullptr),
     _p(isCoupled("p") ? &coupledValue("p") : nullptr),
     _ref_point(getParam<RealVectorValue>("ref_point")),
-    _leverarm_direction(getParam<unsigned int>("leverarm_direction"))
+    _leverarm_direction(&getParam<RealVectorValue>("leverarm_direction"))
 {
   if (_tensor && _p)
     mooseError(
@@ -62,15 +61,10 @@ Real
 SidesetMomentTempl<is_ad>::computeQpIntegral()
 {
   if (_tensor)
-  {
-    RealVectorValue dir(0, 0, 0);
-    dir((*_stress_dir)) = 1;
-    return _normals[_qp] * (MetaPhysicL::raw_value((*_tensor)[_qp]) * dir) *
-           std::abs(_ref_point(_leverarm_direction) - _q_point[_qp](_leverarm_direction));
-  }
+    return _normals[_qp] * (MetaPhysicL::raw_value((*_tensor)[_qp]) * (*_stress_dir)) *
+           (_q_point[_qp] - _ref_point) * (*_leverarm_direction);
   else
-    return (*_p)[_qp] *
-           std::abs(_ref_point(_leverarm_direction) - _q_point[_qp](_leverarm_direction));
+    return ((*_p)[_qp]) * (_q_point[_qp] - _ref_point) * (*_leverarm_direction);
 }
 
 template class SidesetMomentTempl<false>;

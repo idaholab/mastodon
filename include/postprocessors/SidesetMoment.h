@@ -14,8 +14,7 @@
 #include "RankTwoTensor.h"
 
 /**
- * This postprocessor computes the integral of the force multiplied by the leverarm on a sideset in
- * direction _dir
+ * This postprocessor computes the integral of the force multiplied by the leverarm on a sideset
  */
 template <bool is_ad>
 class SidesetMomentTempl : public SideIntegralPostprocessor
@@ -32,8 +31,8 @@ private:
   /// the stress tensor
   const GenericMaterialProperty<RankTwoTensor, is_ad> * _tensor;
 
-  /// the direction along which the force is computed
-  const unsigned int * _stress_dir;
+  /// the direction vector using which the force is computed
+  const RealVectorValue * _stress_dir;
 
   /// the pressure
   const VariableValue * const _p;
@@ -41,8 +40,8 @@ private:
   /// the reference point on the sideset about which the moment is computed
   const RealVectorValue & _ref_point;
 
-  /// the direction along which the lever arm is computed
-  const unsigned int & _leverarm_direction;
+  /// the direction using which the lever arm is computed
+  const RealVectorValue * _leverarm_direction;
 };
 
 typedef SidesetMomentTempl<false> SidesetMoment;

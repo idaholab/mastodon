@@ -44,7 +44,7 @@
     type = SidesetMoment
     boundary = 'right'
     ref_point = '1.0 1.0 0.0'
-    leverarm_direction = 1
+    leverarm_direction = '0 1 0'
     p = p
   []
 []
