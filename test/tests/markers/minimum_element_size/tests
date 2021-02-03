@@ -1,12 +1,20 @@
 [Tests]
   design = "MinimumElementSizeMarker.md"
-  issues = "#2"
+  issues = "#2 #351"
   [./test]
     type = Exodiff
     input = minimum_element_size.i
     exodiff = minimum_element_size_out.e
     vtk = true
 
-    requirement = "The MinimumElementSizeMarker shall accurately mark an element for mesh refinement if the minimum element size is greater than that recommended by the ShearWaveIndicator."
+    requirement = "The MinimumElementSizeMarker shall accurately mark an element for mesh refinement if the minimum element size is greater than that recommended by the specified indicator."
+  [../]
+  [./test_value]
+    type = Exodiff
+    input = minimum_element_size_value.i
+    exodiff = minimum_element_size_value_out.e
+    vtk = true
+
+    requirement = "The MinimumElementSizeMarker shall accurately mark an element for mesh refinement if the minimum element size is greater than that recommended by user specified value."
   [../]
 []

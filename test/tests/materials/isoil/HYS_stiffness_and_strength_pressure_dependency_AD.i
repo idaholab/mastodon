@@ -390,7 +390,7 @@
   nl_rel_tol = 1e-11
   start_time = 0
   end_time = 10
-  dt = 0.01
+  dt = 0.05
   timestep_tolerance = 1e-6
   petsc_options = '-snes_ksp_ew'
   petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
