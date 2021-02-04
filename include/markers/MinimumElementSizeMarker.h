@@ -1,13 +1,12 @@
 #ifndef MINIMUMELEMENTSIZEMARKER_H
 #define MINIMUMELEMENTSIZEMARKER_H
 
-// MOOSE includes
-#include "IndicatorMarker.h"
+#include "Marker.h"
 
 /**
- * Marks for refinement base on shear wave speed material property.
+ * Marks for refinement based on an indicator or an input element size.
  */
-class MinimumElementSizeMarker : public IndicatorMarker
+class MinimumElementSizeMarker : public Marker
 {
 public:
   static InputParameters validParams();
@@ -15,10 +14,13 @@ public:
 
 protected:
   /**
-   * Computes the marker value base on the current element size and minimum size
-   * indicator.
+   * Computes the marker value based on the current element size and minimum size
+   * indicator or value.
    */
   virtual MarkerValue computeElementMarker() override;
+
+  /// Pointer to the element size specified by the user.
+  const Real * _element_size;
 
   /// Term multiplied to the minimum element size indicator.
   const Real & _scale;
@@ -28,6 +30,9 @@ protected:
 
   /// Place to compute the element size (for effeciency)
   Real _minimum_element_size;
+
+  /// Pointer to store the libmesh error vector variable
+  ErrorVector * _error_vector;
 };
 
 #endif // MINIMUMELEMENTSIZEMARKER_H
