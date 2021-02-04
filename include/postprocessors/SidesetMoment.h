@@ -32,16 +32,22 @@ private:
   const GenericMaterialProperty<RankTwoTensor, is_ad> * _tensor;
 
   /// the direction vector using which the force is computed
-  const RealVectorValue * _stress_dir;
+  const RealVectorValue * _stress_direction;
 
   /// the pressure
-  const VariableValue * const _p;
+  const VariableValue * const _pressure;
 
   /// the reference point on the sideset about which the moment is computed
-  const RealVectorValue & _ref_point;
+  const RealVectorValue & _reference_point;
 
-  /// the direction using which the lever arm is computed
-  const RealVectorValue * _leverarm_direction;
+  /// the direction about which the moment is computed
+  const RealVectorValue * _moment_direction;
+
+  /// storage for the force vector
+  RealVectorValue _force_vector;
+
+  /// storage for the moment vector
+  RealVectorValue _moment_vector;
 };
 
 typedef SidesetMomentTempl<false> SidesetMoment;

@@ -112,11 +112,11 @@
 [Postprocessors]
   [./moment_z_bot]
     type = SidesetMoment
-    stress_dir = '1 0 0'
+    stress_direction = '1 0 0'
     stress_tensor = stress
     boundary = 'left'
-    ref_point = '0.0 0.0 0.25'
-    leverarm_direction = '0 1 0'
+    reference_point = '0.0 0.0 0.25'
+    moment_direction = '0 0 -1'
   [../]
 []
 

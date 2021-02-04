@@ -43,9 +43,9 @@
   [moment]
     type = SidesetMoment
     boundary = 'right'
-    ref_point = '1.0 1.0 0.0'
-    leverarm_direction = '0 1 0'
-    p = p
+    reference_point = '1.0 1.0 0.0'
+    moment_direction = '0 0 1'
+    pressure = p
   []
 []
 
