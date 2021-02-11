@@ -84,7 +84,7 @@
     type = ComputeFiniteStrain
     displacements = 'disp_x disp_y disp_z'
   []
-  [./stress]
+  [stress]
     type =  ComputeFiniteStrainElasticStress
   []
 []
@@ -110,14 +110,14 @@
 []
 
 [Postprocessors]
-  [./moment_z_bot]
+  [moment_z_bot]
     type = SidesetMoment
     stress_direction = '1 0 0'
     stress_tensor = stress
     boundary = 'left'
     reference_point = '0.0 0.0 0.25'
     moment_direction = '0 0 -1'
-  [../]
+  []
 []
 
 [Outputs]
