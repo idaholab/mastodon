@@ -20,5 +20,6 @@ A list of example simulations using MASTODON is provided below. These examples i
 - [Example 10a](examples/example10a.md): Cantilever example demonstrating central difference time integration.
 - [Example 10b](examples/example10b.md): Cantilever example demonstrating central difference time integration using HEX20 elements.
 - [Example 11](examples/example11.md): Cantilever example demonstrating mesh requirements for accuracy in bending of static and dynamic simulations.
+- [Example 11b](examples/example11b.md): Cantilever example demonstrating automatic mesh refinement using the `MinimumElementSizeMarker` object and the use of `SidesetMoment` and `` postprocessors.
 
 !bibtex bibliography
