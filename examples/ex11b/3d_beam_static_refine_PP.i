@@ -27,25 +27,49 @@
     block_id = 1
     input = nodeset_gen
   []
-  [subdomain_small]
+  [subdomain_middle]
     type = SubdomainBoundingBoxGenerator
-    bottom_left = '0.0 0.0 0.0'
-    top_right = '1.0 0.5 1.0'
+    bottom_left = '1.0 0.0 0.0'
+    top_right = '3.0 1.0 1.0'
     location = INSIDE
-    block_id = 5
+    block_id = 2
     input = subdomain_near
   []
+  # [subdomain_small]
+  #   type = SubdomainBoundingBoxGenerator
+  #   bottom_left = '0.0 0.0 0.0'
+  #   top_right = '1.0 0.5 1.0'
+  #   location = INSIDE
+  #   block_id = 5
+  #   input = subdomain_middle
+  # []
 []
 
 [Adaptivity]
-  initial_marker = marker1
+  marker = combo
   initial_steps = 5
+  [Indicators]
+    [shear_wave]
+      type = ShearWaveIndicator
+      cutoff_frequency = 1000
+    []
+  []
   [Markers]
     [marker1]
       type = MinimumElementSizeMarker
-      element_size = 0.25
+      element_size = 0.15
       block = 1
     []
+    [marker2]
+      type = MinimumElementSizeMarker
+      indicator = shear_wave
+      block = 2
+    []
+    [./combo]
+      type = ComboMarker
+      markers = 'marker1 marker2'
+      block = '1 2'
+    [../]
   []
 []
 
@@ -115,6 +139,11 @@
   [./stress]
     type = ComputeFiniteStrainElasticStress
   [../]
+  [./shear_wave_speed]
+    type = GenericConstantMaterial
+    prop_names = shear_wave_speed
+    prop_values =  250.0
+  [../]
 []
 
 [Preconditioning]
@@ -159,11 +188,11 @@
     variable = stress_xx
     point = '0.0 1.0 0.5'
   []
-  [avg_stress_xx_block]
-    type = ElementAverageValue
-    variable = stress_xx
-    block = 5
-  []
+  # [avg_stress_xx_block]
+  #   type = ElementAverageValue
+  #   variable = stress_xx
+  #   block = 5
+  # []
 []
 
 [Outputs]
