@@ -18,7 +18,7 @@
     new_boundary = 'center_node'
     coord = '5.0 0.0 0.5'
     input = 'mesh_gen'
-  [../]
+  []
   [subdomain_near]
     type = SubdomainBoundingBoxGenerator
     bottom_left = '0.0 0.0 0.0'
@@ -35,14 +35,6 @@
     block_id = 2
     input = subdomain_near
   []
-  # [subdomain_small]
-  #   type = SubdomainBoundingBoxGenerator
-  #   bottom_left = '0.0 0.0 0.0'
-  #   top_right = '1.0 0.5 1.0'
-  #   location = INSIDE
-  #   block_id = 5
-  #   input = subdomain_middle
-  # []
 []
 
 [Adaptivity]
@@ -65,11 +57,11 @@
       indicator = shear_wave
       block = 2
     []
-    [./combo]
+    [combo]
       type = ComboMarker
       markers = 'marker1 marker2'
       block = '1 2'
-    [../]
+    []
   []
 []
 
@@ -78,79 +70,78 @@
 []
 
 [Modules/TensorMechanics/Master]
-  [./strain_calculator]
+  [strain_calculator]
     strain = FINITE
     generate_output = 'stress_xx'
-  [../]
+  []
 []
 
 [Variables]
-  [./disp_x]
+  [disp_x]
     order = SECOND
     family = LAGRANGE
-  [../]
-  [./disp_y]
+  []
+  [disp_y]
     order = SECOND
     family = LAGRANGE
-  [../]
-  [./disp_z]
+  []
+  [disp_z]
     order = SECOND
     family = LAGRANGE
-  [../]
+  []
 []
 
 [BCs]
-  [./fixx0]
+  [fixx0]
     type = DirichletBC
     variable = disp_x
     boundary = left
     value = 0.0
-  [../]
-  [./fixy1]
+  []
+  [fixy1]
     type = DirichletBC
     variable = disp_y
     boundary = left
     value = 0.0
-  [../]
-  [./fixy2]
+  []
+  [fixy2]
     type = DirichletBC
     variable = disp_z
     boundary = left
     value = 0.0
-  [../]
+  []
 []
 
 [NodalKernels]
-  [./force_y2]
+  [force_y2]
     type = ConstantRate
     variable = disp_y
     boundary = 'center_node'
     rate = -1000
-  [../]
+  []
 []
 
-
 [Materials]
-  [./elasticity]
+  [elasticity]
     type = ComputeIsotropicElasticityTensor
     youngs_modulus = 10e9
     poissons_ratio = 0.3
-  [../]
-  [./stress]
+  []
+  [stress]
     type = ComputeFiniteStrainElasticStress
-  [../]
-  [./shear_wave_speed]
+  []
+  [shear_wave_speed]
     type = GenericConstantMaterial
     prop_names = shear_wave_speed
     prop_values =  250.0
-  [../]
+  []
 []
 
 [Preconditioning]
-  [./smp]
+  [smp]
     type = SMP
     full = true
-  [../]
+  []
 []
 
 [Executioner]
@@ -165,17 +156,12 @@
 []
 
 [Postprocessors]
-  [disp_y]
-    type = PointValue
-    point = '5.0 0.0 0.5'
-    variable = disp_y
-  []
-  [moment_z]
+  [moment_y]
     type = SidesetMoment
     stress_direction = '1 0 0'
     stress_tensor = stress
     boundary = 'left'
-    reference_point = '0.0 0.0 0.0'
+    reference_point = '0.0 0.5 0.0'
     moment_direction = '0 0 1'
   []
   [avg_stress_xx_side]
@@ -183,16 +169,11 @@
     variable = stress_xx
     boundary = left
   []
-  [stress_xx_side]
-    type = PointValue
+  [avg_stress_xx_block]
+    type = ElementAverageValue
     variable = stress_xx
-    point = '0.0 1.0 0.5'
+    block = 1
   []
-  # [avg_stress_xx_block]
-  #   type = ElementAverageValue
-  #   variable = stress_xx
-  #   block = 5
-  # []
 []
 
 [Outputs]
