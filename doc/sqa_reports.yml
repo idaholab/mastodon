@@ -20,6 +20,7 @@ Documents:
     software_test_plan: sqa/mastodon_stp.md
     requirements_traceablity_matrix: sqa/mastodon_rtm.md
     verification_validation_plan: sqa/mastodon_vvr.md
+    failure_analysis_report: sqa/mastodon_far.md
     theory_manual: manuals/theory/index.md
     user_manual: manuals/user/index.md
     log_safety_software_determination: WARNING
