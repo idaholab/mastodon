@@ -1,7 +1,7 @@
 # Example 11b: Mesh refinement using `Marker` and `Indicator`, and demonstration of `SidesetMoment` and `AverageValue` postprocessors
 
-This example expands on [Example 11a](examples/example11.md) to demonstrate mesh refinement using `Markers` and `Indicators`. This example also demonstrates the use and verification of `SidesetMoment` and `AverageValue` postprocessors. For demonstration purposes,
-the beam model subjected to static loading from [Example 11a](examples/example11.md) is borrowed. This beam model is divided into three subdomains represented using three colors (red, green, and gray) in the figure below.
+This example expands on [Example 11a](examples/example11a.md) to demonstrate mesh refinement using `Markers` and `Indicators`. This example also demonstrates the use and verification of `SidesetMoment` and `AverageValue` postprocessors. For demonstration purposes,
+the beam model subjected to static loading from [Example 11a](examples/example11a.md) is borrowed. This beam model is divided into three subdomains represented using three colors (red, green, and gray) in the figure below.
 
 !media media/examples/ex11b/ex11b_blocks.png
        style=width:50%;margin-left:150px;float:center;
@@ -91,4 +91,13 @@ Both [`SideAverageValue`](/postprocessors/SideAverageValue.md) and [`ElementAver
          start=avg_stress_xx_side
          end=Outputs
 
-The computed average stress across the left end sideset and the red subdomain of the beam are both close to zero. Theoretically, these close to zero values are due to the symmetry of the stress distribution along depth of the beam.
+The computed average stress across the left end sideset and the red subdomain of the beam are both close to zero. Theoretically, these close to zero values are due to the symmetry of the stress distribution along the depth of the beam.
+
+A complete list of the postprocessor results are presented in the table below.
+
+!table id=PP_results caption= Postprocessor values computed using two levels of mesh refinement.
+| Value | Level 1 refinement | Level 2 refinement|
+| - | - | - |
+| SidesetMoment | 5.18 KN (Exact = 5 KN) | 5.03 KN (Exact = 5 KN) |
+| `SideAverageValue` for stress_xx | 0.0063 Pa (Exact = 0 Pa) | 1E-12 Pa (Exact = 0 Pa) |
+| `ElementAverageValue` for stress_xx | 0.01 Pa (Exact = 0 Pa) | 1E-12 Pa (Exact = 0 Pa) |
