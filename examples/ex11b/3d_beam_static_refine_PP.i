@@ -156,12 +156,12 @@
 []
 
 [Postprocessors]
-  [moment_y]
+  [moment_z]
     type = SidesetMoment
     stress_direction = '1 0 0'
     stress_tensor = stress
     boundary = 'left'
-    reference_point = '0.0 0.5 0.0'
+    reference_point = '0.0 0.0 0.5'
     moment_direction = '0 0 1'
   []
   [avg_stress_xx_side]
