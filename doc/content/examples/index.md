@@ -19,6 +19,7 @@ A list of example simulations using MASTODON is provided below. These examples i
 - [Example 9](examples/example9.md): Soil-structure interaction analysis of an undamped rigid structure on undamped linear soil.
 - [Example 10a](examples/example10a.md): Cantilever example demonstrating central difference time integration.
 - [Example 10b](examples/example10b.md): Cantilever example demonstrating central difference time integration using HEX20 elements.
-- [Example 11](examples/example11.md): Cantilever example demonstrating mesh requirements for accuracy in bending of static and dynamic simulations.
+- [Example 11a](examples/example11a.md): Cantilever example demonstrating mesh requirements for accuracy in bending of static and dynamic simulations.
+- [Example 11b](examples/example11b.md): Mesh refinement using `Marker` and `Indicator`, and demonstration of `SidesetMoment` and `AverageValue` postprocessors
 
 !bibtex bibliography

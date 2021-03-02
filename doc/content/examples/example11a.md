@@ -1,4 +1,4 @@
-# Example 11: Effect of Mesh Refinement and Element Type
+# Example 11a: Effect of Mesh Refinement and Element Type
 
 This example demonstrates a 3D cantilever beam subject to static and dynamic loading. This example was created to show some modeling best practices and things to be aware of when simulating structures or other 3D geometry in dynamic, high-bending type scenarios - particularly when continuum elements are used in lieu of shell elements.
 
@@ -10,7 +10,7 @@ Varied levels of mesh refinement as well as linear and quadratic element types a
 
 In this example, a 3D cantilever beam is constructed using the [GeneratedMeshGenerator](meshgenerators/GeneratedMeshGenerator.md). The 5 x 1 x 1 $m$ beam is fixed in all directions at one end where x = 0. A nodeset is generated at the bottom center of the free end of the beam using the [ExtraNodesetGenerator](meshgenerators/ExtraNodesetGenerator.md), which is necessary for application of the point load.
 
-!listing examples/ex11/static/3d_beam_static_first_order.i
+!listing examples/ex11a/static/3d_beam_static_first_order.i
          start=Mesh
          end=GlobalParams
 
@@ -18,7 +18,7 @@ The mesh is constructed such that the beam contains 10 elements along the length
 
 [fig:static_beam] shows the coarsest and finest mesh with magnified displacements for the beam with HEX8 elements.
 
-!media media/examples/ex11/static_beam.png
+!media media/examples/ex11a/static_beam.png
        style=width:50%;margin-left:150px;float:center;
        id=fig:static_beam
        caption=Static beam models with varied level of mesh refinement.
@@ -55,7 +55,7 @@ This model was setup and run for multiple levels of mesh refinement, also with b
 
 It is worth noting that HEX27 elements were also tested and they produced nearly identical results to those of HEX20 elements. The differences between the first order and second order element models are subtle but important, specifically the element type (first order shown near the start of this example) and order of the displacement variables (second order shown below).
 
-!listing examples/ex11/static/3d_beam_static_second_order.i
+!listing examples/ex11a/static/3d_beam_static_second_order.i
          start=Variables
          end=BCs
 
@@ -69,23 +69,23 @@ f_{n_f} = \frac {1.875^2}{2\pi}\sqrt{\frac {EI}{\rho AL^4}} = 18.65Hz
 
 The Ormsby wavelet is created using the [OrmsbyWavelet](functions/OrmsbyWavelet.md) function type.
 
-!listing examples/ex11/dynamic/3d_beam_dynamic_first_order.i
+!listing examples/ex11a/dynamic/3d_beam_dynamic_first_order.i
          start=Functions
          end=Materials
 
 The wavelet is applied as an acceleration at the fixed end of the beam using the [PresetAcceleration](bcs/PresetAcceleration.md) boundary condition.
 
-!listing examples/ex11/dynamic/3d_beam_dynamic_first_order.i
+!listing examples/ex11a/dynamic/3d_beam_dynamic_first_order.i
          start=BCs
          end=Functions
 
 The simulation results are captured using [VectorPostprocessors](VectorPostprocessors/index.md), specifically the [ResponseHistoryBuilder](vectorpostprocessors/ResponseHistoryBuilder.md) and [ResponseSpectraCalculator](vectorpostprocessors/ResponseSpectraCalculator.md)
 
-!listing examples/ex11/dynamic/3d_beam_dynamic_first_order.i
+!listing examples/ex11a/dynamic/3d_beam_dynamic_first_order.i
          start=VectorPostprocessors
          end=Outputs
 
-!media media/examples/ex11/dynamic_beam_plot.png
+!media media/examples/ex11a/dynamic_beam_plot.png
          style=width:100%;margin-right:0px;float:center;
          id=fig:dynamic_beam
          caption=Acceleration response spectrum plot for dynamic beam simulation
@@ -109,4 +109,4 @@ Simulation time for each of the models was recorded as well as the resulting fir
 
 This example was created to provide some insight into how bending is captured using continuum elements. For both of these static and dynamic simulations, the second order elements provide a result that is more consistent with the analytical solutions, although the computation cost is much higher. The input file with second order elements is listed below, all previous listings show the first order element model.
 
-!listing examples/ex11/dynamic/3d_beam_dynamic_second_order.i
+!listing examples/ex11a/dynamic/3d_beam_dynamic_second_order.i
