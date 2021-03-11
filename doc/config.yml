@@ -4,6 +4,9 @@ Content:
     - ${MOOSE_DIR}/modules/contact/doc/content
     - ${MOOSE_DIR}/modules/stochastic_tools/doc/content
     - ${MOOSE_DIR}/modules/tensor_mechanics/doc/content
+    - ${MOOSE_DIR}/modules/heat_conduction/doc/content
+    - ${MOOSE_DIR}/modules/ray_tracing/doc/content
+    - ${MOOSE_DIR}/modules/xfem/doc/content
     - ${BLACKBEAR_DIR}/doc/content
     - moose:
         root_dir: ${MOOSE_DIR}/modules/doc/content
@@ -50,6 +53,10 @@ Extensions:
             - ${MOOSE_DIR}/modules/contact/include
             - ${MOOSE_DIR}/modules/stochastic_tools/include
             - ${MOOSE_DIR}/modules/tensor_mechanics/include
+            - ${MOOSE_DIR}/modules/heat_conduction/include
+            - ${MOOSE_DIR}/modules/ray_tracing/include
+            - ${MOOSE_DIR}/modules/misc/include
+            - ${MOOSE_DIR}/modules/xfem/include
 
     MooseDocs.extensions.common:
         shortcuts: !include ${MOOSE_DIR}/framework/doc/globals.yml
@@ -81,6 +88,9 @@ Extensions:
             framework: !include ${MOOSE_DIR}/framework/doc/sqa_framework.yml
             tensor_mechanics: !include ${MOOSE_DIR}/modules/tensor_mechanics/doc/sqa_tensor_mechanics.yml
             stochastic_tools: !include ${MOOSE_DIR}/modules/stochastic_tools/doc/sqa_stochastic_tools.yml
+            heat_conduction: !include ${MOOSE_DIR}/modules/heat_conduction/doc/sqa_heat_conduction.yml
+            ray_tracing: !include ${MOOSE_DIR}/modules/ray_tracing/doc/sqa_ray_tracing.yml
+            xfem: !include ${MOOSE_DIR}/modules/xfem/doc/sqa_xfem.yml
             contact: !include ${MOOSE_DIR}/modules/contact/doc/sqa_contact.yml
 
         requirement-groups:

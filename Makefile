@@ -23,7 +23,6 @@ include $(FRAMEWORK_DIR)/moose.mk
 TENSOR_MECHANICS := yes
 CONTACT          := yes
 STOCHASTIC_TOOLS := yes
-include $(MOOSE_DIR)/modules/modules.mk
 ###############################################################################
 
 # BlackBear (optional)
@@ -39,7 +38,11 @@ else
   include            $(FRAMEWORK_DIR)/app.mk
   ADDITIONAL_CPPFLAGS += -DBLACKBEAR_ENABLED
   APP_HEADERS        := $(APP_HEADERS) $(app_HEADER)
+  HEAT_CONDUCTION    := yes
+  MISC               := yes
+  XFEM               := yes
 endif
+include $(MOOSE_DIR)/modules/modules.mk
 
 # dep apps
 APPLICATION_DIR    := $(CURDIR)
