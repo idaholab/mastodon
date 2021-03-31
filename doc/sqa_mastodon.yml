@@ -1,0 +1,5 @@
+specs:
+  - tests
+directories:
+  - ${MASTODON_DIR}/test/tests
+reports: !include ${MASTODON_DIR}/doc/sqa_reports.yml
