@@ -18,6 +18,9 @@ if not os.path.exists(BLACKBEAR_DIR):
   raise Exception('Failed to locate BlackBear, specify the BLACKBEAR_DIR environment variable.')
 os.environ['BLACKBEAR_DIR'] = os.path.abspath(BLACKBEAR_DIR)
 
+if 'MASTODON_DIR' not in os.environ:
+    os.environ['MASTODON_DIR'] = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
 # Append MOOSE python directory
 MOOSE_PYTHON_DIR = os.path.join(MOOSE_DIR, 'python')
 if MOOSE_PYTHON_DIR not in sys.path:
