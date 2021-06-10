@@ -1,6 +1,6 @@
 ## Developing new objects
 
-MASTODON is built upon the [MOOSE Framework](https://mooseframework.inl.gov) and
+MASTODON is built upon [MOOSE](https://mooseframework.inl.gov) and
 therefore uses the MOOSE architecture and protocols for development. Developers therefore are highly
 encouraged to look into the MOOSE Framework and also reach out to the MASTODON team [here](help/contact_us.md) when
 planning to develop new objects. Development and inclusion of a new object (material, boundary condition, etc.) in MASTODON (or MOOSE) involves the following steps:
@@ -15,3 +15,5 @@ planning to develop new objects. Development and inclusion of a new object (mate
 
 - Examples, if any
 - Creating test problems that will be included in the list of tests
+
+MOOSE and MASTODON use specific formatting for all the C++ code in the repository. This formatting is explained in the [MOOSE software coding standards](sqa/framework_scs.md).
