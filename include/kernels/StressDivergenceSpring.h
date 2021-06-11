@@ -50,19 +50,19 @@ protected:
   std::vector<unsigned int> _rot_var;
 
   /// Spring forces
-  const MaterialProperty<RealVectorValue> & _spring_forces_global;
+  const MaterialProperty<ColumnMajorMatrix> & _spring_forces_global;
 
   /// Spring moments
-  const MaterialProperty<RealVectorValue> & _spring_moments_global;
+  const MaterialProperty<ColumnMajorMatrix> & _spring_moments_global;
 
   /// Displacement stiffness matrix
-  const MaterialProperty<RankTwoTensor> & _kdd;
+  const MaterialProperty<ColumnMajorMatrix> & _kdd;
 
   /// Rotation stiffness matrix
-  const MaterialProperty<RankTwoTensor> & _krr;
+  const MaterialProperty<ColumnMajorMatrix> & _krr;
 
   /// Rotation stiffness matrix
-  const MaterialProperty<RankTwoTensor> & _total_global_to_local_rotation;
+  const MaterialProperty<ColumnMajorMatrix> & _total_global_to_local_rotation;
 };
 
 #endif // STRESSDIVERGENCESPRING_H

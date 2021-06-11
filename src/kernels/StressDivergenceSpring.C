@@ -53,12 +53,12 @@ StressDivergenceSpring::StressDivergenceSpring(const InputParameters & parameter
     _disp_var(_ndisp),
     _nrot(coupledComponents("rotations")),
     _rot_var(_nrot),
-    _spring_forces_global(getMaterialPropertyByName<RealVectorValue>("global_forces")),
-    _spring_moments_global(getMaterialPropertyByName<RealVectorValue>("global_moments")),
-    _kdd(getMaterialPropertyByName<RankTwoTensor>("displacement_stiffness_matrix")),
-    _krr(getMaterialPropertyByName<RankTwoTensor>("rotation_stiffness_matrix")),
+    _spring_forces_global(getMaterialPropertyByName<ColumnMajorMatrix>("global_forces")),
+    _spring_moments_global(getMaterialPropertyByName<ColumnMajorMatrix>("global_moments")),
+    _kdd(getMaterialPropertyByName<ColumnMajorMatrix>("displacement_stiffness_matrix")),
+    _krr(getMaterialPropertyByName<ColumnMajorMatrix>("rotation_stiffness_matrix")),
     _total_global_to_local_rotation(
-        getMaterialPropertyByName<RankTwoTensor>("total_global_to_local_rotation"))
+        getMaterialPropertyByName<ColumnMajorMatrix>("total_global_to_local_rotation"))
 {
   if (_component > 5)
     mooseError("Error in StressDivergenceSpring block ",
