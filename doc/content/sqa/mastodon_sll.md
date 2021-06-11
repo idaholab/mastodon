@@ -2,7 +2,7 @@
 
 # BlackBear
 
-Grizzly relies on BlackBear, which is summarized as follows on the project website:
+MASTODON relies on BlackBear, which is summarized as follows on the project website:
 [github.com/idaholab/blackbear](https://github.com/idaholab/blackbear).
 
 > BlackBear is a MOOSE-based application for analysis of degradation processes in structural
