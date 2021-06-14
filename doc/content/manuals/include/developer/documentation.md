@@ -2,15 +2,12 @@
 
 Prior to merging the code, MOOSE and MASTODON require adequate documentation
 describing the implemented feature, such as materials, post processors, etc.
-Several tools are available for MOOSE-based documentation (see
-[mooseframework.org](https://www.mooseframework.org)).
+Several tools are available for [MOOSE-based documentation](framework/documenting.md).
 For each new feature, the following documentation files are required.
 
 #### Documentation of C++ objects
 
-For each C++ object created, the developer should include the documentation as
-prescribed by MOOSE documentation requirements, see
-[mooseframework.org](https://www.mooseframework.org).
+For each C++ object created, the developer should include the documentation using the [MOOSE documentation system](framework/documenting.md).
 
 #### User manual
 
