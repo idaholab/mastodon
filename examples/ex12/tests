@@ -1,0 +1,20 @@
+[Tests]
+  [./ex12_ssi]
+    type = RunApp
+    input = ssi_input.i
+    method = opt
+    check_input = True
+  []
+  [./ex12_site_response]
+    type = RunApp
+    input = site_response/sr_input.i
+    method = opt
+    check_input = True
+  []
+  [./ex12_fixed_base]
+    type = RunApp
+    input = fixed_base/fixed_base.i
+    method = opt
+    check_input = True
+  []
+[]
