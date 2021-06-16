@@ -23,6 +23,7 @@ include $(FRAMEWORK_DIR)/moose.mk
 TENSOR_MECHANICS := yes
 CONTACT          := yes
 STOCHASTIC_TOOLS := yes
+FSI              := yes
 ###############################################################################
 
 # BlackBear (optional)
