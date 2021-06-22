@@ -46,20 +46,20 @@ LinearSpring::LinearSpring(const InputParameters & parameters)
     _ndisp(coupledComponents("displacements")),
     _rot_num(3),
     _disp_num(3),
-    _deformations(declareProperty<RealVectorValue>("deformations")),
-    _rotations(declareProperty<RealVectorValue>("rotations")),
+    _deformations(declareProperty<ColumnMajorMatrix>("deformations")),
+    _rotations(declareProperty<ColumnMajorMatrix>("rotations")),
     _kx(coupledValue("kx")),
     _ky(coupledValue("ky")),
     _kz(coupledValue("kz")),
     _krx(coupledValue("krx")),
     _kry(coupledValue("kry")),
     _krz(coupledValue("krz")),
-    _spring_forces_global(declareProperty<RealVectorValue>("global_forces")),
-    _spring_moments_global(declareProperty<RealVectorValue>("global_moments")),
-    _kdd(declareProperty<RankTwoTensor>("displacement_stiffness_matrix")),
-    _krr(declareProperty<RankTwoTensor>("rotation_stiffness_matrix")),
+    _spring_forces_global(declareProperty<ColumnMajorMatrix>("global_forces")),
+    _spring_moments_global(declareProperty<ColumnMajorMatrix>("global_moments")),
+    _kdd(declareProperty<ColumnMajorMatrix>("displacement_stiffness_matrix")),
+    _krr(declareProperty<ColumnMajorMatrix>("rotation_stiffness_matrix")),
     _total_global_to_local_rotation(
-        declareProperty<RankTwoTensor>("total_global_to_local_rotation"))
+        declareProperty<ColumnMajorMatrix>("total_global_to_local_rotation"))
 {
   // Checking for consistency between length of the provided displacements and rotations vector
   if (_ndisp != _nrot)
@@ -75,6 +75,24 @@ LinearSpring::LinearSpring(const InputParameters & parameters)
     MooseVariable * rot_variable = getVar("rotations", i);
     _rot_num[i] = rot_variable->number(); // Rotation variable numbers in MOOSE
   }
+}
+
+void
+LinearSpring::initQpStatefulProperties()
+{
+  _deformations[_qp].reshape(3, 1);
+  _rotations[_qp].reshape(3, 1);
+  _spring_forces_global[_qp].reshape(3, 1);
+  _spring_forces_global[_qp].zero();
+  _spring_moments_global[_qp].reshape(3, 1);
+  _kdd[_qp].reshape(3, 3);
+  _krr[_qp].reshape(3, 3);
+  _total_global_to_local_rotation[_qp].reshape(3, 3);
+  _original_global_to_local_rotation.reshape(3, 3);
+  _global_disp0.reshape(3, 1);
+  _global_disp1.reshape(3, 1);
+  _global_rot0.reshape(3, 1);
+  _global_rot1.reshape(3, 1);
 }
 
 void

@@ -52,8 +52,10 @@ ComputeLRIsolatorElasticity::validParams()
       "Switch for modeling strength degradation due to lead core heating."); // Strength degradation
                                                                              // due to heating
   // Material properties
-  params.addRequiredParam<Real>("fy", "Yield stress of the bearing.");
-  params.addRequiredParam<Real>("alpha", "Yield displacement of the bearing.");
+  params.addRequiredParam<Real>("fy", "Yield strength of the bearing.");
+  params.addRequiredParam<Real>("alpha",
+                                "Ratio of post-yield shear stiffness to the initial elastic shear "
+                                "stiffness of the bearing. This is dimensionless");
   params.addRequiredParam<Real>("G_rubber", "Shear modulus of rubber.");
   params.addRequiredParam<Real>("K_rubber", "Bulk modulus of rubber.");
   params.addRequiredParam<Real>("D1", "Diameter of lead core.");
