@@ -29,6 +29,9 @@ public:
   LinearSpring(const InputParameters & parameters);
 
 protected:
+  /// Initialize stateful properties
+  virtual void initQpStatefulProperties() override;
+
   /// Compute properties for each qp
   virtual void computeQpProperties() override;
 
@@ -61,10 +64,10 @@ protected:
   std::vector<unsigned int> _disp_num;
 
   /// Deformations in the spring calculated at a time t in the spring local coordinates
-  MaterialProperty<RealVectorValue> & _deformations;
+  MaterialProperty<ColumnMajorMatrix> & _deformations;
 
   /// Rotations in the spring calculated at a time t in the spring local coordinates
-  MaterialProperty<RealVectorValue> & _rotations;
+  MaterialProperty<ColumnMajorMatrix> & _rotations;
 
   /// Axial stiffness of the spring (local x direction)
   const VariableValue & _kx;
@@ -85,58 +88,58 @@ protected:
   const VariableValue & _krz;
 
   /// Global displacement at node 0 of the spring element
-  RealVectorValue _global_disp0; // node 0
+  ColumnMajorMatrix _global_disp0; // node 0
 
   /// Global displacement at node 1 of the spring element
-  RealVectorValue _global_disp1; // node 1
+  ColumnMajorMatrix _global_disp1; // node 1
 
   /// Global rotation at node 0 of the spring element
-  RealVectorValue _global_rot0; // node 0
+  ColumnMajorMatrix _global_rot0; // node 0
 
   /// Global rotation at node 1 of the spring element
-  RealVectorValue _global_rot1; // node 1
+  ColumnMajorMatrix _global_rot1; // node 1
 
   /// Local displacement at node 0 of the spring element
-  RealVectorValue _local_disp0; // node 0
+  ColumnMajorMatrix _local_disp0; // node 0
 
   /// Local displacement at node 1 of the spring element
-  RealVectorValue _local_disp1; // node 1
+  ColumnMajorMatrix _local_disp1; // node 1
 
   /// Local rotation at node 0 of the spring element
-  RealVectorValue _local_rot0; // node 0
+  ColumnMajorMatrix _local_rot0; // node 0
 
   /// Local rotation at node 1 of the spring element
-  RealVectorValue _local_rot1; // node 1
+  ColumnMajorMatrix _local_rot1; // node 1
 
   /// Spring forces in the local coordinate system
-  RealVectorValue _spring_forces_local;
+  ColumnMajorMatrix _spring_forces_local;
 
   // Spring moments in the local coordinate system
-  RealVectorValue _spring_moments_local;
+  ColumnMajorMatrix _spring_moments_local;
 
   /// Spring displacement stiffness matrix in the local coordinate system
-  RankTwoTensor _kdd_local;
+  ColumnMajorMatrix _kdd_local;
 
   /// Spring rotational stiffness matrix in the local coordinate system
-  RankTwoTensor _krr_local;
+  ColumnMajorMatrix _krr_local;
 
   /// Spring forces in the global coordinate system
-  MaterialProperty<RealVectorValue> & _spring_forces_global;
+  MaterialProperty<ColumnMajorMatrix> & _spring_forces_global;
 
   /// Spring moments in the global coordinate system
-  MaterialProperty<RealVectorValue> & _spring_moments_global;
+  MaterialProperty<ColumnMajorMatrix> & _spring_moments_global;
 
   /// Spring displacement stiffness matrix in the global coordinate system
-  MaterialProperty<RankTwoTensor> & _kdd;
+  MaterialProperty<ColumnMajorMatrix> & _kdd;
 
   /// Spring rotational stiffness matrix in the global coordinate system
-  MaterialProperty<RankTwoTensor> & _krr;
+  MaterialProperty<ColumnMajorMatrix> & _krr;
 
   /// Rotational transformation from global coordinate system to spring local configuration at t = 0
-  RankTwoTensor _original_global_to_local_rotation;
+  ColumnMajorMatrix _original_global_to_local_rotation;
 
   /// Rotational transformation from global coordinate system to spring local configuration at any time
-  MaterialProperty<RankTwoTensor> & _total_global_to_local_rotation;
+  MaterialProperty<ColumnMajorMatrix> & _total_global_to_local_rotation;
 };
 
 #endif // LINEARSPRING_H

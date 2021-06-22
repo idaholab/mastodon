@@ -1,0 +1,11 @@
+[Tests]
+  [./cmm_spring]
+    type = CSVDiff
+    input = spring_static.i
+    csvdiff = spring_static_out.csv
+
+    design = "MaterialRealCMMAux.md"
+    issues = "#374"
+    requirement = "The MaterialRealCMMAux AuxKernel shall accurately calculate the AuxVariable from a ColumnMajorMatrix material property."
+  [../]
+[]
