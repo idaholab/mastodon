@@ -20,10 +20,17 @@ include $(FRAMEWORK_DIR)/build.mk
 include $(FRAMEWORK_DIR)/moose.mk
 
 ################################## MODULES ####################################
+ALL_MODULES      := no
 CONTACT          := yes
+FLUID_PROPERTIES := yes
 FSI              := yes
+HEAT_CONDUCTION  := yes
+MISC             := yes
+RAY_TRACING      := yes
 STOCHASTIC_TOOLS := yes
 TENSOR_MECHANICS := yes
+XFEM             := yes
+NAVIER_STOKES    := yes
 include $(MOOSE_DIR)/modules/modules.mk
 ###############################################################################
 
