@@ -70,8 +70,7 @@ StressDivergenceIsolator::StressDivergenceIsolator(const InputParameters & param
     _alpha(getParam<Real>("alpha")),
     _isDamped(_zeta != 0.0 || std::abs(_alpha) > 0.0),
     _Fg_old(_isDamped ? &getMaterialPropertyOld<ColumnMajorMatrix>("global_forces") : nullptr),
-    _Fg_older(_isDamped ? &getMaterialPropertyOlder<ColumnMajorMatrix>("global_forces")
-                                        : nullptr),
+    _Fg_older(_isDamped ? &getMaterialPropertyOlder<ColumnMajorMatrix>("global_forces") : nullptr),
     _static_initialization(getParam<bool>("static_initialization"))
 {
   if (_component > 5)
@@ -106,10 +105,10 @@ StressDivergenceIsolator::computeResidual()
 
   // add contributions from stiffness proportional damping (non-zero _zeta) or HHT time integration
   // (non-zero _alpha)
-  if (_isDamped && _dt > 0.0 && !(_static_initialization && _t <= 2*_dt))
+  if (_isDamped && _dt > 0.0 && !(_static_initialization && _t <= 2 * _dt))
     global_force_res = global_force_res * (1.0 + _alpha + (1.0 + _alpha) * _zeta / _dt) -
-      (*_Fg_old)[0] * (_alpha + (1.0 + 2.0 * _alpha) * _zeta / _dt) +
-      (*_Fg_older)[0] * (_alpha * _zeta / _dt);
+                       (*_Fg_old)[0] * (_alpha + (1.0 + 2.0 * _alpha) * _zeta / _dt) +
+                       (*_Fg_older)[0] * (_alpha * _zeta / _dt);
 
   _local_re(0) = global_force_res(_component);
 
