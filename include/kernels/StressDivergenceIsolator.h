@@ -50,6 +50,24 @@ protected:
 
   /// GLobal stiffness matrix
   const MaterialProperty<ColumnMajorMatrix> & _Kg;
+
+  /// Stiffness proportional Rayleigh damping parameter
+  const Real & _zeta;
+
+  /// HHT time integration parameter
+  const Real & _alpha;
+
+  /// Boolean flag to turn on Rayleigh damping or numerical damping due to HHT time integration
+  const bool _isDamped;
+
+  /// Old global isolator forces
+  const MaterialProperty<ColumnMajorMatrix> * _Fg_old;
+
+  /// Older global isolator forces
+  const MaterialProperty<ColumnMajorMatrix> * _Fg_older;
+
+  /// Static initialization
+  const bool _static_initialization;
 };
 
 #endif // STRESSDIVERGENCEISOLATOR_H
