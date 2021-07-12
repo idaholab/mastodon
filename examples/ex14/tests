@@ -1,0 +1,16 @@
+[Tests]
+  [./ex14_part1a]
+    type = RunApp
+    input = basemat_with_isolators_new.i
+    method = opt
+    check_input = True
+    allow_warnings = True
+  [../]
+  [./ex14_part1b]
+    type = RunApp
+    input = basemat_with_isolators_new_3D.i
+    method = opt
+    check_input = True
+    allow_warnings = True
+  [../]
+[../]
