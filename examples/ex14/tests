@@ -13,4 +13,11 @@
     check_input = True
     allow_warnings = True
   [../]
+  [./ex14_part2]
+    type = RunApp
+    input = building_basemat_with_isolators_new.i
+    method = opt
+    check_input = True
+    allow_warnings = True
+  [../]
 [../]
