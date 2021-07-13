@@ -40,6 +40,19 @@ StressDivergenceIsolator::validParams()
       "1 for y, 2 for z, 3 for rot_x, 4 for rot_y and 5 for rot_z).");
   params.addRequiredCoupledVar("displacements", "The displacement variables for isolator.");
   params.addRequiredCoupledVar("rotations", "The rotation variables for the isolator.");
+  params.addParam<Real>(
+      "zeta",
+      0.0,
+      "Name of material property or a constant real number defining the zeta parameter for the "
+      "Rayleigh damping.");
+  params.addRangeCheckedParam<Real>(
+      "alpha", 0.0, "alpha >= -0.3333 & alpha <= 0.0", "alpha parameter for HHT time integration");
+  params.addParam<bool>("static_initialization",
+                        false,
+                        "Set to true to get the system to "
+                        "equilibrium under gravity by running a "
+                        "quasi-static analysis (by solving Ku = F) "
+                        "in the first time step");
   params.set<bool>("use_displaced_mesh") = true;
   return params;
 }
@@ -52,7 +65,13 @@ StressDivergenceIsolator::StressDivergenceIsolator(const InputParameters & param
     _nrot(coupledComponents("rotations")),
     _rot_var(_nrot),
     _Fg(getMaterialPropertyByName<ColumnMajorMatrix>("global_forces")),
-    _Kg(getMaterialPropertyByName<ColumnMajorMatrix>("global_stiffness_matrix"))
+    _Kg(getMaterialPropertyByName<ColumnMajorMatrix>("global_stiffness_matrix")),
+    _zeta(getParam<Real>("zeta")),
+    _alpha(getParam<Real>("alpha")),
+    _isDamped(_zeta != 0.0 || std::abs(_alpha) > 0.0),
+    _Fg_old(_isDamped ? &getMaterialPropertyOld<ColumnMajorMatrix>("global_forces") : nullptr),
+    _Fg_older(_isDamped ? &getMaterialPropertyOlder<ColumnMajorMatrix>("global_forces") : nullptr),
+    _static_initialization(getParam<bool>("static_initialization"))
 {
   if (_component > 5)
     mooseError("Error in StressDivergenceIsolator block ",
@@ -74,19 +93,28 @@ StressDivergenceIsolator::StressDivergenceIsolator(const InputParameters & param
 void
 StressDivergenceIsolator::computeResidual()
 {
+  prepareVectorTag(_assembly, _var.number());
+
   // Accessing residual vector, re, from MOOSE assembly
   DenseVector<Number> & re = _assembly.residualBlock(_var.number());
   mooseAssert(re.size() == 2, "Isolator element only has two nodes.");
   _local_re.resize(re.size());
   _local_re.zero();
 
-  // Calculating residual for node 0 (external forces on node 0)
-  _local_re(0) = _Fg[0](_component);
+  ColumnMajorMatrix global_force_res = _Fg[0];
 
-  // External force on node 1 (external forces on node 1)
-  _local_re(1) = _Fg[0](_component + 6);
+  // add contributions from stiffness proportional damping (non-zero _zeta) or HHT time integration
+  // (non-zero _alpha)
+  if (_isDamped && _dt > 0.0 && !(_static_initialization && _t <= 2 * _dt))
+    global_force_res = global_force_res * (1.0 + _alpha + (1.0 + _alpha) * _zeta / _dt) -
+                       (*_Fg_old)[0] * (_alpha + (1.0 + 2.0 * _alpha) * _zeta / _dt) +
+                       (*_Fg_older)[0] * (_alpha * _zeta / _dt);
 
-  re += _local_re;
+  _local_re(0) = global_force_res(_component);
+
+  _local_re(1) = global_force_res(_component + 6);
+
+  accumulateTaggedLocalResidual();
 
   if (_has_save_in)
   {
@@ -99,6 +127,8 @@ StressDivergenceIsolator::computeResidual()
 void
 StressDivergenceIsolator::computeJacobian()
 {
+  prepareMatrixTag(_assembly, _var.number(), _var.number());
+
   // Access Jacobian; size is n x n (n is number of nodes)
   DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), _var.number());
   _local_ke.resize(ke.m(), ke.n());
@@ -109,7 +139,11 @@ StressDivergenceIsolator::computeJacobian()
     for (unsigned int j = 0; j < _phi.size(); ++j)
       _local_ke(i, j) += _Kg[0](i * 6 + _component, j * 6 + _component);
 
-  ke += _local_ke;
+  // scaling factor for Rayliegh damping and HHT time integration
+  if (_isDamped && _dt > 0.0 && !(_static_initialization && _t == _dt))
+    _local_ke *= (1.0 + _alpha + (1.0 + _alpha) * _zeta / _dt);
+
+  accumulateTaggedLocalMatrix();
 
   if (_has_diag_save_in)
   {
@@ -154,13 +188,22 @@ StressDivergenceIsolator::computeOffDiagJacobian(const unsigned int jvar_num)
         break;
       }
     }
+
+    prepareMatrixTag(_assembly, _var.number(), jvar_num);
+
     // getting the jacobian from assembly
-    DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), jvar_num);
+    // DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), jvar_num);
     if (coupled)
     {
       for (unsigned int i = 0; i < _test.size(); ++i)
         for (unsigned int j = 0; j < _phi.size(); ++j)
-          ke(i, j) += _Kg[0](i * 6 + _component, j * 6 + coupled_component);
+          _local_ke(i, j) += _Kg[0](i * 6 + _component, j * 6 + coupled_component);
     }
+
+    // scaling factor for Rayliegh damping and HHT time integration
+    if (_isDamped && _dt > 0.0 && !(_static_initialization && _t == _dt))
+      _local_ke *= (1.0 + _alpha + (1.0 + _alpha) * _zeta / _dt);
+
+    accumulateTaggedLocalMatrix();
   }
 }
