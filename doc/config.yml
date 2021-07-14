@@ -81,7 +81,7 @@ Extensions:
         reports: !include ${ROOT_DIR}/doc/sqa_reports.yml
         categories:
             mastodon: !include ${ROOT_DIR}/doc/sqa_mastodon.yml
-            blackbear: !include ${BLACKBEAR_DIR}/doc/sqa_blackbear.yml
+            # blackbear: !include ${BLACKBEAR_DIR}/doc/sqa_blackbear.yml
             framework: !include ${MOOSE_DIR}/framework/doc/sqa_framework.yml
             contact: !include ${MOOSE_DIR}/modules/contact/doc/sqa_contact.yml
             fluid_properties: !include ${MOOSE_DIR}/modules/fluid_properties/doc/sqa_fluid_properties.yml
