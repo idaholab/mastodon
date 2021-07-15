@@ -83,10 +83,12 @@ recorded at the triangular red dot as illustrated in [fig:Tank]. [fig:pressure] 
 
 ## Results: Comparison to a reference solution
 
-[fig:comp] presents the peak pressure and peak wave height in comparison to a reference solution.
+[fig:comp] presents the peak pressure and peak wave height in comparison to a reference solution from [!citet](Yu2020a).
  It is observed that the modeled results match quite well with the reference solution.
 
 !media media/examples/ex12a_comp.png
   style=width:50%;float:center;
   id=fig:comp
-  caption=Comparison of the modeled results to a reference solution.
+  caption=Comparison of the modeled results to a reference solution from [!citet](Yu2020a).
+
+!bibtex bibliography

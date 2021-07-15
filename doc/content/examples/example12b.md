@@ -48,9 +48,11 @@ present the pressures and wave heights, respectively.
 ## Results: Comparison to a reference solution
 
 [fig:comp] presents the peak pressure and peak wave height in comparison to a reference solution.
-It is observed that the modeled results match quite well with the reference solution.
+It is observed that the modeled results match quite well with the reference solution from [!citet](Yu2020a).
 
 !media media/examples/ex12b_comp.png
  style=width:50%;float:center;
  id=fig:comp
- caption=Comparison of the modeled results to a reference solution.
+ caption=Comparison of the modeled results to a reference solution from [!citet](Yu2020a).
+
+!bibtex bibliography

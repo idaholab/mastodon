@@ -77,7 +77,7 @@ Fluid-structure interaction between the tank and the fluid is modeled using the 
 
 !listing examples/ex12c/FSI_ex12c.i
 
-## Results: Pressures on the tank and wave heights on the fluid
+## Results: Pressures on the tank and wave heights over the fluid
 
 Pressures acting on the tank wall as a function of time are recorded at the circular
 red dot as illustrated in [fig:Tank]. Wave heights as the function of time are also
@@ -101,9 +101,11 @@ recorded at the triangular red dot as illustrated in [fig:Tank]. [fig:pressure] 
 ## Results: Comparison to experimental results
 
 [fig:comp] presents the peak pressure and peak wave height in comparison to experimental results.
- It is observed that the modeled results match quite well with experiments.
+ It is observed that the modeled results match quite well with experimental results from [!citet](Mir2021a).
 
 !media media/examples/ex12c_comp.png
   style=width:50%;float:center;
   id=fig:comp
-  caption=Comparison of the modeled results to experimental results.
+  caption=Comparison of the modeled results to experimental results from [!citet](Mir2021a).
+
+!bibtex bibliography
