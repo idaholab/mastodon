@@ -30,9 +30,9 @@
     probabilistic_multiapp = 'sub'
     num_gms = 3
     demand_variable = 'accel_2x'
-    frequency = 4
-    damping_ratio = 0.05
-    dt = 0.005
+    ssc_frequency = 4
+    ssc_damping_ratio = 0.05
+    dtsim = 0.005
     median_capacity = 0.01
     beta_capacity = 1.3
     num_samples = 3
