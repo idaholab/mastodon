@@ -12,6 +12,21 @@ demand distribution and capacity distribution and calculate the conditional prob
 in each bin, and 3) fit a lognormal distribution in the conditional probabilities to calculate a
 fragility. This kind of fragility is also referred to as 'enhanced fragility'.
 
+Step 1, calculation of the demand distribution, can be done in two ways. The first method is to
+provide all the response history files of the demands calculated from MASTODON or some other
+software. In this case MASTODON will perform the full postprocessing and calcualate the
+stochastic demands. However, in most cases, the user would like to calculate the median demands
+in a different manner, for example, if the demand is a geometric mean of two horizontal
+spectral accelerations, or an average spectral acceleration in a frequency range (which is pretty
+common in practice). In these cases, the user can just provide a csv file with a demand matrix of
+size M x N, where M is the total number of simulations in each bin (i.e., number of GMs * the number of
+samples for each bin) and N is the total number of bins. MASTODON will calculate the lognormal
+distribution parameters for these demand values and use them for enhanced fragility calculation. If the
+first method is followed, users have to provide ALL of the input parameters, `master_file`, `hazard_multiapp`,
+`probabilistic_multiapp`, `demand_variable`, `ssc_frequency`, `ssc_damping_ratio`, and `dtsim`. If any of
+them is missing, MASTODON will throw an error. If method 2 is followed, just provide the `demand_filename`
+parameter. 
+
 Fitting a lognormal fragility function to the probabilities of failure requires an optimization
 algorithm to find the parameters, median and lognormal standard deviation. Two methods are
 currently available for calculating these fragility parameters: 'brute force' and
