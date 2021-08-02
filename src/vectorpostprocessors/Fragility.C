@@ -14,8 +14,8 @@ Fragility::validParams()
 {
   InputParameters params = GeneralVectorPostprocessor::validParams();
   params.addParam<std::string>("master_file", "Name of the master file without extension.");
-  params.addParam<std::string>(
-      "hazard_multiapp", "Name of the multiapp corresponding to ground motion sampling.");
+  params.addParam<std::string>("hazard_multiapp",
+                               "Name of the multiapp corresponding to ground motion sampling.");
   params.addParam<std::string>(
       "probabilistic_multiapp",
       "Name of the multiapp corresponding to the probabilistic simulations.");
@@ -29,11 +29,10 @@ Fragility::validParams()
                                             // VectorPostprocessor data and
                                             // getting rid of response spectra
                                             // calculation in this class.
-  params.addParam<Real>(
-      "ssc_frequency", "Frequency at which, the spectral demand of the SSC is calculated.");
-  params.addParam<Real>(
-      "ssc_damping_ratio",
-      "Damping ratio at which the spectral demand of the SSC is calculated.");
+  params.addParam<Real>("ssc_frequency",
+                        "Frequency at which, the spectral demand of the SSC is calculated.");
+  params.addParam<Real>("ssc_damping_ratio",
+                        "Damping ratio at which the spectral demand of the SSC is calculated.");
   params.addParam<Real>("dtsim", "dt for response spectra calculation.");
   params.addParam<std::string>("demand_filename",
                                "File name that contains stochastic demand matrix. Has m x n values "
@@ -88,15 +87,20 @@ Fragility::validParams()
 Fragility::Fragility(const InputParameters & parameters)
   : GeneralVectorPostprocessor(parameters),
     _master_file(isParamValid("master_file") ? &getParam<std::string>("master_file") : NULL),
-    _hazard_multiapp(isParamValid("hazard_multiapp") ? &getParam<std::string>("hazard_multiapp") : NULL),
-    _probabilistic_multiapp(isParamValid("probabilistic_multiapp") ? &getParam<std::string>("probabilistic_multiapp") : NULL),
-    _demand_variable(isParamValid("demand_variable") ? &getParam<std::string>("demand_variable") : NULL),
+    _hazard_multiapp(isParamValid("hazard_multiapp") ? &getParam<std::string>("hazard_multiapp")
+                                                     : NULL),
+    _probabilistic_multiapp(isParamValid("probabilistic_multiapp")
+                                ? &getParam<std::string>("probabilistic_multiapp")
+                                : NULL),
+    _demand_variable(isParamValid("demand_variable") ? &getParam<std::string>("demand_variable")
+                                                     : NULL),
     _ssc_freq(isParamValid("ssc_frequency") ? &getParam<Real>("ssc_frequency") : NULL),
     _ssc_xi(isParamValid("ssc_damping_ratio") ? &getParam<Real>("ssc_damping_ratio") : NULL),
     _dtsim(isParamValid("dtsim") ? &getParam<Real>("dtsim") : NULL),
-    _rh_file_exist(_master_file && _hazard_multiapp && _probabilistic_multiapp && _demand_variable &&
-                         _ssc_freq && _ssc_xi && _dtsim),
-    _demand_filename(isParamValid("demand_filename") ? &getParam<std::string>("demand_filename") : NULL),
+    _rh_file_exist(_master_file && _hazard_multiapp && _probabilistic_multiapp &&
+                   _demand_variable && _ssc_freq && _ssc_xi && _dtsim),
+    _demand_filename(isParamValid("demand_filename") ? &getParam<std::string>("demand_filename")
+                                                     : NULL),
     _sd_file_exist(!!_demand_filename),
     _num_gms(getParam<unsigned int>("num_gms")),
     _median_cap(getParam<Real>("median_capacity")),
@@ -124,19 +128,21 @@ Fragility::Fragility(const InputParameters & parameters)
                "'. Both response history file options and stochastic demand file options "
                "are provided. Provide exactly one set of them.");
   if (!_rh_file_exist && !_sd_file_exist)
-    mooseError("Error in block '" + name() +
-               "'. Either one or more of the response history file options are missing or "
-               "none of the response history file options or stochastic demand file "
-               "options are provided. Provide exactly one of them. \n\n **If response history files "
-               "are to be used, please provide the input parameters, master_file, hazard_multiapp, "
-               "probabilistic_multiapp, demand_variable, ssc_freq, ssc_xi, and dt.");
+    mooseError(
+        "Error in block '" + name() +
+        "'. Either one or more of the response history file options are missing or "
+        "none of the response history file options or stochastic demand file "
+        "options are provided. Provide exactly one of them. \n\n **If response history files "
+        "are to be used, please provide the input parameters, master_file, hazard_multiapp, "
+        "probabilistic_multiapp, demand_variable, ssc_freq, ssc_xi, and dt.");
 
-  if (!_rh_file_exist && (_master_file || _hazard_multiapp || _probabilistic_multiapp || _demand_variable ||
-                       _ssc_freq || _ssc_xi || _dtsim))
-    mooseError("Error in block '" + name() +
-              "'. If response history files "
-              "are to be used, please provide ALL of the input parameters, master_file, hazard_multiapp, "
-              "probabilistic_multiapp, demand_variable, ssc_freq, ssc_xi, and dt.");
+  if (!_rh_file_exist && (_master_file || _hazard_multiapp || _probabilistic_multiapp ||
+                          _demand_variable || _ssc_freq || _ssc_xi || _dtsim))
+    mooseError(
+        "Error in block '" + name() +
+        "'. If response history files "
+        "are to be used, please provide ALL of the input parameters, master_file, hazard_multiapp, "
+        "probabilistic_multiapp, demand_variable, ssc_freq, ssc_xi, and dt.");
 
   if (_rh_file_exist)
   {
@@ -250,7 +256,7 @@ Fragility::readDemandsFromSDFiles(unsigned int bin)
     mooseError("Error in block '" + name() +
                "'. Number of columns in stochastic demands file is not the "
                "same as the number of bins.");
-  stoc_demands = stoc_demands_file.getData("bin_" + std::to_string(bin+1));
+  stoc_demands = stoc_demands_file.getData("bin_" + std::to_string(bin + 1));
   if (stoc_demands.size() != _num_gms * _num_samples)
     mooseError("Error in block '" + name() +
                "'. Number of rows in stochastic demands file is not the "

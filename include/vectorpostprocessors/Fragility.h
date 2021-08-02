@@ -138,7 +138,6 @@ protected:
 
   /// Seed for the random number generator
   const int _sgd_seed;
-
 };
 
 #endif
