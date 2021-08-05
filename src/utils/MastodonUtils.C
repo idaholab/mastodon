@@ -415,6 +415,8 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
         params_now = {loc_rand + dparam, sca_rand + dparam};
         params_before = {loc_rand, sca_rand};
       }
+      if (index == 0)
+        likelihood_base = likelihood_now;
       while (std::abs(likelihood_now - likelihood_before) > tolerance)
       {
         gradient_now[0] = (likelihood_now - likelihood_before) / (params_now[0] - params_before[0]);
