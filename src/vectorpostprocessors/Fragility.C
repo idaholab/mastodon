@@ -62,22 +62,22 @@ Fragility::validParams()
                         "Optimization "
                         "method for fragility fitting. The following "
                         "methods are available: brute force "
-                        "or Stochastic Gradient Descent.");
-  params.addParam<Real>("sgd_tolerance",
+                        "or Randomized Gradient Descent.");
+  params.addParam<Real>("rgd_tolerance",
                         1e-03,
-                        "Tolerance for declaring convergence of the Stochastic Gradient Descent "
+                        "Tolerance for declaring convergence of the Randomized Gradient Descent "
                         "algorithm.");
-  params.addParam<Real>("sgd_gamma",
+  params.addParam<Real>("rgd_gamma",
                         0.001,
-                        "Parameter controlling the step size of the Stochastic Gradient Descent "
+                        "Parameter controlling the step size of the Randomized Gradient Descent "
                         "algorithm.");
-  params.addParam<Real>("sgd_numrnd",
+  params.addParam<Real>("rgd_numrnd",
                         1000,
-                        "Number of random initializations in the Stochastic Gradient Descent "
+                        "Number of random initializations in the Randomized Gradient Descent "
                         "algorithm.");
-  params.addParam<Real>("sgd_seed",
+  params.addParam<Real>("rgd_seed",
                         1028,
-                        "Seed for random number generator in the Stochastic Gradient Descent "
+                        "Seed for random number generator in the Randomized Gradient Descent "
                         "algorithm.");
   params.addClassDescription("Calculate the seismic fragility of an SSC by postprocessing the "
                              "results of a probabilistic or stochastic simulation.");
@@ -118,10 +118,10 @@ Fragility::Fragility(const InputParameters & parameters)
     _median_fragility(declareVector("fragility_median")),
     _beta_fragility(declareVector("fragility_beta")),
     _brute_force(getParam<bool>("brute_force")),
-    _sgd_tolerance(getParam<Real>("sgd_tolerance")),
-    _sgd_gamma(getParam<Real>("sgd_gamma")),
-    _sgd_numrnd(getParam<Real>("sgd_numrnd")),
-    _sgd_seed(getParam<Real>("sgd_seed"))
+    _rgd_tolerance(getParam<Real>("rgd_tolerance")),
+    _rgd_gamma(getParam<Real>("rgd_gamma")),
+    _rgd_numrnd(getParam<Real>("rgd_numrnd")),
+    _rgd_seed(getParam<Real>("rgd_seed"))
 {
   if (_rh_file_exist && _sd_file_exist)
     mooseError("Error in block '" + name() +
@@ -233,10 +233,10 @@ Fragility::execute()
                                                                        _beta_fragility_limits,
                                                                        _num_collapses,
                                                                        _brute_force,
-                                                                       _sgd_tolerance,
-                                                                       _sgd_gamma,
-                                                                       _sgd_numrnd,
-                                                                       _sgd_seed);
+                                                                       _rgd_tolerance,
+                                                                       _rgd_gamma,
+                                                                       _rgd_numrnd,
+                                                                       _rgd_seed);
   _median_fragility[0] = fitted_vals[0];
   _beta_fragility[0] = fitted_vals[1];
 }

@@ -25,15 +25,15 @@ distribution parameters for these demand values and use them for enhanced fragil
 first method is followed, users have to provide ALL of the input parameters, `master_file`, `hazard_multiapp`,
 `probabilistic_multiapp`, `demand_variable`, `ssc_frequency`, `ssc_damping_ratio`, and `dtsim`. If any of
 them is missing, MASTODON will throw an error. If method 2 is followed, just provide the `demand_filename`
-parameter. 
+parameter.
 
 Fitting a lognormal fragility function to the probabilities of failure requires an optimization
 algorithm to find the parameters, median and lognormal standard deviation. Two methods are
 currently available for calculating these fragility parameters: 'brute force' and
-'Stochastic Gradient Descent (SGD)'. Brute force finds that combination of parameters
- which maximizes the likelihood by looping over all alternative combinations. SGD finds
-the parameter combination by running a Newton-Raphson type algorithm with random seed values.
-SGD also requires the additional parameters:
+'Randomized Gradient Descent (RGD)'. Brute force finds that combination of parameters
+ which maximizes the likelihood by looping over all alternative combinations. RGD finds
+the parameter combination by running a simple gradient descent (Newton-Raphson type) algorithm with random seed values and finding the values corresponding to the minimum value of the cost function or objective.
+RGD also requires the additional parameters:
 
 1. tolerance (To declare convergence of the algorithm. 1e-03 can be optimal.)
 2. gamma (Controls the step size of the algorithm. 0.001 can be optimal.)
@@ -41,8 +41,8 @@ SGD also requires the additional parameters:
 4. seed (Seed for the random number generator. Currently set to 1028).
 
 Of course, both algorithms have their pros and cons. For example, brute force takes orders
-of magnitude more time to run. SGD may not guarantee the best fragility fit and users should
-change the SGD parameters and make sure that the results don't change significantly, to
+of magnitude more time to run. RGD may not guarantee the best fragility fit and users should
+change the RGD parameters and make sure that the results don't change significantly, to
 ensure that the best results are calculated.
 
 ### Assumptions and current limitations

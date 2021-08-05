@@ -128,16 +128,16 @@ protected:
   const bool & _brute_force;
 
   /// Tolerance for Stochastic Gradient Descent
-  const Real _sgd_tolerance;
+  const Real _rgd_tolerance;
 
   /// Parameter controlling step size for Stochastic Gradient Descent
-  const Real _sgd_gamma;
+  const Real _rgd_gamma;
 
   /// Number of random initializations for Stochastic Gradient Descent
-  const int _sgd_numrnd;
+  const int _rgd_numrnd;
 
   /// Seed for the random number generator
-  const int _sgd_seed;
+  const int _rgd_seed;
 };
 
 #endif

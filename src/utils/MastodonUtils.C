@@ -382,6 +382,7 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
         }
   }
   else
+  // Using Randomized Gradient Descent to maximize likelihood (as defined above) or minimize -loglikelihood
   {
     Real loc_rand;
     Real sca_rand;
@@ -394,7 +395,7 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
               // Note that Gradient Descent algorithm requires two likelihood values from two seeds.
     Real likelihood_now;           // Initializing a variable.
     Real likelihood_before;        // Initializing a variable.
-    Real likelihood_base = -50001; // Initializing to an arbitrarily low value here.
+    Real likelihood_base = std::numeric_limits<Real>::lowest();
     // This variable will get updated if a parameter vector has greater likelihood.
     MooseRandom::seed(seed); // Setting up the random number generator.
     for (int index = 0; index < num_rnd; index++)
@@ -406,7 +407,7 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
           -MastodonUtils::calcLogLikelihood(im, pf, loc_rand + dparam, sca_rand + dparam, n);
       params_now = {loc_rand, sca_rand};
       params_before = {loc_rand + dparam, sca_rand + dparam};
-      if (likelihood_now > likelihood_before)
+      if (likelihood_now > likelihood_before) // Swap params and likelihoods before and now
       {
         likelihood_now =
             -MastodonUtils::calcLogLikelihood(im, pf, loc_rand + dparam, sca_rand + dparam, n);
