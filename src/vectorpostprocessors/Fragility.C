@@ -242,7 +242,8 @@ Fragility::execute()
                                                                        _rgd_seed);
   _median_fragility[0] = fitted_vals[0];
   _beta_fragility[0] = fitted_vals[1];
-  _loglikelihood[0] = MastodonUtils::calcLogLikelihood(_im, _conditional_pf, _median_fragility[0], _beta_fragility[0], _num_collapses);
+  _loglikelihood[0] = MastodonUtils::calcLogLikelihood(
+      _im, _conditional_pf, _median_fragility[0], _beta_fragility[0], _num_collapses);
 }
 
 std::vector<Real>

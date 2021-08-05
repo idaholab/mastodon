@@ -382,7 +382,8 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
         }
   }
   else
-  // Using Randomized Gradient Descent to maximize likelihood (as defined above) or minimize -loglikelihood
+  // Using Randomized Gradient Descent to maximize likelihood (as defined above) or minimize
+  // -loglikelihood
   {
     Real loc_rand;
     Real sca_rand;
@@ -428,7 +429,8 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
           index = index - 1;
           break;
         }
-        else likelihood_now =
+        else
+          likelihood_now =
               -MastodonUtils::calcLogLikelihood(im, pf, params_now[0], params_now[1], n);
       }
       if (likelihood_now < likelihood_base)
