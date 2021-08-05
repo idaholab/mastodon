@@ -395,7 +395,7 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
               // Note that Gradient Descent algorithm requires two likelihood values from two seeds.
     Real likelihood_now;           // Initializing a variable.
     Real likelihood_before;        // Initializing a variable.
-    Real likelihood_base = std::numeric_limits<Real>::lowest();
+    Real likelihood_base = std::numeric_limits<Real>::max();
     // This variable will get updated if a parameter vector has greater likelihood.
     MooseRandom::seed(seed); // Setting up the random number generator.
     for (int index = 0; index < num_rnd; index++)
@@ -415,8 +415,6 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
         params_now = {loc_rand + dparam, sca_rand + dparam};
         params_before = {loc_rand, sca_rand};
       }
-      if (index == 0)
-        likelihood_base = likelihood_now;
       while (std::abs(likelihood_now - likelihood_before) > tolerance)
       {
         gradient_now[0] = (likelihood_now - likelihood_before) / (params_now[0] - params_before[0]);
@@ -430,16 +428,13 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
           index = index - 1;
           break;
         }
-        else
-        {
-          likelihood_now =
+        else likelihood_now =
               -MastodonUtils::calcLogLikelihood(im, pf, params_now[0], params_now[1], n);
-          if ((-likelihood_now) > (likelihood_base))
-          {
-            likelihood_base = -likelihood_now;
-            params_return = params_now;
-          }
-        }
+      }
+      if (likelihood_now < likelihood_base)
+      {
+        likelihood_base = likelihood_now;
+        params_return = params_now;
       }
     }
   }

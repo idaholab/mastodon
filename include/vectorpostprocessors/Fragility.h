@@ -124,6 +124,9 @@ protected:
   /// Beta of the fitted fragility
   VectorPostprocessorValue & _beta_fragility;
 
+  /// loglikelihood of the fitted fragility params
+  VectorPostprocessorValue & _loglikelihood;
+
   /// Method for optimization
   const bool & _brute_force;
 

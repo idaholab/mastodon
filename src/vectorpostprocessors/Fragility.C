@@ -117,6 +117,7 @@ Fragility::Fragility(const InputParameters & parameters)
     _conditional_pf(declareVector("conditional_pf")),
     _median_fragility(declareVector("fragility_median")),
     _beta_fragility(declareVector("fragility_beta")),
+    _loglikelihood(declareVector("loglikelihood")),
     _brute_force(getParam<bool>("brute_force")),
     _rgd_tolerance(getParam<Real>("rgd_tolerance")),
     _rgd_gamma(getParam<Real>("rgd_gamma")),
@@ -190,6 +191,7 @@ Fragility::initialize()
   _conditional_pf.clear();
   _median_fragility.clear();
   _beta_fragility.clear();
+  _loglikelihood.clear();
 }
 
 void
@@ -201,6 +203,7 @@ Fragility::execute()
   _conditional_pf.resize(_num_bins);
   _median_fragility.resize(1);
   _beta_fragility.resize(1);
+  _loglikelihood.resize(1);
   for (std::size_t bin = 0; bin < _num_bins; bin++)
   {
     _im[bin] = _im_values[bin];
@@ -239,6 +242,7 @@ Fragility::execute()
                                                                        _rgd_seed);
   _median_fragility[0] = fitted_vals[0];
   _beta_fragility[0] = fitted_vals[1];
+  _loglikelihood[0] = MastodonUtils::calcLogLikelihood(_im, _conditional_pf, _median_fragility[0], _beta_fragility[0], _num_collapses);
 }
 
 std::vector<Real>
