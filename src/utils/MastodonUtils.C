@@ -294,7 +294,8 @@ MastodonUtils::greaterProbability(Real demand_median,
   // std dev = srss(betaD, betaC)
   // now, greater probability = 1 - CDF(0.0)
   Real greater_prob_location = log(demand_median) - log(capacity_median);
-  Real greater_prob_scale = std::sqrt(demand_scale*demand_scale + capacity_scale* capacity_scale);
+  Real greater_prob_scale =
+      std::sqrt(demand_scale * demand_scale + capacity_scale * capacity_scale);
   return (1.0 - Normal::cdf(0.0, greater_prob_location, greater_prob_scale));
 }
 
@@ -421,7 +422,7 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
         else
           {
             likelihood_now =
-              -MastodonUtils::calcLogLikelihood(im, pf, params_now[0], params_now[1], n);
+                -MastodonUtils::calcLogLikelihood(im, pf, params_now[0], params_now[1], n);
             if (likelihood_now < likelihood_base)
             {
               likelihood_base = likelihood_now;
