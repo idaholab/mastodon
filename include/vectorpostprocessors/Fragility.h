@@ -40,32 +40,47 @@ public:
    *  Function to calculate the vector of spectral demands at the frequency of
    *  the SSC.
    */
-  std::vector<Real> calcDemandsFromFile(unsigned int bin);
+  std::vector<Real> calcDemandsFromRHFiles(unsigned int bin);
+  /**
+   *  Function to read the vectors of spectral demands from the stochastic demand
+   *  files.
+   */
+  std::vector<Real> readDemandsFromSDFiles(unsigned int bin);
 
 protected:
   /// Name of the master file without extension
-  const std::string & _master_file;
+  const std::string * _master_file;
 
   /// Name of the multiapp corresponding to ground motion sampling
-  const std::string & _hazard_multiapp;
+  const std::string * _hazard_multiapp;
 
   /// Name of the multiapp corresponding to the probabilistic simulations
-  const std::string & _probabilistic_multiapp;
+  const std::string * _probabilistic_multiapp;
+
+  /// Demand variable name of the ssc that is also column name in the output csv file
+  const std::string * _demand_variable;
+
+  /// Frequency at which the spectral acceleration demand of the SSC is to be calculated
+  const Real * _ssc_freq;
+
+  /// Damping ratio of the ssc for spectral acceleration demand calculation
+  const Real * _ssc_xi;
+
+  /// Time step of the simulations
+  const Real * _dtsim;
+
+  /// bool for response history files
+  const bool _rh_file_exist;
+
+  /// File name that contains stochastic demand matrix. Has mxn values
+  /// where m is number of GMs in each bin and n is num bins.
+  const std::string * _demand_filename;
+
+  /// bool for stochastic demand files
+  const bool _sd_file_exist;
 
   /// Number of ground motions used in each intensity bin
   const unsigned int & _num_gms;
-
-  /// Demand variable name of the ssc that is also column name in the output csv file
-  const std::string & _demand_variable;
-
-  /// Frequency at which the spectral acceleration demand of the SSC is to be calculated
-  const Real & _ssc_freq;
-
-  /// Damping ratio of the ssc for spectral acceleration demand calculation
-  const Real & _ssc_xi;
-
-  /// Time step of the simulations
-  const Real & _dtsim;
 
   /// Median capacity of the ssc as a function of the demand parameter
   const Real & _median_cap;
@@ -109,20 +124,23 @@ protected:
   /// Beta of the fitted fragility
   VectorPostprocessorValue & _beta_fragility;
 
+  /// loglikelihood of the fitted fragility params
+  VectorPostprocessorValue & _loglikelihood;
+
   /// Method for optimization
   const bool & _brute_force;
 
   /// Tolerance for Stochastic Gradient Descent
-  const Real _sgd_tolerance;
+  const Real _rgd_tolerance;
 
   /// Parameter controlling step size for Stochastic Gradient Descent
-  const Real _sgd_gamma;
+  const Real _rgd_gamma;
 
   /// Number of random initializations for Stochastic Gradient Descent
-  const int _sgd_numrnd;
+  const int _rgd_numrnd;
 
   /// Seed for the random number generator
-  const int _sgd_seed;
+  const int _rgd_seed;
 };
 
 #endif

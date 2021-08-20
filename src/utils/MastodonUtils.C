@@ -11,6 +11,7 @@
 #include "MooseUtils.h"
 #include "MooseRandom.h"
 #include "Lognormal.h"
+#include "Normal.h"
 
 // MASTODON includes
 #include "MastodonUtils.h"
@@ -286,27 +287,16 @@ MastodonUtils::greaterProbability(Real demand_median,
                                   Real capacity_median,
                                   Real capacity_scale)
 {
-  Real demand_location = log(demand_median);
-  Real capacity_location = log(capacity_median);
-
-  Real min_demand = Lognormal::quantile(
-      0.001, demand_location, demand_scale); //~ -3 sigma for normal distributions
-  Real max_demand = Lognormal::quantile(
-      0.999, demand_location, demand_scale); //~ +3 sigma for normal distributions
-  Real prob = 0.0;
-  Real param = min_demand;
-  Real p_1, p_2;
-  Real delta = demand_median / 1000;
-  while (param < max_demand)
-  {
-    p_1 = Lognormal::pdf(param, demand_location, demand_scale) *
-          Lognormal::cdf(param, capacity_location, capacity_scale);
-    p_2 = Lognormal::pdf(param + delta, demand_location, demand_scale) *
-          Lognormal::cdf(param + delta, capacity_location, capacity_scale);
-    prob += delta * (p_1 + p_2) / 2;
-    param += delta;
-  }
-  return prob;
+  // Need P(D-C > 0) = P(lnD-lnC > 0)
+  // lnD and lnC are Normally distributed
+  // Evaluating the mean and std dev of lnD-lnC as
+  // mean = mean(lnD) - mean(lnC) = ln(thetaD) - ln(thetaC)
+  // std dev = srss(betaD, betaC)
+  // now, greater probability = 1 - CDF(0.0)
+  Real greater_prob_location = log(demand_median) - log(capacity_median);
+  Real greater_prob_scale =
+      std::sqrt(demand_scale * demand_scale + capacity_scale * capacity_scale);
+  return (1.0 - Normal::cdf(0.0, greater_prob_location, greater_prob_scale));
 }
 
 Real
@@ -382,6 +372,8 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
         }
   }
   else
+  // Using Randomized Gradient Descent to maximize likelihood (as defined above) or minimize
+  // -loglikelihood
   {
     Real loc_rand;
     Real sca_rand;
@@ -394,7 +386,7 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
               // Note that Gradient Descent algorithm requires two likelihood values from two seeds.
     Real likelihood_now;           // Initializing a variable.
     Real likelihood_before;        // Initializing a variable.
-    Real likelihood_base = -50001; // Initializing to an arbitrarily low value here.
+    Real likelihood_base = std::numeric_limits<Real>::max();
     // This variable will get updated if a parameter vector has greater likelihood.
     MooseRandom::seed(seed); // Setting up the random number generator.
     for (int index = 0; index < num_rnd; index++)
@@ -406,7 +398,7 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
           -MastodonUtils::calcLogLikelihood(im, pf, loc_rand + dparam, sca_rand + dparam, n);
       params_now = {loc_rand, sca_rand};
       params_before = {loc_rand + dparam, sca_rand + dparam};
-      if (likelihood_now > likelihood_before)
+      if (likelihood_now > likelihood_before) // Swap params and likelihoods before and now
       {
         likelihood_now =
             -MastodonUtils::calcLogLikelihood(im, pf, loc_rand + dparam, sca_rand + dparam, n);
@@ -428,16 +420,16 @@ MastodonUtils::maximizeLogLikelihood(const std::vector<Real> & im,
           break;
         }
         else
-        {
-          likelihood_now =
-              -MastodonUtils::calcLogLikelihood(im, pf, params_now[0], params_now[1], n);
-          if ((-likelihood_now) > (likelihood_base))
           {
-            likelihood_base = -likelihood_now;
-            params_return = params_now;
+            likelihood_now =
+                -MastodonUtils::calcLogLikelihood(im, pf, params_now[0], params_now[1], n);
+            if (likelihood_now < likelihood_base)
+            {
+              likelihood_base = likelihood_now;
+              params_return = params_now;
+            }
           }
         }
-      }
     }
   }
   return params_return;
