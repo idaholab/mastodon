@@ -25,21 +25,15 @@
 [VectorPostprocessors]
   [./fragility_pump]
     type = Fragility
-    master_file = 'master' # name of the master file in this case is 'master.i'
-    hazard_multiapp = 'run_hazard'
-    probabilistic_multiapp = 'sub'
-    num_gms = 3
-    demand_variable = 'accel_2x'
-    frequency = 4
-    damping_ratio = 0.05
-    dt = 0.005
-    median_capacity = 0.01
-    beta_capacity = 1.3
-    num_samples = 3
-    num_bins = 4
-    im_values = '0.3 0.5 0.7 0.9'
-    median_fragility_limits = '3.0 8.0'
-    beta_fragility_limits = '1.0 3.0'
+    num_gms = 30
+    demand_filename = 'stoc_demands_03_cpump.csv'
+    median_capacity = 3.1
+    beta_capacity = 0.5
+    num_samples = 1
+    num_bins = 6
+    im_values = '0.33 0.65 0.98 1.30 1.63 1.95'
+    median_fragility_limits = '0.1 10.0'
+    beta_fragility_limits = '0.01 3.0'
     execute_on = TIMESTEP_END
   [../]
 []
