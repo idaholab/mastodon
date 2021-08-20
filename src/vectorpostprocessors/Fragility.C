@@ -30,7 +30,7 @@ Fragility::validParams()
                                             // getting rid of response spectra
                                             // calculation in this class.
   params.addParam<Real>("ssc_frequency",
-                        "Frequency at which, the spectral demand of the SSC is calculated.");
+                        "Frequency at which the spectral demand of the SSC is calculated.");
   params.addParam<Real>("ssc_damping_ratio",
                         "Damping ratio at which the spectral demand of the SSC is calculated.");
   params.addParam<Real>("dtsim", "dt for response spectra calculation.");
