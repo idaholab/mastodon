@@ -92,7 +92,7 @@ The simulation results are captured using [VectorPostprocessors](VectorPostproce
 
 Simulation time for each of the models was recorded as well as the resulting first natural frequencies.
 
-!table id=static_results_linear caption= HEX8 (Linear) elements refinement study.
+!table id=dynamic_results_linear caption= HEX8 (Linear) elements refinement study.
 | Elements | Mode 1 (Hz) | Run time (s)|
 | - | - | - |
 | 1 | 20.24 | 3.206 |
@@ -101,7 +101,7 @@ Simulation time for each of the models was recorded as well as the resulting fir
 | 8 | 19.39 | 18.282 |
 
 
-!table id=static_results_quadratic caption= HEX20 (Quadratic) elements refinement study.
+!table id=dynamic_results_quadratic caption= HEX20 (Quadratic) elements refinement study.
 | Elements | Mode 1 (Hz) | Run time (s) |
 | - | - | - |
 | 1 | 18.41 | 23.333 |

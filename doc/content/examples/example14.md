@@ -79,7 +79,7 @@ The acceleration response spectra calculated at the center of the basemat are pr
        caption=5% damped acceleration response spectra in X direction (input)
 
 !media media/examples/ex14/basemat_sa_x.png
-       style=width:100% id=fig:bm_sa_x
+       style=width:100% id=fig:basemat_sa_x
        caption=5% damped acceleration response spectra in X direction (basemat center)
 !col-end!
 
@@ -89,7 +89,7 @@ The acceleration response spectra calculated at the center of the basemat are pr
        caption=5% damped acceleration response spectra in Y direction (input)
 
 !media media/examples/ex14/basemat_sa_y.png
-       style=width:100% id=fig:bm_sa_y
+       style=width:100% id=fig:basemat_sa_y
        caption=5% damped acceleration response spectra in Y direction (basemat center)
 !col-end!
 
@@ -99,7 +99,7 @@ The acceleration response spectra calculated at the center of the basemat are pr
        caption=5% damped acceleration response spectra in Z direction (input)
 
 !media media/examples/ex14/basemat_sa_z.png
-       style=width:100% id=fig:bm_sa_z
+       style=width:100% id=fig:basemat_sa_z
        caption=5% damped acceleration response spectra in Z direction (basemat center)
 !col-end!
 
