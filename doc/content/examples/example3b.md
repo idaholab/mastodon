@@ -35,7 +35,7 @@ explicit and implicit integration schemes and also their 5 percent damped respon
 !col! small=12 medium=6 large=6
 !media media/examples/Exp_Imp_ex03_Sa.png
      style=width:95%;float:center;
-     id=fig:acc_comp
+     id=fig:sa_comp
       caption=Comparison of response spectra at the soil surface generated using explicit and implicit schemes.
 !col-end!
 
