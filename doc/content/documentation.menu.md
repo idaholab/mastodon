@@ -6,7 +6,7 @@
 - [Theory manual](manuals/theory/index.md)
 - [User manual](manuals/user/index.md)
 - [Syntax](syntax/index.md)
-- [Peacock](peacock.md)
+- [Peacock](python/peacock.md)
 
 !col-end!
 

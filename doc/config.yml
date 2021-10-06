@@ -1,6 +1,7 @@
 Content:
     - doc/content
     - ${MOOSE_DIR}/framework/doc/content
+    - ${MOOSE_DIR}/python/doc/content
     - ${MOOSE_DIR}/modules/contact/doc/content
     - ${MOOSE_DIR}/modules/fluid_properties/doc/content
     - ${MOOSE_DIR}/modules/fsi/doc/content
@@ -19,7 +20,6 @@ Content:
             - getting_started/installation/install_miniconda.md
             - getting_started/installation/uninstall_conda.md
             - getting_started/installation/wsl.md
-            - application_usage/peacock.md
             - framework_development/git.md
             - help/development/**
             - help/finite_element_concepts/nodal_patch_recovery.md
