@@ -16,8 +16,6 @@
 
 registerMooseObject("MastodonApp", MaterialRealCMMAux);
 
-defineLegacyParams(MaterialRealCMMAux);
-
 InputParameters
 MaterialRealCMMAux::validParams()
 {
