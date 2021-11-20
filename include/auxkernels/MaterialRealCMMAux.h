@@ -17,12 +17,6 @@
 // MOOSE includes
 #include "MaterialAuxBase.h"
 
-// Forward declarations
-class MaterialRealCMMAux;
-
-template <>
-InputParameters validParams<MaterialRealCMMAux>();
-
 /**
  * AuxKernel for outputting a DenseMatrix<Real> material property component to an AuxVariable
  */
