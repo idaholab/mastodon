@@ -55,7 +55,7 @@ UniformLayerAuxKernel::computeValue()
   if (_nodal)
     _distance = _direction * (*_current_node);
   else
-    _distance = _direction * _current_elem->centroid();
+    _distance = _direction * _current_elem->vertex_average();
 
   // Locate the layer
   std::vector<Real>::const_iterator iter =
