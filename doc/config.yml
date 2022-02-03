@@ -21,6 +21,7 @@ Content:
             - getting_started/installation/wsl.md
             - application_usage/peacock.md
             - help/development/**
+            - help/finite_element_concepts/nodal_patch_recovery.md
             - media/**
             - templates/**
             - bib/**
