@@ -96,17 +96,17 @@ FunctionPointForce::addPoints()
     for (unsigned int i = 0; i < number; ++i)
     {
       const Function * const function_x = &getFunction("x_position");
-      _p(0) = function_x->value(i + 1, _qp);
+      _p(0) = function_x->value(i + 1, Point());
 
       if (_mesh.dimension() > 1)
       {
         const Function * const function_y = &getFunction("y_position");
-        _p(1) = function_y->value(i + 1, _qp);
+        _p(1) = function_y->value(i + 1, Point());
 
         if (_mesh.dimension() > 2)
         {
           const Function * const function_z = &getFunction("z_position");
-          _p(2) = function_z->value(i + 1, _qp);
+          _p(2) = function_z->value(i + 1, Point());
         }
       }
       addPoint(_p, i);
