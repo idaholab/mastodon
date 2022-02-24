@@ -57,7 +57,7 @@
   [./transfer_x]
     # Transfers scaled ground motions to multiapp
     type = HazardCurveTransfer
-    multi_app = run_hazard
+    to_multi_app = run_hazard
     function = accel_bottom_x # Function in sub.i that receives the scaled ground motions
     component = x # component that is being transferred
   [../]
