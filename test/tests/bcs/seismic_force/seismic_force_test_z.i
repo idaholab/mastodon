@@ -16,9 +16,9 @@
 [Mesh]
   type = GeneratedMesh
   dim = 3
-  nx = 1
-  ny = 1
-  nz = 20
+  nx = 4
+  ny = 4
+  nz = 40
   xmin = 0.0
   xmax = 25.0
   ymin = 0.0
@@ -240,12 +240,12 @@
 [Executioner]
   type = Transient
   solve_type = PJFNK
-  nl_abs_tol = 1e-12
-  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  nl_rel_tol = 1e-10
   l_tol = 1e-12
   start_time = 0
-  end_time = 2.5625
-  dt = 0.01
+  end_time = 2.6
+  dt = 0.1
   timestep_tolerance = 1e-6
   petsc_options = '-snes_ksp_ew'
   petsc_options_iname = '-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter'
