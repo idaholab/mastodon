@@ -36,11 +36,11 @@ PiecewiseFunctionTransfer::execute()
 
   if (_direction == TO_MULTIAPP)
   {
-    FEProblemBase & from_problem = _to_multi_app->problemBase();
+    FEProblemBase & from_problem = getToMultiApp()->problemBase();
     PiecewiseBase & from_function =
         dynamic_cast<PiecewiseBase &>(from_problem.getFunction(from_name));
-    for (unsigned int i = 0; i < _to_multi_app->numGlobalApps(); i++)
-      if (_to_multi_app->hasLocalApp(i))
+    for (unsigned int i = 0; i < getToMultiApp()->numGlobalApps(); i++)
+      if (getToMultiApp()->hasLocalApp(i))
       {
         FEProblemBase & to_problem = getMultiApp()->appProblemBase(i);
         PiecewiseBase & to_function =
@@ -51,10 +51,10 @@ PiecewiseFunctionTransfer::execute()
 
   else if (_direction == FROM_MULTIAPP)
   {
-    FEProblemBase & to_problem = _from_multi_app->problemBase();
+    FEProblemBase & to_problem = getFromMultiApp()->problemBase();
     PiecewiseBase & to_function = dynamic_cast<PiecewiseBase &>(to_problem.getFunction(to_name));
-    for (unsigned int i = 0; i < _from_multi_app->numGlobalApps(); i++)
-      if (_from_multi_app->hasLocalApp(i))
+    for (unsigned int i = 0; i < getFromMultiApp()->numGlobalApps(); i++)
+      if (getFromMultiApp()->hasLocalApp(i))
       {
         FEProblemBase & from_problem = getMultiApp()->appProblemBase(i);
         PiecewiseBase & from_function =
