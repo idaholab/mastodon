@@ -28,8 +28,7 @@
 [Transfers]
   [./transfer]
     type = PiecewiseFunctionTransfer
-    multi_app = sub
-    direction = to_multiapp
+    to_multi_app = sub
     to_function = func
     from_function = func
   [../]

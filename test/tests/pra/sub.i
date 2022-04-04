@@ -61,7 +61,7 @@
   [./sub]
     # transfers monte carlo samples to multiapp
     type = SamplerParameterTransfer
-    multi_app = sub
+    to_multi_app = sub
     sampler = monte_carlo
     parameters = 'Materials/Elasticity_tensor_1/scale_factor_density'
     to_control = 'stochastic'
@@ -71,8 +71,7 @@
   [./transfer]
     # transfers scaled ground motions to multiapp
     type = PiecewiseFunctionTransfer
-    multi_app = sub
-    direction = to_multiapp
+    to_multi_app = sub
     to_function = accel_bottom_x # name of function in subsub.i which uses the scaled ground motions
     from_function = accel_bottom_x # name of the function in sub.i, which receives the scaled ground motions
   [../]
