@@ -34,7 +34,7 @@
 [Transfers]
   [./transfer]
     type = HazardCurveTransfer
-    multi_app = run_hazard
+    to_multi_app = run_hazard
     function = func
     component = z
   [../]
