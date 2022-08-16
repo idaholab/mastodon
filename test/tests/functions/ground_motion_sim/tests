@@ -1,0 +1,11 @@
+[Tests]
+  [./ground_motion_sim]
+    type = CSVDiff
+    input = ground_motion_sim.i
+    csvdiff = ground_motion_sim_out.csv
+
+    design = "GroundMotionSim.md"
+    issues = "#414"
+    requirement = "The GroundMotionSim function shall accurately generate ground motions"
+  [../]
+[]
