@@ -65,6 +65,8 @@ MastodonApp::registerAll(Factory & factory, ActionFactory & action_factory, Synt
   syntax.registerActionSyntax("MastodonModelAction", "Mastodon/Model");
 
   syntax.registerActionSyntax("MastodonOutputsAction", "Mastodon/Outputs");
+
+  registerDataFilePath();
 }
 
 extern "C" void
