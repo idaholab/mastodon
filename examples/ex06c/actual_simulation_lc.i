@@ -17,66 +17,66 @@
 []
 
 [Variables]
-  [./disp_x]
-  [../]
-  [./disp_y]
-  [../]
-  [./disp_z]
-  [../]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [disp_z]
+  []
 []
 
 [AuxVariables]
-  [./vel_x]
-  [../]
-  [./accel_x]
-  [../]
-  [./accel_y]
-  [../]
-  [./vel_y]
-  [../]
-  [./vel_z]
-  [../]
-  [./accel_z]
-  [../]
-  [./nor_forc]
-    order = FIRST
-    family = LAGRANGE
-  [../]
-  [./tang_forc_x]
-    order = FIRST
-    family = LAGRANGE
-  [../]
+  [vel_x]
   []
+  [accel_x]
+  []
+  [accel_y]
+  []
+  [vel_y]
+  []
+  [vel_z]
+  []
+  [accel_z]
+  []
+  [nor_forc]
+    order = FIRST
+    family = LAGRANGE
+  []
+  [tang_forc_x]
+    order = FIRST
+    family = LAGRANGE
+  []
+[]
 
 [Kernels]
-  [./TensorMechanics]
+  [TensorMechanics]
     use_displaced_mesh = true
     displacements = 'disp_x disp_y disp_z'
-  [../]
-  [./gravity]
+  []
+  [gravity]
     type = Gravity
     variable = disp_z
-    value = -386.09   #in/s2
-  [../]
-  [./inertia_x]
+    value = -386.09 #in/s2
+  []
+  [inertia_x]
     type = InertialForce
     variable = disp_x
     velocity = vel_x
     acceleration = accel_x
     beta = 0.25
     gamma = 0.5
-    eta=0.0
-  [../]
-  [./inertia_y]
+    eta = 0.0
+  []
+  [inertia_y]
     type = InertialForce
     variable = disp_y
     velocity = vel_y
     acceleration = accel_y
     beta = 0.25
     gamma = 0.5
-    eta=0.0
-  [../]
-  [./inertia_z]
+    eta = 0.0
+  []
+  [inertia_z]
     type = InertialForce
     variable = disp_z
     velocity = vel_z
@@ -84,165 +84,163 @@
     beta = 0.25
     gamma = 0.5
     eta = 0.0
-  [../]
+  []
 []
 
 [AuxKernels]
-  [./nor_forc]
+  [nor_forc]
     type = PenetrationAux
     variable = nor_forc
     quantity = normal_force_magnitude
     boundary = 102
     paired_boundary = 103
-  [../]
-  [./tang_forc_x]
+  []
+  [tang_forc_x]
     type = PenetrationAux
     variable = tang_forc_x
     quantity = tangential_force_x
     boundary = 102
     paired_boundary = 103
-  [../]
-  [./accel_x]
+  []
+  [accel_x]
     type = NewmarkAccelAux
     variable = accel_x
     displacement = disp_x
     velocity = vel_x
     beta = 0.25
     execute_on = timestep_end
-  [../]
-  [./vel_x]
+  []
+  [vel_x]
     type = NewmarkVelAux
     variable = vel_x
     acceleration = accel_x
     gamma = 0.5
     execute_on = timestep_end
-  [../]
-  [./accel_y]
+  []
+  [accel_y]
     type = NewmarkAccelAux
     variable = accel_y
     displacement = disp_y
     velocity = vel_y
     beta = 0.25
     execute_on = timestep_end
-  [../]
-  [./vel_y]
+  []
+  [vel_y]
     type = NewmarkVelAux
     variable = vel_y
     acceleration = accel_y
     gamma = 0.5
     execute_on = timestep_end
-  [../]
-  [./accel_z]
+  []
+  [accel_z]
     type = NewmarkAccelAux
     variable = accel_z
     displacement = disp_z
     velocity = vel_z
     beta = 0.25
     execute_on = timestep_end
-  [../]
-  [./vel_z]
+  []
+  [vel_z]
     type = NewmarkVelAux
     variable = vel_z
     acceleration = accel_z
     gamma = 0.5
     execute_on = timestep_end
-  [../]
+  []
 []
 
 [BCs]
-  [./fix_x_soil]
+  [fix_x_soil]
     type = DirichletBC
     variable = disp_x
     boundary = 100
     value = 0.0
-  [../]
-  [./fix_y_soil]
+  []
+  [fix_y_soil]
     type = DirichletBC
     variable = disp_y
     boundary = 100
     value = 0.0
-  [../]
-  [./fix_z_soil]
+  []
+  [fix_z_soil]
     type = DirichletBC
     variable = disp_z
     boundary = 100
     value = 0.0
-  [../]
-  [./concrete_pressure]
+  []
+  [concrete_pressure]
     type = Pressure
     boundary = 101
     variable = disp_z
     component = 2
     factor = 5 #psi
-  [../]
+  []
 []
 
-
 [NodalKernels]
-  [./force_x]
+  [force_x]
     type = UserForcingFunctionNodalKernel
     boundary = 1000
     function = force
     variable = disp_x
-  [../]
+  []
 []
 
 [Functions]
-  [./force]
+  [force]
     type = PiecewiseLinear
     x = '0 1 2'
-    y= '0  0.1953125 0.390625'  #number of nodes = 512, force 0,100,200
-  [../]
+    y = '0  0.1953125 0.390625' #number of nodes = 512, force 0,100,200
+  []
 []
 
-
 [Materials]
-  [./elasticity_tensor_block]
+  [elasticity_tensor_block]
     youngs_modulus = 4e6 #psi
     poissons_ratio = 0.25
     type = ComputeIsotropicElasticityTensor
     block = 2
-  [../]
-  [./strain_block]
+  []
+  [strain_block]
     type = ComputeFiniteStrain
     block = 2
     displacements = 'disp_x disp_y disp_z'
-  [../]
-  [./stress_block]
+  []
+  [stress_block]
     type = ComputeFiniteStrainElasticStress
     block = 2
-  [../]
-  [./den_block]
+  []
+  [den_block]
     type = GenericConstantMaterial
     block = 2
     prop_names = density
     prop_values = 0.0002248 #slug/in^3
-  [../]
-  [./elasticity_tensor_soil]
+  []
+  [elasticity_tensor_soil]
     youngs_modulus = 1.3983e+05 #psi
     poissons_ratio = 0.3
     type = ComputeIsotropicElasticityTensor
     block = 1
-  [../]
-  [./strain_soil]
+  []
+  [strain_soil]
     type = ComputeFiniteStrain
     block = 1
     displacements = 'disp_x disp_y disp_z'
-  [../]
-  [./stress_soil]
+  []
+  [stress_soil]
     type = ComputeFiniteStrainElasticStress
     block = 1
-  [../]
-  [./den_soil]
+  []
+  [den_soil]
     type = GenericConstantMaterial
     block = 1
     prop_names = density
     prop_values = 0.0001356 #slug/in^3
-  [../]
+  []
 []
 
 [Contact]
-  [./leftright]
+  [leftright]
     secondary = 102
     primary = 103
     model = coulomb
@@ -251,39 +249,39 @@
     friction_coefficient = 0.7
     penalty = 1e5
     displacements = 'disp_x disp_y disp_z'
-  [../]
+  []
 []
 
 [Preconditioning]
-  [./andy]
+  [andy]
     type = SMP
     full = true
-  [../]
+  []
 []
 
 [Postprocessors]
-  [./nor_forc]
+  [nor_forc]
     type = NodalSum
     variable = nor_forc
     boundary = 102
-  [../]
-  [./tang_forc_x]
+  []
+  [tang_forc_x]
     type = NodalSum
     variable = tang_forc_x
     boundary = 102
-  [../]
-  [./dispx]
-    type = NodalMaxValue
+  []
+  [dispx]
+    type = NodalExtremeValue
+    value_type = max
     block = '2'
     variable = disp_x
-  [../]
-  [./force2x]
+  []
+  [force2x]
     type = FunctionValuePostprocessor
     function = force
     scale_factor = 512 #Number of nodes
-  [../]
+  []
 []
-
 
 [Executioner]
   type = Transient
@@ -302,17 +300,14 @@
   timestep_tolerance = 1e-3
 []
 
-
-
-
- [Outputs]
-   csv = true
-   exodus = true
-   file_base = results55
-   perf_graph = true
-   print_linear_residuals = false
-   [./screen]
-     type = Console
-     max_rows = 1
-   [../]
- []
+[Outputs]
+  csv = true
+  exodus = true
+  file_base = results55
+  perf_graph = true
+  print_linear_residuals = false
+  [screen]
+    type = Console
+    max_rows = 1
+  []
+[]
