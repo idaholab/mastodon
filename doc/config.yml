@@ -20,6 +20,7 @@ Content:
             - getting_started/installation/uninstall_conda.md
             - getting_started/installation/wsl.md
             - application_usage/peacock.md
+            - framework_development/git.md
             - help/development/**
             - help/finite_element_concepts/nodal_patch_recovery.md
             - media/**
