@@ -47,8 +47,11 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 Author contact information:
-Chandrakanth Bolisetti,
-chandrakanth.bolisetti@inl.gov,
-Idaho National Laboratory,
-P.O. Box 1625, MS 3860,
-Idaho Falls, ID 83415
+
+- Chandrakanth Bolisetti,
+  chandrakanth.bolisetti@inl.gov,
+  Idaho National Laboratory
+
+- Somayajulu Dhulipala,
+  som.dhulipala@inl.gov,
+  Idaho National Laboratory
