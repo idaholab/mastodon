@@ -34,7 +34,6 @@ Extensions:
     MooseDocs.extensions.navigation:
         name: MASTODON
         repo: https://github.com/idaholab/mastodon
-        home: https://www.mooseframework.org/mastodon
         google-cse: 000781241768298771085:vnudcgneeya
         menu:
             Getting Started:
@@ -75,6 +74,10 @@ Extensions:
 
     MooseDocs.extensions.template:
         active: True
+
+    MooseDocs.extensions.bibtex:
+        duplicates:
+            - hales15homogenization
 
     MooseDocs.extensions.sqa:
         active: True
