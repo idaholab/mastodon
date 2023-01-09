@@ -14,8 +14,8 @@ where
 
 `taumax = 7500` ; specifies maximum shear strength achieved at large shear strains.
 
-Other parameters are the same as in [Example 1](examples/index.md). Once the same boundary
-conditions are applied as in [Example 1](examples/index.md), the following response is obtained
+Other parameters are the same as in [Example 1](examples/index.md exact=True). Once the same boundary
+conditions are applied as in [Example 1](examples/index.md exact=True), the following response is obtained
 
 !media media/examples/example2stressstrain.png
        style=width:60%;margin-left:150px;float:center;
