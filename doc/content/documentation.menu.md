@@ -21,7 +21,7 @@
 !col! small=12 medium=4 large=4
 ## Demonstration
 
-- [Examples](examples/index.md)
+- [Examples](examples/index.md exact=True)
 - [Publications](publications.md)
 
 !col-end!
