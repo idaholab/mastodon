@@ -56,7 +56,7 @@ MV2_ENABLE_AFFINITY=0 mpiexec ~/projects/mastodon/mastodon-opt -i shear_beam_Iso
 date >> out
 ```
 
-- You can re-use the above file with the following changes:    
+- You can re-use the above file with the following changes:
 
   - `FIRSTNAME.LASTNAME@inl.gov` is your INL email ID.
   - `Example03_hpc` is the name of the job.
@@ -85,7 +85,7 @@ conda activate moose
 conda update --all
 ```
 
-- You might have accidentally made some changes to MASTODON source code. To undo these changes use the below command. Then update and rebuild libmesh, compile MASTODON, and run the tests as described in the [Getting Started](getting_started/installation.md) page.  
+- You might have accidentally made some changes to MASTODON source code. To undo these changes use the below command. Then update and rebuild libmesh, compile MASTODON, and run the tests as described in the [Getting Started](getting_started/installation.md) page.
 
 ```
 git clean -dxf
@@ -97,7 +97,7 @@ Running this command will completely erase all additional files and uncommitted 
 
 ### How to write an input file from scratch?
 
-Generally, we do not recommend doing this. On the [Examples](examples/index.md) page, a variety of problems are discussed. We recommend downloading the input file from one of those problems and modifying it to suit your own problem. In this process, the MASTODON [User Manual](manuals/user/index.md) and [Syntax](syntax/index.md) pages might also help. There are also a number of input files checked into the `tests` directories within MASTODON. In addition, users are welcome to reach out to the MASTODON community through google groups and ask for files similar to what they are doing.
+Generally, we do not recommend doing this. On the [Examples](examples/index.md exact=True) page, a variety of problems are discussed. We recommend downloading the input file from one of those problems and modifying it to suit your own problem. In this process, the MASTODON [User Manual](manuals/user/index.md) and [Syntax](syntax/index.md) pages might also help. There are also a number of input files checked into the `tests` directories within MASTODON. In addition, users are welcome to reach out to the MASTODON community through google groups and ask for files similar to what they are doing.
 
 ### How to input a mesh file from ABAQUS (i.e., a `.inp` file)?
 
