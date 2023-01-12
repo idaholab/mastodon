@@ -16,6 +16,7 @@ Content:
     - moose:
         root_dir: ${MOOSE_DIR}/modules/doc/content
         content:
+            - application_development/performance_benchmarking.md
             - getting_started/installation/install_conda_moose.md
             - getting_started/installation/install_miniconda.md
             - getting_started/installation/uninstall_conda.md
@@ -72,6 +73,9 @@ Extensions:
     MooseDocs.extensions.acronym:
         acronyms: !include ${MOOSE_DIR}/framework/doc/acronyms.yml
 
+    MooseDocs.extensions.algorithm:
+        active: True
+
     MooseDocs.extensions.template:
         active: True
 
@@ -88,6 +92,7 @@ Extensions:
             mastodon: !include ${ROOT_DIR}/doc/sqa_mastodon.yml
             blackbear: !include ${BLACKBEAR_DIR}/doc/sqa_blackbear.yml
             framework: !include ${MOOSE_DIR}/framework/doc/sqa_framework.yml
+            python: !include ${MOOSE_DIR}/python/doc/sqa_python.yml
             contact: !include ${MOOSE_DIR}/modules/contact/doc/sqa_contact.yml
             fluid_properties: !include ${MOOSE_DIR}/modules/fluid_properties/doc/sqa_fluid_properties.yml
             fsi: !include ${MOOSE_DIR}/modules/fsi/doc/sqa_fsi.yml
