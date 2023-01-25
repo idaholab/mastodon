@@ -17,6 +17,8 @@ Content:
         root_dir: ${MOOSE_DIR}/modules/doc/content
         content:
             - application_development/performance_benchmarking.md
+            - application_development/test_system.md
+            - application_usage/input_syntax.md
             - getting_started/installation/install_conda_moose.md
             - getting_started/installation/install_miniconda.md
             - getting_started/installation/uninstall_conda.md
