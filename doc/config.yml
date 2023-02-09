@@ -22,6 +22,7 @@ Content:
             - getting_started/installation/install_conda_moose.md
             - getting_started/installation/install_miniconda.md
             - getting_started/installation/uninstall_conda.md
+            - getting_started/installation/install_peacock.md
             - getting_started/installation/wsl.md
             - framework_development/git.md
             - help/development/**
