@@ -12,8 +12,6 @@ and an experimental [WSL](getting_started/mastodon_windows10.md) option is avail
 
 ## Prerequisites
 
-!include getting_started/mastodon_remove_moose_environment.md
-
 !include installation/install_miniconda.md
 
 !include installation/install_conda_moose.md
