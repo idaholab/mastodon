@@ -19,6 +19,7 @@ Content:
             - application_development/performance_benchmarking.md
             - application_development/test_system.md
             - application_usage/input_syntax.md
+            - application_usage/restart_recover.md
             - getting_started/installation/install_conda_moose.md
             - getting_started/installation/install_miniconda.md
             - getting_started/installation/uninstall_conda.md
