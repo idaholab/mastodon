@@ -1,0 +1,3 @@
+sys2, AND, dGATE1, dGATE2, 
+dGATE1, OR, E, D,
+dGATE2, OR, F, G
