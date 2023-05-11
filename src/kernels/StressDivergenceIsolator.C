@@ -95,11 +95,7 @@ StressDivergenceIsolator::computeResidual()
 {
   prepareVectorTag(_assembly, _var.number());
 
-  // Accessing residual vector, re, from MOOSE assembly
-  DenseVector<Number> & re = _assembly.residualBlock(_var.number());
-  mooseAssert(re.size() == 2, "Isolator element only has two nodes.");
-  _local_re.resize(re.size());
-  _local_re.zero();
+  mooseAssert(_local_re.size() == 2, "Isolator element only has two nodes.");
 
   ColumnMajorMatrix global_force_res = _Fg[0];
 
@@ -117,22 +113,14 @@ StressDivergenceIsolator::computeResidual()
   accumulateTaggedLocalResidual();
 
   if (_has_save_in)
-  {
-    Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
     for (unsigned int i = 0; i < _save_in.size(); ++i)
       _save_in[i]->sys().solution().add_vector(_local_re, _save_in[i]->dofIndices());
-  }
 }
 
 void
 StressDivergenceIsolator::computeJacobian()
 {
   prepareMatrixTag(_assembly, _var.number(), _var.number());
-
-  // Access Jacobian; size is n x n (n is number of nodes)
-  DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), _var.number());
-  _local_ke.resize(ke.m(), ke.n());
-  _local_ke.zero();
 
   // i and j are looping over nodes
   for (unsigned int i = 0; i < _test.size(); ++i)
@@ -147,12 +135,11 @@ StressDivergenceIsolator::computeJacobian()
 
   if (_has_diag_save_in)
   {
-    unsigned int rows = ke.m();
+    unsigned int rows = _local_ke.m();
     DenseVector<Number> diag(rows);
     for (unsigned int i = 0; i < rows; ++i)
       diag(i) = _local_ke(i, i);
 
-    Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
     for (unsigned int i = 0; i < _diag_save_in.size(); ++i)
       _diag_save_in[i]->sys().solution().add_vector(diag, _diag_save_in[i]->dofIndices());
   }

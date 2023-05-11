@@ -81,10 +81,8 @@ void
 StressDivergenceSpring::computeResidual()
 {
   // Accessing residual vector, re, from MOOSE assembly
-  DenseVector<Number> & re = _assembly.residualBlock(_var.number());
-  mooseAssert(re.size() == 2, "Spring element has and only has two nodes.");
-  _local_re.resize(re.size());
-  _local_re.zero();
+  prepareVectorTag(_assembly, _var.number());
+  mooseAssert(_local_re.size() == 2, "Spring element has and only has two nodes.");
 
   // Calculating residual for node 0 (external forces on node 0)
   if (_component < 3)
@@ -95,23 +93,18 @@ StressDivergenceSpring::computeResidual()
   // External force on node 1 = -1 * external force on node 0
   _local_re(1) = -_local_re(0);
 
-  re += _local_re;
+  accumulateTaggedLocalResidual();
 
   if (_has_save_in)
-  {
-    Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
     for (unsigned int i = 0; i < _save_in.size(); ++i)
       _save_in[i]->sys().solution().add_vector(_local_re, _save_in[i]->dofIndices());
-  }
 }
 
 void
 StressDivergenceSpring::computeJacobian()
 {
   // Access Jacobian; size is n x n (n is number of nodes)
-  DenseMatrix<Number> & ke = _assembly.jacobianBlock(_var.number(), _var.number());
-  _local_ke.resize(ke.m(), ke.n());
-  _local_ke.zero();
+  prepareMatrixTag(_assembly, _var.number(), _var.number());
 
   for (unsigned int i = 0; i < _test.size(); ++i)
     for (unsigned int j = 0; j < _phi.size(); ++j)
@@ -122,16 +115,15 @@ StressDivergenceSpring::computeJacobian()
         _local_ke(i, j) += (i == j ? 1 : -1) * _krr[0](_component - 3, _component - 3);
     }
 
-  ke += _local_ke;
+  accumulateTaggedLocalMatrix();
 
   if (_has_diag_save_in)
   {
-    unsigned int rows = ke.m();
+    unsigned int rows = _local_ke.m();
     DenseVector<Number> diag(rows);
     for (unsigned int i = 0; i < rows; ++i)
       diag(i) = _local_ke(i, i);
 
-    Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
     for (unsigned int i = 0; i < _diag_save_in.size(); ++i)
       _diag_save_in[i]->sys().solution().add_vector(diag, _diag_save_in[i]->dofIndices());
   }
