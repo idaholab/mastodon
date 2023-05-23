@@ -42,7 +42,7 @@ MastodonApp::registerAll(Factory & factory, ActionFactory & action_factory, Synt
 
   Registry::registerObjectsTo(factory, {"MastodonApp"});
   Registry::registerActionsTo(action_factory, {"MastodonApp"});
-  ModulesApp::registerAll(factory, action_factory, syntax);
+  ModulesApp::registerAllObjects<MastodonApp>(factory, action_factory, syntax);
 #ifdef BLACKBEAR_ENABLED
   BlackBearApp::registerAll(factory, action_factory, syntax);
 #endif
