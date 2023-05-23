@@ -1,19 +1,33 @@
 Content:
-    - doc/content
-    - ${MOOSE_DIR}/framework/doc/content
-    - ${MOOSE_DIR}/python/doc/content
-    - ${MOOSE_DIR}/modules/contact/doc/content
-    - ${MOOSE_DIR}/modules/fluid_properties/doc/content
-    - ${MOOSE_DIR}/modules/fsi/doc/content
-    - ${MOOSE_DIR}/modules/heat_conduction/doc/content
-    - ${MOOSE_DIR}/modules/misc/doc/content
-    - ${MOOSE_DIR}/modules/navier_stokes/doc/content
-    - ${MOOSE_DIR}/modules/ray_tracing/doc/content
-    - ${MOOSE_DIR}/modules/stochastic_tools/doc/content
-    - ${MOOSE_DIR}/modules/tensor_mechanics/doc/content
-    - ${MOOSE_DIR}/modules/xfem/doc/content
-    - ${BLACKBEAR_DIR}/doc/content
-    - moose:
+    mastodon:
+        root_dir: doc/content
+    framework:
+        root_dir: ${MOOSE_DIR}/framework/doc/content
+    python:
+        root_dir: ${MOOSE_DIR}/python/doc/content
+    contact:
+        root_dir: ${MOOSE_DIR}/modules/contact/doc/content
+    fluid_properties:
+        root_dir: ${MOOSE_DIR}/modules/fluid_properties/doc/content
+    fsi:
+        root_dir: ${MOOSE_DIR}/modules/fsi/doc/content
+    heat_conduction:
+        root_dir: ${MOOSE_DIR}/modules/heat_conduction/doc/content
+    misc:
+        root_dir: ${MOOSE_DIR}/modules/misc/doc/content
+    navier_stokes:
+        root_dir: ${MOOSE_DIR}/modules/navier_stokes/doc/content
+    ray_tracing:
+        root_dir: ${MOOSE_DIR}/modules/ray_tracing/doc/content
+    stochastic_tools:
+        root_dir: ${MOOSE_DIR}/modules/stochastic_tools/doc/content
+    tensor_mechanics:
+        root_dir: ${MOOSE_DIR}/modules/tensor_mechanics/doc/content
+    xfem:
+        root_dir: ${MOOSE_DIR}/modules/xfem/doc/content
+    blackbear:
+        root_dir: ${BLACKBEAR_DIR}/doc/content
+    modules:
         root_dir: ${MOOSE_DIR}/modules/doc/content
         content:
             - application_development/performance_benchmarking.md

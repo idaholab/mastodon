@@ -20,7 +20,6 @@ include $(FRAMEWORK_DIR)/build.mk
 include $(FRAMEWORK_DIR)/moose.mk
 
 ################################## MODULES ####################################
-ALL_MODULES      := no
 CONTACT          := yes
 FLUID_PROPERTIES := yes
 FSI              := yes
