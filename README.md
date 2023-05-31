@@ -1,3 +1,4 @@
+
 [MASTODON Webpage](https://mooseframework.inl.gov/mastodon)
 
 [MASTODON Input Syntax](https://mooseframework.inl.gov/mastodon/syntax/index.html)
