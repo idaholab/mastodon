@@ -48,6 +48,7 @@ ComputeISoilStress::validParams()
                         "dependent stiffness for all the soil "
                         "layers.");
   params.addParam<std::vector<Real>>("p_ref",
+                                     {},
                                      "The reference pressure at which "
                                      "the parameters are defined for "
                                      "each soil layer. If 'soil_type = "
@@ -86,6 +87,7 @@ ComputeISoilStress::validParams()
       "wave_speed_calculation", true, "Set to false to turn off P and S wave speed calculation.");
   params.addParam<std::vector<FunctionName>>(
       "initial_soil_stress",
+      {},
       "A list of functions describing the initial stress. There "
       "must be 9 functions, corresponding to the xx, yx, zx, xy, yy, zy, xz, yz, "
       "zz components respectively. If not provided, all components of the "
