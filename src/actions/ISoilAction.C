@@ -37,7 +37,6 @@ ISoilAction::validParams()
       "layer_variable", "The auxvariable providing the soil layer identification.");
   params.addRequiredParam<std::vector<unsigned int>>(
       "layer_ids",
-      {},
       "Vector of layer ids that map one-to-one to the rest of the "
       "soil layer parameters provided as input.");
   params.addRequiredParam<std::vector<Real>>("poissons_ratio",
