@@ -49,6 +49,7 @@ ISoilAction::validParams()
                         "dependent stiffness for all the soil "
                         "layers.");
   params.addParam<std::vector<Real>>("p_ref",
+                                     {},
                                      "The reference pressure at which "
                                      "the parameters are defined for "
                                      "each soil layer. If 'soil_type = "
@@ -86,6 +87,7 @@ ISoilAction::validParams()
   params.addParam<bool>("implicit", true, "Set to false to use the explicit solver.");
   params.addParam<std::vector<FunctionName>>(
       "initial_soil_stress",
+      {},
       "The function values for the initial stress distribution. 9 function "
       "names have to be provided corresponding to stress_xx, stress_xy, "
       "stress_xz, stress_yx, stress_yy, stress_yz, stress_zx, stress_zy, "
