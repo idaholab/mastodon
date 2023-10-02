@@ -13,6 +13,7 @@ UniformLayerAuxKernel::validParams()
       "domain in the specified direction.");
   params.addParam<std::vector<unsigned int>>(
       "layer_ids",
+      {},
       "A list of layer identifiers to assign to each interface. "
       "If not provided integer values starting from 0 are "
       "utilized, if provided the length of this vector must be "
