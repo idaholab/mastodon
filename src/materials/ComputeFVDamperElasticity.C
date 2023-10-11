@@ -156,7 +156,7 @@ ComputeFVDamperElasticity::computeDeformation()
     node.push_back(_current_elem->node_ptr(i));
 
   // Fetch the solution for the two end nodes at current time
-  NonlinearSystemBase & nonlinear_sys = _fe_problem.getNonlinearSystemBase();
+  NonlinearSystemBase & nonlinear_sys = _fe_problem.getNonlinearSystemBase(/*nl_sys_num=*/0);
   const NumericVector<Number> & sol = *nonlinear_sys.currentSolution();
   const NumericVector<Number> & sol_old = nonlinear_sys.solutionOld();
 
