@@ -11,8 +11,8 @@ Content:
         root_dir: ${MOOSE_DIR}/modules/fluid_properties/doc/content
     fsi:
         root_dir: ${MOOSE_DIR}/modules/fsi/doc/content
-    heat_conduction:
-        root_dir: ${MOOSE_DIR}/modules/heat_conduction/doc/content
+    heat_transfer:
+        root_dir: ${MOOSE_DIR}/modules/heat_transfer/doc/content
     misc:
         root_dir: ${MOOSE_DIR}/modules/misc/doc/content
     navier_stokes:
@@ -77,7 +77,7 @@ Extensions:
             - ${MOOSE_DIR}/modules/contact/include
             - ${MOOSE_DIR}/modules/fluid_properties/include
             - ${MOOSE_DIR}/modules/fsi/include
-            - ${MOOSE_DIR}/modules/heat_conduction/include
+            - ${MOOSE_DIR}/modules/heat_transfer/include
             - ${MOOSE_DIR}/modules/misc/include
             - ${MOOSE_DIR}/modules/navier_stokes/include
             - ${MOOSE_DIR}/modules/ray_tracing/include
@@ -114,7 +114,7 @@ Extensions:
             contact: !include ${MOOSE_DIR}/modules/contact/doc/sqa_contact.yml
             fluid_properties: !include ${MOOSE_DIR}/modules/fluid_properties/doc/sqa_fluid_properties.yml
             fsi: !include ${MOOSE_DIR}/modules/fsi/doc/sqa_fsi.yml
-            heat_conduction: !include ${MOOSE_DIR}/modules/heat_conduction/doc/sqa_heat_conduction.yml
+            heat_transfer: !include ${MOOSE_DIR}/modules/heat_transfer/doc/sqa_heat_transfer.yml
             misc: !include ${MOOSE_DIR}/modules/misc/doc/sqa_misc.yml
             navier_stokes: !include ${MOOSE_DIR}/modules/navier_stokes/doc/sqa_navier_stokes.yml
             ray_tracing: !include ${MOOSE_DIR}/modules/ray_tracing/doc/sqa_ray_tracing.yml
