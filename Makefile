@@ -23,7 +23,7 @@ include $(FRAMEWORK_DIR)/moose.mk
 CONTACT          := yes
 FLUID_PROPERTIES := yes
 FSI              := yes
-HEAT_CONDUCTION  := yes
+HEAT_TRANSFER    := yes
 MISC             := yes
 RAY_TRACING      := yes
 STOCHASTIC_TOOLS := yes
