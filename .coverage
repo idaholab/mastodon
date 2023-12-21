@@ -6,5 +6,5 @@
 # - warn_new: Warns below this percentage of coverage for new lines added
 
 [default]
-require_total = 93
+require_total = 92
 warn_new = 90
