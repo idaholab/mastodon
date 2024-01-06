@@ -13,7 +13,7 @@ Documents:
     software_requirements_specification: sqa/mastodon_srs.md
     software_design_description: sqa/mastodon_sdd.md
     software_test_plan: sqa/mastodon_stp.md
-    requirements_traceablity_matrix: sqa/mastodon_rtm.md
+    requirements_traceability_matrix: sqa/mastodon_rtm.md
     verification_validation_report: sqa/mastodon_vvr.md
     failure_analysis_report: sqa/mastodon_far.md
     safety_software_determination: sqa/inl_records.md#safety_software_determination
