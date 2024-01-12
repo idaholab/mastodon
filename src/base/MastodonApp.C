@@ -34,6 +34,7 @@ void
 MastodonApp::registerApps()
 {
   registerApp(MastodonApp);
+  ModulesApp::registerApps();
 }
 
 void
