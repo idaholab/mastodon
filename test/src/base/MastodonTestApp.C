@@ -36,4 +36,5 @@ void
 MastodonTestApp::registerApps()
 {
   registerApp(MastodonTestApp);
+  MastodonApp::registerApps();
 }
