@@ -80,7 +80,7 @@
   [../]
 []
 
-[Modules/TensorMechanics/Master]
+[Physics/SolidMechanics/QuasiStatic]
   [./concrete]
     block = 1
     strain = FINITE

@@ -69,7 +69,7 @@
   displacements = 'disp_x disp_y disp_z'
 []
 
-[Modules/TensorMechanics/Master]
+[Physics/SolidMechanics/QuasiStatic]
   [strain_calculator]
     strain = FINITE
     generate_output = 'stress_xx'

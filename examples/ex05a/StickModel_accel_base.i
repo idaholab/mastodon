@@ -141,7 +141,7 @@
   [../]
 []
 
-[Modules/TensorMechanics/LineElementMaster]
+[Physics/SolidMechanics/LineElementMaster]
 #    add_variables = true
     displacements = 'disp_x disp_y disp_z'
     rotations = 'rot_x rot_y rot_z'
