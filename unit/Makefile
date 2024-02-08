@@ -34,7 +34,7 @@ HEAT_CONDUCTION  := yes
 MISC             := yes
 RAY_TRACING      := yes
 STOCHASTIC_TOOLS := yes
-TENSOR_MECHANICS := yes
+SOLID_MECHANICS  := yes
 XFEM             := yes
 NAVIER_STOKES    := yes
 include $(MOOSE_DIR)/modules/modules.mk
