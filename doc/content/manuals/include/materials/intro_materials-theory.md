@@ -7,7 +7,7 @@ To model the mechanical behavior of a material, three components need to be defi
    normalized by the length of the truss. In a 3D scenario, the strain is 3x3 tensor and there are
    three different ways to calculate strains from displacements - small linearized total strain,
    small linearized incremental strain, and finite incremental strain. Details about these methods
-   can be found in [modules/tensor_mechanics/index.md].
+   can be found in [modules/solid_mechanics/index.md].
 
 2. +Elasticity Tensor+: The elasticity tensor is a 4th order tensor with a maximum of 81
    independent constants. For MASTODON applications, the soil and structure are usually assumed to

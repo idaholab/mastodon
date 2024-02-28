@@ -21,8 +21,8 @@ Content:
         root_dir: ${MOOSE_DIR}/modules/ray_tracing/doc/content
     stochastic_tools:
         root_dir: ${MOOSE_DIR}/modules/stochastic_tools/doc/content
-    tensor_mechanics:
-        root_dir: ${MOOSE_DIR}/modules/tensor_mechanics/doc/content
+    solid_mechanics:
+        root_dir: ${MOOSE_DIR}/modules/solid_mechanics/doc/content
     xfem:
         root_dir: ${MOOSE_DIR}/modules/xfem/doc/content
     blackbear:
@@ -82,7 +82,7 @@ Extensions:
             - ${MOOSE_DIR}/modules/navier_stokes/include
             - ${MOOSE_DIR}/modules/ray_tracing/include
             - ${MOOSE_DIR}/modules/stochastic_tools/include
-            - ${MOOSE_DIR}/modules/tensor_mechanics/include
+            - ${MOOSE_DIR}/modules/solid_mechanics/include
             - ${MOOSE_DIR}/modules/xfem/include
 
     MooseDocs.extensions.common:
@@ -119,7 +119,7 @@ Extensions:
             navier_stokes: !include ${MOOSE_DIR}/modules/navier_stokes/doc/sqa_navier_stokes.yml
             ray_tracing: !include ${MOOSE_DIR}/modules/ray_tracing/doc/sqa_ray_tracing.yml
             stochastic_tools: !include ${MOOSE_DIR}/modules/stochastic_tools/doc/sqa_stochastic_tools.yml
-            tensor_mechanics: !include ${MOOSE_DIR}/modules/tensor_mechanics/doc/sqa_tensor_mechanics.yml
+            solid_mechanics: !include ${MOOSE_DIR}/modules/solid_mechanics/doc/sqa_solid_mechanics.yml
             xfem: !include ${MOOSE_DIR}/modules/xfem/doc/sqa_xfem.yml
 
         requirement-groups:
