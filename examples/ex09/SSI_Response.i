@@ -64,7 +64,7 @@
   [../]
 []
 
-[Physics/SolidMechanics/LineElementMaster]
+[Physics/SolidMechanics/LineElement/QuasiStatic]
   displacements = 'disp_x disp_y disp_z'
   rotations = 'rot_x rot_y rot_z'
 
