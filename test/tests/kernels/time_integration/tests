@@ -1,5 +1,5 @@
 [Tests]
-  [./newmark]
+  [newmark]
     type = 'Exodiff'
     input = 'newmark.i'
     exodiff = 'newmark_out.e'
@@ -7,14 +7,14 @@
     requirement = 'The Newmark time integration scheme in MASTODON shall calculate results that are equal to analytical calculations.'
     design = 'timeintegrators/NewmarkBeta.md'
     issues = '#12185'
-  [../]
-  [./hht]
+  []
+  [hht]
     type = 'Exodiff'
     input = 'hht.i'
     exodiff = 'hht_out.e'
     verification = 'hht.md'
     requirement = 'The HHT time integration scheme in MASTODON shall calculate results that are equal to analytical calculations.'
-    design = 'tensor_mechanics/Dynamics.md'
+    design = 'solid_mechanics/Dynamics.md'
     issues = '#5537'
-  [../]
+  []
 []
