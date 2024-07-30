@@ -12,7 +12,7 @@
 
 [MOOSE Webpage](https://mooseframework.inl.gov)
 
-### Description
+### Description 
 
 MASTODON is a MOOSE-based application for seismic analysis and risk assessment including linear and nonlinear site response and soil-structure interaction analysis.
 
