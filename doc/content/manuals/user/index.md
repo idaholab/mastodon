@@ -2,6 +2,8 @@
 
 !include include/misc/getting_started-user.md
 
+!include include/misc/units.md
+
 !include include/mesh/meshing-user.md
 
 !include include/bcs/bcs-user.md
