@@ -7,3 +7,7 @@
 !template! item key=system-purpose
 !include mastodon_srs.md start=system-purpose-begin end=system-purpose-finish
 !template-end!
+
+!template! item key=log-revisions
+No known log revisions exist for {{app}}
+!template-end!
