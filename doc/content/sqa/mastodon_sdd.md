@@ -24,7 +24,7 @@ this design, providing code objects that define specific aspects of the
 solutions for its physics that derive from the base classes defined by the
 MOOSE framework and the modules that it depends on.
 
-{{app}} provides specialized `Material` classes that define the constitutive behavior of soils and seismic protective systems that are often used in earthquake engineering. {{app}} also provides `DiracKernels` that describe the energy release during an earthquake, `BC`s that create an absorbing boundary to simulate an infinite domain, and miscellaneous `Action` and
+{{app}} provides specialized `Material` classes that define the constitutive behavior of soils, structures, and seismic protective systems that are often used in earthquake engineering. {{app}} also provides `DiracKernels` that describe the energy release during an earthquake, `BC`s that create an absorbing boundary to simulate an infinite domain, and miscellaneous `Action` and
 `VectorPostprocessor` classes to facilitate various aspects of these simulations. Much of the functionality of {{app}} is provided by the MOOSE modules that it builds on.
 !template-end!
 
@@ -35,7 +35,7 @@ on the MOOSE modules such as [Solid Mechanics](solid_mechanics/index.md) and
 [Fluid Structure Interaction](fsi/index.md) for much of its core functionality.
 The structure of {{app}} is based on defining C++ classes that derive from
 classes in the MOOSE framework or modules that provide functionality that is
-specifically tailored to the structural degradation problem. By using the
+specifically tailored to earthquake engineering and seismic risk assessment problems. By using the
 interfaces defined in MOOSE base classes for these classes, {{app}} is able to
 rely on MOOSE to execute these models at the appropriate times during the
 simulation and use their results in the desired ways.

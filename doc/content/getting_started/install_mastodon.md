@@ -37,7 +37,23 @@ git submodule update --init contrib/neml
 
 ## Compile and Test MASTODON
 
-After cloning, MASTODON should be compiled and tested before use. This step is the same
+It is necessary to build PETSc and libMesh within the MOOSE repository before building any application:
+
+```bash
+cd ~/projects/moose/scripts
+./update_and_rebuild_petsc.sh
+./update_and_rebuild_libmesh.sh
+```
+
+On a multiprocessor machine, this process can optionally be done in parallel by setting
+the `JOBS` environment variable equal to the number of processors to be used. For example, to
+build using 8 processors, the libMesh build script can be run as follows:
+
+```bash
+JOBS=8 ./update_and_rebuild_libmesh.sh
+```
+
+MASTODON should now be ready to be compiled and tested before use. This step is the same
 with or without BlackBear.
 
 ```bash
@@ -54,6 +70,9 @@ If the installation was successful you should see most of the tests passing (som
 skipped depending on your system environment).
 
 You now have a working copy of MASTODON.
+
+!alert note
+If you are having problems with installation, one option is to start fresh. You can do this by cleaning up the directory running ```make clobberall``` and restarting the compilation process in this section. 
 
 ## Update MASTODON
 
