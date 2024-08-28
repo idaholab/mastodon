@@ -2,6 +2,8 @@
 
 !include include/misc/getting_started-theory.md
 
+!include include/misc/units.md
+
 !include include/model/governing_equations-theory.md
 
 !include include/executioners/time_integration-theory.md
