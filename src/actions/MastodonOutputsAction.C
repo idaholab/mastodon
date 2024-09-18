@@ -65,11 +65,17 @@ MastodonOutputsAction::act()
 void
 MastodonOutputsAction::addStressStrainAuxVariables()
 {
-  FEType stress_strain_fe_type(CONSTANT, MONOMIAL);
+  auto var_params = _factory.getValidParams("MooseVariable");
+  var_params.set<MooseEnum>("family") = "MONOMIAL";
+  var_params.set<MooseEnum>("order") = "CONSTANT";
+
   for (std::size_t k = 0; k < _matrix_size[_problem->mesh().dimension() - 1]; k++)
   {
-    _problem->addAuxVariable(_stress_auxvariables[k], stress_strain_fe_type);
-    _problem->addAuxVariable(_strain_auxvariables[k], stress_strain_fe_type);
+    if (!_problem->hasVariable(_stress_auxvariables[k]))
+    {
+      _problem->addAuxVariable("MooseVariable", _stress_auxvariables[k], var_params);
+      _problem->addAuxVariable("MooseVariable", _strain_auxvariables[k], var_params);
+    }
   }
 }
 
