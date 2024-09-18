@@ -71,8 +71,11 @@ MastodonOutputsAction::addStressStrainAuxVariables()
 
   for (std::size_t k = 0; k < _matrix_size[_problem->mesh().dimension() - 1]; k++)
   {
-    _problem->addAuxVariable("MooseVariable", _stress_auxvariables[k], var_params);
-    _problem->addAuxVariable("MooseVariable", _strain_auxvariables[k], var_params);
+    if (!_problem->hasVariable(_stress_auxvariables[k]))
+    {
+      _problem->addAuxVariable("MooseVariable", _stress_auxvariables[k], var_params);
+      _problem->addAuxVariable("MooseVariable", _strain_auxvariables[k], var_params);
+    }
   }
 }
 
