@@ -6,7 +6,5 @@
 int
 main(int argc, char * argv[])
 {
-  Moose::main<MastodonTestApp>(argc, argv);
-
-  return 0;
+  return Moose::main<MastodonTestApp>(argc, argv);
 }
