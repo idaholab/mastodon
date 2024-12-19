@@ -5,6 +5,9 @@ Content:
         root_dir: ${MOOSE_DIR}/framework/doc/content
     python:
         root_dir: ${MOOSE_DIR}/python/doc/content
+        content: # Allow all except civet extension documentation (not enabled). Remove this subsection if extension is enabled.
+            - python/**
+            - ~python/MooseDocs/extensions/civet.md
     contact:
         root_dir: ${MOOSE_DIR}/modules/contact/doc/content
     fluid_properties:
