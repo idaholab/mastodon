@@ -4,7 +4,7 @@
     input = 'asr_confined.i'
     exodiff = 'asr_confined_strip_out.e'
     custom_cmp = 'asr_confined.cmp'
-    required_objects = 'ConcreteASREigenstrain ConcreteASRMicrocrackingDamage PorousMediaBase'
+    capabilities = 'blackbearapp'
     requirement = 'Mastodon shall provide the ability to link in and use concrete degradation models from BlackBear'
     issues = '#277'
     design = 'ConcreteASREigenstrain.md ConcreteASRMicrocrackingDamage.md ConcreteThermalMoisture.md'
