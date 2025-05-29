@@ -1,11 +1,11 @@
 [Tests]
-issues = '#2'
-design = 'LayerInterfaceIndicator.md'
+  issues = '#2'
+  design = 'LayerInterfaceIndicator.md'
   [./test]
     type = Exodiff
     input = auto_adapt.i
     exodiff = auto_adapt_out.e
-    vtk = true
+    capabilities = 'vtk'
     requirement = 'Mastodon shall create a mesh using the shear wave indicator and minimum element size marker'
   [../]
 []

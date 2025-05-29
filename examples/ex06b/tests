@@ -2,7 +2,7 @@
   [./ex06b]
     type = RunApp
     input = stabilize_isoil.i
-    method = opt
+    capabilities = 'method=opt'
     check_input = True
   [../]
 [../]
