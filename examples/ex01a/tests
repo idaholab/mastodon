@@ -2,7 +2,7 @@
   [./ex01a]
     type = RunApp
     input = HYS_darendeli.i
-    method = opt
+    capabilities = 'method=opt'
     check_input = True
   [../]
 [../]

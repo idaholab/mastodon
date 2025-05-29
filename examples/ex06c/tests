@@ -2,7 +2,7 @@
   [./ex06c]
     type = RunApp
     input = stabilize_lc.i
-    method = opt
+    capabilities = 'method=opt'
     check_input = True
   [../]
 [../]

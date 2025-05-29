@@ -4,6 +4,6 @@
     input = '2BlockFriction_Isoilunit.i'
     cli_args = Executioner/num_steps=2
     allow_warnings = true
-    method = opt
+    capabilities = 'method=opt'
   [../]
 [../]

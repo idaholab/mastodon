@@ -2,13 +2,13 @@
   [./ex13_site_response]
     type = RunApp
     input = site_response/sr_input.i
-    method = opt
+    capabilities = 'method=opt'
     check_input = True
   []
   [./ex13_fixed_base]
     type = RunApp
     input = fixed_base/fixed_base.i
-    method = opt
+    capabilities = 'method=opt'
     check_input = True
   []
 []

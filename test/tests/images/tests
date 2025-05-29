@@ -4,7 +4,7 @@
     type = Exodiff
     input = three_layer.i
     exodiff = three_layer_out.e
-    vtk = true
+    capabilities = 'vtk'
 
     design = "ImageFunction.md"
     issues = "#2"
