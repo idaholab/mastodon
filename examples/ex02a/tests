@@ -2,7 +2,7 @@
   [./ex02a]
     type = RunApp
     input = HYS_GQH.i
-    method = opt
+    capabilities = 'method=opt'
     check_input = True
   [../]
 [../]

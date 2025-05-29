@@ -35,6 +35,9 @@ MastodonApp::registerApps()
 {
   registerApp(MastodonApp);
   ModulesApp::registerApps();
+#ifdef BLACKBEAR_ENABLED
+  BlackBearApp::registerApps();
+#endif
 }
 
 void

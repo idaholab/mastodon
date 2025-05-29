@@ -5,7 +5,7 @@
     type = Exodiff
     input = minimum_element_size.i
     exodiff = minimum_element_size_out.e
-    vtk = true
+    capabilities = 'vtk'
 
     requirement = "The MinimumElementSizeMarker shall accurately mark an element for mesh refinement if the minimum element size is greater than that recommended by the specified indicator."
   [../]
@@ -13,7 +13,7 @@
     type = Exodiff
     input = minimum_element_size_value.i
     exodiff = minimum_element_size_value_out.e
-    vtk = true
+    capabilities = 'vtk'
 
     requirement = "The MinimumElementSizeMarker shall accurately mark an element for mesh refinement if the minimum element size is greater than that recommended by user specified value."
   [../]

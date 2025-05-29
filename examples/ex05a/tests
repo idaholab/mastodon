@@ -2,7 +2,7 @@
   [./ex05a]
     type = RunApp
     input = StickModel_accel_base.i
-    method = opt
+    capabilities = 'method=opt'
     check_input = True
   [../]
 [../]

@@ -3,6 +3,6 @@
     type = RunApp
     input = 'shear_beam_Isoil_free_field_explicit.i'
     cli_args = Executioner/num_steps=2
-    method = opt
+    capabilities = 'method=opt'
   [../]
 [../]

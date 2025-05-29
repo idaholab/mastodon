@@ -2,7 +2,7 @@
   [./ex06a]
     type = RunApp
     input = psf_grav.i
-    method = opt
+    capabilities = 'method=opt'
     check_input = True
   [../]
 [../]

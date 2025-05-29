@@ -2,7 +2,7 @@
   [./tutorial]
     type = RunApp
     input = site_response_1.i
-    method = opt
+    capabilities = 'method=opt'
     check_input = True
   [../]
 [../]
