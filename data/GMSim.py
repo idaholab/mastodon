@@ -1,4 +1,3 @@
-from re import T
 import numpy as np
 from scipy.stats import gamma
 import sys
