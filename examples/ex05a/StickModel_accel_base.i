@@ -58,7 +58,7 @@
 [Kernels]
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
-    zeta = 0.0005438894818 # stiffness proportional damping
+    stiffness_damping_coefficient = 0.0005438894818
     block = 15
   [../]
   [./inertia_x]

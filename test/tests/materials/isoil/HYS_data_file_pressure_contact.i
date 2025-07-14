@@ -103,7 +103,7 @@
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
     use_displaced_mesh = false
-    zeta = 0.00006366
+    stiffness_damping_coefficient = 0.00006366
   [../]
   [./inertia_x]
     type = InertialForce

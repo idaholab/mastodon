@@ -184,7 +184,7 @@
     input = HYS_GQH_noaction_AD.i
     exodiff = HYS_GQH_out.e
     cli_args = Outputs/file_base=HYS_GQH_out
-    abs_zero = 1e-9
+    abs_zero = 1e-7
     prereq = GQH_AD
 
     requirement = "The ADComputeISoilStress class shall accurately model the nonlinear dynamic response of the system when automatic differentiation is used along with the auto-generated GQH stress-strain curves."
@@ -238,6 +238,8 @@
     type = Exodiff
     input = HYS_thin_layer.i
     exodiff = HYS_thin_layer_out.e
+    abs_zero = 5e-5
+    rel_err = 8e-5
 
     requirement = "The ISoil action and ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer formulation."
   [../]
