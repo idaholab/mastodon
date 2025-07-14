@@ -118,7 +118,11 @@ MastodonModelAction::addDynamicTensorMechanicsAction()
   InputParameters action_params =
       _action_factory.getValidParams("LegacyDynamicTensorMechanicsAction");
   action_params.set<std::vector<VariableName>>("displacements") = dim_disp_variables;
-  action_params.applyParameters(parameters());
+  action_params.applyParameters(parameters(), {"eta", "zeta"});
+  action_params.set<MaterialPropertyName>("mass_damping_coefficient") =
+      getParam<MaterialPropertyName>("eta");
+  action_params.set<MaterialPropertyName>("stiffness_damping_coefficient") =
+      getParam<MaterialPropertyName>("zeta");
   // Create the action and add it to the action warehouse
   std::shared_ptr<Action> dynamictensormechanics_action =
       std::static_pointer_cast<Action>(_action_factory.create(

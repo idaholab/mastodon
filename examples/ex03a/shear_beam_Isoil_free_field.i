@@ -47,7 +47,7 @@
 [Kernels]
   [./DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
-    zeta = 0.000781
+    stiffness_damping_coefficient = 0.000781
   [../]
   [./inertia_x]
     type = InertialForce

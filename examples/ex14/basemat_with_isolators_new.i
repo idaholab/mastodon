@@ -117,9 +117,9 @@
   [DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
     block = 'upper_basemat'
-    alpha = -0.05
+    hht_alpha = -0.05
     static_initialization = true
-    zeta = 0.0019
+    stiffness_damping_coefficient = 0.0019
   []
   [inertia_x]
     type = InertialForce
