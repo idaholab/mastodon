@@ -148,7 +148,8 @@
   start_time = 0
   end_time = 2.0
   l_tol = 1e-12
-  nl_abs_tol = 1e-12
+  nl_abs_tol = 1e-15
+  nl_rel_tol = 1e-12
   dt = 0.01
   timestep_tolerance = 1e-12
 []
