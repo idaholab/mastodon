@@ -82,7 +82,7 @@
     displacements = 'disp_x disp_y'
     block = 0
     save_in = 'resid_x resid_y'
-    zeta = 0.00006366
+    stiffness_damping_coefficient = 0.00006366
   [../]
   [./inertia_x]
     type = InertialForce

@@ -72,7 +72,7 @@
     use_displaced_mesh = false
   []
   [DynamicTensorMechanics]
-    zeta = 0.00006366
+    stiffness_damping_coefficient = 0.00006366
     displacements = 'disp_x disp_y disp_z'
     block = 'roof ext_buttresses ext_walls int_buttresses SG_bases int_wall int_slab RV_housing small_walls basemat RV SGs RV_slab' # 99 98 97 96 95 94'
   []

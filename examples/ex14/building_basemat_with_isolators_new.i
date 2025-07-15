@@ -117,9 +117,9 @@
   [DynamicTensorMechanics]
     displacements = 'disp_x disp_y disp_z'
     block = 'roof ext_buttresses ext_walls int_buttresses SG_bases SGs int_wall int_slab RV_housing RV small_walls upper_basemat fluid_material RV_slab'
-    alpha = -0.05
+    hht_alpha = -0.05
     static_initialization = true
-    zeta = 0.0019
+    stiffness_damping_coefficient = 0.0019
   []
   [inertia_x]
     type = InertialForce

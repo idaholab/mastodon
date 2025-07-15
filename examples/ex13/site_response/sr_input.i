@@ -48,7 +48,7 @@
 
 [Kernels]
   [DynamicTensorMechanics]
-    zeta = 0.0017490 #1.5% 1-20hz
+    stiffness_damping_coefficient = 0.0017490 #1.5% 1-20hz
     displacements = 'disp_x disp_y disp_z'
     static_initialization = true
   []
