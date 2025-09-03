@@ -199,7 +199,7 @@
   []
   [out1]
     type = Checkpoint
-    interval = 1
+    time_step_interval = 1
     num_files = 2
   []
 []

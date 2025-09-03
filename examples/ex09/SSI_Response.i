@@ -328,6 +328,6 @@
   [./out2]
     type = Exodus
     file_base = Exod_SSI_NoDamp_RigidStr
-    interval = 10
+    time_step_interval = 10
   [../]
 []

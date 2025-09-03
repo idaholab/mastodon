@@ -342,6 +342,6 @@
   [./screen]
    type = Console
    max_rows = 1
-   interval = 1000
+   time_step_interval = 1000
   [../]
 []

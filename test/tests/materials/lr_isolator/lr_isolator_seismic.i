@@ -520,5 +520,5 @@
   csv = true
   exodus = true
   perf_graph = true
-  # interval = 10
+  # time_step_interval = 10
 []
