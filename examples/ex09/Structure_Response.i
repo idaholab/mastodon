@@ -310,6 +310,6 @@
   [./out2]
     type = Exodus
     file_base = Exod_Str_Final_NoDamp
-    interval = 10
+    time_step_interval = 10
   [../]
 []
