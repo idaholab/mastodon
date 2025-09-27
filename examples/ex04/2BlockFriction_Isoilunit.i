@@ -226,27 +226,27 @@
 [../]
 [./initial_zztop]
   type = ParsedFunction
-  value = '8792.0 * -9.81 * (21.0 - z)'
+  expression = '8792.0 * -9.81 * (21.0 - z)'
 [../]
 [./initial_ytop]
   type = ParsedFunction
-  value = '8792.0 * -9.81 * (21.0 - z) * 0.2/0.8'
+  expression = '8792.0 * -9.81 * (21.0 - z) * 0.2/0.8'
 [../]
 [./initial_zzmid]
   type = ParsedFunction
-  value = '-862495.2 - 2500.0 * -9.81 * (11.0 - z)'
+  expression = '-862495.2 - 2500.0 * -9.81 * (11.0 - z)'
 [../]
 [./initial_ymid]
   type = ParsedFunction
-  value = '(-862495.2 - 2500.0 * -9.81 * (11.0 - z)) * 0.45/0.55'
+  expression = '(-862495.2 - 2500.0 * -9.81 * (11.0 - z)) * 0.45/0.55'
 [../]
 [./initial_zzbot]
   type = ParsedFunction
-  value = '-887020.2 - 2500.0 * -9.81 * (10.0 - z)'
+  expression = '-887020.2 - 2500.0 * -9.81 * (10.0 - z)'
 [../]
 [./initial_ybot]
   type = ParsedFunction
-  value = '(-887020.2 - 2500.0 * -9.81 * (10.0 - z)) * 0.3/0.7'
+  expression = '(-887020.2 - 2500.0 * -9.81 * (10.0 - z)) * 0.3/0.7'
 [../]
 []
 
