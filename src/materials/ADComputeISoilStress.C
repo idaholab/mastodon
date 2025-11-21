@@ -402,6 +402,7 @@ ADComputeISoilStress::initQpStatefulProperties()
   // Get the position of the current id in the layer_ids array
   _pos = find(_layer_ids.begin(), _layer_ids.end(), _current_id) - _layer_ids.begin();
 
+  using std::sqrt, std::pow;
   if (_wave_speed_calculation)
   {
     ADReal initial_youngs = 0.0;
@@ -410,12 +411,12 @@ ADComputeISoilStress::initQpStatefulProperties()
 
     // shear wave speed is sqrt(shear_modulus/density)
     (*_shear_wave_speed)[_qp] =
-        std::sqrt(initial_youngs / (2.0 * (1.0 + _poissons_ratio[_pos])) / (*_density)[_qp]);
+        sqrt(initial_youngs / (2.0 * (1.0 + _poissons_ratio[_pos])) / (*_density)[_qp]);
 
     // P wave speed is sqrt(P wave modulus/density)
     (*_P_wave_speed)[_qp] =
-        std::sqrt(initial_youngs * (1.0 - _poissons_ratio[_pos]) / (1.0 + _poissons_ratio[_pos]) /
-                  (1.0 - 2.0 * _poissons_ratio[_pos]) / (*_density)[_qp]);
+        sqrt(initial_youngs * (1.0 - _poissons_ratio[_pos]) / (1.0 + _poissons_ratio[_pos]) /
+             (1.0 - 2.0 * _poissons_ratio[_pos]) / (*_density)[_qp]);
   }
 
   // determine the lateral and vertical stresses
@@ -427,16 +428,15 @@ ADComputeISoilStress::initQpStatefulProperties()
   if (_pressure_dependency)
   {
     if (!MooseUtils::absoluteFuzzyEqual(mean_stress - _p0, 0.0))
-      _stiffness_pressure_correction = std::pow((mean_stress - _p0) / _p_ref[_pos], _b_exp);
+      _stiffness_pressure_correction = pow((mean_stress - _p0) / _p_ref[_pos], _b_exp);
     else
       _stiffness_pressure_correction = 0.0;
 
     if (!MooseUtils::absoluteFuzzyEqual(
             _a0 + _a1 * (mean_stress - _p0) + _a2 * (mean_stress - _p0) * (mean_stress - _p0), 0.0))
       _strength_pressure_correction =
-          std::sqrt(_a0 + _a1 * (mean_stress - _p0) +
-                    _a2 * (mean_stress - _p0) * (mean_stress - _p0)) /
-          std::sqrt(_a0 + _a1 * (_p_ref[_pos]) + _a2 * (_p_ref[_pos]) * (_p_ref[_pos]));
+          sqrt(_a0 + _a1 * (mean_stress - _p0) + _a2 * (mean_stress - _p0) * (mean_stress - _p0)) /
+          sqrt(_a0 + _a1 * (_p_ref[_pos]) + _a2 * (_p_ref[_pos]) * (_p_ref[_pos]));
     else
       _strength_pressure_correction = 0.0;
   }
@@ -461,7 +461,7 @@ ADComputeISoilStress::initQpStatefulProperties()
       ADReal J2_model = dev_model.doubleContraction(dev_model);
       ADReal dev_stress_model = 0.0;
       if (!MooseUtils::absoluteFuzzyEqual(J2_model, 0.0))
-        dev_stress_model = std::sqrt(3.0 / 2.0 * J2_model);
+        dev_stress_model = sqrt(3.0 / 2.0 * J2_model);
       if (dev_stress_model > _yield_stress[_pos][i] * _strength_pressure_correction)
         dev_model *= (_yield_stress[_pos][i] * _strength_pressure_correction) / dev_stress_model;
 
@@ -492,10 +492,12 @@ ADComputeISoilStress::computeStress()
   if (_t_step == 0)
     return;
 
+  using std::round, std::pow, std::sqrt;
+
   // Determine the current id for the soil. The variable which is a Real must be
   // converted to a unsigned int for lookup, so first
   // it is rounded to avoid Real values that are just below the desired value.
-  _current_id = static_cast<unsigned int>(std::round(_soil_layer_variable[_qp]));
+  _current_id = static_cast<unsigned int>(round(_soil_layer_variable[_qp]));
 
   // Get the position of the current id in the layer_ids array
   _pos = find(_layer_ids.begin(), _layer_ids.end(), _current_id) - _layer_ids.begin();
@@ -513,16 +515,15 @@ ADComputeISoilStress::computeStress()
   if (_pressure_dependency)
   {
     if (!MooseUtils::absoluteFuzzyEqual(mean_stress - _p0, 0.0))
-      _stiffness_pressure_correction = std::pow((mean_stress - _p0) / _p_ref[_pos], _b_exp);
+      _stiffness_pressure_correction = pow((mean_stress - _p0) / _p_ref[_pos], _b_exp);
     else
       _stiffness_pressure_correction = 0.0;
 
     if (!MooseUtils::absoluteFuzzyEqual(
             _a0 + _a1 * (mean_stress - _p0) + _a2 * (mean_stress - _p0) * (mean_stress - _p0), 0.0))
       _strength_pressure_correction =
-          std::sqrt(_a0 + _a1 * (mean_stress - _p0) +
-                    _a2 * (mean_stress - _p0) * (mean_stress - _p0)) /
-          std::sqrt(_a0 + _a1 * (_p_ref[_pos]) + _a2 * (_p_ref[_pos]) * (_p_ref[_pos]));
+          sqrt(_a0 + _a1 * (mean_stress - _p0) + _a2 * (mean_stress - _p0) * (mean_stress - _p0)) /
+          sqrt(_a0 + _a1 * (_p_ref[_pos]) + _a2 * (_p_ref[_pos]) * (_p_ref[_pos]));
     else
       _strength_pressure_correction = 0.0;
   }
@@ -566,7 +567,7 @@ ADComputeISoilStress::computeStress()
         _deviatoric_trial_stress.doubleContraction(_deviatoric_trial_stress);
 
     if (!MooseUtils::absoluteFuzzyEqual(_dev_trial_stress_squared, 0.0))
-      _effective_trial_stress = std::sqrt(3.0 / 2.0 * _dev_trial_stress_squared);
+      _effective_trial_stress = sqrt(3.0 / 2.0 * _dev_trial_stress_squared);
 
     // check yield condition and calculate plastic strain
     _yield_condition =
@@ -649,8 +650,9 @@ ADComputeISoilStress::computeSoilLayerProperties(
     // scaling
     for (std::size_t i = 0; i < number; i++)
     {
+      using std::sqrt;
       youngs[k][i] = G0_component[i] * 2.0 * (1.0 + poissons_ratio[k]);
-      yield_stress[k][i] = yield_stress[k][i] * std::sqrt(3.0) / (2.0 * (1.0 + poissons_ratio[k]));
+      yield_stress[k][i] = yield_stress[k][i] * sqrt(3.0) / (2.0 * (1.0 + poissons_ratio[k]));
     }
   }
   for (std::size_t k = 0; k < layer_ids.size(); k++)
