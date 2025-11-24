@@ -74,7 +74,7 @@ BeamMeshGenerator::generate()
     mooseError("BeamMeshGenerator: Mesh file should contain separate sections with node and "
                "element information.");
 
-  std::unique_ptr<ReplicatedMesh> mesh = libmesh_make_unique<ReplicatedMesh>(comm(), 2);
+  std::unique_ptr<ReplicatedMesh> mesh = std::make_unique<ReplicatedMesh>(comm(), 2);
 
   mesh->set_mesh_dimension(1);
   mesh->set_spatial_dimension(3);
