@@ -115,7 +115,7 @@ template <bool is_ad>
 void
 ComputeIsotropicElasticityTensorSoilTempl<is_ad>::computeQpElasticityTensor()
 {
-
+  using std::sqrt, std::max;
   _P_wave_modulus = _layer_shear_modulus[_qp] * 2.0 * (1.0 - _layer_poissons_ratio[_qp]) /
                     (1.0 - 2.0 * _layer_poissons_ratio[_qp]);
 
@@ -124,10 +124,10 @@ ComputeIsotropicElasticityTensorSoilTempl<is_ad>::computeQpElasticityTensor()
   if (_wave_speed_calculation)
   {
     // Shear wave speed: sqrt(G/rho)
-    (*_shear_wave_speed)[_qp] = std::sqrt(_layer_shear_modulus[_qp] / _density[_qp]);
+    (*_shear_wave_speed)[_qp] = sqrt(_layer_shear_modulus[_qp] / _density[_qp]);
 
     // P wave speed: sqrt(M/rho)
-    (*_P_wave_speed)[_qp] = std::sqrt(_P_wave_modulus / _density[_qp]);
+    (*_P_wave_speed)[_qp] = sqrt(_P_wave_modulus / _density[_qp]);
   }
 
   std::vector<Real> iso_const(2);
@@ -140,9 +140,9 @@ ComputeIsotropicElasticityTensorSoilTempl<is_ad>::computeQpElasticityTensor()
   // Effective stiffness computations
   Real elas_mod = _layer_shear_modulus[_qp] * 2.0 * (1.0 + _layer_poissons_ratio[_qp]);
   _effective_stiffness_local =
-      std::max(std::sqrt((elas_mod * (1 - _layer_poissons_ratio[_qp])) /
-                         ((1 + _layer_poissons_ratio[_qp]) * (1 - 2 * _layer_poissons_ratio[_qp]))),
-               std::sqrt(elas_mod / (2 * (1 + _layer_poissons_ratio[_qp]))));
+      max(sqrt((elas_mod * (1 - _layer_poissons_ratio[_qp])) /
+               ((1 + _layer_poissons_ratio[_qp]) * (1 - 2 * _layer_poissons_ratio[_qp]))),
+          sqrt(elas_mod / (2 * (1 + _layer_poissons_ratio[_qp]))));
 
   // Assign elasticity tensor at a given quad point
   _elasticity_tensor[_qp] = _Cijkl;

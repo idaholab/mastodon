@@ -59,7 +59,7 @@ GroundMotionReader::execute(const std::string & name, const std::string & patter
   for (const std::string & filename : names)
   {
     std::unique_ptr<MooseUtils::DelimitedFileReader> reader =
-        libmesh_make_unique<MooseUtils::DelimitedFileReader>(filename);
+        std::make_unique<MooseUtils::DelimitedFileReader>(filename);
     reader->read();
     readers.emplace_back(std::move(reader));
   }
