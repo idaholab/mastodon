@@ -271,7 +271,7 @@ def GroundMotionSim(M, Dist, Rval, Vs30, F, n):
     Fc_t = np.zeros((len(t), 1))
     for j in range(nt):
         if tmod[j, 0] < tcost:
-            Fc_t[j, 0] = np.exp(fnot - ft * np.log(tmod[j]) - fm * M + fs * np.log(Vs30 / 800))
+            Fc_t[j, 0] = np.exp(fnot - ft * np.log(tmod[j][0]) - fm * M + fs * np.log(Vs30 / 800))
         elif tmod[j, 0] >= tcost:
             Fc_t[j, 0] = np.exp(fnot - ft * np.log(tcost) - fm * M + fs * np.log(Vs30 / 800))
 
@@ -305,8 +305,8 @@ def GroundMotionSim(M, Dist, Rval, Vs30, F, n):
             (-1 / (2 * sigmas ** 2)) * (np.log(t[i]) - mus) ** 2)
 
     # Accounting for Arias Intensity in Equation (21)
-    inteP = np.trapz(PaP, t)
-    inteS = np.trapz(precoda, t)
+    inteP = np.trapezoid(PaP, t)
+    inteS = np.trapezoid(precoda, t)
     AI_fact_P = AI / inteP
     AI_fact_S = AI / inteS
     Pa_P = PaP * AI_fact_P
@@ -331,7 +331,7 @@ def GroundMotionSim(M, Dist, Rval, Vs30, F, n):
     Pa_t = np.append(Pa_t[:id_coda + 1], e, axis=0)
 
     # Accounting for time-dependence
-    inte = np.trapz(Pa_t, t)
+    inte = np.trapezoid(Pa_t, t)
     AI_fact = AI / inte
     Pa_t *= AI_fact
 
