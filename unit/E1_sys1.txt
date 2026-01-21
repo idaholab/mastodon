@@ -1,0 +1,3 @@
+sys1, OR, aGATE1, aGATE2, 
+aGATE1, AND, A, B,
+aGATE2, OR, C, G
