@@ -6,7 +6,7 @@
     input = 'one_seismic_source.i'
     exodiff = 'one_seismic_source_out.e'
     abs_zero = 1e-06
-    compiler = 'GCC CLANG'
+    capabilities = '(compiler=gcc | compiler=clang)'
 
     requirement = "The SeismicSource action and the SeismicSource class shall accurately apply a point source at the user-provided point within the computational domain."
   [../]
