@@ -6,7 +6,6 @@
     input = 'force_one_point.i'
     exodiff = 'force_one_point_out.e'
     abs_zero = 1e-06
-    compiler = 'GCC CLANG'
 
     requirement = "The FunctionPointForce class shall accurately apply the force at any point within an element."
   [../]
@@ -15,7 +14,6 @@
     input = 'force_multi_point.i'
     exodiff = 'force_multi_point_out.e'
     abs_zero = 1e-06
-    compiler = 'GCC CLANG'
 
     requirement = "The FunctionPointForce class shall accurately apply a force at multiple points within the computational domain."
   [../]

@@ -6,7 +6,7 @@
     input = 'seismic_force_test_x_y.i'
     exodiff = 'seismic_force_test_x_y_out.e'
     max_parallel = 1
-    method = 'opt'
+    capabilities = 'method=opt'
 
     requirement = "The SeismicForce class shall accurately convert the user-provided input velocities to shear tractions at the boundary."
   [../]
@@ -16,7 +16,7 @@
     input = 'seismic_force_test_z.i'
     exodiff = 'seismic_force_test_z_out.e'
     max_parallel = 1
-    method = 'opt'
+    capabilities = 'method=opt'
     rel_err = 1e-5
     abs_zero = 2e-3
 
