@@ -9,7 +9,7 @@ class MastodonApp : public MooseApp
 {
 public:
   static InputParameters validParams();
-  MastodonApp(InputParameters parameters);
+  MastodonApp(const InputParameters & parameters);
   static void registerApps();
   static void registerAll(Factory &, ActionFactory &, Syntax &);
 };
