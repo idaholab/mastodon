@@ -70,7 +70,7 @@ MastodonApp::registerAll(Factory & factory, ActionFactory & action_factory, Synt
 
   syntax.registerActionSyntax("MastodonOutputsAction", "Mastodon/Outputs");
 
-  registerDataFilePath();
+  registerAppDataFilePath("mastodon");
 }
 
 extern "C" void
