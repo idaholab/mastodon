@@ -25,7 +25,7 @@ MastodonApp::validParams()
 // dependent apps know about the MastodonApp label.
 registerKnownLabel("MastodonApp");
 
-MastodonApp::MastodonApp(InputParameters parameters) : MooseApp(parameters)
+MastodonApp::MastodonApp(const InputParameters & parameters) : MooseApp(parameters)
 {
   MastodonApp::registerAll(_factory, _action_factory, _syntax);
 }
