@@ -232,11 +232,11 @@
   [../]
   [./initial_zz]
     type = ParsedFunction
-    value = '-2000.0 * 9.81 * (2.0 - z)'
+    expression = '-2000.0 * 9.81 * (2.0 - z)'
   [../]
   [./initial_xx]
     type = ParsedFunction
-    value = '-2000.0 * 9.81 * (2.0 - z) * 0.3/0.7'
+    expression = '-2000.0 * 9.81 * (2.0 - z) * 0.3/0.7'
   [../]
 []
 

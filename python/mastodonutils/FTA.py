@@ -10,6 +10,7 @@ minimal cutsets, minimal cutset probabilities, system level probability,
 importance measures, and the system risk of unacceptable performance. The
 description of each individual class and their usage is below.
 """
+
 import os
 
 
@@ -24,6 +25,7 @@ class Event(object):
         prob[list]: [Mean/Median,sd] for Basic events,
                         use None for Intermediate events.
     """
+
     # Define the node operators
     OR = 0
     AND = 1
@@ -50,11 +52,15 @@ class Event(object):
     def operator(self, value):
         """Set the operator attribute"""
         if value not in [Event.AND, Event.OR, None]:
-            raise TypeError("The operator must be one of the following: Event.AND, "
-                            "Event.OR, or None")
+            raise TypeError(
+                "The operator must be one of the following: Event.AND, "
+                "Event.OR, or None"
+            )
         if self.__children and value is None:
-            raise AttributeError("The operator can not be set to None (i.e., a basic node) because "
-                                 "the Event has children.")
+            raise AttributeError(
+                "The operator can not be set to None (i.e., a basic node) because "
+                "the Event has children."
+            )
         self.__operator = value
 
     @property
@@ -70,8 +76,10 @@ class Event(object):
         if not all(isinstance(v, Event) for v in values):
             raise TypeError("Supplied values must be Event objects.")
         if self.__operator is None:
-            raise AttributeError("The node is a basic node (i.e., the operator attribute is not "
-                                 "set), therefore it can not have children.")
+            raise AttributeError(
+                "The node is a basic node (i.e., the operator attribute is not "
+                "set), therefore it can not have children."
+            )
         self.__children = values
 
     @property
@@ -85,16 +93,22 @@ class Event(object):
         distribution = dist[0]
         antype = dist[1]
         if self.__operator is not None:
-            raise AttributeError("'%s' is not a basic node (i.e., the operator attribute is "
-                                 "set), therefore it can not have distribution." % (self.__name))
-        if antype == 'Fragility':
-            if distribution not in ['LNORM', 'PE']:
-                raise TypeError("The dist. of '%s' for fragility must be "
-                                "one of the following: LNORM, PE" % (self.__name))
+            raise AttributeError(
+                "'%s' is not a basic node (i.e., the operator attribute is "
+                "set), therefore it can not have distribution." % (self.__name)
+            )
+        if antype == "Fragility":
+            if distribution not in ["LNORM", "PE"]:
+                raise TypeError(
+                    "The dist. of '%s' for fragility must be "
+                    "one of the following: LNORM, PE" % (self.__name)
+                )
         else:
-            if distribution not in ['PE', 'NORM']:
-                raise TypeError("The dist. of '%s' for risk must be "
-                                "one of the following: PE, NORM" % (self.__name))
+            if distribution not in ["PE", "NORM"]:
+                raise TypeError(
+                    "The dist. of '%s' for risk must be "
+                    "one of the following: PE, NORM" % (self.__name)
+                )
         self.__dist = distribution
 
     @property
@@ -113,51 +127,71 @@ class Event(object):
         nsamp = values[4]
         seed = values[5]
         if not isinstance(prob, list):
-            raise TypeError("The supplied items of '%s' must be a list." % (self.__name))
+            raise TypeError(
+                "The supplied items of '%s' must be a list." % (self.__name)
+            )
 
         import numpy
         import scipy.stats
+
         numpy.random.seed(seed)
         if antype == "Fragility":
-            if self.__dist == 'LNORM':
+            if self.__dist == "LNORM":
                 if len(prob) != 2:
-                    raise IndexError("The distribution of '%s' requires two inputs: "
-                                     "Mean/Median and Standard_Deviaton" % (self.__name))
+                    raise IndexError(
+                        "The distribution of '%s' requires two inputs: "
+                        "Mean/Median and Standard_Deviaton" % (self.__name)
+                    )
                 for i in range(0, len(im)):
-                    self.__prob.append(scipy.stats.norm.cdf(numpy.log(im[i]/prob[0])/prob[1]))
-            if self.__dist == 'PE':
+                    self.__prob.append(
+                        scipy.stats.norm.cdf(numpy.log(im[i] / prob[0]) / prob[1])
+                    )
+            if self.__dist == "PE":
                 if len(prob) != 1:
-                    raise IndexError("Point Estimate of '%s' requires only one input: "
-                                     "Mean/Median probability" % (self.__name))
+                    raise IndexError(
+                        "Point Estimate of '%s' requires only one input: "
+                        "Mean/Median probability" % (self.__name)
+                    )
                     if (prob[0] > 1) or (prob[0] < 0):
-                        raise ValueError("PE of '%s' should be between 0 & 1" % (self.__name))
-                self.__prob = prob*len(im)
+                        raise ValueError(
+                            "PE of '%s' should be between 0 & 1" % (self.__name)
+                        )
+                self.__prob = prob * len(im)
             if uc:
-                raise IOError("Uncertainty option is not currently available for Fragility analysis. "
-                              "Please change uncertainty to False or use Risk analysis option.")
+                raise IOError(
+                    "Uncertainty option is not currently available for Fragility analysis. "
+                    "Please change uncertainty to False or use Risk analysis option."
+                )
         else:
-            if self.__dist == 'PE':
+            if self.__dist == "PE":
                 if len(prob) != 1:
-                    raise IndexError("Point Estimate of '%s' requires only one input: "
-                                     "Mean/Median probability" % (self.__name))
+                    raise IndexError(
+                        "Point Estimate of '%s' requires only one input: "
+                        "Mean/Median probability" % (self.__name)
+                    )
                 if (prob[0] > 1) or (prob[0] < 0):
-                    raise ValueError("PE of '%s' should be between 0 & 1" % (self.__name))
-            if self.__dist != 'PE':
+                    raise ValueError(
+                        "PE of '%s' should be between 0 & 1" % (self.__name)
+                    )
+            if self.__dist != "PE":
                 if len(prob) != 2:
-                    raise IndexError("The distribution of '%s' requires two inputs: "
-                                     "Mean/Median and Standard_Deviaton" % (self.__name))
+                    raise IndexError(
+                        "The distribution of '%s' requires two inputs: "
+                        "Mean/Median and Standard_Deviaton" % (self.__name)
+                    )
             if not uc:
-                if self.__dist == 'PE':
-                    self.__prob = prob*2
-                if self.__dist == 'NORM':
-                    self.__prob = [numpy.clip(prob[0], 0, 1)]*2
+                if self.__dist == "PE":
+                    self.__prob = prob * 2
+                if self.__dist == "NORM":
+                    self.__prob = [numpy.clip(prob[0], 0, 1)] * 2
             if uc:
-                if self.__dist == 'PE':
-                    self.__prob = prob*(nsamp+1)
-                if self.__dist == 'NORM':
+                if self.__dist == "PE":
+                    self.__prob = prob * (nsamp + 1)
+                if self.__dist == "NORM":
                     self.__prob = [numpy.clip(prob[0], 0, 1)]
                     self.__prob.append(
-                        numpy.clip(numpy.random.normal(prob[0], prob[1], nsamp), 0, 1))
+                        numpy.clip(numpy.random.normal(prob[0], prob[1], nsamp), 0, 1)
+                    )
 
     def __eq__(self, other):
         """
@@ -171,8 +205,11 @@ class Event(object):
         elif isinstance(other, Event):
             return self.__name == other.name
         else:
-            raise TypeError("Comparison with between '{}' type is not valid.".
-                            format(type(other).__name__))
+            raise TypeError(
+                "Comparison with between '{}' type is not valid.".format(
+                    type(other).__name__
+                )
+            )
 
     def __str__(self):
         """
@@ -190,9 +227,11 @@ class Event(object):
         """
         Helper for creating a str of the complete tree.
         """
-        out = '{}{} (Operator: {})'.format(' '*2*level, self.__name, str(self.__operator))
+        out = "{}{} (Operator: {})".format(
+            " " * 2 * level, self.__name, str(self.__operator)
+        )
         for child in self.children:
-            out += '\n' + child._dump(level+1)  # pylint: disable=protected-access
+            out += "\n" + child._dump(level + 1)  # pylint: disable=protected-access
         return out
 
 
@@ -380,10 +419,14 @@ class FaultTree(object):
             lines = fid.readlines()
 
         for line in lines:
-            items = line.split(',')
-            events.append([items[0].strip(),
-                           operator[items[1].strip().upper()],
-                           [x.strip() for x in items[2:]]])
+            items = line.split(",")
+            events.append(
+                [
+                    items[0].strip(),
+                    operator[items[1].strip().upper()],
+                    [x.strip() for x in items[2:]],
+                ]
+            )
         return events
 
 
@@ -487,8 +530,21 @@ class Quantification(object):
                              written in the approach_2 folder.
     """
 
-    def __init__(self, name, logic, basic_events, analysis='default', hazard=None, IM=None,
-                 nbins=15, uncertainty=False, nsamp=1, seed=None, lite=False, write_output=False):
+    def __init__(
+        self,
+        name,
+        logic,
+        basic_events,
+        analysis="default",
+        hazard=None,
+        IM=None,
+        nbins=15,
+        uncertainty=False,
+        nsamp=1,
+        seed=None,
+        lite=False,
+        write_output=False,
+    ):
 
         # name
         self.__name = name
@@ -507,14 +563,14 @@ class Quantification(object):
 
         # Number of samples
         # TODO: throw error if nsamp is provided but uc is false
-        self.__nsamp = self.__parValue(nsamp, 'nsamp')
+        self.__nsamp = self.__parValue(nsamp, "nsamp")
 
         # Uncertainty Analysis
         self.__uc = uncertainty
 
         # set seed for the uncertainty analysis
         # TODO: throw error if seed is provided but uc is false
-        self.__seed = self.__parValue(seed, 'seed')
+        self.__seed = self.__parValue(seed, "seed")
 
         # If true, a 'lite' version of quantification will be performed as
         # described above
@@ -526,8 +582,14 @@ class Quantification(object):
         if self.__antype.lower() == "fragility":
             # read Hazard curve
             if hazard is None:
-                self.__hazard = [[0.0608, 0.01], [0.2124, 0.001], [0.4, 0.0001],
-                                 [0.629, 1e-05], [0.9344, 1e-06], [1.3055, 1e-07]]
+                self.__hazard = [
+                    [0.0608, 0.01],
+                    [0.2124, 0.001],
+                    [0.4, 0.0001],
+                    [0.629, 1e-05],
+                    [0.9344, 1e-06],
+                    [1.3055, 1e-07],
+                ]
             else:
                 self.__hazard = self.__readHazardFile(hazard)
 
@@ -543,7 +605,7 @@ class Quantification(object):
             if len(IM) == 2:
                 self.__imrang = IM
                 # Number of bins for Intensity Measure
-                self.__nbins = self.__parValue(nbins, 'nbins')
+                self.__nbins = self.__parValue(nbins, "nbins")
                 # list of Intensity Measure bin values and the extents of the bins
                 self.__im, self.__imextents = self.__bins(self.__imrang, self.__nbins)
             # If a list is provided assume that the list is the bin extents and
@@ -552,34 +614,57 @@ class Quantification(object):
             # input nbins is ignored
             if len(IM) > 2:
                 self.__imextents = IM
-                self.__im = range(len(IM)-1) # initializing im
+                self.__im = range(len(IM) - 1)  # initializing im
                 self.__nbins = len(IM) - 1
                 from numpy import sqrt
+
                 for i in range(0, len(self.__im)):
-                    self.__im[i] = sqrt(IM[i] * IM[i+1]) # geomean
+                    self.__im[i] = sqrt(IM[i] * IM[i + 1])  # geomean
 
             # Interpolating/Exterpolating hazard curve based on Intensity Measure bin values
-            self.__haz_freq, self.__haz_freq_deltas = self.__hazInterp(self.__hazard, self.__im, self.__imextents)
+            self.__haz_freq, self.__haz_freq_deltas = self.__hazInterp(
+                self.__hazard, self.__im, self.__imextents
+            )
 
             # dictionary of basic events (event objects) for fragility input
-            self.__bnodes_frag = self.__BEprob(self.__bas_events, self.__antype, self.__logic.nodes,
-                                               self.__im, self.__nsamp, self.__uc, self.__seed)
+            self.__bnodes_frag = self.__BEprob(
+                self.__bas_events,
+                self.__antype,
+                self.__logic.nodes,
+                self.__im,
+                self.__nsamp,
+                self.__uc,
+                self.__seed,
+            )
 
             # Top event fragility (lognormal parameters and plot)
             self.__topfragility, self.__ln = self.__TOPfragility(
-                self.__Min_max, self.__mcsets, self.__MCprob,
-                self.__lnparameters, self.__im)
+                self.__Min_max,
+                self.__mcsets,
+                self.__MCprob,
+                self.__lnparameters,
+                self.__im,
+            )
 
             # Calculating top event risk using approach 2
-            self.__bins_top_risk_2 = [x*y for x, y in zip(self.__topfragility, self.__haz_freq_deltas)]
-            self.__bins_top_risk_2_mod = [x*y for x, y in zip(self.__topfragility, self.__haz_freq)]
+            self.__bins_top_risk_2 = [
+                x * y for x, y in zip(self.__topfragility, self.__haz_freq_deltas)
+            ]
+            self.__bins_top_risk_2_mod = [
+                x * y for x, y in zip(self.__topfragility, self.__haz_freq)
+            ]
             self.__top_risk_2 = [sum(self.__bins_top_risk_2)]
 
             # Writing the results from approach 2
             if self.__write_output:
-                self.__approach_2_results(self.__name, self.__im, self.__haz_freq,
-                                          self.__topfragility, self.__haz_freq_deltas,
-                                          self.__bins_top_risk_2)
+                self.__approach_2_results(
+                    self.__name,
+                    self.__im,
+                    self.__haz_freq,
+                    self.__topfragility,
+                    self.__haz_freq_deltas,
+                    self.__bins_top_risk_2,
+                )
 
             if not (self.__lite):
                 # dictionary of basic events risk (convolving fragility and hazard)
@@ -592,11 +677,20 @@ class Quantification(object):
             self.__im = None
 
             # dictionary of basic events risk (risk inputs)
-            self.__bnodes = self.__BEprob(self.__bas_events, self.__antype, self.__logic.nodes,
-                                          self.__im, self.__nsamp, self.__uc, self.__seed)
+            self.__bnodes = self.__BEprob(
+                self.__bas_events,
+                self.__antype,
+                self.__logic.nodes,
+                self.__im,
+                self.__nsamp,
+                self.__uc,
+                self.__seed,
+            )
 
         else:
-            raise ValueError("The analysis type should be either `fragility` or `risk`.")
+            raise ValueError(
+                "The analysis type should be either `fragility` or `risk`."
+            )
 
         if not self.__lite:
             # list of lists of minimal cutset probabilities
@@ -607,7 +701,7 @@ class Quantification(object):
             self.__top_rare = [sum(i) for i in zip(*self.__mc_prob)]
             self.__top_rare_stat = self.__IMstat([self.__top_rare])
             # 2. Upper Bound Approximation
-            self.__top_upper_bound = self.__Intermediate_event(self.__mc_prob, 'OR')
+            self.__top_upper_bound = self.__Intermediate_event(self.__mc_prob, "OR")
             self.__top_ub_stat = self.__IMstat([self.__top_upper_bound])
             # 3. Min-Max approach
             self.__top_exact = self.__Min_max(self.__mcsets, self.__MCprob)
@@ -615,25 +709,48 @@ class Quantification(object):
 
             # Importance Measures
             import collections
-            self.__top_cal = collections.OrderedDict([('MCS Upper Bound', self.__top_ub_stat),
-                                                      ('Rare Event', self.__top_rare_stat),
-                                                      ('Min Max', self.__top_exact_stat)])
+
+            self.__top_cal = collections.OrderedDict(
+                [
+                    ("MCS Upper Bound", self.__top_ub_stat),
+                    ("Rare Event", self.__top_rare_stat),
+                    ("Min Max", self.__top_exact_stat),
+                ]
+            )
             # minimal cut set Fussel-Vesely Important Measures
             self.__mc_im = self.__MCim(self.__mc_prob, self.__top_upper_bound)
             # basic event Importance Measures
             self.__count, self.__be_im = self.__BEim(
-                self.__mcsets, self.__mc_prob, self.__top_upper_bound,
-                self.__bnodes, self.__bas_events, self.__MCprob,
-                self.__Intermediate_event, self.__nsamp, self.__uc, self.__seed,
-                self.__IMstat, self.__antype, self.__im)
+                self.__mcsets,
+                self.__mc_prob,
+                self.__top_upper_bound,
+                self.__bnodes,
+                self.__bas_events,
+                self.__MCprob,
+                self.__Intermediate_event,
+                self.__nsamp,
+                self.__uc,
+                self.__seed,
+                self.__IMstat,
+                self.__antype,
+                self.__im,
+            )
 
             # Results to csv format
             self.__write_output = write_output
             if self.__write_output:
-                self.__approach_1_results(self.__name, self.__top_upper_bound,
-                                          self.__mcsets, self.__mc_prob, self.__mc_im,
-                                          self.__top_cal, self.__bas_events,
-                                          self.__count, self.__bnodes, self.__be_im)
+                self.__approach_1_results(
+                    self.__name,
+                    self.__top_upper_bound,
+                    self.__mcsets,
+                    self.__mc_prob,
+                    self.__mc_im,
+                    self.__top_cal,
+                    self.__bas_events,
+                    self.__count,
+                    self.__bnodes,
+                    self.__be_im,
+                )
 
     @property
     def name(self):
@@ -697,18 +814,27 @@ class Quantification(object):
     def toprisk_1(self):
         """Return TOP event risk using approach 1"""
         if self.__lite:
-            raise IOError("top_risk_1, which is the risk calculated from Approach 1 "
-                          "is only available for a full analysis. Currently, the parameter "
-                          "lite is set to True and only an Approach 2 analysis is performed.")
+            raise IOError(
+                "top_risk_1, which is the risk calculated from Approach 1 "
+                "is only available for a full analysis. Currently, the parameter "
+                "lite is set to True and only an Approach 2 analysis is performed."
+            )
         else:
             return (self.__top_upper_bound[0], self.__top_rare[0], self.__top_exact[0])
 
     @property
     def toprisk_2_info(self):
         """Return the bin IM, bin hazard, bin fragility, bin hazard delta, and
-           the top risk for each bin (haz delta * fragility) that was used to
-           calculate the TOP event risk using approach 2"""
-        return (self.__im, self.__haz_freq, self.__topfragility, self.__haz_freq_deltas, self.__bins_top_risk_2, self.__bins_top_risk_2_mod)
+        the top risk for each bin (haz delta * fragility) that was used to
+        calculate the TOP event risk using approach 2"""
+        return (
+            self.__im,
+            self.__haz_freq,
+            self.__topfragility,
+            self.__haz_freq_deltas,
+            self.__bins_top_risk_2,
+            self.__bins_top_risk_2_mod,
+        )
 
     @property
     def toprisk_2(self):
@@ -718,12 +844,12 @@ class Quantification(object):
     @property
     def be_im_ratio(self):
         """Return the basic event ratio importance measures"""
-        return (self.__be_im['BE_fv'], self.__be_im['BE_rrr'], self.__be_im['BE_rir'])
+        return (self.__be_im["BE_fv"], self.__be_im["BE_rrr"], self.__be_im["BE_rir"])
 
     @property
     def be_im_diff(self):
         """Return the basic event difference importance measures"""
-        return (self.__be_im['BE_rri'], self.__be_im['BE_rii'], self.__be_im['BE_bi'])
+        return (self.__be_im["BE_rri"], self.__be_im["BE_rii"], self.__be_im["BE_bi"])
 
     def __str__(self):
         """
@@ -752,7 +878,10 @@ class Quantification(object):
                 bnodes[name] = bnode
             else:
                 import warnings
-                warnings.warn("Basic event is not used in logic of the fault tree: " + name)
+
+                warnings.warn(
+                    "Basic event is not used in logic of the fault tree: " + name
+                )
                 bnode = Event(name)
                 bnode.dist = (dist, antype)
                 # Probabilites of the nodes are assigned in the event class
@@ -775,7 +904,7 @@ class Quantification(object):
             temp = list(cutsets[i])
             for j in range(0, len(temp)):
                 xm.append(temp[j].prob)
-            temp1 = Quantification.__Intermediate_event(xm, 'AND')
+            temp1 = Quantification.__Intermediate_event(xm, "AND")
             min_cut.append(temp1)
         return min_cut
 
@@ -786,7 +915,7 @@ class Quantification(object):
         """
         im = []
         for i in range(0, len(mc_prob)):
-            im.append([100*x/y for x, y in zip(mc_prob[i], top_ub)])
+            im.append([100 * x / y for x, y in zip(mc_prob[i], top_ub)])
         return im
 
     ################## Exact probability calculation ##################
@@ -797,10 +926,11 @@ class Quantification(object):
         approach (exact)
         """
         import itertools
+
         sub = []
         # Evaluating the sets that occur in the union of the sets in
         # the variable, cutsets
-        for l in range(1, len(cutsets)+1):
+        for l in range(1, len(cutsets) + 1):
             for subset in itertools.combinations(cutsets, l):
                 subset = set(list(itertools.chain(*subset)))
                 sub.append(list(subset))
@@ -816,8 +946,9 @@ class Quantification(object):
         Helper function for calculating nCr
         """
         import math
+
         f = math.factorial
-        return f(nval) / f(rval) / f(nval-rval)
+        return f(nval) / f(rval) / f(nval - rval)
 
     @staticmethod
     def __Min_exact(prob, cutsets):
@@ -827,16 +958,16 @@ class Quantification(object):
         """
         cm = []
         for i in range(0, len(cutsets)):
-            cm.append(Quantification.__nCr(len(cutsets), i+1))
+            cm.append(Quantification.__nCr(len(cutsets), i + 1))
         ones = []
         for i in range(0, len(cm)):
-            if i%2 == 0:
+            if i % 2 == 0:
                 for j in range(0, int(cm[i])):
-                    ones.append([1]*len(prob[0]))
-            if i%2 == 1:
+                    ones.append([1] * len(prob[0]))
+            if i % 2 == 1:
                 for _ in range(0, int(cm[i])):
-                    ones.append([-1]*len(prob[0]))
-        sum_all_terms = [[a*b for a, b in zip(x, y)] for x, y in zip(ones, prob)]
+                    ones.append([-1] * len(prob[0]))
+        sum_all_terms = [[a * b for a, b in zip(x, y)] for x, y in zip(ones, prob)]
         sum_all_terms = [sum(j) for j in zip(*sum_all_terms)]
         return sum_all_terms
 
@@ -856,11 +987,33 @@ class Quantification(object):
     ### Interval Importance : Risk Reduction Interval,Risk Increase Interval, Birnbaum Importance
 
     @staticmethod
-    def __BEim(mcsets, mc_prob, top_ub, bnodes, bas_events, mcprob, int_evnt,
-               nsamp, uncert, seed, stat, antype, intmes):
+    def __BEim(
+        mcsets,
+        mc_prob,
+        top_ub,
+        bnodes,
+        bas_events,
+        mcprob,
+        int_evnt,
+        nsamp,
+        uncert,
+        seed,
+        stat,
+        antype,
+        intmes,
+    ):
         import collections
-        be_im = collections.OrderedDict([('BE_fv', []), ('BE_rrr', []), ('BE_rir', []),
-                                         ('BE_rri', []), ('BE_rii', []), ('BE_bi', [])])
+
+        be_im = collections.OrderedDict(
+            [
+                ("BE_fv", []),
+                ("BE_rrr", []),
+                ("BE_rir", []),
+                ("BE_rri", []),
+                ("BE_rii", []),
+                ("BE_bi", []),
+            ]
+        )
         be_count = []
         be_index = []
         be_fv = []
@@ -882,27 +1035,27 @@ class Quantification(object):
             be_index.append(temp)
 
             # F1: minimal cut set upper bound evaluated with basic event probability set to one
-            bnodes[key[0]].dist = ('PE', "risk")
+            bnodes[key[0]].dist = ("PE", "risk")
             bnodes[key[0]].prob = ([1], "risk", intmes, uncert, nsamp, seed)
             mc_prob1 = mcprob(mcsets)
-            f1 = int_evnt(mc_prob1, 'OR')
+            f1 = int_evnt(mc_prob1, "OR")
 
             # F0: minimal cut set upper bound evaluated with basic event probability set to zero
             bnodes[key[0]].prob = ([0], "risk", intmes, uncert, nsamp, seed)
             mc_prob0 = mcprob(mcsets)
-            f0 = int_evnt(mc_prob0, 'OR')
+            f0 = int_evnt(mc_prob0, "OR")
 
             if count != 0:
                 temp1 = [mc_prob[item] for item in be_index[i]]
                 # Fi: MCS upper bound evaluated for all MCS containing i'th basic event
-                fi = int_evnt(temp1, 'OR')
+                fi = int_evnt(temp1, "OR")
                 # Ratio and Interval Importance Measures
-                be_fv.append([x/y for x, y in zip(fi, top_ub)])
-                be_rrr.append([y/x for x, y in zip(f0, top_ub)])
-                be_rri.append([y-x for x, y in zip(f0, top_ub)])
-                be_rir.append([x/y for x, y in zip(f1, top_ub)])
-                be_rii.append([x-y for x, y in zip(f1, top_ub)])
-                be_bi.append([x-y for x, y in zip(f1, f0)])
+                be_fv.append([x / y for x, y in zip(fi, top_ub)])
+                be_rrr.append([y / x for x, y in zip(f0, top_ub)])
+                be_rri.append([y - x for x, y in zip(f0, top_ub)])
+                be_rir.append([x / y for x, y in zip(f1, top_ub)])
+                be_rii.append([x - y for x, y in zip(f1, top_ub)])
+                be_bi.append([x - y for x, y in zip(f1, f0)])
             else:
                 be_fv.append([0, [0]])
                 be_rrr.append([0, [0]])
@@ -911,20 +1064,20 @@ class Quantification(object):
                 be_rii.append([0, [0]])
                 be_bi.append([0, [0]])
 
-            if antype == 'Fragility':
-                bnodes[key[0]].dist = ('PE', "risk")
+            if antype == "Fragility":
+                bnodes[key[0]].dist = ("PE", "risk")
                 bnodes[key[0]].prob = ([prob[0]], "risk", intmes, uncert, nsamp, seed)
             else:
                 bnodes[key[0]].dist = (key[1], "risk")
                 bnodes[key[0]].prob = (key[2], "risk", intmes, uncert, nsamp, seed)
 
         #### Statistics of importance measures
-        be_im['BE_fv'] = stat(be_fv)
-        be_im['BE_rrr'] = stat(be_rrr)
-        be_im['BE_rir'] = stat(be_rir)
-        be_im['BE_rri'] = stat(be_rri)
-        be_im['BE_rii'] = stat(be_rii)
-        be_im['BE_bi'] = stat(be_bi)
+        be_im["BE_fv"] = stat(be_fv)
+        be_im["BE_rrr"] = stat(be_rrr)
+        be_im["BE_rir"] = stat(be_rir)
+        be_im["BE_rri"] = stat(be_rri)
+        be_im["BE_rii"] = stat(be_rii)
+        be_im["BE_bi"] = stat(be_bi)
         return be_count, be_im
 
     @staticmethod
@@ -933,6 +1086,7 @@ class Quantification(object):
         Function calculates the statistics of Importance measures
         """
         import numpy as np
+
         im_stat = []
         for i in range(0, len(impmes)):
             imp_array = impmes[i][1]
@@ -963,11 +1117,12 @@ class Quantification(object):
         Function calculates the probability of intersection/union of sets
         """
         from operator import mul, sub
-        if gate == 'AND':
+
+        if gate == "AND":
             return [reduce(mul, x) for x in zip(*dep_events)]
-        if gate == 'OR':
-            temp = [reduce(mul, map(sub, [1]*len(x), x)) for x in zip(*dep_events)]
-            return [x-y for x, y in zip([1]*len(temp), temp)]
+        if gate == "OR":
+            temp = [reduce(mul, map(sub, [1] * len(x), x)) for x in zip(*dep_events)]
+            return [x - y for x, y in zip([1] * len(temp), temp)]
 
     @staticmethod
     def __bins(imrange, nbins):
@@ -976,9 +1131,10 @@ class Quantification(object):
         """
         im = []
         import numpy as np
-        imext = np.linspace(imrange[0], imrange[1], nbins+1)
-        for i in range(0, len(imext)-1):
-            im.append(0.5*(imext[i]+imext[i+1]))
+
+        imext = np.linspace(imrange[0], imrange[1], nbins + 1)
+        for i in range(0, len(imext) - 1):
+            im.append(0.5 * (imext[i] + imext[i + 1]))
         return im, imext
 
     @staticmethod
@@ -988,9 +1144,11 @@ class Quantification(object):
         using least square fit
         """
         from scipy.optimize import curve_fit
-        (logpara, logcov) = curve_fit(Quantification.__logcdf, intmes, fragility, maxfev=1000)
-        return logpara, logcov
 
+        logpara, logcov = curve_fit(
+            Quantification.__logcdf, intmes, fragility, maxfev=1000
+        )
+        return logpara, logcov
 
     @staticmethod
     def __logcdf(intmes, amedian, beta):
@@ -998,6 +1156,7 @@ class Quantification(object):
         Function for fitting conditional probabilities into a lognormal cdf
         """
         from scipy.stats import lognorm
+
         return lognorm.cdf(intmes, beta, loc=0, scale=amedian)
 
     @staticmethod
@@ -1010,17 +1169,19 @@ class Quantification(object):
 
         from scipy import interpolate
         import numpy as np
+
         # Linear interpolation in the log-log scale interpretation of the
         # hazard curve. This is in accordance with ASCE 43, where the hazard
         # curve is assumed to be multi linear in the log-log scale
-        yinterp = interpolate.interp1d(np.log10(haz_im), np.log10(haz_freq),
-                                       fill_value='extrapolate')
-        y_interp = 10**yinterp(np.log10(im))
+        yinterp = interpolate.interp1d(
+            np.log10(haz_im), np.log10(haz_freq), fill_value="extrapolate"
+        )
+        y_interp = 10 ** yinterp(np.log10(im))
         # Calculating hazard deltas that will be used in convolution
-        y_interp_ext = 10**yinterp(np.log10(imext))
+        y_interp_ext = 10 ** yinterp(np.log10(imext))
         deltas = []
-        for i in range(0, len(y_interp_ext)-1):
-            deltas.append(y_interp_ext[i] - y_interp_ext[i+1])
+        for i in range(0, len(y_interp_ext) - 1):
+            deltas.append(y_interp_ext[i] - y_interp_ext[i + 1])
 
         # Plot Hazard Curve
         # fig, ax = plt.subplots()
@@ -1046,7 +1207,7 @@ class Quantification(object):
         and Whittaker for a description of the convolution.
         """
         for key in bnodes:
-            risk = [sum([x*y for x, y in zip(bnodes[key].prob, deltas)])]
+            risk = [sum([x * y for x, y in zip(bnodes[key].prob, deltas)])]
             bnodes[key].dist = ("PE", "risk")
             bnodes[key].prob = (risk, "risk", None, False, 1, None)
         return bnodes
@@ -1056,19 +1217,24 @@ class Quantification(object):
         """
         Function for raising input errors (nbins, nsamp, seed)
         """
-        if name == 'seed':
+        if name == "seed":
             if value != None:
                 if not isinstance(value, int):
-                    raise TypeError("The supplied value of %s must be an integer." % (name))
-                if (value < 0) or (value > 2**32-1):
-                    raise ValueError("The supplied value of %s must be a +ve integer." % (name))
+                    raise TypeError(
+                        "The supplied value of %s must be an integer." % (name)
+                    )
+                if (value < 0) or (value > 2**32 - 1):
+                    raise ValueError(
+                        "The supplied value of %s must be a +ve integer." % (name)
+                    )
         else:
             if not isinstance(value, int):
                 raise TypeError("The supplied value of %s must be an integer." % (name))
             if value <= 0:
-                raise ValueError("The supplied value of %s must be a +ve integer." % (name))
+                raise ValueError(
+                    "The supplied value of %s must be a +ve integer." % (name)
+                )
         return value
-
 
     @staticmethod
     def __readHazardFile(fname):
@@ -1083,16 +1249,23 @@ class Quantification(object):
                 with open(fname) as fid:
                     lines = fid.readlines()
                 for line in lines:
-                    items = line.split(',')
+                    items = line.split(",")
                     if len(items) > 2:
-                        raise IOError("The hazard file {} should only have two items per row.".format(fname))
+                        raise IOError(
+                            "The hazard file {} should only have two items per row.".format(
+                                fname
+                            )
+                        )
                     else:
                         data.append([float(items[0].strip()), float(items[1].strip())])
         elif isinstance(fname, list):
             data = fname
         else:
             raise TypeError(
-                "The supplied input for hazard, {}, must be a filename or a list.".format(fname))
+                "The supplied input for hazard, {}, must be a filename or a list.".format(
+                    fname
+                )
+            )
         return data
 
     @staticmethod
@@ -1108,89 +1281,173 @@ class Quantification(object):
                 with open(fname) as fid:
                     lines = fid.readlines()
                 for line in lines:
-                    items = line.split(',')
+                    items = line.split(",")
                     if len(items) > 2:
-                        data.append([items[0].strip(),
-                                     items[1].strip().upper(),
-                                     [float(x.strip()) for x in items[2:]]])
+                        data.append(
+                            [
+                                items[0].strip(),
+                                items[1].strip().upper(),
+                                [float(x.strip()) for x in items[2:]],
+                            ]
+                        )
                     else:
                         data.append([float(items[0].strip()), float(items[1].strip())])
         elif isinstance(fname, list):
             data = fname
         else:
             raise TypeError(
-                "The supplied input for basic_events, {}, must be a filename or a list.".format(fname))
+                "The supplied input for basic_events, {}, must be a filename or a list.".format(
+                    fname
+                )
+            )
         return data
 
     @staticmethod
-    def __approach_2_results(name, im, haz_freq, topfragility, haz_freq_deltas, bins_top_risk_2):
+    def __approach_2_results(
+        name, im, haz_freq, topfragility, haz_freq_deltas, bins_top_risk_2
+    ):
         """
         Function for writing approach 2 results in csv format
         """
         # Create a folder for results
-        if not os.path.exists(name+'_results'):
-            os.mkdir(name+'_results')
-        if not os.path.exists(name+'_results/approach_2'):
-            os.mkdir(name+'_results/approach_2')
+        if not os.path.exists(name + "_results"):
+            os.mkdir(name + "_results")
+        if not os.path.exists(name + "_results/approach_2"):
+            os.mkdir(name + "_results/approach_2")
         # Writing results into a csv file
         import csv
-        dirname = name + '_results/approach_2/'
-        with open(dirname+'results.csv', 'w') as f1:
-            writer = csv.writer(f1, delimiter=',', lineterminator='\n',)
-            writer.writerow(['bin#', 'im', 'mafe', 'top_failure_prob',
-                              'delta_mafe', 'bin_risk'])
-            for i, a in enumerate(im):
-                writer.writerow([i+1, im[i], haz_freq[i], topfragility[i],
-                                 haz_freq_deltas[i], bins_top_risk_2[i]])
 
+        dirname = name + "_results/approach_2/"
+        with open(dirname + "results.csv", "w") as f1:
+            writer = csv.writer(
+                f1,
+                delimiter=",",
+                lineterminator="\n",
+            )
+            writer.writerow(
+                ["bin#", "im", "mafe", "top_failure_prob", "delta_mafe", "bin_risk"]
+            )
+            for i, a in enumerate(im):
+                writer.writerow(
+                    [
+                        i + 1,
+                        im[i],
+                        haz_freq[i],
+                        topfragility[i],
+                        haz_freq_deltas[i],
+                        bins_top_risk_2[i],
+                    ]
+                )
 
     @staticmethod
-    def __approach_1_results(name, top_upper_bound, mcsets, mc_prob, mc_im, top_cal, bas_events, count,
-                  bnodes, be_im):
+    def __approach_1_results(
+        name,
+        top_upper_bound,
+        mcsets,
+        mc_prob,
+        mc_im,
+        top_cal,
+        bas_events,
+        count,
+        bnodes,
+        be_im,
+    ):
         """
         Function for writing approach 1 results in csv format.
         """
         # Create a folder for results
-        if not os.path.exists(name+'_results'):
-            os.mkdir(name+'_results')
-        if not os.path.exists(name+'_results/approach_1'):
-            os.mkdir(name+'_results/approach_1')
+        if not os.path.exists(name + "_results"):
+            os.mkdir(name + "_results")
+        if not os.path.exists(name + "_results/approach_1"):
+            os.mkdir(name + "_results/approach_1")
 
         # Writing results into separate csv files
         import csv
-        dirname = name + '_results/approach_1/'
-        with open(dirname+'cutsets.csv', 'w') as f1:
-            writer = csv.writer(f1, delimiter=',', lineterminator='\n',)
-            writer.writerows([['Cut Sets', 'Prob/Freq', 'IM (%)'],
-                              ['Total', top_upper_bound[0], '100']])
+
+        dirname = name + "_results/approach_1/"
+        with open(dirname + "cutsets.csv", "w") as f1:
+            writer = csv.writer(
+                f1,
+                delimiter=",",
+                lineterminator="\n",
+            )
+            writer.writerows(
+                [
+                    ["Cut Sets", "Prob/Freq", "IM (%)"],
+                    ["Total", top_upper_bound[0], "100"],
+                ]
+            )
             for i in range(0, len(mcsets)):
-                writer.writerow([str(list(mcsets[i])), mc_prob[i][0],
-                                 mc_im[i][0]])
+                writer.writerow([str(list(mcsets[i])), mc_prob[i][0], mc_im[i][0]])
 
-        with open(dirname+'top_event.csv', 'w') as f2:
-            writer = csv.writer(f2, delimiter=',', lineterminator='\n',)
-            writer.writerows([['Quantification Method', 'Prob/Freq', 'Mean',
-                               'Median', '5th', '95th', 'SD']])
+        with open(dirname + "top_event.csv", "w") as f2:
+            writer = csv.writer(
+                f2,
+                delimiter=",",
+                lineterminator="\n",
+            )
+            writer.writerows(
+                [
+                    [
+                        "Quantification Method",
+                        "Prob/Freq",
+                        "Mean",
+                        "Median",
+                        "5th",
+                        "95th",
+                        "SD",
+                    ]
+                ]
+            )
             for i, keyt in enumerate(top_cal):
-                row = [keyt] + [top_cal[keyt][0][k]
-                                for k in range(0, len(top_cal[keyt][0]))]
+                row = [keyt] + [
+                    top_cal[keyt][0][k] for k in range(0, len(top_cal[keyt][0]))
+                ]
                 writer.writerow(row)
 
-        with open(dirname+'importance_measures.csv', 'w') as f3:
-            writer = csv.writer(f3, delimiter=',', lineterminator='\n',)
-            writer.writerows([['Basic Event', 'Count', 'Prob', 'FV', 'RRR',
-                               'RIR', 'RRI', 'RII', 'BI']])
+        with open(dirname + "importance_measures.csv", "w") as f3:
+            writer = csv.writer(
+                f3,
+                delimiter=",",
+                lineterminator="\n",
+            )
+            writer.writerows(
+                [
+                    [
+                        "Basic Event",
+                        "Count",
+                        "Prob",
+                        "FV",
+                        "RRR",
+                        "RIR",
+                        "RRI",
+                        "RII",
+                        "BI",
+                    ]
+                ]
+            )
             for i, keyb in enumerate(bas_events):
-                row = [keyb[0]] + [count[i]] + \
-                    [bnodes[keyb[0]].prob[0]] + [be_im[key][i][0] for key in be_im]
+                row = (
+                    [keyb[0]]
+                    + [count[i]]
+                    + [bnodes[keyb[0]].prob[0]]
+                    + [be_im[key][i][0] for key in be_im]
+                )
                 writer.writerow(row)
 
-        wname = ['fv', 'rrr', 'rir', 'rri', 'rii', 'bi']
+        wname = ["fv", "rrr", "rir", "rri", "rii", "bi"]
         for i, key in enumerate(be_im):
-            with open(dirname+wname[i]+'.csv', 'w') as f4:
-                writer = csv.writer(f4, delimiter=',', lineterminator='\n',)
-                writer.writerows([['Basic Event', 'PE', 'Mean', 'Median', '5th', '95th', 'SD']])
+            with open(dirname + wname[i] + ".csv", "w") as f4:
+                writer = csv.writer(
+                    f4,
+                    delimiter=",",
+                    lineterminator="\n",
+                )
+                writer.writerows(
+                    [["Basic Event", "PE", "Mean", "Median", "5th", "95th", "SD"]]
+                )
                 for j, keyb in enumerate(bas_events):
-                    row = [keyb[0]] + [be_im[key][j][k]
-                                       for k in range(0, len(be_im[key][0]))]
+                    row = [keyb[0]] + [
+                        be_im[key][j][k] for k in range(0, len(be_im[key][0]))
+                    ]
                     writer.writerow(row)
