@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Tests for the FTA.Quantification object."""
+
 import unittest
 from mastodonutils.FTA import Quantification
 
@@ -15,99 +16,211 @@ class TestQuantification(unittest.TestCase):
         """
         # File Inputs
         with self.assertRaises(IOError) as cm:
-            Quantification(name='test', logic='not_a_valid_filename.txt', basic_events='not_a_valid_filename.txt',
-                           hazard='not_a_valid_filename.txt')
-        self.assertIn('does not exist', str(cm.exception))
+            Quantification(
+                name="test",
+                logic="not_a_valid_filename.txt",
+                basic_events="not_a_valid_filename.txt",
+                hazard="not_a_valid_filename.txt",
+            )
+        self.assertIn("does not exist", str(cm.exception))
 
         with self.assertRaises(TypeError) as cm:
-            Quantification(name='test', logic=42, basic_events=42, hazard=42)
+            Quantification(name="test", logic=42, basic_events=42, hazard=42)
         self.assertIn("must be a filename or a list.", str(cm.exception))
 
         # Inputs for Fragility
-        inputs = Quantification('test', 'logic1.txt', 'logic1_bas_events_LNORM.txt', analysis='Fragility',
-                                hazard='hazard.txt', IM=[0.1, 4], nbins=15)
-        self.assertEqual(inputs.logic, [['TE', 0, ['IE3', 'IE4']], ['IE4', 0, ['C4']],
-                                        ['IE3', 0, ['C3', 'IE2']], ['IE2', 1, ['C2', 'IE1']],
-                                        ['IE1', 0, ['C1']]])
-        self.assertEqual(inputs.basic_events, [['C1', 'LNORM', [1.88, 0.5]],
-                                               ['C2', 'LNORM', [3.78, 0.79]],
-                                               ['C3', 'LNORM', [2.33, 0.76]],
-                                               ['C4', 'LNORM', [3.66, 0.45]]])
-        self.assertEqual(inputs.antype, 'Fragility')
-        self.assertEqual(inputs.hazard, [[0.0608, 0.01], [0.2124, 0.001], [0.4, 0.0001],
-                                         [0.629, 1e-05], [0.9344, 1e-06], [1.3055, 1e-07]])
+        inputs = Quantification(
+            "test",
+            "logic1.txt",
+            "logic1_bas_events_LNORM.txt",
+            analysis="Fragility",
+            hazard="hazard.txt",
+            IM=[0.1, 4],
+            nbins=15,
+        )
+        self.assertEqual(
+            inputs.logic,
+            [
+                ["TE", 0, ["IE3", "IE4"]],
+                ["IE4", 0, ["C4"]],
+                ["IE3", 0, ["C3", "IE2"]],
+                ["IE2", 1, ["C2", "IE1"]],
+                ["IE1", 0, ["C1"]],
+            ],
+        )
+        self.assertEqual(
+            inputs.basic_events,
+            [
+                ["C1", "LNORM", [1.88, 0.5]],
+                ["C2", "LNORM", [3.78, 0.79]],
+                ["C3", "LNORM", [2.33, 0.76]],
+                ["C4", "LNORM", [3.66, 0.45]],
+            ],
+        )
+        self.assertEqual(inputs.antype, "Fragility")
+        self.assertEqual(
+            inputs.hazard,
+            [
+                [0.0608, 0.01],
+                [0.2124, 0.001],
+                [0.4, 0.0001],
+                [0.629, 1e-05],
+                [0.9344, 1e-06],
+                [1.3055, 1e-07],
+            ],
+        )
         self.assertEqual(inputs.imrang, [0.1, 4])
         self.assertEqual(inputs.nbins, 15)
 
         with self.assertRaises(TypeError) as cm:
-            Quantification('testInputs', 'logic1.txt', 'logic1_bas_events_LNORM.txt',
-                           analysis='Fragility', hazard='hazard.txt', IM=42)
-        self.assertEqual("The supplied items of IM range must be a list.", str(cm.exception))
+            Quantification(
+                "testInputs",
+                "logic1.txt",
+                "logic1_bas_events_LNORM.txt",
+                analysis="Fragility",
+                hazard="hazard.txt",
+                IM=42,
+            )
+        self.assertEqual(
+            "The supplied items of IM range must be a list.", str(cm.exception)
+        )
 
         with self.assertRaises(TypeError) as cm:
-            Quantification('testInputs', 'logic1.txt', 'logic1_bas_events_LNORM.txt',
-                           analysis='Fragility', hazard='hazard.txt', nbins=[42])
-        self.assertEqual("The supplied value of nbins must be an integer.", str(cm.exception))
+            Quantification(
+                "testInputs",
+                "logic1.txt",
+                "logic1_bas_events_LNORM.txt",
+                analysis="Fragility",
+                hazard="hazard.txt",
+                nbins=[42],
+            )
+        self.assertEqual(
+            "The supplied value of nbins must be an integer.", str(cm.exception)
+        )
 
         with self.assertRaises(ValueError) as cm:
-            Quantification('testInputs', 'logic1.txt', 'logic1_bas_events_LNORM.txt',
-                           analysis='Fragility', hazard='hazard.txt', nbins=-15)
-        self.assertEqual("The supplied value of nbins must be a +ve integer.",
-                         str(cm.exception))
+            Quantification(
+                "testInputs",
+                "logic1.txt",
+                "logic1_bas_events_LNORM.txt",
+                analysis="Fragility",
+                hazard="hazard.txt",
+                nbins=-15,
+            )
+        self.assertEqual(
+            "The supplied value of nbins must be a +ve integer.", str(cm.exception)
+        )
 
         # Inputs for Risk analysis (not fragility)
-        inputs = Quantification('testInputs', 'logic2.txt', 'logic2_bas_events_PE.txt', analysis='Risk')
-        self.assertEqual(inputs.logic, [['TOP', 1, ['GATE1', 'GATE2']],
-                                        ['GATE1', 0, ['FT-N/m-1', 'FT-N/m-2', 'FT-N/m-3']],
-                                        ['GATE2', 0, ['B1', 'B3', 'B4']],
-                                        ['GATE3', 0, ['B2', 'B4']],
-                                        ['FT-N/m-1', 1, ['GATE3', 'B3', 'B5']],
-                                        ['FT-N/m-2', 1, ['GATE3', 'B1']],
-                                        ['FT-N/m-3', 1, ['B3', 'B5', 'B1']]])
-        self.assertEqual(inputs.basic_events, [['B1', 'PE', [0.01]], ['B2', 'PE', [0.02]],
-                                               ['B3', 'PE', [0.03]], ['B4', 'PE', [0.04]],
-                                               ['B5', 'PE', [0.05]]])
-        self.assertNotEqual(inputs.antype, 'Fragility')
+        inputs = Quantification(
+            "testInputs", "logic2.txt", "logic2_bas_events_PE.txt", analysis="Risk"
+        )
+        self.assertEqual(
+            inputs.logic,
+            [
+                ["TOP", 1, ["GATE1", "GATE2"]],
+                ["GATE1", 0, ["FT-N/m-1", "FT-N/m-2", "FT-N/m-3"]],
+                ["GATE2", 0, ["B1", "B3", "B4"]],
+                ["GATE3", 0, ["B2", "B4"]],
+                ["FT-N/m-1", 1, ["GATE3", "B3", "B5"]],
+                ["FT-N/m-2", 1, ["GATE3", "B1"]],
+                ["FT-N/m-3", 1, ["B3", "B5", "B1"]],
+            ],
+        )
+        self.assertEqual(
+            inputs.basic_events,
+            [
+                ["B1", "PE", [0.01]],
+                ["B2", "PE", [0.02]],
+                ["B3", "PE", [0.03]],
+                ["B4", "PE", [0.04]],
+                ["B5", "PE", [0.05]],
+            ],
+        )
+        self.assertNotEqual(inputs.antype, "Fragility")
         self.assertEqual(inputs.uncertainty, False)
         self.assertEqual(inputs.nsamp, 1)
         self.assertEqual(inputs.seed, None)
 
         # Testing for input errors making sure parameters are input correctly
-        inputs = Quantification('testInputs', 'logic2.txt', 'logic2_bas_events_PE.txt', analysis='Risk',
-                                uncertainty=True, nsamp=1000, seed=436546754)
-        self.assertEqual(inputs.name, 'testInputs')
+        inputs = Quantification(
+            "testInputs",
+            "logic2.txt",
+            "logic2_bas_events_PE.txt",
+            analysis="Risk",
+            uncertainty=True,
+            nsamp=1000,
+            seed=436546754,
+        )
+        self.assertEqual(inputs.name, "testInputs")
         self.assertEqual(inputs.uncertainty, True)
         self.assertEqual(inputs.nsamp, 1000)
         self.assertEqual(inputs.seed, 436546754)
 
         # Testing for input type errors and value errors
         with self.assertRaises(TypeError) as cm:
-            Quantification('testInputs', 'logic2.txt', 'logic2_bas_events_PE.txt', analysis='Risk',
-                           uncertainty=True, nsamp=[1], seed=42.1)
-        self.assertEqual("The supplied value of nsamp must be an integer.", str(cm.exception))
+            Quantification(
+                "testInputs",
+                "logic2.txt",
+                "logic2_bas_events_PE.txt",
+                analysis="Risk",
+                uncertainty=True,
+                nsamp=[1],
+                seed=42.1,
+            )
+        self.assertEqual(
+            "The supplied value of nsamp must be an integer.", str(cm.exception)
+        )
 
         with self.assertRaises(TypeError) as cm:
-            Quantification('testInputs', 'logic2.txt', 'logic2_bas_events_PE.txt', analysis='Risk',
-                           uncertainty=True, nsamp=10, seed=42.0)
-        self.assertEqual("The supplied value of seed must be an integer.", str(cm.exception))
+            Quantification(
+                "testInputs",
+                "logic2.txt",
+                "logic2_bas_events_PE.txt",
+                analysis="Risk",
+                uncertainty=True,
+                nsamp=10,
+                seed=42.0,
+            )
+        self.assertEqual(
+            "The supplied value of seed must be an integer.", str(cm.exception)
+        )
 
         with self.assertRaises(ValueError) as cm:
-            Quantification('testInputs', 'logic2.txt', 'logic2_bas_events_PE.txt', analysis='Risk',
-                           uncertainty=True, nsamp=-10, seed=42.0)
-        self.assertEqual("The supplied value of nsamp must be a +ve integer.",
-                         str(cm.exception))
+            Quantification(
+                "testInputs",
+                "logic2.txt",
+                "logic2_bas_events_PE.txt",
+                analysis="Risk",
+                uncertainty=True,
+                nsamp=-10,
+                seed=42.0,
+            )
+        self.assertEqual(
+            "The supplied value of nsamp must be a +ve integer.", str(cm.exception)
+        )
 
         with self.assertRaises(ValueError) as cm:
-            Quantification('testInputs', 'logic2.txt', 'logic2_bas_events_PE.txt', analysis='Risk',
-                           uncertainty=True, nsamp=10, seed=-42)
-        self.assertEqual("The supplied value of seed must be a +ve integer.",
-                         str(cm.exception))
+            Quantification(
+                "testInputs",
+                "logic2.txt",
+                "logic2_bas_events_PE.txt",
+                analysis="Risk",
+                uncertainty=True,
+                nsamp=10,
+                seed=-42,
+            )
+        self.assertEqual(
+            "The supplied value of seed must be a +ve integer.", str(cm.exception)
+        )
 
     def testTOPrisk(self):
         """
         Function for asserting FTA top event risk.
         """
-        fta = Quantification('testTOPrisk', 'logic2.txt', 'logic2_bas_events_NORM.txt', analysis='Risk')
+        fta = Quantification(
+            "testTOPrisk", "logic2.txt", "logic2_bas_events_NORM.txt", analysis="Risk"
+        )
         self.assertRisk(fta)
         self.assertIMratio(fta.be_im_ratio)
         self.assertIMdiff(fta.be_im_diff)
@@ -174,5 +287,5 @@ class TestQuantification(unittest.TestCase):
         self.assertEqual(imdiff[2][4][0], 0.002097481139769597)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main(module=__name__, verbosity=2)
