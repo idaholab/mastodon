@@ -6,7 +6,7 @@
     input = 'lr_isolator_axial_ct.i'
     csvdiff = 'lr_isolator_axial_ct_out.csv'
     override_columns = 'reaction_x'
-    override_rel_err = '1e-6'
+    override_rel_err = '9e-5' # diffs with 9.9e-6 with -march=x86-64-v3
     override_abs_zero = '1e-7'
 
     requirement = "The ComputeLRIsolatorElasticity class shall accurately model the tensile and compressive response of the isolator."
