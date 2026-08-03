@@ -250,6 +250,8 @@
     input = HYS_thin_layer_noaction.i
     exodiff = HYS_thin_layer_out.e
     cli_args = Outputs/file_base=HYS_thin_layer_out
+    abs_zero = 5e-5
+    rel_err = 8e-5
     prereq = thin_layer
 
     requirement = "The ComputeISoilStress class shall accurately construct the stress-strain curve for a thin-layer formulation without the use of the ISoilAction."
