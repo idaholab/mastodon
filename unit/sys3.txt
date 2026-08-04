@@ -1,0 +1,3 @@
+sys3, OR, G1, G2
+G1, AND, A,B,C
+G2, OR, D, F
