@@ -1,0 +1,27 @@
+# Existing GoogleTests awaiting SQA metadata. New entries are prohibited; this list may only shrink.
+unit:
+  - GroundMotionReader.error
+  - GroundMotionReader.execute
+  - HazardCurve.execute
+  - ISoilUtils.computeCoulombBackbone
+  - ISoilUtils.computeDarendeliBackbone
+  - ISoilUtils.computeGQHBackBone
+  - ISoilUtils.computeSoilLayerProperties
+  - ISoilUtils.computeUserDefinedBackbone
+  - MastodonUtils.Regularize
+  - MastodonUtils.ResponseSpectrum
+  - MastodonUtils.adjust
+  - MastodonUtils.calcLogLikelihood
+  - MastodonUtils.checkEqual
+  - MastodonUtils.checkEqualSize
+  - MastodonUtils.glob
+  - MastodonUtils.greaterProbability
+  - MastodonUtils.isNegativeOrZero
+  - MastodonUtils.log10
+  - MastodonUtils.lognormalStandardDeviation
+  - MastodonUtils.maximizeLogLikelihood
+  - MastodonUtils.mean
+  - MastodonUtils.median
+  - MastodonUtils.percentile
+  - MastodonUtils.standardDeviation
+  - MastodonUtils.zeropad
