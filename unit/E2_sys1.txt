@@ -1,0 +1,3 @@
+sys1, OR, cGATE1, cGATE2, 
+cGATE1, AND, A, B,
+cGATE2, OR, C, D
