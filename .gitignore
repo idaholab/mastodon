@@ -26,6 +26,8 @@ peacock_run_exe_tmp.i
 *.py
 *.pyc
 !python/**/*.py
+!doc/**/*.py
+!test/**/*.py
 **/.ipynb_checkpoints
 
 # Allow certain files in gold directories
@@ -54,4 +56,4 @@ doc/doxygen/html
 !doc/content/media/**/*.png
 
 # Allow CSV in data directory
-!tests/data/**/*.csv
+!test/tests/data/**/*.csv

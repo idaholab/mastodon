@@ -1,0 +1,45 @@
+[Tests]
+  design = functions/BaselineCorrection.md
+  issues = '#296'
+
+  [prepare_data]
+    type = RunCommand
+    command = ./sine_wave.py
+    required_python_packages = numpy
+
+    requirement = "Generate a file containing the time series data for the correction_types test."
+  []
+
+  [correction_types]
+    type = CSVDiff
+    input = test.i
+    csvdiff = 'corrected_accel.csv corrected_vel.csv corrected_disp.csv'
+    prereq = prepare_data
+
+    requirement = "The system shall support applying various types of baseline corrections to "
+                  "discrete-time accelerations and evaluating the corrected acceleration, "
+                  "velocity, and displacement time histories."
+  []
+
+  [errors]
+    requirement = "The system shall report a reasonable error message when"
+
+    [bad_function_type]
+      type = RunException
+      input = errors.i
+      cli_args = Functions/error_test/function=bad_function
+      expect_err = "This must be the name of a PiecewiseLinear object"
+
+      detail = "the provided function is not an instance of PiecewiseLinear; and"
+    []
+    [tight_error_on_residual]
+      type = RunException
+      input = errors.i
+      cli_args = Functions/error_test/error_on_residual=1e-16
+      expect_err = "Failed to compute a least squares polynomial of degree \(10\) within the "
+                   "specified tolerance \(1e-16 <"
+
+      detail = "the relative residual error tolerance is smaller than what the solver achieved."
+    []
+  []
+[]
