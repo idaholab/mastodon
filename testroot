@@ -1,4 +1,3 @@
 app_name = mastodon
 allow_warnings = false
-allow_override = false
 allow_unused = false
