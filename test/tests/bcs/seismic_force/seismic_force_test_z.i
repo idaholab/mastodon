@@ -32,7 +32,10 @@
       type = TimePeriod
       disable_objects = 'Kernels/inertia_x Kernels/inertia_y Kernels/inertia_z AuxKernels/accel_x AuxKernels/accel_y AuxKernels/accel_z AuxKernels/vel_x AuxKernels/vel_y AuxKernels/vel_z'
       start_time = 0.0
-      end_time = 0.00125 # same as dt used in the analysis
+      # Disable the objects for the first time step (t = 0.1) only. The control is executed
+      # at the beginning of each time step so the enabling/disabling applies to the whole step.
+      end_time = 0.15
+      execute_on = 'INITIAL TIMESTEP_BEGIN'
    [../]
 []
 
