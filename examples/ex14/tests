@@ -18,6 +18,7 @@
     input = building_basemat_with_isolators_new.i
     capabilities = 'method=opt'
     check_input = True
+    min_slots = 2 # memory heavy
     allow_warnings = True
   [../]
 [../]
