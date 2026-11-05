@@ -16,7 +16,7 @@ Friction Pendulum^TM^ (FP) bearings are used to seismically isolate structures, 
 
 !row-end!
 
-Continuum modeling of FP bearings is computationally expensive and impractical for applications involving structures with tens to hundreds of bearings. Hence a two-node model developed by [!citet](manishkumarmceer2015b) is adopted here. The bottom node represents the concave sliding surface, and the top node represents the articulated slider. The two-node model has six degrees of freedom (3 translations and 3 rotations), at each node and is capable of simulating nonlinear hysteric behavior in the FP bearing. The physical model and spring representation of the two-node FP isolator element is similar to that of the lead-rubber isolator as shown in [fig](manuals/include/materials/lr_isolator-theory.md[fig:physicalmodelofbearing]).
+Continuum modeling of FP bearings is computationally expensive and impractical for applications involving structures with tens to hundreds of bearings. Hence a two-node model developed by [!citet](manishkumarmceer2015b) is adopted here. The bottom node represents the concave sliding surface, and the top node represents the articulated slider. The two-node model has six degrees of freedom (3 translations and 3 rotations), at each node and is capable of simulating nonlinear hysteric behavior in the FP bearing. The physical model and spring representation of the two-node FP isolator element is similar to that of the lead-rubber isolator as shown in [manuals/include/materials/lr_isolator-theory.md].
 
 #### Force-displacement relationship
 
