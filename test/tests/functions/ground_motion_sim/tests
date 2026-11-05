@@ -7,5 +7,6 @@
     design = "GroundMotionSim.md"
     issues = "#414"
     requirement = "The GroundMotionSim function shall accurately generate ground motions"
+    min_slots = 3
   [../]
 []
